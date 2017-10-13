@@ -1,0 +1,262 @@
+*{margin: 0;padding: 0;}
+body {
+  background: #ddd;
+}
+
+#container
+{
+height: 80vh;
+width: 100vw;
+background-color: #ddd;
+overflow: hidden;
+position: relative;
+/*#overflow-x: scroll;*/
+  margin-top: 30px;
+  display: inline-block;
+}
+
+#thumbs
+{
+background-color: #ddd;
+position: absolute;
+top: 0px;
+left: 0px;
+height: 100%;
+width: auto;
+/*overflow: hidden;*/
+white-space: nowrap;
+padding: 3vh 3vh;
+}
+
+.history-block {
+  height: 100%;
+  width: 15.6666vw;
+  background-color: #cdcdcd;
+  margin: 0 -2px;
+  border-right: 1px solid #fff;
+  display: inline-block;
+  font-family: 'roboto condensed', sans-serif;
+  font-size:60px;
+  font-weight: 100;
+  color: #FFF;
+  cursor: pointer;
+  box-shadow: 2px 5px 20px rgba(0,0,0,0.8);
+  transition: width 0.2s;
+  text-align: center;
+}
+
+.history-block:last-of-type {
+  border-right: none;
+}
+
+.cover {
+  width: 100%;
+  height: 100%;
+}
+
+.cover:hover {
+  width: 100%;
+  height: 100%;
+}
+
+.timePeriod {
+  position: absolute;
+  width: 15.6666vw;
+    top: 5vh;
+    font-size: medium;
+    font-weight:500;
+}
+
+.yearRange {
+  position: absolute;
+  width: 15.6666vw;
+    top: 10vh;
+    font-size: x-small;
+  white-space: normal;
+  transition: width 0.2s;
+}
+
+.historyContent {
+    position: absolute;
+    width: 15.6666vw;
+    top: 15vh;
+    font-size: 10px;
+    white-space: normal;
+    visibility:hidden;
+    transition: width 0.2s;
+    overflow-y: scroll;
+    height: 45vh;
+    padding-left:5%;
+    padding-right:5%;
+    font-size: 12px;
+    background-color:rgba(0, 0, 0, 0.5);
+    background-clip: content-box;
+    border-radius: 10px
+}
+
+::-webkit-scrollbar {
+      width: 8px; /* 1px wider than Lion. */
+      /* This is more usable for users trying to click it. */
+      background-color: rgba(0,0,0,0);
+      /*-webkit-border-radius: 100px;*/
+      }
+      /* hover effect for both scrollbar area, and scrollbar 'thumb' */
+      ::-webkit-scrollbar:hover {
+      background-color: rgba(0, 0, 0, 0.09);
+      }
+     
+      ::-webkit-scrollbar-thumb:vertical:active {
+      background: rgba(0,0,0,0.61); /* Some darker color when you click it */
+      -webkit-border-radius: 100px;
+      }
+
+.timeline {
+  display:none;
+  position: absolute;
+  bottom: 9vh;
+    font-size: 20px;
+    margin-left: 7vw;
+    margin-right: 7vw;
+  transition: display 0.8s;
+}
+
+  .timeline ul {
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+  }
+
+    .timeline ul li {
+      display: inline;
+      font-size: 15px;
+      font-weight: 100;
+      padding: 0px 5px;
+      margin: 2vw;
+    }
+
+      .timeline ul li:before {
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        content: '\f111';
+        color: rgba(255,255,255,0.8);
+        position: absolute;
+        top: 30px;
+        margin-left:0px;
+        transition: all 0.5s;
+      }
+
+      .timeline ul li.changed:before {
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        color: #4286f4;
+        content: '\f111';
+        position: absolute;
+        top: 30px;
+        margin-left:0px;
+        transition: all 0.5s;
+      }
+
+      .timeline ul li:after {
+        content: '';
+        position: absolute;
+        top: 40px;
+        margin-left:-3vw;
+        width: 9vw;
+        height:2px;
+        border: 1px solid rgba(255,255,255,0.5);
+        transition: all 0.5s;
+      }
+
+      .timeline ul li.changed:after {
+        content: '';
+        position: absolute;
+        top: 40px;
+        margin-left:-3vw;
+        width: 9vw;
+        height:2px;
+        border: 1px solid #4286f4;
+        transition: all 0.5s;
+      }
+
+        .timeline ul li:last-child:after {
+          position: absolute;
+          top: 0;
+          margin-left:0;
+          width: 0;
+          height:0;
+          border: 0;
+          transition: 0;
+        }
+
+      .timelineYear, .timelineYear:hover {
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.8s;
+      }
+
+      .timeline ul li:hover:before {
+        content: '\f111';
+        color: #0f681e;
+        font-size: 18px;
+        transition: all 0.5s;
+        top: 29px;
+        margin-left:0px
+      }
+
+      .timeline ul li:hover:after {
+        content: '';
+        position: absolute;
+        top: 40px;
+        margin-left:-3vw;
+        width: 9vw;
+        height:2px;
+        border: 1px solid #0f681e;
+        transition: all 0.5s;
+      }
+
+      .timeline ul li:last-child:hover:after {
+          position: absolute;
+          top: 0;
+          margin-left:0;
+          width: 0;
+          height:0;
+          border: 0;
+          transition: 0;
+        }
+
+      .timeline ul li:hover .timelineYear {
+        position: static;
+        top:-10px;
+      }
+
+.bg-66 {
+  background: url("images/1.jpg");
+  background-size:cover;
+}
+
+.bg-76 {
+  background: url("images/2.jpg");
+  background-size:cover;
+}
+
+.bg-86 {
+  background: url("images/3.jpg");
+  background-size:cover;
+}
+
+.bg-96 {
+  background: url("images/4.jpg");
+  background-size:cover;
+}
+
+.bg-06 {
+  background: url("images/5.jpg");
+  background-size:cover;
+}
+
+.bg-16 {
+  background: url("images/6.png");
+  background-size:cover;
+}
