@@ -83,7 +83,7 @@ $(function() {
                 anchor3 = $("#historyContent1Anchor3").position().top + $('#historyContent1').scrollTop();
                 anchor4 = $("#historyContent1Anchor4").position().top + $('#historyContent1').scrollTop();
                 anchor5 = $("#historyContent1Anchor5").position().top + $('#historyContent1').scrollTop();
-            }, 200)
+            }, 200);
         } else if (focus[0] == $('#historyContent2')[0] && isSelected != 2) {
             isSelected = 2;
             setTimeout(function() {
@@ -92,7 +92,7 @@ $(function() {
                 anchor3 = $("#historyContent2Anchor3").position().top + $('#historyContent2').scrollTop();
                 anchor4 = $("#historyContent2Anchor4").position().top + $('#historyContent2').scrollTop();
                 anchor5 = $("#historyContent2Anchor5").position().top + $('#historyContent2').scrollTop();
-            }, 200)
+            }, 200);
         } else if (focus[0] == $('#historyContent3')[0] && isSelected != 3) {
             isSelected = 3;
             setTimeout(function() {
@@ -101,7 +101,7 @@ $(function() {
                 anchor3 = $("#historyContent3Anchor3").position().top + $('#historyContent3').scrollTop();
                 anchor4 = $("#historyContent3Anchor4").position().top + $('#historyContent3').scrollTop();
                 anchor5 = $("#historyContent3Anchor5").position().top + $('#historyContent3').scrollTop();
-            }, 200)
+            }, 200);
         } else if (focus[0] == $('#historyContent4')[0] && isSelected != 4) {
             isSelected = 4;
             setTimeout(function() {
@@ -110,7 +110,7 @@ $(function() {
                 anchor3 = $("#historyContent4Anchor3").position().top + $('#historyContent4').scrollTop();
                 anchor4 = $("#historyContent4Anchor4").position().top + $('#historyContent4').scrollTop();
                 anchor5 = $("#historyContent4Anchor5").position().top + $('#historyContent4').scrollTop();
-            }, 200)
+            }, 200);
         } else if (focus[0] == $('#historyContent5')[0] && isSelected != 5) {
             isSelected = 5;
             setTimeout(function() {
@@ -119,7 +119,7 @@ $(function() {
                 anchor3 = $("#historyContent5Anchor3").position().top + $('#historyContent5').scrollTop();
                 anchor4 = $("#historyContent5Anchor4").position().top + $('#historyContent5').scrollTop();
                 anchor5 = $("#historyContent5Anchor5").position().top + $('#historyContent5').scrollTop();
-            }, 200)
+            }, 200);
         } else if (focus[0] == $('#historyContent6')[0] && isSelected != 6) {
             isSelected = 6;
             setTimeout(function() {
@@ -128,7 +128,7 @@ $(function() {
                 anchor3 = $("#historyContent6Anchor3").position().top + $('#historyContent6').scrollTop();
                 anchor4 = $("#historyContent6Anchor4").position().top + $('#historyContent6').scrollTop();
                 anchor5 = $("#historyContent6Anchor5").position().top + $('#historyContent6').scrollTop();
-            }, 200)
+            }, 200);
         }
     });
 
