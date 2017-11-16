@@ -1,3 +1,10 @@
+/* general css */
+
+body {
+    background-color: #2c3840;
+}
+
+
 /* responsive navbar css */
 
 .topbar-responsive {
@@ -132,10 +139,11 @@
 /* main page content */
 
 .large-article-header {
-    background: url("adambandel.com/images/homePhoto.jpeg") no-repeat center;
+    background: url("../images/homePhoto.jpeg") no-repeat center;
     background-size: cover;
     height: 31.25rem;
     position: relative;
+    opacity: 0.9;
 }
 
 @media screen and (max-width: 39.9375em) {
@@ -152,14 +160,14 @@
     -ms-flex-direction: column;
     flex-direction: column;
     position: absolute;
-    bottom: 3.125rem;
+    top: 12.125vh;
     left: 0;
     right: 0;
 }
 
 @media screen and (max-width: 39.9375em) {
     .large-article-header-content {
-        bottom: 1.25rem;
+        /* bottom: 1.25rem; */
     }
 }
 
@@ -201,26 +209,82 @@
     -webkit-justify-content: space-between;
     -ms-flex-pack: justify;
     justify-content: space-between;
+    color: #fefefe;
 }
 
 .large-article-header-content .article-details a {
     color: #fefefe;
 }
 
-.large-article-header-content .article-author {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    margin: 1rem 0;
+
+/* homepage buttons */
+
+.button-rounded-hover {
+    border: 0;
+    border-radius: 5000px;
+    padding: 1rem 2rem;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    transition: all 0.35s ease;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
-.large-article-header-content .article-author img {
-    border-radius: 3.125rem;
+.button-rounded-hover:before {
+    opacity: 0;
+    content: "";
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: inherit;
+    background-color: #fefefe;
+    transition: all 0.3s;
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
 }
 
-.large-article-header-content .article-author a {
-    margin-left: 1rem;
+.button-rounded-hover:after {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border: 5px solid #115b8d74;
+    content: '';
+    border-radius: inherit;
 }
+
+.button-rounded-hover:hover,
+.button-rounded-hover:focus {
+    background-color: #115b8d74;
+}
+
+.button-rounded-hover:hover:before,
+.button-rounded-hover:focus:before {
+    -webkit-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    transform: translateX(0%);
+    opacity: 0.25;
+}
+
+
+/* headshot */
+
+.portfolio-resume-headshot {
+    margin-bottom: 2rem;
+    border-radius: 50%;
+    max-height: 150px;
+    max-width: 120px;
+    display: block;
+    margin: auto;
+    margin-bottom: 1vh;
+}
+
+
+/* contact form */
