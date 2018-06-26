@@ -1,113 +1,101 @@
+
+
 (function($) {
 
-    skel.breakpoints({
-        wide: '(min-width: 961px) and (max-width: 1880px)',
-        normal: '(min-width: 961px) and (max-width: 1620px)',
-        narrow: '(min-width: 961px) and (max-width: 1320px)',
-        narrower: '(max-width: 960px)',
-        mobile: '(max-width: 736px)'
-    });
+	var	$window = $(window),
+		$body = $('body'),
+		settings = {
 
-    $(function() {
+			// Parallax background effect?
+				parallax: true,
 
-        var $window = $(window),
-            $body = $('body');
+			// Parallax factor (lower = more intense, higher = less intense).
+				parallaxFactor: 10
 
-        // Disable animations/transitions until the page has loaded.
-        $body.addClass('is-loading');
+		};
 
-        $window.on('load', function() {
-            $body.removeClass('is-loading');
-        });
+	// Breakpoints.
+		breakpoints({
+			wide:    [ '1081px',  '1680px' ],
+			normal:  [ '841px',   '1080px' ],
+			narrow:  [ '737px',   '840px'  ],
+			mobile:  [ null,      '736px'  ]
+		});
 
-        // CSS polyfills (IE<9).
-        if (skel.vars.IEVersion < 9)
-            $(':last-child').addClass('last-child');
+	// Mobile?
+		if (browser.mobile)
+			$body.addClass('is-scroll');
 
-        // Fix: Placeholder polyfill.
-        $('form').placeholder();
+	// Play initial animations on page load.
+		$window.on('load', function() {
+			window.setTimeout(function() {
+				$body.removeClass('is-preload');
+			}, 100);
+		});
 
-        // Prioritize "important" elements on mobile.
-        skel.on('+mobile -mobile', function() {
-            $.prioritize(
-                '.important\\28 mobile\\29',
-                skel.breakpoint('mobile').active
-            );
-        });
+	// Scrolly.
+		$('.scrolly-middle').scrolly({
+			speed: 1000,
+			anchor: 'middle'
+		});
 
-        // Scrolly links.
-        $('.scrolly').scrolly();
+		$('.scrolly').scrolly({
+			speed: 1000,
+			offset: function() { return (breakpoints.active('<=mobile') ? 70 : 190); }
+		});
 
-        // Nav.
-        var $nav_a = $('#nav a');
+	// Parallax background.
 
-        // Scrolly-fy links.
-        $nav_a
-            .scrolly()
-            .on('click', function(e) {
+		// Disable parallax on IE/Edge (smooth scrolling is jerky), and on mobile platforms (= better performance).
+			if (browser.name == 'ie'
+			||	browser.name == 'edge'
+			||	browser.mobile)
+				settings.parallax = false;
 
-                var t = $(this),
-                    href = t.attr('href');
+		if (settings.parallax) {
 
-                if (href[0] != '#')
-                    return;
+			var $dummy = $(), $bg;
 
-                e.preventDefault();
+			$window
+				.on('scroll.overflow_parallax', function() {
 
-                // Clear active and lock scrollzer until scrolling has stopped
-                $nav_a
-                    .removeClass('active')
-                    .addClass('scrollzer-locked');
+					// Adjust background position.
+						$bg.css('background-position', 'center ' + (-1 * (parseInt($window.scrollTop()) / settings.parallaxFactor)) + 'px');
 
-                // Set this link to active
-                t.addClass('active');
+				})
+				.on('resize.overflow_parallax', function() {
 
-            });
+					// If we're in a situation where we need to temporarily disable parallax, do so.
+						if (breakpoints.active('<=narrow')) {
 
-        // Initialize scrollzer.
-        var ids = [];
+							$body.css('background-position', '');
+							$bg = $dummy;
 
-        $nav_a.each(function() {
+						}
 
-            var href = $(this).attr('href');
+					// Otherwise, continue as normal.
+						else
+							$bg = $body;
 
-            if (href[0] != '#')
-                return;
+					// Trigger scroll handler.
+						$window.triggerHandler('scroll.overflow_parallax');
 
-            ids.push(href.substring(1));
+				})
+				.trigger('resize.overflow_parallax');
 
-        });
+		}
 
-        $.scrollzer(ids, { pad: 200, lastHack: true });
-
-        // Header (narrower + mobile).
-
-        // Toggle.
-        $(
-                '<div id="headerToggle">' +
-                '<a href="#header" class="toggle"></a>' +
-                '</div>'
-            )
-            .appendTo($body);
-
-        // Header.
-        $('#header')
-            .panel({
-                delay: 500,
-                hideOnClick: true,
-                hideOnSwipe: true,
-                resetScroll: true,
-                resetForms: true,
-                side: 'left',
-                target: $body,
-                visibleClass: 'header-visible'
-            });
-
-        // Fix: Remove transitions on WP<10 (poor/buggy performance).
-        if (skel.vars.os == 'wp' && skel.vars.osVersion < 10)
-            $('#headerToggle, #header, #main')
-            .css('transition', 'none');
-
-    });
+	// Poptrox.
+		$('.gallery').poptrox({
+			useBodyOverflow: false,
+			usePopupEasyClose: false,
+			overlayColor: '#0a1919',
+			overlayOpacity: 0.75,
+			usePopupDefaultStyling: false,
+			usePopupCaption: true,
+			popupLoaderText: '',
+			windowMargin: 10,
+			usePopupNav: true
+		});
 
 })(jQuery);
