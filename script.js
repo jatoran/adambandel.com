@@ -1146,7 +1146,8 @@ class GameUI {
                 // Update button text, style, and clickability based on training.active
                 const button = trainingCell.querySelector(`#button-${training.id}`);
                 button.setAttribute('style', 'white-space:pre;');
-                button.textContent = `- ${this.formatNumber(training.value.minus(training.displayValue))} ${training.valueType}`;
+                button.textContent = `- ${this.formatNumber(training.cost)} ${training.costType}\r\n`;
+                button.textContent += `+ ${this.formatNumber(training.value.minus(training.displayValue))} ${training.valueType}`;
                 //button.textContent += `+ ${this.formatNumber(training.value.minus(training.displayValue)) || this.formatNumber(training.value)} ${training.valueType}`;
 
                 if (training.active && (training.level !== training.maxLevel)) {
