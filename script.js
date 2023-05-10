@@ -120,7 +120,7 @@ class Builder {
         this.pushFightersToStages();
 
         this.buildSkillTree();
-        this.populateSkillUnlocks();
+        this.createSkillConnectionUnlocks();
 
         //assignments phase 1 - assign references  - THESE MUST BE BEFORE NEXT SECTION OF ASSIGNMENTS
         this.assignModPriorities();
@@ -226,6 +226,7 @@ class Builder {
         const modData = [
 
             //SKILL MODS
+            //skill base cost/value mods
             { id: 40001, name: "skillCostMod1", type: "baseCost", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: null, targetID: 4001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
             { id: 40002, name: "skillValueMod1", type: "baseValue", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: null, targetID: 4001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
             { id: 40003, name: "skillCostMod2", type: "baseCost", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: null, targetID: 4002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
@@ -236,12 +237,43 @@ class Builder {
             { id: 40008, name: "skillValueMod4", type: "baseValue", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: null, targetID: 4004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
             { id: 40009, name: "skillCostMod5", type: "baseCost", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: null, targetID: 4005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
             { id: 40010, name: "skillValueMod5", type: "baseValue", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: null, targetID: 4005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40011, name: "skillCostMod7", type: "baseCost", priority: null, sourceID: 4006, sourceCalcType: "add", targetType: null, targetID: 4006, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40012, name: "skillValueMod7", type: "baseValue", priority: null, sourceID: 4006, sourceCalcType: "add", targetType: null, targetID: 4006, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40013, name: "skillCostMod8", type: "baseCost", priority: null, sourceID: 4007, sourceCalcType: "add", targetType: null, targetID: 4007, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40014, name: "skillValueMod8", type: "baseValue", priority: null, sourceID: 4007, sourceCalcType: "add", targetType: null, targetID: 4007, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40015, name: "skillCostMod9", type: "baseCost", priority: null, sourceID: 4008, sourceCalcType: "add", targetType: null, targetID: 4008, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40016, name: "skillValueMod9", type: "baseValue", priority: null, sourceID: 4008, sourceCalcType: "add", targetType: null, targetID: 4008, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40017, name: "skillCostMod10", type: "baseCost", priority: null, sourceID: 4009, sourceCalcType: "add", targetType: null, targetID: 4009, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40018, name: "skillValueMod10", type: "baseValue", priority: null, sourceID: 4009, sourceCalcType: "add", targetType: null, targetID: 4009, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40019, name: "skillCostMod11", type: "baseCost", priority: null, sourceID: 4010, sourceCalcType: "add", targetType: null, targetID: 4010, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40020, name: "skillValueMod11", type: "baseValue", priority: null, sourceID: 4010, sourceCalcType: "add", targetType: null, targetID: 4010,runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40021, name: "skillCostMod12", type: "baseCost", priority: null, sourceID: 4011, sourceCalcType: "add", targetType: null, targetID: 4011, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40022, name: "skillValueMod12", type: "baseValue", priority: null, sourceID: 4011, sourceCalcType: "add", targetType: null, targetID: 4011, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40023, name: "skillCostMod13", type: "baseCost", priority: null, sourceID: 4012, sourceCalcType: "add", targetType: null, targetID: 4012, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40024, name: "skillValueMod13", type: "baseValue", priority: null, sourceID: 4012, sourceCalcType: "add", targetType: null, targetID: 4012, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40025, name: "skillCostMod14", type: "baseCost", priority: null, sourceID: 4013, sourceCalcType: "add", targetType: null, targetID: 4013, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40026, name: "skillValueMod14", type: "baseValue", priority: null, sourceID: 4013, sourceCalcType: "add", targetType: null, targetID: 4013, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40027, name: "skillCostMod15", type: "baseCost", priority: null, sourceID: 4014, sourceCalcType: "add", targetType: null, targetID: 4014, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40028, name: "skillValueMod15", type: "baseValue", priority: null, sourceID: 4014, sourceCalcType: "add", targetType: null, targetID: 4014, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40029, name: "skillCostMod6", type: "baseCost", priority: null, sourceID: 4015, sourceCalcType: "add", targetType: null, targetID: 4015, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40030, name: "skillValueMod6", type: "baseValue", priority: null, sourceID: 4015, sourceCalcType: "add", targetType: null, targetID: 4015, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 40011, name: "skUpMod1", type: "value", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
-            { id: 40012, name: "skUpMod2", type: "value", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 3, value: 3, active: false },
-            { id: 40013, name: "skUpMod3", type: "value", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 4, value: 4, active: false },
-            { id: 40014, name: "skUpMod4", type: "value", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 5, value: 5, active: false },
-            { id: 40015, name: "skUpMod5", type: "value", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 6, value: 6, active: false },
+            //skill typemods
+            { id: 41011, name: "skUpMod1", type: "value", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
+            { id: 41012, name: "skUpMod2", type: "value", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 3, value: 3, active: false },
+            { id: 41013, name: "skUpMod3", type: "value", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 4, value: 4, active: false },
+            { id: 41014, name: "skUpMod4", type: "value", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 5, value: 5, active: false },
+            { id: 41015, name: "skUpMod5", type: "value", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 6, value: 6, active: false },
+            { id: 41016, name: "skUpMod6", type: "value", priority: null, sourceID: 4006, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 7, value: 7, active: false },
+            { id: 41017, name: "skUpMod7", type: "value", priority: null, sourceID: 4007, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 8, value: 8, active: false },
+            { id: 41018, name: "skUpMod8", type: "value", priority: null, sourceID: 4008, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 9, value: 9, active: false },
+            { id: 41019, name: "skUpMod9", type: "value", priority: null, sourceID: 4009, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
+            { id: 41020, name: "skUpMod10", type: "value", priority: null, sourceID: 4010, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 11, value: 11, active: false },
+            { id: 41021, name: "skUpMod11", type: "value", priority: null, sourceID: 4011, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 12, value: 12, active: false },
+            { id: 41022, name: "skUpMod12", type: "value", priority: null, sourceID: 4012, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 13, value: 13, active: false },
+            { id: 41023, name: "skUpMod13", type: "value", priority: null, sourceID: 4013, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 14, value: 14, active: false },
+            { id: 41024, name: "skUpMod14", type: "value", priority: null, sourceID: 4014, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 15, value: 15, active: false },
+            { id: 41025, name: "skUpMod15", type: "value", priority: null, sourceID: 4015, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 16, value: 16, active: false },
 
 
             //POWER UPGRADE MODS
@@ -338,33 +370,33 @@ class Builder {
             { id: 901, name: "fMod1", type: "baseCost", priority: null, sourceID: 9001, sourceCalcType: "add", targetType: null, targetID: 9001, runningCalcType: "add", baseValue: 100, value: 100, active: true },
             { id: 902, name: "fMod2", type: "baseValue", priority: null, sourceID: 9001, sourceCalcType: "add", targetType: null, targetID: 9001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
             { id: 903, name: "fMod3", type: "baseCost", priority: null, sourceID: 9002, sourceCalcType: "add", targetType: null, targetID: 9002, runningCalcType: "add", baseValue: 500, value: 500, active: true },
-            { id: 904, name: "fMod4", type: "baseValue", priority: null, sourceID: 9002, sourceCalcType: "add", targetType: null, targetID: 9002, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 904, name: "fMod4", type: "baseValue", priority: null, sourceID: 9002, sourceCalcType: "add", targetType: null, targetID: 9002, runningCalcType: "add", baseValue: 2, value: 2, active: true },
             { id: 905, name: "fMod5", type: "baseCost", priority: null, sourceID: 9003, sourceCalcType: "add", targetType: null, targetID: 9003, runningCalcType: "add", baseValue: 1000, value: 1000, active: true },
-            { id: 906, name: "fMod6", type: "baseValue", priority: null, sourceID: 9003, sourceCalcType: "add", targetType: null, targetID: 9003, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 906, name: "fMod6", type: "baseValue", priority: null, sourceID: 9003, sourceCalcType: "add", targetType: null, targetID: 9003, runningCalcType: "add", baseValue: 5, value: 5, active: true },
             { id: 907, name: "fMod7", type: "baseCost", priority: null, sourceID: 9004, sourceCalcType: "add", targetType: null, targetID: 9004, runningCalcType: "add", baseValue: 5000, value: 5000, active: true },
-            { id: 908, name: "fMod8", type: "baseValue", priority: null, sourceID: 9004, sourceCalcType: "add", targetType: null, targetID: 9004, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 908, name: "fMod8", type: "baseValue", priority: null, sourceID: 9004, sourceCalcType: "add", targetType: null, targetID: 9004, runningCalcType: "add", baseValue: 5, value: 5, active: true },
             { id: 909, name: "fMod9", type: "baseCost", priority: null, sourceID: 9005, sourceCalcType: "add", targetType: null, targetID: 9005, runningCalcType: "add", baseValue: 10000, value: 10000, active: true },
-            { id: 910, name: "fMod10", type: "baseValue", priority: null, sourceID: 9005, sourceCalcType: "add", targetType: null, targetID: 9005, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 910, name: "fMod10", type: "baseValue", priority: null, sourceID: 9005, sourceCalcType: "add", targetType: null, targetID: 9005, runningCalcType: "add", baseValue: 5, value: 5, active: true },
             { id: 911, name: "fMod11", type: "baseCost", priority: null, sourceID: 9006, sourceCalcType: "add", targetType: null, targetID: 9006, runningCalcType: "add", baseValue: 50000, value: 50000, active: true },
-            { id: 912, name: "fMod12", type: "baseValue", priority: null, sourceID: 9006, sourceCalcType: "add", targetType: null, targetID: 9006, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 912, name: "fMod12", type: "baseValue", priority: null, sourceID: 9006, sourceCalcType: "add", targetType: null, targetID: 9006, runningCalcType: "add", baseValue: 10, value: 10, active: true },
             { id: 913, name: "fMod13", type: "baseCost", priority: null, sourceID: 9007, sourceCalcType: "add", targetType: null, targetID: 9007, runningCalcType: "add", baseValue: 100000, value: 100000, active: true },
-            { id: 914, name: "fMod14", type: "baseValue", priority: null, sourceID: 9007, sourceCalcType: "add", targetType: null, targetID: 9007, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 914, name: "fMod14", type: "baseValue", priority: null, sourceID: 9007, sourceCalcType: "add", targetType: null, targetID: 9007, runningCalcType: "add", baseValue: 10, value: 10, active: true },
             { id: 915, name: "fMod15", type: "baseCost", priority: null, sourceID: 9008, sourceCalcType: "add", targetType: null, targetID: 9008, runningCalcType: "add", baseValue: 500000, value: 500000, active: true },
-            { id: 916, name: "fMod16", type: "baseValue", priority: null, sourceID: 9008, sourceCalcType: "add", targetType: null, targetID: 9008, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 916, name: "fMod16", type: "baseValue", priority: null, sourceID: 9008, sourceCalcType: "add", targetType: null, targetID: 9008, runningCalcType: "add", baseValue: 10, value: 10, active: true },
             { id: 917, name: "fMod17", type: "baseCost", priority: null, sourceID: 9009, sourceCalcType: "add", targetType: null, targetID: 9009, runningCalcType: "add", baseValue: 1000000, value: 1000000, active: true },
-            { id: 918, name: "fMod18", type: "baseValue", priority: null, sourceID: 9009, sourceCalcType: "add", targetType: null, targetID: 9009, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 918, name: "fMod18", type: "baseValue", priority: null, sourceID: 9009, sourceCalcType: "add", targetType: null, targetID: 9009, runningCalcType: "add", baseValue: 15, value: 15, active: true },
             { id: 919, name: "fMod19", type: "baseCost", priority: null, sourceID: 9010, sourceCalcType: "add", targetType: null, targetID: 9010, runningCalcType: "add", baseValue: 5000000, value: 5000000, active: true },
-            { id: 920, name: "fMod20", type: "baseValue", priority: null, sourceID: 9010, sourceCalcType: "add", targetType: null, targetID: 9010, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 920, name: "fMod20", type: "baseValue", priority: null, sourceID: 9010, sourceCalcType: "add", targetType: null, targetID: 9010, runningCalcType: "add", baseValue: 15, value: 15, active: true },
             { id: 921, name: "fMod21", type: "baseCost", priority: null, sourceID: 9011, sourceCalcType: "add", targetType: null, targetID: 9011, runningCalcType: "add", baseValue: 10000000, value: 10000000, active: true },
-            { id: 922, name: "fMod22", type: "baseValue", priority: null, sourceID: 9011, sourceCalcType: "add", targetType: null, targetID: 9011, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 922, name: "fMod22", type: "baseValue", priority: null, sourceID: 9011, sourceCalcType: "add", targetType: null, targetID: 9011, runningCalcType: "add", baseValue: 20, value: 20, active: true },
             { id: 923, name: "fMod23", type: "baseCost", priority: null, sourceID: 9012, sourceCalcType: "add", targetType: null, targetID: 9012, runningCalcType: "add", baseValue: 50000000, value: 50000000, active: true },
-            { id: 924, name: "fMod24", type: "baseValue", priority: null, sourceID: 9012, sourceCalcType: "add", targetType: null, targetID: 9012, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 924, name: "fMod24", type: "baseValue", priority: null, sourceID: 9012, sourceCalcType: "add", targetType: null, targetID: 9012, runningCalcType: "add", baseValue: 20, value: 20, active: true },
             { id: 925, name: "fMod25", type: "baseCost", priority: null, sourceID: 9013, sourceCalcType: "add", targetType: null, targetID: 9013, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: true },
-            { id: 926, name: "fMod26", type: "baseValue", priority: null, sourceID: 9013, sourceCalcType: "add", targetType: null, targetID: 9013, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 926, name: "fMod26", type: "baseValue", priority: null, sourceID: 9013, sourceCalcType: "add", targetType: null, targetID: 9013, runningCalcType: "add", baseValue: 30, value: 30, active: true },
             { id: 927, name: "fMod27", type: "baseCost", priority: null, sourceID: 9014, sourceCalcType: "add", targetType: null, targetID: 9014, runningCalcType: "add", baseValue: 500000000, value: 500000000, active: true },
-            { id: 928, name: "fMod28", type: "baseValue", priority: null, sourceID: 9014, sourceCalcType: "add", targetType: null, targetID: 9014, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 928, name: "fMod28", type: "baseValue", priority: null, sourceID: 9014, sourceCalcType: "add", targetType: null, targetID: 9014, runningCalcType: "add", baseValue: 30, value: 30, active: true },
             { id: 929, name: "fMod29", type: "baseCost", priority: null, sourceID: 9015, sourceCalcType: "add", targetType: null, targetID: 9015, runningCalcType: "add", baseValue: 1000000000, value: 1000000000000, active: true },
-            { id: 930, name: "fMod30", type: "baseValue", priority: null, sourceID: 9015, sourceCalcType: "add", targetType: null, targetID: 9015, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 930, name: "fMod30", type: "baseValue", priority: null, sourceID: 9015, sourceCalcType: "add", targetType: null, targetID: 9015, runningCalcType: "add", baseValue: 30, value: 30, active: true },
         ];
 
 
@@ -523,11 +555,22 @@ class Builder {
 
     initializeSkills() {
         const skillData = [
-            { id: 4001, name: "sk1", description: "all values * (this.level * 2)", level: 0, maxLevel: 5, active: true, connections: { east: 4002, south: 4003, west: 4004 } },
-            { id: 4002, name: "sk2", description: "all values * (this.level * 3)", level: 0, maxLevel: 5, active: false, connections: { west: 4001 } },
-            { id: 4003, name: "sk3", description: "all values * (this.level * 4)", level: 0, maxLevel: 5, active: false, connections: { south: 4005 } },
-            { id: 4004, name: "sk4", description: "all values * (this.level * 5)", level: 0, maxLevel: 5, active: false, connections: { east: 4001 } },
-            { id: 4005, name: "sk5", description: "all values * (this.level * 6)", level: 0, maxLevel: 5, active: false, connections: { north: 4001 } },
+            { id: 4001, name: "sk1", description: "all values * (this.level * 2)", level: 0, maxLevel: 10, active: true, connections: { east: 4002, south: 4003, west: 4004 } },
+            { id: 4002, name: "sk2", description: "all values * (this.level * 3)", level: 0, maxLevel: 10, active: false, connections: { east:4011} },
+            { id: 4003, name: "sk3", description: "all values * (this.level * 4)", level: 0, maxLevel: 10, active: false, connections: { south: 4005 } },
+            { id: 4004, name: "sk4", description: "all values * (this.level * 5)", level: 0, maxLevel: 10, active: false, connections: { east: 4001 } },
+            { id: 4005, name: "sk5", description: "all values * (this.level * 6)", level: 0, maxLevel: 10, active: false, connections: {  south:4006 } },
+            { id: 4006, name: "sk6", description: "all values * (this.level * 7)", level: 0, maxLevel: 10, active: false, connections: { east: 4007, south: 4008, west: 4013 } },
+            { id: 4007, name: "sk7", description: "all values * (this.level * 8)", level: 0, maxLevel: 10, active: false, connections: { south:4009,  } },
+            { id: 4008, name: "sk8", description: "all values * (this.level * 9)", level: 0, maxLevel: 10, active: false, connections: { } },
+            { id: 4009, name: "sk9", description: "all values * (this.level * 10)", level: 0, maxLevel: 10, active: false, connections: {south:4010 } },
+            { id: 4010, name: "sk10", description: "all values * (this.level * 11)", level: 0, maxLevel: 10, active: false, connections: {} },
+            { id: 4011, name: "sk11", description: "all values * (this.level * 12)", level: 0, maxLevel: 10, active: false, connections: {east:4012} },
+            { id: 4012, name: "sk12", description: "all values * (this.level * 13)", level: 0, maxLevel: 10, active: false, connections: {south:4014} },
+            { id: 4013, name: "sk13", description: "all values * (this.level * 14)", level: 0, maxLevel: 10, active: false, connections: {} },
+            { id: 4014, name: "sk14", description: "all values * (this.level * 15)", level: 0, maxLevel: 10, active: false, connections: { south:4015} },
+            { id: 4015, name: "sk15", description: "all values * (this.level * 16)", level: 0, maxLevel: 10, active: false, connections: {} },
+
         ];
 
         skillData.forEach(data => {
@@ -546,10 +589,9 @@ class Builder {
             this.gameManager.gameContent.skillTree.skills.push(skill);
             this.gameManager.gameContent.idToObjectMap.set(id, skill);
         });
-
     }
 
-    populateSkillUnlocks() {
+    createSkillConnectionUnlocks() {
         let unlockID = 3500;
         let unlocksDone = [];
         this.gameManager.gameContent.skillTree.skills.forEach(skill => {
@@ -705,15 +747,16 @@ class Builder {
             }
         });
 
-        this.handleTypeMods(typeMods);
+        this.typeModHandler(typeMods);
     }
 
-    handleTypeMods(typeMods) {
+    typeModHandler(typeMods) {
         typeMods.forEach(typeMod => {
             let featureLoop = null;
+
+            //grab array of relevant targeted features
             if (typeMod.targetType === "powerTrain") {
                 featureLoop = this.trainings.filter(training => training.realmID < 50);
-                console.error(featureLoop);
             }
             else if (typeMod.targetType === "fighters") {
                 featureLoop = this.fighters;
@@ -725,6 +768,7 @@ class Builder {
                 featureLoop = this.trainings;
             }
 
+            //add type mod to relevant feature
             for (const feature of featureLoop) {
                 this.addModToObjectCalcTree(feature, typeMod);
             }
@@ -1132,15 +1176,14 @@ class GameUI {
                 trainingDescription.textContent = "\n" + training.description;
 
                 // Display 0 for the value if the training level is 0
-                const displayValue = training.level.eq(0) ? 0 : (training.value);
+                const displayValue = (training.value);
                 currentValueElement.textContent = `${this.formatNumber(displayValue)} ${training.valueType}`;
 
                 // Update button text, style, and clickability based on training.active
                 const button = trainingCell.querySelector(`#button-${training.id}`);
                 button.setAttribute('style', 'white-space:pre;');
                 button.textContent = `- ${this.formatNumber(training.cost)} ${training.costType}\r\n`;
-                button.textContent += `+ ${this.formatNumber(training.value.minus(training.displayValue))} ${training.valueType}`;
-                //button.textContent += `+ ${this.formatNumber(training.value.minus(training.displayValue)) || this.formatNumber(training.value)} ${training.valueType}`;
+                button.textContent += `+ ${this.formatNumber(training.displayValue)} ${training.valueType}`;
 
                 if (training.active && (training.level !== training.maxLevel)) {
                     button.disabled = false;
@@ -1271,7 +1314,8 @@ class GameUI {
                 const button = document.querySelector(`#fight-button-${fighter.id}`);
                 button.setAttribute('style', 'white-space:pre;');
                 button.textContent = `Fight \r\n`;
-                button.textContent += `PwrLvl: ${this.formatNumber(fighter.cost)}`;
+                button.textContent += `PwrLvl: ${this.formatNumber(fighter.cost)}\r\n`;
+                button.textContent += `Reward: ${this.formatNumber(fighter.value)} skill`;
                 if (fighter.isDefeated || !fighter.active) {
                     button.disabled = true;
                     button.style.opacity = 0.5;
@@ -1331,7 +1375,7 @@ class GameUI {
             }
 
             // Update skill node properties
-            if (!skill.active || !(skill.level < skill.maxLevel)) {
+            if (!skill.active || !(skill.level.lt(skill.maxLevel))) {
                 skillNode.setAttribute('disabled', true);
                 skillNode.setAttribute('style', 'opacity: 0.3;');
             } else {
@@ -1417,6 +1461,7 @@ class GameManager {
 
     onMultiplierChange(multiplier) {
         this.multiplier = multiplier;
+        const originalMultiplier = multiplier;
         // Iterate over each realm in the game content
         for (const realm of this.gameContent.powerRealms.concat(this.gameContent.spiritRealms)) {
             // Check if the realm is unlocked
@@ -1426,7 +1471,11 @@ class GameManager {
 
                 // Iterate over each active training or upgrade
                 for (const item of activeTrainingsAndUpgrades) {
-
+                    //check if object's level will exceed max with multiplier
+                    multiplier = originalMultiplier;
+                    if ((item.maxLevel.minus(item.level)).lt(originalMultiplier)) {
+                        multiplier = item.maxLevel.minus(item.level);
+                    }
                     // Iterate over each entry in the calculation trees map
                     item.calcTreesMap.forEach((tree) => {
                         tree.recalculateTreeFromNode(tree.nodes[0], item.level + multiplier, this);
@@ -1497,7 +1546,7 @@ class GameManager {
             let nodeIndex = tree.returnNodeIndex(observer.id);
             if (nodeIndex !== -1) {
                 tree.recalculateTreeFromNode(tree.nodes[nodeIndex], source.level, this);
-                this.updateGameFeatureValues(tree.parent);
+                //this.updateGameFeatureValues(tree.parent);
             }
     }
 
@@ -1510,7 +1559,7 @@ class GameManager {
                 this.gameContent.player.spirit = this.gameContent.player.spirit.minus(data.cost);
                 break;
             case 'skillpoint':
-                this.gameContent.player.skillpoint = this.gameContent.player.skillpoint.plus(data.cost);
+                this.gameContent.player.skillpoint = this.gameContent.player.skillpoint.minus(data.cost);
                 break;
             default:
                 console.error('Invalid subtractcost');
@@ -1518,6 +1567,7 @@ class GameManager {
     }
 
     updateGameFeatureValues(feature) {
+
         feature.displayCost = feature.cost;
         feature.displayValue = feature.value;
 
@@ -1528,6 +1578,10 @@ class GameManager {
                 feature.value = calcTree.currentRunningResult;
             }
         });
+
+
+        feature.displayCost = feature.cost.minus(feature.displayCost);
+        feature.displayValue = feature.value.minus(feature.displayValue);
     }
 
     updatePlayerValues() {
@@ -1791,6 +1845,7 @@ class CalculationTree {
 
         //update result & runResult of following active nodes
         this.updateDownstreamNodes(node, gameManager);
+        gameManager.updateGameFeatureValues(this.parent);
     }
 
     updateNode(node, newSourceValue, gameManager) {
@@ -1961,8 +2016,18 @@ class GameFeature extends Observable {
     }
 
     levelUp(count) {
-        let decimalCount = new Decimal(count);
-        this.level = this.level.plus(decimalCount);
+        //isAffordable is already processed
+        let newCount = new Decimal(count);
+        if ((this.maxLevel - this.level) < count) {
+            newCount = this.maxLevel.minus(this.level);
+        }
+        if (this.featureType !== "skill") {
+            this.level = this.level.plus(newCount);
+        }
+        else {
+            this.level = this.level.plus(1);
+        }
+
         if (this.level.eq(1)) {
             for (const observer of this.observers) {
                 observer.active = true;
