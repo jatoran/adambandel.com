@@ -1466,8 +1466,8 @@ class GameManager {
         for (const realm of this.gameContent.powerRealms.concat(this.gameContent.spiritRealms)) {
             // Check if the realm is unlocked
             if (realm.isUnlocked) {
-                // Get all active trainings and upgrades for the current realm
-                const activeTrainingsAndUpgrades = [...realm.trainings, ...realm.upgrades].filter(item => item.active);
+                // Get all trainings and upgrades for the current realm
+                const activeTrainingsAndUpgrades = [...realm.trainings, ...realm.upgrades];
 
                 // Iterate over each active training or upgrade
                 for (const item of activeTrainingsAndUpgrades) {
@@ -1546,6 +1546,7 @@ class GameManager {
             let nodeIndex = tree.returnNodeIndex(observer.id);
             if (nodeIndex !== -1) {
                 tree.recalculateTreeFromNode(tree.nodes[nodeIndex], source.level, this);
+                this.onMultiplierChange(this.multiplier);
                 //this.updateGameFeatureValues(tree.parent);
             }
     }
@@ -2016,6 +2017,11 @@ class GameFeature extends Observable {
     }
 
     levelUp(count) {
+        if (this.level.eq(0)) {
+            for (const observer of this.observers) {
+                observer.active = true;
+            }
+        }
         //isAffordable is already processed
         let newCount = new Decimal(count);
         if ((this.maxLevel - this.level) < count) {
@@ -2028,11 +2034,7 @@ class GameFeature extends Observable {
             this.level = this.level.plus(1);
         }
 
-        if (this.level.eq(1)) {
-            for (const observer of this.observers) {
-                observer.active = true;
-            }
-        }
+        
     }
 }
 
