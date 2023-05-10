@@ -416,7 +416,7 @@ class Builder {
 
             //power realm upgrades
             { id: 10001, realmID: 11, name: "pUpgrade1", description: "train 1 income *= (this level + 1)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
-            { id: 10002, realmID: 11, name: "pUpgrade2", description: "train 1 income exp prevResult^ (this level + 1)", level: 0, maxLevel: 1, costType: "power", valueType: null, active: true },
+            { id: 10002, realmID: 11, name: "pUpgrade2", description: "train 1 income ^ (this level + 1)", level: 0, maxLevel: 1, costType: "power", valueType: null, active: true },
             { id: 10003, realmID: 11, name: "pUpgrade3", description: "train 1 cost /= (this level + 1)", level: 0, maxLevel: 999, costType: "power",  valueType: null, active: true },
             { id: 10004, realmID: 11, name: "pUpgrade4", description: "train 1 income += (10 * this level)", level: 0, maxLevel: 999, costType: "power",  valueType: null, active: true },
             { id: 10005, realmID: 11, name: "pUpgrade5", description: "all train value * (this.level * 2)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
@@ -427,9 +427,9 @@ class Builder {
 
             { id: 50002, realmID: 51, name: "sUpgrade2", description: "fighter power level - (this.level * 10)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
 
-            { id: 50003, realmID: 51, name: "sUpgrade3", description: "all train/upgrade value tetra prevRunResult ^^ (this.level +1)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
+            { id: 50003, realmID: 51, name: "sUpgrade3", description: "all train/upgrade value ^^ (this.level +1)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
 
-            { id: 50004, realmID: 51, name: "sUpgrade4", description: "all train value log2:prevRunResult", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
+            { id: 50004, realmID: 51, name: "sUpgrade4", description: "all train  log2(value)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
         ];
 
         upgradeData.forEach(data => {
