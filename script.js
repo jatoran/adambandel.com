@@ -1372,13 +1372,13 @@ class GameUI {
             case "toString":
                 return num.toString(2);
             case "toFixed":
-                return num.toFixed(4);
+                return num.toFixed(2);
             case "magnitudeWithDecimalPlaces":
                 return num.magnitudeWithDecimalPlaces(2);
             case "mantissaWithDecimalPlaces":
                 return num.mantissaWithDecimalPlaces(2);
             default:
-                return num.toPrecision(3);
+                return num.toFixed(2);
         }
     }
 
