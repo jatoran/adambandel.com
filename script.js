@@ -127,6 +127,7 @@ class Builder {
         this.assignModReferences();
         this.assignUnlockReferences();
         //assignments phase 2 - assignments to initialized objects
+        this.registerModsToSources();
         this.registerModObserversAndTrees();
         this.initializeCalcTreeValues();
 
@@ -236,35 +237,35 @@ class Builder {
             { id: 40009, name: "skillCostMod5", type: "baseCost", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: null, targetID: 4005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
             { id: 40010, name: "skillValueMod5", type: "baseValue", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: null, targetID: 4005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 40011, name: "skUpMod1", type: "value", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: "baseValue", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
-            { id: 40012, name: "skUpMod2", type: "value", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: "baseValue", targetID: null, runningCalcType: "mult", baseValue: 3, value: 3, active: false },
-            { id: 40013, name: "skUpMod3", type: "value", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: "baseValue", targetID: null, runningCalcType: "mult", baseValue: 4, value: 4, active: false },
-            { id: 40014, name: "skUpMod4", type: "value", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: "baseValue", targetID: null, runningCalcType: "mult", baseValue: 5, value: 5, active: false },
-            { id: 40015, name: "skUpMod5", type: "value", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: "baseValue", targetID: null, runningCalcType: "mult", baseValue: 6, value: 6, active: false },
+            { id: 40011, name: "skUpMod1", type: "value", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
+            { id: 40012, name: "skUpMod2", type: "value", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 3, value: 3, active: false },
+            { id: 40013, name: "skUpMod3", type: "value", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 4, value: 4, active: false },
+            { id: 40014, name: "skUpMod4", type: "value", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 5, value: 5, active: false },
+            { id: 40015, name: "skUpMod5", type: "value", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 6, value: 6, active: false },
 
 
             //POWER UPGRADE MODS
-            { id: 11001, name: "pUpMod1", type: "value", priority: null, sourceID: 10001, sourceCalcType: "mult", targetType: null, targetID: 1001, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
+            { id: 11001, name: "pTarMod1", type: "value", priority: null, sourceID: 10001, sourceCalcType: "mult", targetType: null, targetID: 1001, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
             { id: 11002, name: "pUpCostMod1", type: "baseCost", priority: null, sourceID: 10001, sourceCalcType: "mult", targetType: null, targetID: 10001, runningCalcType: "mult", baseValue: 10, value: 10, active: false},
             { id: 11003, name: "pUpValueMod1", type: "baseValue", priority: null, sourceID: 10001, sourceCalcType: "add", targetType: null, targetID: 10001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 11004, name: "pUpMod2", type: "value", priority: null, sourceID: 10002, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "exp", baseValue: 2, value: 2, active: false },
+            { id: 11004, name: "pTarMod2", type: "value", priority: null, sourceID: 10002, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "exp", baseValue: 2, value: 2, active: false },
             { id: 11005, name: "pUpCostMod2", type: "baseCost", priority: null, sourceID: 10002, sourceCalcType: "mult", targetType: null, targetID: 10002, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 11006, name: "pUpValueMod2", type: "baseValue", priority: null, sourceID: 10002, sourceCalcType: "add", targetType: null, targetID: 10002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 11007, name: "pUpMod3", type: "cost", priority: null, sourceID: 10003, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "div", baseValue: 1, value: 1, active: false },
+            { id: 11007, name: "pTarMod3", type: "cost", priority: null, sourceID: 10003, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "div", baseValue: 1, value: 1, active: false },
             { id: 11008, name: "pUpCostMod3", type: "baseCost", priority: null, sourceID: 10003, sourceCalcType: "mult", targetType: null, targetID: 10003, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 11009, name: "pUpValueMod3", type: "baseValue", priority: null, sourceID: 10003, sourceCalcType: "add", targetType: null, targetID: 10003, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 11010, name: "pUpMod4", type: "value", priority: null, sourceID: 10004, sourceCalcType: "mult", targetType: null, targetID: 1001, runningCalcType: "add", baseValue: 10, value: 10, active: false },
+            { id: 11010, name: "pTarMod4", type: "value", priority: null, sourceID: 10004, sourceCalcType: "mult", targetType: null, targetID: 1001, runningCalcType: "add", baseValue: 10, value: 10, active: false },
             { id: 11011, name: "pUpCostMod4", type: "baseCost", priority: null, sourceID: 10004, sourceCalcType: "mult", targetType: null, targetID: 10004, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 11012, name: "pUpValueMod4", type: "baseValue", priority: null, sourceID: 10004, sourceCalcType: "add", targetType: null, targetID: 10004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 11013, name: "pUpMod5", type: "value", priority: null, sourceID: 10005, sourceCalcType: "mult", targetType: "baseValue", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
+            { id: 11013, name: "pTarMod5", type: "value", priority: null, sourceID: 10005, sourceCalcType: "mult", targetType: "allTrain", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
             { id: 11014, name: "pUpCostMod5", type: "baseCost", priority: null, sourceID: 10005, sourceCalcType: "mult", targetType: null, targetID: 10005, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 11015, name: "pUpValueMod5", type: "baseValue", priority: null, sourceID: 10005, sourceCalcType: "add", targetType: null, targetID: 10005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 11016, name: "pUpMod6", type: "value", priority: null, sourceID: 10006, sourceCalcType: "mult", targetType: "powerTrainValue", targetID: null, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
+            { id: 11016, name: "pTarMod6", type: "value", priority: null, sourceID: 10006, sourceCalcType: "mult", targetType: "powerTrain", targetID: null, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 11017, name: "pUpCostMod6", type: "baseCost", priority: null, sourceID: 10006, sourceCalcType: "mult", targetType: null, targetID: 10006, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 11018, name: "pUpValueMod6", type: "baseValue", priority: null, sourceID: 10006, sourceCalcType: "add", targetType: null, targetID: 10006, runningCalcType: "add", baseValue: 1, value: 1, active: false },
  
@@ -293,20 +294,20 @@ class Builder {
 
             //SPIRIT UPGRADE MODS
             //FIGHTER UPGRADE MOD / FIGHTER MOD
-            { id: 51001, name: "sUpMod1", type: "baseCost", priority: null, sourceID: 50001, sourceCalcType: "add", targetType: "fighters", targetID: null, runningCalcType: "div", baseValue: 1, value: 1, active: false },
+            { id: 51001, name: "sTarMod1", type: "baseCost", priority: null, sourceID: 50001, sourceCalcType: "add", targetType: "fighters", targetID: null, runningCalcType: "div", baseValue: 1, value: 1, active: false },
             { id: 51002, name: "sUpCostMod1", type: "baseCost", priority: null, sourceID: 50001, sourceCalcType: "mult", targetType: null, targetID: 50001, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 51003, name: "sUpValueMod1", type: "baseValue", priority: null, sourceID: 50001, sourceCalcType: "add", targetType: null, targetID: 50001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 51004, name: "sUpMod2", type: "baseCost", priority: null, sourceID: 50002, sourceCalcType: "mult", targetType: "fighters", targetID: null, runningCalcType: "sub", baseValue: 10, value: 10, active: false },
+            { id: 51004, name: "sTarMod2", type: "baseCost", priority: null, sourceID: 50002, sourceCalcType: "mult", targetType: "fighters", targetID: null, runningCalcType: "sub", baseValue: 10, value: 10, active: false },
             { id: 51005, name: "sUpCostMod2", type: "baseCost", priority: null, sourceID: 50002, sourceCalcType: "mult", targetType: null, targetID: 50002, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 51006, name: "sUpValueMod2", type: "baseValue", priority: null, sourceID: 50002, sourceCalcType: "add", targetType: null, targetID: 50002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 51007, name: "sUpMod3", type: "value", priority: null, sourceID: 50003, sourceCalcType: "add", targetType: "baseValue", targetID: null, runningCalcType: "tetra", baseValue: 2, value: 2, active: false },
+            { id: 51007, name: "sTarMod3", type: "value", priority: null, sourceID: 50003, sourceCalcType: "add", targetType: "allTrain", targetID: null, runningCalcType: "tetra", baseValue: 2, value: 2, active: false },
             { id: 51008, name: "sUpCostMod3", type: "baseCost", priority: null, sourceID: 50003, sourceCalcType: "mult", targetType: null, targetID: 50003, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 51009, name: "sUpValueMod3", type: "baseValue", priority: null, sourceID: 50003, sourceCalcType: "add", targetType: null, targetID: 50003, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
 
-            { id: 51010, name: "sUpMod4", type: "value", priority: null, sourceID: 50004, sourceCalcType: "add", targetType: "baseValue", targetID: null, runningCalcType: "log", baseValue: 1, value: 1, active: false },
+            { id: 51010, name: "sUpMod4", type: "value", priority: null, sourceID: 50004, sourceCalcType: "add", targetType: "allTrain", targetID: null, runningCalcType: "log", baseValue: 1, value: 1, active: false },
             { id: 51011, name: "sUpCostMod4", type: "baseCost", priority: null, sourceID: 50004, sourceCalcType: "mult", targetType: null, targetID: 50004, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 51012, name: "sUpValueMod4", type: "baseValue", priority: null, sourceID: 50004, sourceCalcType: "add", targetType: null, targetID: 50004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
@@ -680,18 +681,23 @@ class Builder {
         });
     }
 
+    registerModsToSources() {
+        this.mods.forEach(mod => {
+            this.registerModObserver(mod.source, mod);
+        });
+    }
+
     //register mod observers and push to calculation trees
     registerModObserversAndTrees() {
         let typeMods = [];
         this.mods.forEach(mod => {
-            this.registerModObserver(mod.source, mod);
  
             //store type mods for assignment after other mods have been allocated to their trees
             if (mod.targetType) {
                 typeMods.push(mod);
             }
             else if (mod.target) {
-                this.initializeCalcTrees(mod.target, null, mod);
+                this.addModToObjectCalcTree(mod.target, mod);
             }
          
             else {
@@ -702,78 +708,64 @@ class Builder {
         this.handleTypeMods(typeMods);
     }
 
-    //propogates typeMods to proper calcTrees after all other mods have been added to their trees
     handleTypeMods(typeMods) {
         typeMods.forEach(typeMod => {
-            for (const mod of this.mods) {
-                //blanket upgrade/training type handling
-                if (mod.type === typeMod.targetType && ["upgrade", "training"].includes(mod.source.featureType)) {
-                    this.initializeCalcTrees(null, mod, typeMod);
-                    this.registerModObserver(typeMod.source, mod);
-                }
-                //powerTrainValue type handling
-                if (typeMod.targetType === "powerTrainValue" && mod.source.realmID < 50 && mod.source.featureType === "training") {
-                    this.initializeCalcTrees(null, mod, typeMod);
-                    this.registerModObserver(typeMod.source, mod);
-                }
-                //blanket fighter type handling
-                if (typeMod.targetType === "fighters" && mod.source.featureType === "fighter" && mod.type === typeMod.type) {
-                    this.initializeCalcTrees(null, mod, typeMod);
-                    this.registerModObserver(typeMod.source, mod);
-                }
-                //add other specific typemod functoinality here
-                //chain of if statements, so every mod is checked for matches and registered as an observer
+            let featureLoop = null;
+            if (typeMod.targetType === "powerTrain") {
+                featureLoop = this.trainings.filter(training => training.realmID < 50);
+                console.error(featureLoop);
+            }
+            else if (typeMod.targetType === "fighters") {
+                featureLoop = this.fighters;
+            }
+            else if (typeMod.targetType === "allTrain") {
+                featureLoop = this.trainings;
+            }
+            else if (typeMod.targetType === "trainUpgrade") {
+                featureLoop = this.trainings;
+            }
+
+            for (const feature of featureLoop) {
+                this.addModToObjectCalcTree(feature, typeMod);
             }
         });
     }
 
-    initializeCalcTrees(targetObject, targetMod, mod) {
-        if (targetObject) {
-            let tree = null;
+    addModToObjectCalcTree(targetObject,mod) {
+        let tree = null;
 
-            switch (mod.type) {
-                case 'baseCost':
-                case 'cost':
-                    if (targetObject.calcTreesMap.get("cost")) {
-                        targetObject.calcTreesMap.get("cost").addNode(mod);
-                        mod.calcTreeReferences.push(targetObject.calcTreesMap.get("cost"));
-                    }
-                    else {
-                        tree = new CalculationTree(targetObject, "cost");
-                        targetObject.calcTreesMap.set("cost", tree);
-                        tree.addNode(mod);
-                        mod.calcTreeReferences.push(tree);
-                        this.calcTrees.push(tree);
-                    }
-                    break;
-                case 'baseValue':
-                case 'value':
-                    if (targetObject.calcTreesMap.get("value")) {
-                        targetObject.calcTreesMap.get("value").addNode(mod);
-                        mod.calcTreeReferences.push(targetObject.calcTreesMap.get("value"));
-                    }
-                    else {
-                        tree = new CalculationTree(targetObject, "value");
-                        targetObject.calcTreesMap.set("value", tree);
-                        tree.addNode(mod);
-                        mod.calcTreeReferences.push(tree);
-                        this.calcTrees.push(tree);
-                    }
-                    break;
+        switch (mod.type) {
+            case 'baseCost':
+            case 'cost':
+                if (targetObject.calcTreesMap.get("cost")) {
+                    targetObject.calcTreesMap.get("cost").addNode(mod);
+                    mod.calcTreeReferences.push(targetObject.calcTreesMap.get("cost"));
+                }
+                else {
+                    tree = new CalculationTree(targetObject, "cost");
+                    targetObject.calcTreesMap.set("cost", tree);
+                    tree.addNode(mod);
+                    mod.calcTreeReferences.push(tree);
+                    this.calcTrees.push(tree);
+                }
+                break;
+            case 'baseValue':
+            case 'value':
+                if (targetObject.calcTreesMap.get("value")) {
+                    targetObject.calcTreesMap.get("value").addNode(mod);
+                    mod.calcTreeReferences.push(targetObject.calcTreesMap.get("value"));
+                }
+                else {
+                    tree = new CalculationTree(targetObject, "value");
+                    targetObject.calcTreesMap.set("value", tree);
+                    tree.addNode(mod);
+                    mod.calcTreeReferences.push(tree);
+                    this.calcTrees.push(tree);
+                }
+                break;
 
-                default:
-                    console.error(targetObject,targetMod,mod,"addModtocalctree error");
-            }
-        }
-
-        //typemod handling - for every tree where a mod targetted by a typemod is present, add a typemod node and add that tree to the typemod's references
-        else if (targetMod) {
-            let typeMod = mod;
-            for (const tree of targetMod.calcTreeReferences) {
-                tree.addNode(typeMod);
-                typeMod.calcTreeReferences.push(tree);
-                this.calcTrees.push(tree);
-            }
+            default:
+                console.error(targetObject, mod, "addModtocalctree error");
         }
     }
 
@@ -1458,15 +1450,16 @@ class GameManager {
 
     levelUp(feature) {
         console.error("---------------------------");
+        console.error("---------------------------");
         console.error("LEVEL UP:::::::", feature.name);
+        console.error("---------------------------");
+        console.error("---------------------------");
         this.calcCycle++;
 
         this.deductCost(feature);
         this.eventManager.dispatchEvent('check-unlocks');
 
-        console.error("level:",feature.level.mag);
         feature.levelUp(this.multiplier);
-        console.error("level:", feature.level.mag);
 
         this.notifyObservers(feature);
     }
@@ -1475,21 +1468,25 @@ class GameManager {
     notifyObservers(feature) {
         for (const observer of feature.observers) {
             if (observer.active) {
+                console.error(" obsActive", observer.name);
                 let source = observer.source;
                 let target = observer.target;
 
                 //Handle Type Target Mods
                 if (observer.targetType) {
                     for (const tree of observer.calcTreeReferences) {
+                        console.error("  TypeMod:", observer.name,"updating tree:",tree.parent.name,tree.valueType);
                         this.updateNodes(target, source, observer, tree);
                     }
                 }
                 //Handle Individual Target Mods
                 else {
                     target.calcTreesMap.forEach((tree) => {
+                        console.error("   obsActive", observer.name);
                         this.updateNodes(target, source, observer, tree);
                     });
                 }
+                console.error("    obsUpdated", observer.name);
 
                 this.updatePlayerValues();
             }
@@ -1789,29 +1786,26 @@ class CalculationTree {
     }
 
     recalculateTreeFromNode(node, newSourceValue, gameManager) {
+        //update result & runResult of node
         this.updateNode(node, newSourceValue, gameManager);
+
+        //update result & runResult of following active nodes
         this.updateDownstreamNodes(node, gameManager);
     }
 
     updateNode(node, newSourceValue, gameManager) {
+        //update node result
         node.result = this.calcNodeResult(node, newSourceValue, gameManager);
 
-        if (!node.previousNode) {
+        //update node runResult based on last active node's runResult(if any)
+        let lastActiveResult = this.getLastActiveResult(node);
+        if (!lastActiveResult) {
             node.runningResult = node.result;
-        }
-        else {
-            let lastActiveResult = null;
-
-            let prevNode = node.previousNode;
-            while (prevNode && !lastActiveResult) {
-                if (prevNode.ref.active) {
-                    lastActiveResult = prevNode.runningResult;
-                    node.runningResult = this.calcNodeRunningResult(node, lastActiveResult);
-                }
-                prevNode = prevNode.previousNode;
-            }
+        } else {
+            node.runningResult = this.calcNodeRunningResult(node, lastActiveResult);
         }
 
+        
         node.ref.lastCalcCycle = gameManager.calcCycle;
     }
 
@@ -1820,9 +1814,9 @@ class CalculationTree {
         let lastActiveNode = startNode;
 
         while (currentNode) {
-            if (currentNode.ref.source === this.parent) {
+            //if (currentNode.ref.source === this.parent) {
                 currentNode.result = this.calcNodeResult(currentNode, currentNode.ref.source.level, gameManager);
-            }
+            //}
 
             if (currentNode.ref.active) {
                 currentNode.runningResult = this.calcNodeRunningResult(currentNode, lastActiveNode.runningResult);
@@ -1877,7 +1871,7 @@ class CalculationTree {
             'div': (val1, val2) => val2.dividedBy(val1),
             'exp': (val1, val2) => val2.pow(val1),
             'tetra': (val1, val2) => val2.tetrate(val1),
-            'log': (val1, val2, base = 2) => val2.log(base),
+            'log': (val1, val2, base) => val2.log(base),
         }
         const calculation = CALCULATION_TYPES[type];
 
@@ -1888,22 +1882,19 @@ class CalculationTree {
         return calculation(val1, val2, base);
     }
 
-    getFinalRunningResult() {
-        if (this.nodes.length === 0) {
-            return 0;
+    getLastActiveResult(node) {
+        if (!node.previousNode) {
+            return null;
         }
-
-        // Iterate through the nodes in reverse order
-        for (let i = this.nodes.length - 1; i >= 0; i--) {
-            // Return the runningResult of the last active node
-            if (this.nodes[i].ref.active) {
-                return this.nodes[i].runningResult;
+        let lastActiveResult = null;
+        let prevNode = node.previousNode;
+        while (prevNode && !lastActiveResult) {
+            if (prevNode.ref.active) {
+                lastActiveResult = prevNode.runningResult;
             }
+            prevNode = prevNode.previousNode;
         }
-
-        // If no active nodes are found, return 0
-        console.error("getFinalRunningResult found no ACTIVE nodes");
-        return 0;
+        return lastActiveResult;
     }
 
     returnNodeIndex(id) {
