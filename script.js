@@ -3,27 +3,50 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize the game object when the DOM is fully loaded
     const game = new Game();
-
-     //start game loop
-    game.gameLoop();
 });
 
 class Game {
     constructor() {
-        this.settings = new GameSettings();
         this.eventManager = new EventManager();
-        this.gameManager = new GameManager(this.eventManager);
-        this.unlockManager = new UnlockManager(this.gameManager, this.eventManager);
-        this.builder = new Builder(this.eventManager, this.gameManager, this.unlockManager);
-        this.ui = new GameUI(this.eventManager, this.gameManager);
+        this.eventManager.addListener('loadGameState', this.restart.bind(this));
+
+        this.init(-1);
+
         this.lastIncomeUpdate = performance.now();
         this.incomeUpdateInterval = 1000; // 1 second
         this.uiUpdateInterval = 100; // 100ms
         this.lastUnlockCheck = performance.now();
         this.unlockCheckInterval = 200;
+
+        this.running = true;
+        this.gameLoop();
+    }
+
+    init(state) {
+        this.settings = new GameSettings();
+        this.gameManager = new GameManager(this.eventManager);
+        this.unlockManager = new UnlockManager(this.gameManager, this.eventManager);
+        this.builder = new Builder(this.eventManager, this.gameManager, this.unlockManager);
+        this.gameStateManager = new GameStateManager(this.eventManager, this.gameManager, this.builder);
+        this.ui = new GameUI(this.eventManager, this.gameManager, this.gameStateManager);
+
+        this.gameStateManager.gameStateLoader(state);
+        
+        this.running = true;
+    }
+
+    restart(reset) {
+        this.running = false;
+        this.ui.clear();
+        this.init(reset);
+        this.lastIncomeUpdate = performance.now();
+        this.lastUnlockCheck = performance.now();
     }
 
     gameLoop() {
+        if (!this.running) {
+            return;
+        }
         this.updateIncome();
         this.checkUnlockConditions();
         this.updateUI();
@@ -35,6 +58,7 @@ class Game {
         // Update Stat Incomes every 1 second
         if (currentTime - this.lastIncomeUpdate >= this.incomeUpdateInterval) {
             this.gameManager.calculatePlayerIncome();
+            this.gameManager.updateAllMaxCaches();
             this.lastIncomeUpdate = currentTime;
         }
     }
@@ -86,6 +110,337 @@ class Game {
     }
 }
 
+class GameStateManager {
+    constructor(eventManager, gameManager, builder) {
+        this.eventManager = eventManager;
+        this.gameManager = gameManager;
+        this.builder = builder;
+    }
+
+    loadGameState(num) {
+        this.eventManager.dispatchEvent('loadGameState', num);
+    }
+
+    saveGameState(num) {
+        const gameData = {};
+
+        gameData.saveTimeStamp = Date.now();
+
+        if (!gameData.playerData) {
+            gameData.playerData = {};
+        }
+        switch (num) {
+            case 0:
+                this.saveFullGameState(gameData);
+                break;
+            case 1:
+                this.saveRebirthState1(gameData);
+                break;
+            case 2:
+                this.saveRebirthState3(gameData);
+                break;
+            case 2:
+                this.saveRebirthState3(gameData);
+                break;
+        }
+
+
+        //populate items that are APPLICABLE TO ALL SAVE STATES (inluding regular save)
+        //player lifetime data
+        //achievements and their associated unlocks/perks/mods
+        //settings
+        gameData.playerData.lifetimeEssenceEarned = this.gameManager.gameContent.player.lifetimeEssenceEarned.toString();
+        gameData.playerData.lifetimePowerEarned = this.gameManager.gameContent.player.lifetimePowerEarned.toString();
+        gameData.playerData.lifetimeSpiritEarned = this.gameManager.gameContent.player.lifetimeSpiritEarned.toString();
+
+
+        const gameDataJson = JSON.stringify(gameData);
+        localStorage.setItem('saveGame', gameDataJson);
+
+        if (num > 0) {
+            this.loadGameState(num);
+        }
+    }
+
+    saveFullGameState(gameData) {
+        gameData.trainings = this.builder.trainings.map(training => ({
+            id: training.id,
+            level: training.level.toString(),
+            active: training.active
+        }));
+
+        gameData.upgrades = this.builder.upgrades.map(upgrade => ({
+            id: upgrade.id,
+            level: upgrade.level.toString(),
+            active: upgrade.active
+        }));
+
+        gameData.skills = this.builder.skills.map(skill => ({
+            id: skill.id,
+            level: skill.level.toString(),
+            active: skill.active
+        }));
+
+        gameData.mods = this.builder.mods.map(mod => ({
+            id: mod.id,
+            active: mod.active,
+        }));
+
+        gameData.fighters = this.builder.fighters.map(fighter => ({
+            id: fighter.id,
+            active: fighter.active,
+            isDefeated: fighter.isDefeated,
+        }));
+
+        gameData.stages = this.builder.stages.map(stage => ({
+            id: stage.id,
+            active: stage.active,
+            isCompleted: stage.isCompleted,
+        }));
+
+        gameData.realms = this.builder.realms.map(realm => ({
+            id: realm.id,
+            active: realm.active,
+        }));
+
+        gameData.incompleteUnlocks = this.builder.unlockManager.unlocks.map(unlock => ({
+            id: unlock.id,
+        }));
+        gameData.completedUnlocks = this.builder.unlockManager.completedUnlocks.map(unlock => ({
+            id: unlock.id,
+        }));
+
+        gameData.playerData = {
+            power: this.gameManager.gameContent.player.power.toString(),
+            spirit: this.gameManager.gameContent.player.spirit.toString(),
+            essence: this.gameManager.gameContent.player.essence.toString(),
+            skillpoint: this.gameManager.gameContent.player.skillpoint.toString()
+        };
+    }
+
+    saveRebirthState1(gameData) {
+        this.calculateRebirth1();
+
+        if (this.gameManager.gameContent.player.essence.gt(0)) {
+            gameData.playerData.essence = this.gameManager.gameContent.player.essence.toString();
+        }
+
+        let rebirth1PseudoObject = this.gameManager.findObjectById(60000);
+
+        gameData.rebirth1PseudoObject = {
+            id: rebirth1PseudoObject.id,
+            level: rebirth1PseudoObject.level.toString(),
+            active: rebirth1PseudoObject.active
+        }
+        //essence purchases
+        //esesnce perks/etc.
+
+    }
+
+    calculateRebirth1() {
+        let rebirth1PseudoObject = this.gameManager.findObjectById(60000);
+        let powerLevel = this.gameManager.gameContent.player.powerLevel;
+        //for every 1000 powerlevel, give 1 essence
+        let essenceGain = new Decimal(powerLevel.div(1000));
+
+        this.gameManager.gameContent.player.essence = this.gameManager.gameContent.player.essence.plus(essenceGain);
+
+
+        this.gameManager.gameContent.player.lifetimeEssenceEarned = this.gameManager.gameContent.player.lifetimeEssenceEarned.plus(essenceGain);
+
+        rebirth1PseudoObject.level = rebirth1PseudoObject.level.plus(this.gameManager.gameContent.player.essence).round();
+    }
+
+    saveRebirthState2(gameData) {
+
+    }
+
+    saveRebirthState3(gameData) {
+
+    }
+
+    gameStateLoader(num) {
+        //load basic state on reset command
+        if (num === -1) {
+            return;
+        }
+
+        const gameDataJson = localStorage.getItem('saveGame');
+        if (!gameDataJson) {
+            console.error("No save game file located");
+            return;
+        }
+        const gameData = JSON.parse(gameDataJson);
+
+
+
+        //load items that apply to ALL state loads:
+            //player lifetime data
+            //achievements
+            //settings
+        const { lifetimeEssenceEarned, lifetimePowerEarned, lifetimeSpiritEarned } = gameData.playerData;
+        this.gameManager.gameContent.player.lifetimeEssenceEarned = new Decimal(lifetimeEssenceEarned);
+        this.gameManager.gameContent.player.lifetimePowerEarned = new Decimal(lifetimePowerEarned);
+        this.gameManager.gameContent.player.lifetimeSpiritEarned = new Decimal(lifetimeSpiritEarned);
+
+
+        if (num > 0) {
+            this.applyRebirthState(num,gameData);
+        }
+        else {
+            this.applyStandardSaveState(gameData);
+        }
+
+        //process offline earnings
+        const timeDifference = Date.now() - gameData.saveTimestamp;
+    }
+
+    applyRebirthState(num, gameData) {
+        switch (num) {
+            case 1:
+                this.applyRebirthState1(gameData);
+                break;
+            case 2:
+                this.applyRebirthState2(gameData);
+                break;
+            case 3:
+                this.applyRebirthState3(gameData);
+                break;
+        }
+    }
+
+    applyRebirthState1(gameData) {
+        if (gameData.playerData && gameData.playerData.essence) {
+            this.gameManager.gameContent.player.essence = new Decimal(gameData.playerData.essence);
+        }
+
+        let rebirth1PseudoObject = this.gameManager.findObjectById(60000);
+
+        const { id, level, active } = gameData.rebirth1PseudoObject;
+        rebirth1PseudoObject.level = new Decimal(level);
+        rebirth1PseudoObject.active = active;
+    }
+
+    applyRebirthState2(gameData) {
+        //populate game data from gameData object
+    }
+
+    applyRebirthState3(gameData) {
+        //populate game data from gameData object
+    }
+
+    applyStandardSaveState(gameData) {
+        gameData.trainings.forEach(data => {
+            const { id, level, active } = data;
+
+            let training = this.builder.trainings.find(training => training.id === id);
+
+            if (training) {
+                training.level = new Decimal(level);
+                training.active = active;
+            } else {
+                console.error(`No training found with id: ${id}`);
+            }
+        });
+
+        gameData.upgrades.forEach(data => {
+            const { id, level, active } = data;
+
+            let upgrade = this.builder.upgrades.find(upgrade => upgrade.id === id);
+
+            if (upgrade) {
+                upgrade.level = new Decimal(level);
+                upgrade.active = active;
+            } else {
+                console.error(`No upgrade found with id: ${id}`);
+            }
+        });
+
+        gameData.skills.forEach(data => {
+            const { id, level, active } = data;
+
+            let skill = this.builder.skills.find(skill => skill.id === id);
+
+            if (skill) {
+                skill.level = new Decimal(level);
+                skill.active = active;
+            } else {
+                console.error(`No skill found with id: ${id}`);
+            }
+        });
+
+        gameData.mods.forEach(data => {
+            const { id, active } = data;
+
+            let mod = this.builder.mods.find(mod => mod.id === id);
+
+            if (mod) {
+                mod.active = active;
+            } else {
+                console.error(`No mod found with id: ${id}`);
+            }
+        });
+
+        gameData.fighters.forEach(data => {
+            const { id, active, isDefeated } = data;
+
+            let fighter = this.builder.fighters.find(fighter => fighter.id === id);
+
+            if (fighter) {
+                fighter.active = active;
+                fighter.isDefeated = isDefeated;
+            } else {
+                console.error(`No fighter found with id: ${id}`);
+            }
+        });
+
+        gameData.stages.forEach(data => {
+            const { id, active, isCompleted } = data;
+
+            let stage = this.builder.stages.find(stage => stage.id === id);
+
+            if (stage) {
+                stage.active = active;
+                stage.isCompleted = isCompleted;
+            } else {
+                console.error(`No stage found with id: ${id}`);
+            }
+        });
+
+        gameData.realms.forEach(data => {
+            const { id, active } = data;
+
+            let realm = this.builder.realms.find(realm => realm.id === id);
+
+            if (realm) {
+                realm.active = active;
+            } else {
+                console.error(`No realm found with id: ${id}`);
+            }
+        });
+
+        gameData.completedUnlocks.forEach(data => {
+            const unlockIndex = this.builder.unlockManager.unlocks.findIndex(unlock => unlock.id === data.id);
+
+            if (unlockIndex !== -1) {
+                const completedUnlock = this.builder.unlockManager.unlocks.splice(unlockIndex, 1)[0];
+                this.builder.unlockManager.completedUnlocks.push(completedUnlock);
+            }
+        });
+
+        const { power, spirit, essence, skillpoint } = gameData.playerData;
+        this.gameManager.gameContent.player.power = new Decimal(power);
+        this.gameManager.gameContent.player.spirit = new Decimal(spirit);
+        this.gameManager.gameContent.player.essence = new Decimal(essence);
+        this.gameManager.gameContent.player.skillpoint = new Decimal(skillpoint);
+
+        this.builder.initCalcTreesAndCaches();
+        for (const training of this.builder.trainings) {
+            this.gameManager.updateValues(training.calcTreesMap.get("value"));
+        }
+    }
+}
+
 class Builder {
     constructor(eventManager, gameManager, unlockManager) {
         this.eventManager = eventManager;
@@ -96,6 +451,7 @@ class Builder {
         this.mods = [];
         this.trainings = [];
         this.upgrades = [];
+        this.essenceUpgrades = [];
         this.realms = [];
         this.stages = [];
         this.fighters = [];
@@ -106,13 +462,14 @@ class Builder {
         this.calcTrees = [];
 
         //initialize, push to gameContent data arrays, assign to gameManager ID map
-        this.initializeMods();
-        this.initializeTrainings();
-        this.initializeUpgrades();
-        this.initializeRealms();
-        this.initializeStages();
-        this.initializeFighters();
-        this.initializeSkills();
+        this.initMods();
+        this.initTrainings();
+        this.initUpgrades();
+        this.initEssenceUpgrades();
+        this.initRealms();
+        this.initStages();
+        this.initFighters();
+        this.initSkills();
         this.initializeUnlocks();
 
         this.pushTrainingsToRealms();
@@ -121,21 +478,24 @@ class Builder {
 
         this.buildSkillTree();
         this.createSkillConnectionUnlocks();
+        this.createMilestoneUnlocksAndMods();
+        this.createRebirthModAndPseudoObject();
 
         //assignments phase 1 - assign references  - THESE MUST BE BEFORE NEXT SECTION OF ASSIGNMENTS
         this.assignModPriorities();
         this.assignModReferences();
         this.assignUnlockReferences();
+
         //assignments phase 2 - assignments to initialized objects
         this.registerModsToSources();
         this.registerModObserversAndTrees();
-        this.initializeCalcTreeValues();
-
+        this.initCalcTreesAndCaches();
 
         //testing
         //this.printTrainingInfo();
         //this.printUpgradeInfo();
         //this.printFighterInfo();
+        //this.printUnlockInfo();
     }
 
     initializeUnlocks() {
@@ -222,111 +582,242 @@ class Builder {
         });
     }
 
-    initializeMods() {
+    initMods() {
+        this.initEssenceMods();
+        this.initSkillMods();
+        this.initPowerUpgradeMods();
+        this.initPowerTrainMods();
+        this.initSpiritTrainMods();
+        this.initSpiritUpgradeMods();
+        this.initFighterMods();
+    }
+
+    initTrainings() {
+        this.initPowerTrainings();
+        this.initSpiritTrainings();
+    }
+
+    initPowerTrainings() {
+        const trainingData = [
+            { id: 1001, realmID: 11, name: "pTrain1", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: true },
+            { id: 1002, realmID: 11, name: "pTrain2", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: true },
+            { id: 1003, realmID: 11, name: "pTrain3", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+            { id: 1004, realmID: 11, name: "pTrain4", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+            { id: 1005, realmID: 11, name: "pTrain5", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+            { id: 1006, realmID: 12, name: "pTrain6", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+            { id: 1007, realmID: 12, name: "pTrain7", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+            { id: 1008, realmID: 12, name: "pTrain8", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+            { id: 1009, realmID: 12, name: "pTrain9", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+            { id: 1010, realmID: 12, name: "pTrain10", description: "description", level: 0, maxLevel: 999999, costType: "power", valueType: "powerIncome", active: false },
+        ];
+
+        trainingData.forEach(data => {
+            const { id, realmID, name, description, level, maxLevel, costType, valueType, active } = data;
+            const training = new Training(this.eventManager, id, realmID, name, description, level, maxLevel, costType, valueType, active);
+            this.trainings.push(training);
+            this.gameManager.gameContent.idToObjectMap.set(id, training);
+        });
+    }
+
+    initSpiritTrainings() {
+        const trainingData = [
+            { id: 5001, realmID: 51, name: "sTrain1", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: true },
+            { id: 5002, realmID: 51, name: "sTrain2", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: true },
+            { id: 5003, realmID: 51, name: "sTrain3", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+            { id: 5004, realmID: 51, name: "sTrain4", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+            { id: 5005, realmID: 51, name: "sTrain5", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+            { id: 5006, realmID: 52, name: "sTrain6", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+            { id: 5007, realmID: 52, name: "sTrain7", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+            { id: 5008, realmID: 52, name: "sTrain8", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+            { id: 5009, realmID: 52, name: "sTrain9", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+            { id: 5010, realmID: 52, name: "sTrain10", description: "description", level: 0, maxLevel: 999999, costType: "spirit", valueType: "spiritIncome", active: false },
+        ];
+
+        trainingData.forEach(data => {
+            const { id, realmID, name, description, level, maxLevel, costType, valueType, active } = data;
+            const training = new Training(this.eventManager, id, realmID, name, description, level, maxLevel, costType, valueType, active);
+            this.trainings.push(training);
+            this.gameManager.gameContent.idToObjectMap.set(id, training);
+        });
+    }
+
+    initUpgrades() {
+        this.initPowerUpgrades();
+        this.initSpiritUpgrades();
+    }
+
+    initPowerUpgrades() {
+        const upgradeData = [
+            { id: 10001, realmID: 11, name: "pUpgrade1", description: "train 1 income *= (this level + 1)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
+            { id: 10002, realmID: 11, name: "pUpgrade2", description: "train 1 income ^ (this level + 1)", level: 0, maxLevel: 1, costType: "power", valueType: null, active: true },
+            { id: 10003, realmID: 11, name: "pUpgrade3", description: "train 1 cost /= (this level + 1)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
+            { id: 10004, realmID: 11, name: "pUpgrade4", description: "train 1 income += (10 * this level)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
+            { id: 10005, realmID: 11, name: "pUpgrade5", description: "all train value * (this.level * 2)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
+            { id: 10006, realmID: 11, name: "pUpgrade6", description: "all pTrain value * (this.level *10)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
+        ];
+
+        upgradeData.forEach(data => {
+            const { id, realmID, name, description, level, maxLevel, costType, valueType, active } = data;
+            const upgrade = new Upgrade(this.eventManager, id, realmID, name, description, level, maxLevel, costType, valueType, active);
+            this.upgrades.push(upgrade);
+            this.gameManager.gameContent.idToObjectMap.set(id, upgrade);
+        });
+    }
+
+    initSpiritUpgrades() {
+        const upgradeData = [
+            { id: 50001, realmID: 51, name: "sUpgrade1", description: "fighter powerLevel / (this.level)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
+
+            { id: 50002, realmID: 51, name: "sUpgrade2", description: "fighter power level - (this.level * 10)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
+
+            { id: 50003, realmID: 51, name: "sUpgrade3", description: "all fighter skillpoint * 2", level: 0, maxLevel: 1, costType: "spirit", valueType: null, active: true },
+
+            { id: 50004, realmID: 51, name: "sUpgrade4", description: "all sTrain ^ (this.level)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
+
+        ];
+
+        upgradeData.forEach(data => {
+            const { id, realmID, name, description, level, maxLevel, costType, valueType, active } = data;
+            const upgrade = new Upgrade(this.eventManager, id, realmID, name, description, level, maxLevel, costType, valueType, active);
+            this.upgrades.push(upgrade);
+            this.gameManager.gameContent.idToObjectMap.set(id, upgrade);
+        });
+    }
+
+    initEssenceUpgrades() {
+        const upgradeData = [
+        //essence upgrades
+        { id: 100001, name: "eUpgrade1", description: "all pTrain + 1 basevalue", level: 0, maxLevel: 10, costType: "essence", valueType: null, active: true },
+        ];
+
+        upgradeData.forEach(data => {
+            const { id,  name, description, level, maxLevel, costType, valueType, active } = data;
+            const upgrade = new EssenceUpgrade(this.eventManager, id, name, description, level, maxLevel, costType, valueType, active);
+            this.essenceUpgrades.push(upgrade);
+            //this.upgrades.push(upgrade);
+            this.gameManager.gameContent.essenceUpgrades.push(upgrade);
+            this.gameManager.gameContent.idToObjectMap.set(id, upgrade);
+        });
+    }
+
+    initEssenceMods() {
         const modData = [
+            { id: 101001, name: "essenceTarMod1", type: "baseValue", priority: null, sourceID: 100001, sourceCalcType: "add", targetType: "powerTrain", targetID: null, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            //SKILL MODS
-            //skill base cost/value mods
-            { id: 40001, name: "skillCostMod1", type: "baseCost", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: null, targetID: 4001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40002, name: "skillValueMod1", type: "baseValue", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: null, targetID: 4001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40003, name: "skillCostMod2", type: "baseCost", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: null, targetID: 4002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40004, name: "skillValueMod2", type: "baseValue", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: null, targetID: 4002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40005, name: "skillCostMod3", type: "baseCost", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: null, targetID: 4003, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40006, name: "skillValueMod3", type: "baseValue", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: null, targetID: 4003, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40007, name: "skillCostMod4", type: "baseCost", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: null, targetID: 4004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40008, name: "skillValueMod4", type: "baseValue", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: null, targetID: 4004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40009, name: "skillCostMod5", type: "baseCost", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: null, targetID: 4005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40010, name: "skillValueMod5", type: "baseValue", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: null, targetID: 4005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40011, name: "skillCostMod7", type: "baseCost", priority: null, sourceID: 4006, sourceCalcType: "add", targetType: null, targetID: 4006, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40012, name: "skillValueMod7", type: "baseValue", priority: null, sourceID: 4006, sourceCalcType: "add", targetType: null, targetID: 4006, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40013, name: "skillCostMod8", type: "baseCost", priority: null, sourceID: 4007, sourceCalcType: "add", targetType: null, targetID: 4007, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40014, name: "skillValueMod8", type: "baseValue", priority: null, sourceID: 4007, sourceCalcType: "add", targetType: null, targetID: 4007, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40015, name: "skillCostMod9", type: "baseCost", priority: null, sourceID: 4008, sourceCalcType: "add", targetType: null, targetID: 4008, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40016, name: "skillValueMod9", type: "baseValue", priority: null, sourceID: 4008, sourceCalcType: "add", targetType: null, targetID: 4008, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40017, name: "skillCostMod10", type: "baseCost", priority: null, sourceID: 4009, sourceCalcType: "add", targetType: null, targetID: 4009, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40018, name: "skillValueMod10", type: "baseValue", priority: null, sourceID: 4009, sourceCalcType: "add", targetType: null, targetID: 4009, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40019, name: "skillCostMod11", type: "baseCost", priority: null, sourceID: 4010, sourceCalcType: "add", targetType: null, targetID: 4010, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40020, name: "skillValueMod11", type: "baseValue", priority: null, sourceID: 4010, sourceCalcType: "add", targetType: null, targetID: 4010,runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40021, name: "skillCostMod12", type: "baseCost", priority: null, sourceID: 4011, sourceCalcType: "add", targetType: null, targetID: 4011, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40022, name: "skillValueMod12", type: "baseValue", priority: null, sourceID: 4011, sourceCalcType: "add", targetType: null, targetID: 4011, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40023, name: "skillCostMod13", type: "baseCost", priority: null, sourceID: 4012, sourceCalcType: "add", targetType: null, targetID: 4012, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40024, name: "skillValueMod13", type: "baseValue", priority: null, sourceID: 4012, sourceCalcType: "add", targetType: null, targetID: 4012, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40025, name: "skillCostMod14", type: "baseCost", priority: null, sourceID: 4013, sourceCalcType: "add", targetType: null, targetID: 4013, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40026, name: "skillValueMod14", type: "baseValue", priority: null, sourceID: 4013, sourceCalcType: "add", targetType: null, targetID: 4013, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40027, name: "skillCostMod15", type: "baseCost", priority: null, sourceID: 4014, sourceCalcType: "add", targetType: null, targetID: 4014, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40028, name: "skillValueMod15", type: "baseValue", priority: null, sourceID: 4014, sourceCalcType: "add", targetType: null, targetID: 4014, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40029, name: "skillCostMod6", type: "baseCost", priority: null, sourceID: 4015, sourceCalcType: "add", targetType: null, targetID: 4015, runningCalcType: "add", baseValue: 1, value: 1, active: false },
-            { id: 40030, name: "skillValueMod6", type: "baseValue", priority: null, sourceID: 4015, sourceCalcType: "add", targetType: null, targetID: 4015, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 101001, name: "essenceCostMod1", type: "baseCost", priority: null, sourceID: 100001, sourceCalcType: "add", targetType: null, targetID: 100001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+        ];
 
-            //skill typemods
-            { id: 41011, name: "skUpMod1", type: "value", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
-            { id: 41012, name: "skUpMod2", type: "value", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 3, value: 3, active: false },
-            { id: 41013, name: "skUpMod3", type: "value", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 4, value: 4, active: false },
-            { id: 41014, name: "skUpMod4", type: "value", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 5, value: 5, active: false },
-            { id: 41015, name: "skUpMod5", type: "value", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 6, value: 6, active: false },
-            { id: 41016, name: "skUpMod6", type: "value", priority: null, sourceID: 4006, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 7, value: 7, active: false },
-            { id: 41017, name: "skUpMod7", type: "value", priority: null, sourceID: 4007, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 8, value: 8, active: false },
-            { id: 41018, name: "skUpMod8", type: "value", priority: null, sourceID: 4008, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 9, value: 9, active: false },
-            { id: 41019, name: "skUpMod9", type: "value", priority: null, sourceID: 4009, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
-            { id: 41020, name: "skUpMod10", type: "value", priority: null, sourceID: 4010, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 11, value: 11, active: false },
-            { id: 41021, name: "skUpMod11", type: "value", priority: null, sourceID: 4011, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 12, value: 12, active: false },
-            { id: 41022, name: "skUpMod12", type: "value", priority: null, sourceID: 4012, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 13, value: 13, active: false },
-            { id: 41023, name: "skUpMod13", type: "value", priority: null, sourceID: 4013, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 14, value: 14, active: false },
-            { id: 41024, name: "skUpMod14", type: "value", priority: null, sourceID: 4014, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 15, value: 15, active: false },
-            { id: 41025, name: "skUpMod15", type: "value", priority: null, sourceID: 4015, sourceCalcType: "add", targetType: "trainUpgrade", targetID: null, runningCalcType: "mult", baseValue: 16, value: 16, active: false },
+        modData.forEach(data => {
+            const { id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active } = data;
+            const mod = new Mod(this.eventManager, id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active);
+            this.mods.push(mod);
+            this.gameManager.gameContent.idToObjectMap.set(id, mod);
+        });
+    }
 
 
-            //POWER UPGRADE MODS
-            { id: 11001, name: "pTarMod1", type: "value", priority: null, sourceID: 10001, sourceCalcType: "mult", targetType: null, targetID: 1001, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
-            { id: 11002, name: "pUpCostMod1", type: "baseCost", priority: null, sourceID: 10001, sourceCalcType: "mult", targetType: null, targetID: 10001, runningCalcType: "mult", baseValue: 10, value: 10, active: false},
-            { id: 11003, name: "pUpValueMod1", type: "baseValue", priority: null, sourceID: 10001, sourceCalcType: "add", targetType: null, targetID: 10001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+
+    initPowerUpgradeMods() {
+        const modData = [
+            { id: 11001, name: "pTarMod1", type: "value", priority: null, sourceID: 10001, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
+            { id: 11002, name: "pUpCostMod1", type: "baseCost", priority: null, sourceID: 10001, sourceCalcType: "mult", targetType: null, targetID: 10001, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
 
             { id: 11004, name: "pTarMod2", type: "value", priority: null, sourceID: 10002, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "exp", baseValue: 2, value: 2, active: false },
             { id: 11005, name: "pUpCostMod2", type: "baseCost", priority: null, sourceID: 10002, sourceCalcType: "mult", targetType: null, targetID: 10002, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
-            { id: 11006, name: "pUpValueMod2", type: "baseValue", priority: null, sourceID: 10002, sourceCalcType: "add", targetType: null, targetID: 10002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 11007, name: "pTarMod3", type: "cost", priority: null, sourceID: 10003, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "div", baseValue: 1, value: 1, active: false },
+            { id: 11007, name: "pTarMod3", type: "cost", priority: null, sourceID: 10003, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "div", baseValue: 2, value: 2, active: false },
             { id: 11008, name: "pUpCostMod3", type: "baseCost", priority: null, sourceID: 10003, sourceCalcType: "mult", targetType: null, targetID: 10003, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
-            { id: 11009, name: "pUpValueMod3", type: "baseValue", priority: null, sourceID: 10003, sourceCalcType: "add", targetType: null, targetID: 10003, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
             { id: 11010, name: "pTarMod4", type: "value", priority: null, sourceID: 10004, sourceCalcType: "mult", targetType: null, targetID: 1001, runningCalcType: "add", baseValue: 10, value: 10, active: false },
             { id: 11011, name: "pUpCostMod4", type: "baseCost", priority: null, sourceID: 10004, sourceCalcType: "mult", targetType: null, targetID: 10004, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
-            { id: 11012, name: "pUpValueMod4", type: "baseValue", priority: null, sourceID: 10004, sourceCalcType: "add", targetType: null, targetID: 10004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
             { id: 11013, name: "pTarMod5", type: "value", priority: null, sourceID: 10005, sourceCalcType: "mult", targetType: "allTrain", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
             { id: 11014, name: "pUpCostMod5", type: "baseCost", priority: null, sourceID: 10005, sourceCalcType: "mult", targetType: null, targetID: 10005, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
-            { id: 11015, name: "pUpValueMod5", type: "baseValue", priority: null, sourceID: 10005, sourceCalcType: "add", targetType: null, targetID: 10005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
             { id: 11016, name: "pTarMod6", type: "value", priority: null, sourceID: 10006, sourceCalcType: "mult", targetType: "powerTrain", targetID: null, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 11017, name: "pUpCostMod6", type: "baseCost", priority: null, sourceID: 10006, sourceCalcType: "mult", targetType: null, targetID: 10006, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
-            { id: 11018, name: "pUpValueMod6", type: "baseValue", priority: null, sourceID: 10006, sourceCalcType: "add", targetType: null, targetID: 10006, runningCalcType: "add", baseValue: 1, value: 1, active: false },
- 
-            //POWER TRAINING MODS
-            { id: 101, name: "pMod1", type: "baseCost", priority: null, sourceID: 1001, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
-            { id: 102, name: "pMod2", type: "baseValue", priority: null, sourceID: 1001, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
-            { id: 103, name: "pMod3", type: "baseCost", priority: null, sourceID: 1002, sourceCalcType: "mult", targetType: null, targetID: 1002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
-            { id: 104, name: "pMod4", type: "baseValue", priority: null, sourceID: 1002, sourceCalcType: "mult", targetType: null, targetID: 1002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
-            { id: 105, name: "pMod5", type: "baseCost", priority: null, sourceID: 1003, sourceCalcType: "add", targetType: null, targetID: 1003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
-            { id: 106, name: "pMod6", type: "baseValue", priority: null, sourceID: 1003, sourceCalcType: "mult", targetType: null, targetID: 1003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
-            { id: 107, name: "pMod7", type: "baseCost", priority: null, sourceID: 1004, sourceCalcType: "mult", targetType: null, targetID: 1004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
-            { id: 108, name: "pMod8", type: "baseValue", priority: null, sourceID: 1004, sourceCalcType: "mult", targetType: null, targetID: 1004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
-            { id: 109, name: "pMod9", type: "baseCost", priority: null, sourceID: 1005, sourceCalcType: "add", targetType: null, targetID: 1005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
-            { id: 110, name: "pMod10", type: "baseValue", priority: null, sourceID: 1005, sourceCalcType: "add", targetType: null, targetID: 1005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
-            { id: 111, name: "pMod11", type: "baseCost", priority: null, sourceID: 1006, sourceCalcType: "mult", targetType: null, targetID: 1006, runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
-            { id: 112, name: "pMod12", type: "baseValue", priority: null, sourceID: 1006, sourceCalcType: "mult", targetType: null, targetID: 1006, runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
-            { id: 113, name: "pMod13", type: "baseCost", priority: null, sourceID: 1007, sourceCalcType: "add", targetType: null, targetID: 1007, runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
-            { id: 114, name: "pMod14", type: "baseValue", priority: null, sourceID: 1007, sourceCalcType: "add", targetType: null, targetID: 1007, runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
-            { id: 115, name: "pMod15", type: "baseCost", priority: null, sourceID: 1008, sourceCalcType: "mult", targetType: null, targetID: 1008, runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
-            { id: 116, name: "pMod16", type: "baseValue", priority: null, sourceID: 1008, sourceCalcType: "mult", targetType: null, targetID: 1008, runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
-            { id: 117, name: "pMod17", type: "baseCost", priority: null, sourceID: 1009, sourceCalcType: "add", targetType: null, targetID: 1009, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
-            { id: 118, name: "pMod18", type: "baseValue", priority: null, sourceID: 1009, sourceCalcType: "add", targetType: null, targetID: 1009, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
-            { id: 119, name: "pMod19", type: "baseCost", priority: null, sourceID: 1010, sourceCalcType: "mult", targetType: null, targetID: 1010, runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
-            { id: 120, name: "pMod20", type: "baseValue", priority: null, sourceID: 1010, sourceCalcType: "mult", targetType: null, targetID: 1010, runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
+        ];
+
+        modData.forEach(data => {
+            const { id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active } = data;
+            const mod = new Mod(this.eventManager, id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active);
+            this.mods.push(mod);
+            this.gameManager.gameContent.idToObjectMap.set(id, mod);
+        });
+    }
 
 
-            //SPIRIT UPGRADE MODS
-            //FIGHTER UPGRADE MOD / FIGHTER MOD
-            { id: 51001, name: "sTarMod1", type: "baseCost", priority: null, sourceID: 50001, sourceCalcType: "add", targetType: "fighters", targetID: null, runningCalcType: "div", baseValue: 1, value: 1, active: false },
+
+    initPowerTrainMods() {
+        const modData = [
+            { id: 101, name: "pMod1", type: "baseCost", priority: 1, sourceID: 1001, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 102, name: "pMod2", type: "baseValue", priority: 1, sourceID: 1001, sourceCalcType: "add", targetType: null, targetID: 1001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 103, name: "pMod3", type: "baseCost", priority: 1, sourceID: 1002, sourceCalcType: "mult", targetType: null, targetID: 1002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
+            { id: 104, name: "pMod4", type: "baseValue", priority: 1, sourceID: 1002, sourceCalcType: "mult", targetType: null, targetID: 1002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
+            { id: 105, name: "pMod5", type: "baseCost", priority: 1, sourceID: 1003, sourceCalcType: "add", targetType: null, targetID: 1003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
+            { id: 106, name: "pMod6", type: "baseValue", priority: 1, sourceID: 1003, sourceCalcType: "mult", targetType: null, targetID: 1003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
+            { id: 107, name: "pMod7", type: "baseCost", priority: 1, sourceID: 1004, sourceCalcType: "mult", targetType: null, targetID: 1004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
+            { id: 108, name: "pMod8", type: "baseValue", priority: 1, sourceID: 1004, sourceCalcType: "mult", targetType: null, targetID: 1004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
+            { id: 109, name: "pMod9", type: "baseCost", priority: 1, sourceID: 1005, sourceCalcType: "add", targetType: null, targetID: 1005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
+            { id: 110, name: "pMod10", type: "baseValue", priority: 1, sourceID: 1005, sourceCalcType: "add", targetType: null, targetID: 1005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
+            { id: 111, name: "pMod11", type: "baseCost", priority: 1, sourceID: 1006, sourceCalcType: "mult", targetType: null, targetID: 1006, runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
+            { id: 112, name: "pMod12", type: "baseValue", priority: 1, sourceID: 1006, sourceCalcType: "mult", targetType: null, targetID: 1006, runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
+            { id: 113, name: "pMod13", type: "baseCost", priority: 1, sourceID: 1007, sourceCalcType: "add", targetType: null, targetID: 1007, runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
+            { id: 114, name: "pMod14", type: "baseValue", priority: 1, sourceID: 1007, sourceCalcType: "add", targetType: null, targetID: 1007, runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
+            { id: 115, name: "pMod15", type: "baseCost", priority: 1, sourceID: 1008, sourceCalcType: "mult", targetType: null, targetID: 1008, runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
+            { id: 116, name: "pMod16", type: "baseValue", priority: 1, sourceID: 1008, sourceCalcType: "mult", targetType: null, targetID: 1008, runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
+            { id: 117, name: "pMod17", type: "baseCost", priority: 1, sourceID: 1009, sourceCalcType: "add", targetType: null, targetID: 1009, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
+            { id: 118, name: "pMod18", type: "baseValue", priority: 1, sourceID: 1009, sourceCalcType: "add", targetType: null, targetID: 1009, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
+            { id: 119, name: "pMod19", type: "baseCost", priority: 1, sourceID: 1010, sourceCalcType: "mult", targetType: null, targetID: 1010, runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
+            { id: 120, name: "pMod20", type: "baseValue", priority: 1, sourceID: 1010, sourceCalcType: "mult", targetType: null, targetID: 1010, runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
+
+        ];
+
+        modData.forEach(data => {
+            const { id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active } = data;
+            const mod = new Mod(this.eventManager, id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active);
+            this.mods.push(mod);
+            this.gameManager.gameContent.idToObjectMap.set(id, mod);
+        });
+    }
+
+
+    initSpiritTrainMods() {
+        const modData = [
+            { id: 501, name: "sMod1", type: "baseCost", priority: 1, sourceID: 5001, sourceCalcType: "add", targetType: null, targetID: 5001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 502, name: "sMod2", type: "baseValue", priority: 1, sourceID: 5001, sourceCalcType: "add", targetType: null, targetID: 5001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
+            { id: 503, name: "sMod3", type: "baseCost", priority: 1, sourceID: 5002, sourceCalcType: "mult", targetType: null, targetID: 5002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
+            { id: 504, name: "sMod4", type: "baseValue", priority: 1, sourceID: 5002, sourceCalcType: "mult", targetType: null, targetID: 5002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
+            { id: 505, name: "sMod5", type: "baseCost", priority: 1, sourceID: 5003, sourceCalcType: "add", targetType: null, targetID: 5003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
+            { id: 506, name: "sMod6", type: "baseValue", priority: 1, sourceID: 5003, sourceCalcType: "add", targetType: null, targetID: 5003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
+            { id: 507, name: "sMod7", type: "baseCost", priority: 1, sourceID: 5004, sourceCalcType: "mult", targetType: null, targetID: 5004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
+            { id: 508, name: "sMod8", type: "baseValue", priority: 1, sourceID: 5004, sourceCalcType: "mult", targetType: null, targetID: 5004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
+            { id: 509, name: "sMod9", type: "baseCost", priority: 1, sourceID: 5005, sourceCalcType: "add", targetType: null, targetID: 5005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
+            { id: 510, name: "sMod10", type: "baseValue", priority: 1, sourceID: 5005, sourceCalcType: "add", targetType: null, targetID: 5005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
+            { id: 511, name: "sMod11", type: "baseCost", priority: 1, sourceID: 5006, sourceCalcType: "mult", targetType: null, targetID: 5006, runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
+            { id: 512, name: "sMod12", type: "baseValue", priority: 1, sourceID: 5006, sourceCalcType: "mult", targetType: null, targetID: 5006, runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
+            { id: 513, name: "sMod13", type: "baseCost", priority: 1, sourceID: 5007, sourceCalcType: "add", targetType: null, targetID: 5007, runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
+            { id: 514, name: "sMod14", type: "baseValue", priority: 1, sourceID: 5007, sourceCalcType: "add", targetType: null, targetID: 5007, runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
+            { id: 515, name: "sMod15", type: "baseCost", priority: 1, sourceID: 5008, sourceCalcType: "mult", targetType: null, targetID: 5008, runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
+            { id: 516, name: "sMod16", type: "baseValue", priority: 1, sourceID: 5008, sourceCalcType: "mult", targetType: null, targetID: 5008, runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
+            { id: 517, name: "sMod17", type: "baseCost", priority: 1, sourceID: 5009, sourceCalcType: "add", targetType: null, targetID: 5009, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
+            { id: 518, name: "sMod18", type: "baseValue", priority: 1, sourceID: 5009, sourceCalcType: "add", targetType: null, targetID: 5009, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
+            { id: 519, name: "sMod19", type: "baseCost", priority: 1, sourceID: 5010, sourceCalcType: "mult", targetType: null, targetID: 5010, runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
+            { id: 520, name: "sMod20", type: "baseValue", priority: 1, sourceID: 5010, sourceCalcType: "mult", targetType: null, targetID: 5010, runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
+        ];
+
+        modData.forEach(data => {
+            const { id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active } = data;
+            const mod = new Mod(this.eventManager, id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active);
+            this.mods.push(mod);
+            this.gameManager.gameContent.idToObjectMap.set(id, mod);
+        });
+    }
+
+
+    initSpiritUpgradeMods() {
+        const modData = [
+            { id: 51001, name: "sTarMod1", type: "baseCost", priority: null, sourceID: 50001, sourceCalcType: "add", targetType: "fighters", targetID: null, runningCalcType: "div", baseValue: 2, value: 2, active: false },
             { id: 51002, name: "sUpCostMod1", type: "baseCost", priority: null, sourceID: 50001, sourceCalcType: "mult", targetType: null, targetID: 50001, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 51003, name: "sUpValueMod1", type: "baseValue", priority: null, sourceID: 50001, sourceCalcType: "add", targetType: null, targetID: 50001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
@@ -334,39 +825,27 @@ class Builder {
             { id: 51005, name: "sUpCostMod2", type: "baseCost", priority: null, sourceID: 50002, sourceCalcType: "mult", targetType: null, targetID: 50002, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 51006, name: "sUpValueMod2", type: "baseValue", priority: null, sourceID: 50002, sourceCalcType: "add", targetType: null, targetID: 50002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
 
-            { id: 51007, name: "sTarMod3", type: "value", priority: null, sourceID: 50003, sourceCalcType: "add", targetType: "allTrain", targetID: null, runningCalcType: "tetra", baseValue: 2, value: 2, active: false },
-            { id: 51008, name: "sUpCostMod3", type: "baseCost", priority: null, sourceID: 50003, sourceCalcType: "mult", targetType: null, targetID: 50003, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
-            { id: 51009, name: "sUpValueMod3", type: "baseValue", priority: null, sourceID: 50003, sourceCalcType: "add", targetType: null, targetID: 50003, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 51007, name: "sTarMod3", type: "value", priority: null, sourceID: 50003, sourceCalcType: "mult", targetType: "fighters", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
+            { id: 51008, name: "sUpCostMod3", type: "baseCost", priority: null, sourceID: 50003, sourceCalcType: "mult", targetType: null, targetID: 50003, runningCalcType: "mult", baseValue: 100, value: 100, active: false },
+            { id: 51009, name: "sUpValueMod3", type: "baseValue", priority: null, sourceID: 50003, sourceCalcType: "add", targetType: null, targetID: 50003, runningCalcType: "add", baseValue: 2, value: 2, active: false },
 
 
-            { id: 51010, name: "sUpMod4", type: "value", priority: null, sourceID: 50004, sourceCalcType: "add", targetType: "allTrain", targetID: null, runningCalcType: "log", baseValue: 1, value: 1, active: false },
+            { id: 51010, name: "sTarMod4", type: "value", priority: null, sourceID: 50004, sourceCalcType: "add", targetType: "allTrain", targetID: null, runningCalcType: "exp", baseValue: 2, value: 2, active: false },
             { id: 51011, name: "sUpCostMod4", type: "baseCost", priority: null, sourceID: 50004, sourceCalcType: "mult", targetType: null, targetID: 50004, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
             { id: 51012, name: "sUpValueMod4", type: "baseValue", priority: null, sourceID: 50004, sourceCalcType: "add", targetType: null, targetID: 50004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+        ];
 
-            //SPIRIT TRAINING MODS
-            { id: 501, name: "sMod1", type: "baseCost", priority: null, sourceID: 5001, sourceCalcType: "add", targetType: null, targetID: 5001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
-            { id: 502, name: "sMod2", type: "baseValue", priority: null, sourceID: 5001, sourceCalcType: "add", targetType: null, targetID: 5001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
-            { id: 503, name: "sMod3", type: "baseCost", priority: null, sourceID: 5002, sourceCalcType: "mult", targetType: null, targetID: 5002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
-            { id: 504, name: "sMod4", type: "baseValue", priority: null, sourceID: 5002, sourceCalcType: "mult", targetType: null, targetID: 5002, runningCalcType: "mult", baseValue: 10, value: 10, active: true },
-            { id: 505, name: "sMod5", type: "baseCost", priority: null, sourceID: 5003, sourceCalcType: "add", targetType: null, targetID: 5003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
-            { id: 506, name: "sMod6", type: "baseValue", priority: null, sourceID: 5003, sourceCalcType: "add", targetType: null, targetID: 5003, runningCalcType: "add", baseValue: 100, value: 100, active: false },
-            { id: 507, name: "sMod7", type: "baseCost", priority: null, sourceID: 5004, sourceCalcType: "mult", targetType: null, targetID: 5004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
-            { id: 508, name: "sMod8", type: "baseValue", priority: null, sourceID: 5004, sourceCalcType: "mult", targetType: null, targetID: 5004, runningCalcType: "mult", baseValue: 1000, value: 1000, active: false },
-            { id: 509, name: "sMod9", type: "baseCost", priority: null, sourceID: 5005, sourceCalcType: "add", targetType: null, targetID: 5005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
-            { id: 510, name: "sMod10", type: "baseValue", priority: null, sourceID: 5005, sourceCalcType: "add", targetType: null, targetID: 5005, runningCalcType: "add", baseValue: 10000, value: 10000, active: false },
-            { id: 511, name: "sMod11", type: "baseCost", priority: null, sourceID: 5006, sourceCalcType: "mult", targetType: null, targetID: 5006, runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
-            { id: 512, name: "sMod12", type: "baseValue", priority: null, sourceID: 5006, sourceCalcType: "mult", targetType: null, targetID: 5006,  runningCalcType: "mult", baseValue: 100000, value: 100000, active: false },
-            { id: 513, name: "sMod13", type: "baseCost", priority: null, sourceID: 5007, sourceCalcType: "add", targetType: null,targetID: 5007,  runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
-            { id: 514, name: "sMod14", type: "baseValue", priority: null, sourceID: 5007, sourceCalcType: "add", targetType: null,targetID: 5007,  runningCalcType: "add", baseValue: 1000000, value: 1000000, active: false },
-            { id: 515, name: "sMod15", type: "baseCost", priority: null, sourceID: 5008, sourceCalcType: "mult", targetType: null,targetID: 5008,  runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
-            { id: 516, name: "sMod16", type: "baseValue", priority: null, sourceID: 5008, sourceCalcType: "mult", targetType: null,  targetID: 5008,runningCalcType: "mult", baseValue: 10000000, value: 10000000, active: false },
-            { id: 517, name: "sMod17", type: "baseCost", priority: null, sourceID: 5009, sourceCalcType: "add", targetType: null, targetID: 5009, runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
-            { id: 518, name: "sMod18", type: "baseValue", priority: null, sourceID: 5009, sourceCalcType: "add", targetType: null,targetID: 5009,  runningCalcType: "add", baseValue: 100000000, value: 100000000, active: false },
-            { id: 519, name: "sMod19", type: "baseCost", priority: null, sourceID: 5010, sourceCalcType: "mult", targetType: null,targetID: 5010,  runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
-            { id: 520, name: "sMod20", type: "baseValue", priority: null, sourceID: 5010, sourceCalcType: "mult", targetType: null, targetID: 5010, runningCalcType: "mult", baseValue: 1000000000, value: 1000000000, active: false },
+        modData.forEach(data => {
+            const { id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active } = data;
+            const mod = new Mod(this.eventManager, id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active);
+            this.mods.push(mod);
+            this.gameManager.gameContent.idToObjectMap.set(id, mod);
+        });
+    }
 
 
-            //FIGHTER MODS
+    initFighterMods() {
+        const modData = [
             { id: 901, name: "fMod1", type: "baseCost", priority: null, sourceID: 9001, sourceCalcType: "add", targetType: null, targetID: 9001, runningCalcType: "add", baseValue: 100, value: 100, active: true },
             { id: 902, name: "fMod2", type: "baseValue", priority: null, sourceID: 9001, sourceCalcType: "add", targetType: null, targetID: 9001, runningCalcType: "add", baseValue: 1, value: 1, active: true },
             { id: 903, name: "fMod3", type: "baseCost", priority: null, sourceID: 9002, sourceCalcType: "add", targetType: null, targetID: 9002, runningCalcType: "add", baseValue: 500, value: 500, active: true },
@@ -399,6 +878,50 @@ class Builder {
             { id: 930, name: "fMod30", type: "baseValue", priority: null, sourceID: 9015, sourceCalcType: "add", targetType: null, targetID: 9015, runningCalcType: "add", baseValue: 30, value: 30, active: true },
         ];
 
+        modData.forEach(data => {
+            const { id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active } = data;
+            const mod = new Mod(this.eventManager, id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active);
+            this.mods.push(mod);
+            this.gameManager.gameContent.idToObjectMap.set(id, mod);
+        });
+    }
+
+    initSkillMods() {
+        const modData = [
+            //skill base cost/value mods
+            { id: 40001, name: "skillCostMod1", type: "baseCost", priority: null, sourceID: 4001, sourceCalcType: "add", targetType: null, targetID: 4001, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40003, name: "skillCostMod2", type: "baseCost", priority: null, sourceID: 4002, sourceCalcType: "add", targetType: null, targetID: 4002, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40005, name: "skillCostMod3", type: "baseCost", priority: null, sourceID: 4003, sourceCalcType: "add", targetType: null, targetID: 4003, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40007, name: "skillCostMod4", type: "baseCost", priority: null, sourceID: 4004, sourceCalcType: "add", targetType: null, targetID: 4004, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40009, name: "skillCostMod5", type: "baseCost", priority: null, sourceID: 4005, sourceCalcType: "add", targetType: null, targetID: 4005, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40011, name: "skillCostMod7", type: "baseCost", priority: null, sourceID: 4006, sourceCalcType: "add", targetType: null, targetID: 4006, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40013, name: "skillCostMod8", type: "baseCost", priority: null, sourceID: 4007, sourceCalcType: "add", targetType: null, targetID: 4007, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40015, name: "skillCostMod9", type: "baseCost", priority: null, sourceID: 4008, sourceCalcType: "add", targetType: null, targetID: 4008, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40017, name: "skillCostMod10", type: "baseCost", priority: null, sourceID: 4009, sourceCalcType: "add", targetType: null, targetID: 4009, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40019, name: "skillCostMod11", type: "baseCost", priority: null, sourceID: 4010, sourceCalcType: "add", targetType: null, targetID: 4010, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40021, name: "skillCostMod12", type: "baseCost", priority: null, sourceID: 4011, sourceCalcType: "add", targetType: null, targetID: 4011, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40023, name: "skillCostMod13", type: "baseCost", priority: null, sourceID: 4012, sourceCalcType: "add", targetType: null, targetID: 4012, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40025, name: "skillCostMod14", type: "baseCost", priority: null, sourceID: 4013, sourceCalcType: "add", targetType: null, targetID: 4013, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40027, name: "skillCostMod15", type: "baseCost", priority: null, sourceID: 4014, sourceCalcType: "add", targetType: null, targetID: 4014, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+            { id: 40029, name: "skillCostMod6", type: "baseCost", priority: null, sourceID: 4015, sourceCalcType: "add", targetType: null, targetID: 4015, runningCalcType: "add", baseValue: 1, value: 1, active: false },
+
+            //skill typemods
+            { id: 41011, name: "skUpMod1", type: "value", priority: null, sourceID: 4001, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 2, value: 2, active: false },
+            { id: 41012, name: "skUpMod2", type: "value", priority: null, sourceID: 4002, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 3, value: 3, active: false },
+            { id: 41013, name: "skUpMod3", type: "value", priority: null, sourceID: 4003, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 4, value: 4, active: false },
+            { id: 41014, name: "skUpMod4", type: "value", priority: null, sourceID: 4004, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 5, value: 5, active: false },
+            { id: 41015, name: "skUpMod5", type: "value", priority: null, sourceID: 4005, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 6, value: 6, active: false },
+            { id: 41016, name: "skUpMod6", type: "value", priority: null, sourceID: 4006, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 7, value: 7, active: false },
+            { id: 41017, name: "skUpMod7", type: "value", priority: null, sourceID: 4007, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 8, value: 8, active: false },
+            { id: 41018, name: "skUpMod8", type: "value", priority: null, sourceID: 4008, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 9, value: 9, active: false },
+            { id: 41019, name: "skUpMod9", type: "value", priority: null, sourceID: 4009, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 10, value: 10, active: false },
+            { id: 41020, name: "skUpMod10", type: "value", priority: null, sourceID: 4010, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 11, value: 11, active: false },
+            { id: 41021, name: "skUpMod11", type: "value", priority: null, sourceID: 4011, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 12, value: 12, active: false },
+            { id: 41022, name: "skUpMod12", type: "value", priority: null, sourceID: 4012, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 13, value: 13, active: false },
+            { id: 41023, name: "skUpMod13", type: "value", priority: null, sourceID: 4013, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 14, value: 14, active: false },
+            { id: 41024, name: "skUpMod14", type: "value", priority: null, sourceID: 4014, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 15, value: 15, active: false },
+            { id: 41025, name: "skUpMod15", type: "value", priority: null, sourceID: 4015, sourceCalcType: "mult", targetType: "trains&upgrades", targetID: null, runningCalcType: "mult", baseValue: 16, value: 16, active: false },
+        ];
 
         modData.forEach(data => {
             const { id, name, type, priority, sourceID, sourceCalcType, targetType, targetID, runningCalcType, baseValue, value, active } = data;
@@ -408,87 +931,22 @@ class Builder {
         });
     }
 
-    initializeTrainings() {
-        const trainingData = [
-
-             //power realm trainings
-            { id: 1001, realmID: 11, name: "pTrain1", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: true },
-            { id: 1002, realmID: 11, name: "pTrain2", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: true },
-            { id: 1003, realmID: 11, name: "pTrain3", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: false },
-            { id: 1004, realmID: 11, name: "pTrain4", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: false },
-            { id: 1005, realmID: 11, name: "pTrain5", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: false },
-            { id: 1006, realmID: 12, name: "pTrain6", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: false },
-            { id: 1007, realmID: 12, name: "pTrain7", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: false },
-            { id: 1008, realmID: 12, name: "pTrain8", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: false },
-            { id: 1009, realmID: 12, name: "pTrain9", description: "description", level: 0, maxLevel: 999, costType: "power",  valueType: "powerIncome", active: false },
-            { id: 1010, realmID: 12, name: "pTrain10", description: "description", level: 0, maxLevel: 999, costType: "power", valueType: "powerIncome", active: false },
-
-            //spirit realm trainings
-            { id: 5001, realmID: 51, name: "sTrain1", description: "description", level: 0, maxLevel: 999, costType: "spirit",  valueType: "spiritIncome", active: true },
-            { id: 5002, realmID: 51, name: "sTrain2", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: true },
-            { id: 5003, realmID: 51, name: "sTrain3", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-            { id: 5004, realmID: 51, name: "sTrain4", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-            { id: 5005, realmID: 51, name: "sTrain5", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-            { id: 5006, realmID: 52, name: "sTrain6", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-            { id: 5007, realmID: 52, name: "sTrain7", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-            { id: 5008, realmID: 52, name: "sTrain8", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-            { id: 5009, realmID: 52, name: "sTrain9", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-            { id: 5010, realmID: 52, name: "sTrain10", description: "description", level: 0, maxLevel: 999, costType: "spirit", valueType: "spiritIncome", active: false },
-        ];
-
-        trainingData.forEach(data => {
-            const { id, realmID, name, description, level, maxLevel, costType, valueType, active } = data;
-            const training = new Training(this.eventManager, id, realmID, name, description, level, maxLevel,  costType, valueType, active);
-            this.trainings.push(training);
-            this.gameManager.gameContent.idToObjectMap.set(id, training);
-        });
-    }
-
-    initializeUpgrades() {
-        const upgradeData = [
-
-            //power realm upgrades
-            { id: 10001, realmID: 11, name: "pUpgrade1", description: "train 1 income *= (this level + 1)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
-            { id: 10002, realmID: 11, name: "pUpgrade2", description: "train 1 income ^ (this level + 1)", level: 0, maxLevel: 1, costType: "power", valueType: null, active: true },
-            { id: 10003, realmID: 11, name: "pUpgrade3", description: "train 1 cost /= (this level + 1)", level: 0, maxLevel: 999, costType: "power",  valueType: null, active: true },
-            { id: 10004, realmID: 11, name: "pUpgrade4", description: "train 1 income += (10 * this level)", level: 0, maxLevel: 999, costType: "power",  valueType: null, active: true },
-            { id: 10005, realmID: 11, name: "pUpgrade5", description: "all train value * (this.level * 2)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
-            { id: 10006, realmID: 11, name: "pUpgrade6", description: "all pTrain value * (this.level *10)", level: 0, maxLevel: 999, costType: "power", valueType: null, active: true },
-         
-            //spirit realm upgrades
-            { id: 50001, realmID: 51, name: "sUpgrade1", description: "fighter powerLevel / (this.level)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
-
-            { id: 50002, realmID: 51, name: "sUpgrade2", description: "fighter power level - (this.level * 10)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
-
-            { id: 50003, realmID: 51, name: "sUpgrade3", description: "all train/upgrade value ^^ (this.level +1)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
-
-            { id: 50004, realmID: 51, name: "sUpgrade4", description: "all train  log2(value)", level: 0, maxLevel: 999, costType: "spirit", valueType: null, active: true },
-        ];
-
-        upgradeData.forEach(data => {
-            const { id, realmID, name, description, level, maxLevel, costType,  valueType, active } = data;
-            const upgrade = new Upgrade(this.eventManager, id, realmID, name, description, level, maxLevel, costType, valueType, active);
-            this.upgrades.push(upgrade);
-            this.gameManager.gameContent.idToObjectMap.set(id, upgrade);
-        });
-    }
-
-    initializeRealms() {
+    initRealms() {
         const realmData = [
             //power realms
-            { id: 11, type: "power", name: "pRealm1", isUnlocked: true },
-            { id: 12, type: "power", name: "pRealm2", isUnlocked: true },
-            { id: 13, type: "power", name: "pRealm3", isUnlocked: true },
+            { id: 11, type: "power", name: "pRealm1", active: true },
+            { id: 12, type: "power", name: "pRealm2", active: true },
+            { id: 13, type: "power", name: "pRealm3", active: true },
 
             //spirit realms
-            { id: 51, type: "spirit", name: "sRealm1", isUnlocked: true },
-            { id: 52, type: "spirit", name: "sRealm2", isUnlocked: true },
-            { id: 53, type: "spirit", name: "sRealm3", isUnlocked: true },
+            { id: 51, type: "spirit", name: "sRealm1", active: true },
+            { id: 52, type: "spirit", name: "sRealm2", active: true },
+            { id: 53, type: "spirit", name: "sRealm3", active: true },
         ];
 
         realmData.forEach(data => {
-            const { id, type, name, isUnlocked } = data;
-            const realm = new Realm(this.eventManager, id, type, name, isUnlocked);
+            const { id, type, name, active } = data;
+            const realm = new Realm(this.eventManager, id, type, name, active);
             this.realms.push(realm);
             this.gameManager.gameContent.idToObjectMap.set(id, realm);
 
@@ -501,7 +959,7 @@ class Builder {
         });
     }
 
-    initializeStages() {
+    initStages() {
         const stageData = [
             { id: 901, name: "stage1", active: true },
             { id: 902, name: "stage2", active: false },
@@ -520,7 +978,7 @@ class Builder {
         });
     }
 
-    initializeFighters() {
+    initFighters() {
         const fighterData = [
             { id: 9001, stageID: 901, name: "fighter1", active: true },
             { id: 9002, stageID: 901, name: "fighter2", active: true },
@@ -553,7 +1011,7 @@ class Builder {
         });
     }
 
-    initializeSkills() {
+    initSkills() {
         const skillData = [
             { id: 4001, name: "sk1", description: "all values * (this.level * 2)", level: 0, maxLevel: 10, active: true, connections: { east: 4002, south: 4003, west: 4004 } },
             { id: 4002, name: "sk2", description: "all values * (this.level * 3)", level: 0, maxLevel: 10, active: false, connections: { east:4011} },
@@ -592,11 +1050,12 @@ class Builder {
     }
 
     createSkillConnectionUnlocks() {
-        let unlockID = 3500;
+        let unlockID = 35000;
         let unlocksDone = [];
         this.gameManager.gameContent.skillTree.skills.forEach(skill => {
             for (const direction in skill.connections) {
                 const unlock = new Unlock(unlockID, 1, "level", skill.id, skill.connections[direction]);
+                //dont push unlock if a target skill is already unlocked (to handle bidirectional unlock directions)
                 if (!unlocksDone.some(existingUnlock => existingUnlock.targetID === unlock.targetID)) {
 
                     this.unlocks.push(unlock);
@@ -607,6 +1066,69 @@ class Builder {
                 }
             }
         });
+    }
+
+    createRebirthModAndPseudoObject() {
+        //hidden upgrade object to act as source of rebirth mod
+        const sourceUpgrade =
+            { id: 60000, realmID: null, name: "hidden rebirth1 upgrade source", description: "hidden rebirth1 upgrade source", level: new Decimal(1), maxLevel: new Decimal(999999), costType: "power", valueType: null, active: true };
+        const { id, realmID, name, description, level, maxLevel, costType, valueType, active } = sourceUpgrade;
+        const upgrade = new Upgrade(this.eventManager, id, realmID, name, description, level, maxLevel, costType, valueType, active);
+        this.upgrades.push(upgrade);
+        this.gameManager.gameContent.idToObjectMap.set(id, upgrade);
+
+
+        let modID = 60001;
+        const mod = new Mod(this.eventManager, modID, "rebirth1EssenceMod", "value", null, 60000, "add", "powerTrain", null, "mult", new Decimal(1), new Decimal(1), true);
+        this.mods.push(mod);
+        this.gameManager.gameContent.idToObjectMap.set(modID, mod);
+    }
+
+    createMilestoneUnlocksAndMods() {
+        const MILESTONE_TIERS = [new Decimal(10), new Decimal(25), new Decimal(50), new Decimal(100), new Decimal(250), new Decimal(500), new Decimal(1000), new Decimal(2500), new Decimal(5000), new Decimal(10000), new Decimal(25000), new Decimal(50000),new Decimal(100000)];
+
+        //hidden upgrade object to act as source of milestone mods
+        const sourceUpgrade =
+            { id: 30000, realmID: null, name: "hidden milestone upgrade source", description: "hidden milestone upgrade source", level: new Decimal(1), maxLevel: new Decimal(1), costType: "power", valueType: null, active: true };
+            const { id, realmID, name, description, level, maxLevel, costType, valueType, active } = sourceUpgrade;
+            const upgrade = new Upgrade(this.eventManager, id, realmID, name, description, level, maxLevel, costType, valueType, active);
+            //this.upgrades.push(upgrade);
+            this.gameManager.gameContent.idToObjectMap.set(id, upgrade);
+        
+
+
+        let unlockID = 37500;
+        let modID = 30001;
+        let milestoneLevel = new Decimal(0);
+        for (const feature of this.trainings) {
+            for (let i = 0; i < MILESTONE_TIERS.length; i++) {
+                milestoneLevel = MILESTONE_TIERS[i];
+
+                let modValue = new Decimal(2);
+
+                const mod = new Mod(this.eventManager, modID, feature.name + "milestone" + milestoneLevel.toString(), "value", null, 30000, "mult", null, feature.id, "mult", modValue, modValue, false);
+                this.mods.push(mod);
+                this.gameManager.gameContent.idToObjectMap.set(modID, mod);
+
+
+                const unlock = new Unlock(unlockID, milestoneLevel, "level", feature.id, mod.id);
+
+                this.unlocks.push(unlock);
+                this.unlockManager.unlocks.push(unlock);
+                this.gameManager.gameContent.unlocks.push(unlock);
+                this.gameManager.gameContent.idToObjectMap.set(unlockID, unlock);
+
+                unlockID++;
+                modID++;
+                modValue.plus(2);
+            }
+        }
+
+        //populate all trainings with milestone tiers
+        for (const training of this.trainings) {
+            training.milestoneTiers = MILESTONE_TIERS;
+            training.setNewMilestoneLevel();
+        }
     }
 
 
@@ -743,7 +1265,7 @@ class Builder {
             }
          
             else {
-                console.error("pushModsToTargets: mod",mod.name ,"is not initialized properly - no source or target ID");
+                console.error("pushModsToTargets: mod",mod.name ,"is not initialized properly - missing: target type or target ID");
             }
         });
 
@@ -758,20 +1280,29 @@ class Builder {
             if (typeMod.targetType === "powerTrain") {
                 featureLoop = this.trainings.filter(training => training.realmID < 50);
             }
+            else if (typeMod.targetType === "spiritTrain") {
+                featureLoop = this.trainings.filter(training => training.realmID > 50);
+            }
             else if (typeMod.targetType === "fighters") {
                 featureLoop = this.fighters;
             }
             else if (typeMod.targetType === "allTrain") {
                 featureLoop = this.trainings;
             }
-            else if (typeMod.targetType === "trainUpgrade") {
+            else if (typeMod.targetType === "trains&upgrades") {
                 featureLoop = this.trainings;
+            }
+            else if (typeMod.targetType === "allTrainUpgrades") {
+                featureLoop = this.upgrades;
             }
 
             //add type mod to relevant feature
             for (const feature of featureLoop) {
-                this.addModToObjectCalcTree(feature, typeMod);
+                if (typeMod.source !== feature) {
+                    this.addModToObjectCalcTree(feature, typeMod);
+                }
             }
+
         });
     }
 
@@ -789,7 +1320,7 @@ class Builder {
                     tree = new CalculationTree(targetObject, "cost");
                     targetObject.calcTreesMap.set("cost", tree);
                     tree.addNode(mod);
-                    mod.calcTreeReferences.push(tree);
+                    mod.calcTreeReferences.push(targetObject.calcTreesMap.get("cost"));
                     this.calcTrees.push(tree);
                 }
                 break;
@@ -803,7 +1334,7 @@ class Builder {
                     tree = new CalculationTree(targetObject, "value");
                     targetObject.calcTreesMap.set("value", tree);
                     tree.addNode(mod);
-                    mod.calcTreeReferences.push(tree);
+                    mod.calcTreeReferences.push(targetObject.calcTreesMap.get("value"));
                     this.calcTrees.push(tree);
                 }
                 break;
@@ -813,32 +1344,19 @@ class Builder {
         }
     }
 
-    initializeCalcTreeValues() {
+    initCalcTreesAndCaches() {
         this.calcTrees.forEach(tree => {
-            this.calcAndSetNodeResults(tree);
+            tree.buildCache(tree.parent.level);
         });
-    }
+        this.gameManager.updateAllMaxCaches();
 
-    calcAndSetNodeResults(tree) {
-        let currentNode = tree.nodes[0];
-        currentNode.runningResult = currentNode.result = currentNode.ref.value;
-
-        let lastActiveNode = currentNode;
-        currentNode = currentNode.nextNode;
-
-        // Iterate through the tree to update results and (if active) running results
-        while (currentNode) {
-            currentNode.result = currentNode.ref.baseValue;
-
-            if (currentNode.ref.active) {
-                let prevRunningResult = lastActiveNode.runningResult;
-                currentNode.runningResult = tree.calculateRunningResult(currentNode, prevRunningResult);
+        for (const training of this.trainings) {
+            training.setNewMilestoneLevel();
+            for (const [key, calcTree] of training.calcTreesMap) {
+                calcTree.setNextMilestoneCachePoint();
             }
-            currentNode = currentNode.nextNode;
         }
-        tree.currentRunningResult = lastActiveNode.runningResult;
-
-        this.gameManager.updateGameFeatureValues(tree.parent);
+        
     }
 
     registerModObserver(sourceObject, mod) {
@@ -911,7 +1429,7 @@ class Builder {
             training.calcTreesMap.forEach((calcTree, key) => {
                 console.error(`  Calculation tree: ${key}`);
                 calcTree.nodes.forEach((node, index) => {
-                    console.error(`   Node ${index + 1}: ${node.ref.id} ${node.ref.name} value: ${node.ref.value} srcCalc: ${node.ref.sourceCalcType} runCalc: ${node.ref.runningCalcType} previousNode: ${node.previousNode ? node.previousNode.ref.name : null} nextNode: ${node.nextNode ? node.nextNode.ref.name : null}`);
+                    console.error(`   Node ${index + 1}: ${node.ref.id} ${node.ref.name} value: ${node.ref.value} srcCalc: ${node.ref.sourceCalcType} runCalc: ${node.ref.runningCalcType} previousNode: ${node.previousNode ? node.previousNode.ref.name : null} nextNode: ${node.nextNode ? node.nextNode.ref.name : null} active:${node.ref.active}`);
 
                 });
             });
@@ -959,6 +1477,14 @@ class Builder {
             });
         });
     }
+
+    printUnlockInfo() {
+        this.unlocksDiv = document.getElementById("unlocksList");
+        this.unlocksDiv.innerHTML = `LIST OF UNLOCKS:<br>`;
+        for (const unlock of this.gameManager.gameContent.unlocks) {
+            this.unlocksDiv.innerHTML += `${unlock.dependent.name} unlocks ${unlock.target.name} via ${unlock.conditionType} ${unlock.conditionValue}<br>`;
+        }
+    }
 }
 
 class Unlock {
@@ -978,32 +1504,42 @@ class UnlockManager {
         this.gameManager = gameManager;
         this.eventManager = eventManager;
         this.unlocks = []; // Array to store unlock conditions
+        this.completedUnlocks = [];
 
         // Register the check-unlocks event listener
         this.eventManager.addListener('check-unlocks', this.checkUnlockConditions.bind(this));
     }
 
-    addUnlock(unlock) {
-        this.unlocks.push(unlock);
-    }
-
     checkUnlockConditions() {
+        let completedUnlocks = [];
+
         this.unlocks = this.unlocks.filter(unlock => {
+            let isCompleted = false;
+
             switch (unlock.conditionType) {
                 case 'level':
-                    if (unlock.dependent.level >= unlock.conditionValue) {
+                    if (unlock.dependent.level.gte(unlock.conditionValue)) {
                         unlock.target.setActive();
-                        return false; // Remove the unlock from the array
+                        isCompleted = true;
                     }
                     break;
                 case 'isCompleted':
                     if (unlock.dependent.isCompleted === unlock.conditionValue) {
                         unlock.target.setActive();
-                        return false;
+                        isCompleted = true;
                     }
+                    break;
             }
-            return true; // Keep the unlock in the array
+
+            if (isCompleted) {
+                completedUnlocks.push(unlock);
+            }
+
+            return !isCompleted; // Keep the unlock in the array if it is not completed
         });
+
+        // Append the completed unlocks to the completedUnlocks array
+        this.completedUnlocks = this.completedUnlocks.concat(completedUnlocks);
     }
 }
 
@@ -1013,11 +1549,13 @@ class GameSettings {
 }
 
 class GameUI {
-    constructor(eventManager, gameManager) {
+    constructor(eventManager, gameManager, gameStateManager) {
         this.eventManager = eventManager;
         this.gameManager = gameManager;
+        this.gameStateManager = gameStateManager;
         window.gameUI = this;
         this.statsRow = document.getElementById("row-stats");
+        this.statsRow2 = document.getElementById("row-stats2");
 
         this.powerCol1 = document.getElementById("power-col1");
         this.powerCol2 = document.getElementById("power-col2");
@@ -1031,16 +1569,103 @@ class GameUI {
         this.skillsCol1 = document.getElementById("skills-col1");
         this.skillsCol2 = document.getElementById("skills-col2");
 
-        this.unlocksDiv = document.getElementById("unlocksList");
+        this.essenceCol1 = document.getElementById("essence-col1");
 
         this.numberSettings = document.getElementById("numberSettings");
         this.multSettings = document.getElementById("multSettings");
 
-        this.numberSettings.addEventListener('change', () => this.updateNumberNotation());
-        this.multSettings.addEventListener('change', () => this.updateMultiplier());
+        this.multiplierString = multSettings.value;
+        this.gameManager.multiplierString = this.multSettings.value;
 
+        this.updateNumberNotationHandler = () => this.updateNumberNotation();
+        this.updateMultiplierHandler = () => this.updateMultiplier();
+
+        this.numberSettings.addEventListener('change', this.updateNumberNotationHandler);
+        this.multSettings.addEventListener('change', this.updateMultiplierHandler);
+
+
+        this.populateSaveLoadButtons();
         this.populateUI();
-        //this.populateUnlocksTab();
+    }
+
+    clear() {
+        this.clearListeners();
+        this.clearDynamicElements();
+    }
+
+    clearDynamicElements() {
+        this.clearPowerTab();
+        this.clearSpiritTab();
+        this.clearTournamentTab();
+        this.clearSkillTab();
+    }
+
+    clearListeners() {
+        const saveButton = document.getElementById('save');
+        const loadButton = document.getElementById('load');
+        const resetButton = document.getElementById('reset');
+        const rebirth1Button = document.getElementById('rebirth1');
+        const rebirth2Button = document.getElementById('rebirth2');
+        const rebirth3Button = document.getElementById('rebirth3');
+        saveButton.removeEventListener('click', this.saveButtonHandler);
+        loadButton.removeEventListener('click', this.loadButtonHandler);
+        resetButton.removeEventListener('click', this.resetButtonHandler);
+        rebirth1Button.removeEventListener('click', this.rebirth1ButtonHandler);
+        rebirth2Button.removeEventListener('click', this.rebirth2ButtonHandler);
+        rebirth3Button.removeEventListener('click', this.rebirth3ButtonHandler);
+
+        this.numberSettings.removeEventListener('change', this.updateNumberNotationHandler);
+        this.multSettings.removeEventListener('change', this.updateMultiplierHandler);
+    }
+
+    clearPowerTab() {
+        this.removeAllChildren(this.powerCol1);
+    }
+
+    clearSpiritTab() {
+        this.removeAllChildren(this.spiritCol1);
+    }
+
+    clearTournamentTab() {
+        this.removeAllChildren(this.tournamentCol1);
+    }
+
+    clearSkillTab() {
+        let skillGrid = this.skillsCol1.querySelector('.skill-grid');
+        if (skillGrid) {
+            skillGrid.remove();
+        }
+    }
+
+    removeAllChildren(parent) {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
+    }
+
+    isAffordable(feature) {
+        let featureType = feature.featureType;
+        let cacheKey = null;
+        let resourceType = feature.costType;
+
+        if (featureType === "fighter") {
+            cacheKey = "1";
+        }
+        else {
+            cacheKey = this.multSettings.value;
+            //console.error(cacheKey);
+        }
+
+        let currentCost = feature.calcTreesMap.get("cost").cacheMap.get(cacheKey.toString());
+
+        let currentResource = this.gameManager.queryPlayerResource(resourceType);
+
+        //console.error(feature.name,currentResource, currentCost);
+        if (currentResource.gt(currentCost)) {
+            return true;
+        }
+
+        return false;
     }
 
     updateNumberNotation() {
@@ -1049,8 +1674,10 @@ class GameUI {
     }
 
     updateMultiplier() {
-        this.multiplier = this.multSettings.value;
-        this.gameManager.onMultiplierChange(this.multiplier);
+        this.multiplierString = this.multSettings.value;
+        //this.gameManager.onMultiplierChange(this.multiplier);
+
+        this.gameManager.multiplierString = this.multiplierString;
     }
 
     async populateUI() {
@@ -1063,11 +1690,14 @@ class GameUI {
         this.populateSpiritTab();
         this.populateTournamentTab();
         this.populateSkillsTab();
+        this.populateEssenceTab();
     }
 
     async populateStatsDisplay() {
+
+        // Create and add the elements only once
         if (!this.statsRow.querySelector('.power-stat')) {
-            // Create and add the elements only once
+            //row 1
             const powerStat = document.createElement('div');
             powerStat.className = 'power-stat';
             this.statsRow.appendChild(powerStat);
@@ -1084,6 +1714,10 @@ class GameUI {
             spiritIncomeStat.className = 'spirit-income-stat';
             this.statsRow.appendChild(spiritIncomeStat);
 
+            const powerLevelStat = document.createElement('div');
+            powerLevelStat.className = 'power-level-stat';
+            this.statsRow.appendChild(powerLevelStat);
+
             const essenceStat = document.createElement('div');
             essenceStat.className = 'essence-stat';
             this.statsRow.appendChild(essenceStat);
@@ -1092,20 +1726,130 @@ class GameUI {
             skillpointStat.className = 'skillpoint-stat';
             this.statsRow.appendChild(skillpointStat);
 
-            const powerLevelStat = document.createElement('div');
-            powerLevelStat.className = 'power-level-stat';
-            this.statsRow.appendChild(powerLevelStat);
+            //row 2
+            const lifetimePower = document.createElement('div');
+            lifetimePower.className = 'lifetime-power';
+            this.statsRow2.appendChild(lifetimePower);
+
+            const placeHolder1 = document.createElement('div');
+            placeHolder1.className = '';
+            this.statsRow2.appendChild(placeHolder1);
+
+            const lifetimeSpirit = document.createElement('div');
+            lifetimeSpirit.className = 'lifetime-spirit';
+            this.statsRow2.appendChild(lifetimeSpirit);
+
+            const placeHolder2 = document.createElement('div');
+            placeHolder2.className = '';
+            this.statsRow2.appendChild(placeHolder2);
+
+            const lifetimeEssence = document.createElement('div');
+            lifetimeEssence.className = 'lifetime-essence';
+            this.statsRow2.appendChild(lifetimeEssence);
+
+            const essenceMultiplier = document.createElement('div');
+            essenceMultiplier.className = 'essence-multiplier';
+            this.statsRow2.appendChild(essenceMultiplier);
+
         }
 
         // Update the text of the elements without replacing their content
-        this.statsRow.querySelector('.power-stat').textContent = `Power: ${this.formatNumber(this.gameManager.gameContent.player.power)}`;
-        this.statsRow.querySelector('.power-income-stat').textContent = `powerIncome: ${this.formatNumber(this.gameManager.gameContent.player.powerIncome)}`;
-        this.statsRow.querySelector('.spirit-stat').textContent = `Spirit: ${this.formatNumber(this.gameManager.gameContent.player.spirit)}`;
-        this.statsRow.querySelector('.spirit-income-stat').textContent = `spiritIncome: ${(this.gameManager.gameContent.player.spiritIncome)}`;
-        this.statsRow.querySelector('.essence-stat').textContent = `Essence: ${this.formatNumber(this.gameManager.gameContent.player.essence)}`;
-        this.statsRow.querySelector('.skillpoint-stat').textContent = `Skillpoint: ${this.formatNumber(this.gameManager.gameContent.player.skillpoint)}`;
-        this.statsRow.querySelector('.power-level-stat').textContent = `PowerLevel: ${this.formatNumber(this.gameManager.gameContent.player.powerLevel)}`;
+
+        //row 1
+        this.statsRow.querySelector('.power-stat').textContent = `Power\n${this.formatNumber(this.gameManager.gameContent.player.power)}`;
+        this.statsRow.querySelector('.power-income-stat').textContent = `powerIncome\n ${this.formatNumber(this.gameManager.gameContent.player.powerIncome)}`;
+        this.statsRow.querySelector('.spirit-stat').textContent = `Spirit\n${this.formatNumber(this.gameManager.gameContent.player.spirit)}`;
+        this.statsRow.querySelector('.spirit-income-stat').textContent = `spiritIncome\n${this.formatNumber(this.gameManager.gameContent.player.spiritIncome)}`;
+        this.statsRow.querySelector('.power-level-stat').textContent = `PowerLevel\n${this.formatNumber(this.gameManager.gameContent.player.powerLevel)}`;
+        this.statsRow.querySelector('.essence-stat').textContent = `Essence\n${this.formatNumber(this.gameManager.gameContent.player.essence)}`;
+        this.statsRow.querySelector('.skillpoint-stat').textContent = `Skillpoint\n${this.formatNumber(this.gameManager.gameContent.player.skillpoint)}`;
+
+        //row 2
+        this.statsRow2.querySelector('.lifetime-power').textContent = `LifetimePower\n${this.formatNumber(this.gameManager.gameContent.player.lifetimePowerEarned)}`;
+        this.statsRow2.querySelector('.lifetime-spirit').textContent = `LifetimeSpirit\n${this.formatNumber(this.gameManager.gameContent.player.lifetimeSpiritEarned)}`;
+        this.statsRow2.querySelector('.lifetime-essence').textContent = `LifetimeEssence\n${this.formatNumber(this.gameManager.gameContent.player.lifetimeEssenceEarned)}`;
+
+        let rebirth1PseudoObject = this.gameManager.findObjectById(60000);
+        this.statsRow2.querySelector('.essence-multiplier').textContent = `EssenceMultiplier\n${this.formatNumber(rebirth1PseudoObject.level)}`;
     }
+    
+    populateSaveLoadButtons() {
+        // Get the save and load divs
+        const saveButton = document.getElementById('save');
+        const loadButton = document.getElementById('load');
+        const resetButton = document.getElementById('reset');
+        const rebirth1Button = document.getElementById('rebirth1');
+        const rebirth2Button = document.getElementById('rebirth2');
+        const rebirth3Button = document.getElementById('rebirth3');
+
+        this.saveButtonHandler = () => {
+            this.gameStateManager.saveGameState(0);
+            saveButton.innerHTML = "Game Saved!";
+            saveButton.classList.add('fade');
+            setTimeout(function () {
+                saveButton.classList.remove('fade');
+                saveButton.innerHTML = "Save";
+            }, 1000); // Set timeout to 2 seconds (2000 milliseconds)
+        };
+
+        this.loadButtonHandler = () => {
+            this.gameStateManager.loadGameState(0);
+            loadButton.innerHTML = "Game Loaded!";
+            loadButton.classList.add('fade');
+            setTimeout(function () {
+                loadButton.classList.remove('fade');
+                loadButton.innerHTML = "Load";
+            }, 1000); // Set timeout to 2 seconds (2000 milliseconds)
+        };
+
+        this.resetButtonHandler = () => {
+            this.gameStateManager.loadGameState(-1);
+            resetButton.innerHTML = "Game Reset!";
+            resetButton.classList.add('fade');
+            setTimeout(function () {
+                resetButton.classList.remove('fade');
+                resetButton.innerHTML = "Reset";
+            }, 1000); // Set timeout to 2 seconds (2000 milliseconds)
+        };
+
+        this.rebirth1ButtonHandler = () => {
+            this.gameStateManager.saveGameState(1);
+            rebirth1Button.innerHTML = "Rebirth1!";
+            rebirth1Button.classList.add('fade');
+            setTimeout(function () {
+                rebirth1Button.classList.remove('fade');
+                rebirth1Button.innerHTML = "Rebirth 1";
+            }, 1000); // Set timeout to 2 seconds (2000 milliseconds)
+        };
+
+        this.rebirth2ButtonHandler = () => {
+            this.gameStateManager.saveGameState(2);
+            rebirth2Button.innerHTML = "Rebirth2!";
+            rebirth2Button.classList.add('fade');
+            setTimeout(function () {
+                rebirth2Button.classList.remove('fade');
+                rebirth2Button.innerHTML = "Rebirth 2";
+            }, 1000); // Set timeout to 2 seconds (2000 milliseconds)
+        };
+
+        this.rebirth3ButtonHandler = () => {
+            this.gameStateManager.saveGameState(3);
+            rebirth3Button.innerHTML = "Rebirth3!";
+            rebirth3Button.classList.add('fade');
+            setTimeout(function () {
+                rebirth3Button.classList.remove('fade');
+                rebirth3Button.innerHTML = "Rebirth 3";
+            }, 1000); // Set timeout to 2 seconds (2000 milliseconds)
+        };
+
+        saveButton.addEventListener('click', this.saveButtonHandler);
+        loadButton.addEventListener('click', this.loadButtonHandler);
+        resetButton.addEventListener('click', this.resetButtonHandler);
+        rebirth1Button.addEventListener('click', this.rebirth1ButtonHandler);
+        rebirth2Button.addEventListener('click', this.rebirth2ButtonHandler);
+        rebirth3Button.addEventListener('click', this.rebirth3ButtonHandler);
+    }
+
 
     populatePowerTab() {
         this.populateRealms(this.powerCol1, this.gameManager.gameContent.powerRealms);
@@ -1134,7 +1878,7 @@ class GameUI {
                     trainingCell = document.createElement('div');
                     trainingCell.id = trainingId;
                     trainingCell.classList.add('training-cell');
-
+                    
                     const trainingName = document.createElement('div');
                     trainingName.className = 'training-name';
                     trainingName.textContent = training.name + " lvl " + training.level + "\n" + training.description;
@@ -1144,7 +1888,7 @@ class GameUI {
                     const button = document.createElement('button');
                     button.id = `button-${training.id}`;
                     button.addEventListener('click', () => {
-                        this.buyGameFeature(training.id);
+                        this.buyFeature(training.id);
                     });
                     buttonContainer.appendChild(button);
                     trainingCell.appendChild(buttonContainer);
@@ -1176,16 +1920,29 @@ class GameUI {
                 trainingDescription.textContent = "\n" + training.description;
 
                 // Display 0 for the value if the training level is 0
-                const displayValue = (training.value);
-                currentValueElement.textContent = `${this.formatNumber(displayValue)} ${training.valueType}`;
-
+                currentValueElement.textContent = `${this.formatNumber(training.value)} ${training.valueType}`;
+                
                 // Update button text, style, and clickability based on training.active
                 const button = trainingCell.querySelector(`#button-${training.id}`);
                 button.setAttribute('style', 'white-space:pre;');
-                button.textContent = `- ${this.formatNumber(training.cost)} ${training.costType}\r\n`;
-                button.textContent += `+ ${this.formatNumber(training.displayValue)} ${training.valueType}`;
+                if (this.multiplierString === "-1") {
+                    button.textContent = `x ${training.maxAffordableLevel}\r\n`;
+                }
+                else if (this.multiplierString === "-2") {
+                    button.textContent = `x ${training.nextMilestoneLevel.minus(training.level)}\r\n`;
+                }
+                else {
+                button.textContent = `x${this.multiplierString}\r\n`;    
+                }
 
-                if (training.active && (training.level !== training.maxLevel)) {
+                let nextTrainingValue = new Decimal(training.calcTreesMap.get("value").getCacheValue(this.multiplierString));
+
+                let nextTrainingCost = new Decimal(training.calcTreesMap.get("cost").getCacheValue(this.multiplierString));
+                button.textContent += `-${this.formatNumber(nextTrainingCost)} ${training.costType}\r\n`;
+                //button.textContent += `-${this.formatNumber((training.calcTreesMap.get("cost").cacheMap.get(this.multiplierString)))} ${training.costType}\r\n`;
+                button.textContent += `+${this.formatNumber(nextTrainingValue.minus(training.value))} ${training.valueType}`;
+
+                if (training.active && (training.level !== training.maxLevel) && this.isAffordable(training)) {
                     button.disabled = false;
                     button.style.opacity = 1;
                 }
@@ -1218,7 +1975,7 @@ class GameUI {
                     const button = document.createElement('button');
                     button.id = `button-${upgrade.id}`;
                     button.addEventListener('click', () => {
-                        this.buyGameFeature(upgrade.id);
+                        this.buyFeature(upgrade.id);
                     });
                     buttonContainer.appendChild(button);
                     upgradeCell.appendChild(buttonContainer);
@@ -1244,10 +2001,26 @@ class GameUI {
                 // Update button text, style, and clickability based on upgrade.active
                 const button = upgradeCell.querySelector(`#button-${upgrade.id}`);
                 button.setAttribute('style', 'white-space:pre;');
-                button.textContent = `- ${this.formatNumber(upgrade.cost)} ${upgrade.costType}\r\n`;
+                if (this.multiplierString === "-1") {
+                    button.textContent = `x${upgrade.maxAffordableLevel}\r\n`;
+                }
 
+                else if (this.multiplierString === "-2") {
+                    button.textContent = `x1\r\n`;
+                }
 
-                if (upgrade.active && (upgrade.level.neq(upgrade.maxLevel))) {
+                //if cache does not contain value that multiplier has set
+                else if (upgrade.calcTreesMap.get("cost").cacheMap.size < (new Decimal(this.multiplierString)).toNumber() + 2) {
+                    button.textContent = `x${upgrade.maxAffordableLevel}\r\n`;
+                }
+                else {
+                    button.textContent = `x${this.multiplierString}\r\n`;
+                }
+                let nextUpgradeCost = new Decimal(upgrade.calcTreesMap.get("cost").getCacheValue(this.multiplierString).toNumber());
+                button.textContent += `-${this.formatNumber(nextUpgradeCost)} ${upgrade.costType}\r\n`;
+
+                
+                if (upgrade.active && upgrade.level.neq(upgrade.maxLevel) && this.isAffordable(upgrade)) {
                     button.disabled = false;
                     button.style.opacity = 1;
                 }
@@ -1295,8 +2068,6 @@ class GameUI {
                     const button = document.createElement('button');
                     button.setAttribute('style', 'white-space:pre;');
                     button.id = `fight-button-${fighter.id}`;
-                    button.textContent = `Fight\r\n`;
-                    button.textContent += `PwrLvl: ${this.formatNumber(fighter.cost)}`;
                     button.addEventListener('click', () => {
                         this.fight(stage.id, fighter.id, this.gameManager.gameContent.player.powerLevel);
                     });
@@ -1312,14 +2083,20 @@ class GameUI {
 
                 // Update button appearance based on fighter.active
                 const button = document.querySelector(`#fight-button-${fighter.id}`);
-                button.setAttribute('style', 'white-space:pre;');
                 button.textContent = `Fight \r\n`;
-                button.textContent += `PwrLvl: ${this.formatNumber(fighter.cost)}\r\n`;
-                button.textContent += `Reward: ${this.formatNumber(fighter.value)} skill`;
-                if (fighter.isDefeated || !fighter.active) {
+                button.textContent += `PwrLvl: ${this.formatNumber(fighter.calcTreesMap.get("cost").cacheMap.get("1"))}\r\n`;
+                button.textContent += `+ ${this.formatNumber(fighter.calcTreesMap.get("value").cacheMap.get("1"))} skillpoint`;
+                if (!fighter.active || !this.isAffordable(fighter)) {
                     button.disabled = true;
                     button.style.opacity = 0.5;
-                } else {
+                }
+                else if (fighter.isDefeated) {
+                    button.disabled = true;
+                    button.style.opacity = 0.2;
+                    button.setAttribute('style', 'white-space:pre; background-color:green;');
+                }
+
+                else {
                     button.disabled = false;
                     button.style.opacity = 1;
                 }
@@ -1366,7 +2143,7 @@ class GameUI {
                 // Add click event to upgrade the skill
                 skillNode.addEventListener('click', () => {
                     if (!skillNode.getAttribute('disabled')) {
-                        this.buyGameFeature(skill.id);
+                        this.buyFeature(skill.id);
                     }
                 });
 
@@ -1375,7 +2152,7 @@ class GameUI {
             }
 
             // Update skill node properties
-            if (!skill.active || !(skill.level.lt(skill.maxLevel))) {
+            if (!skill.active || !skill.level.lt(skill.maxLevel) || !this.isAffordable(skill)) {
                 skillNode.setAttribute('disabled', true);
                 skillNode.setAttribute('style', 'opacity: 0.3;');
             } else {
@@ -1386,12 +2163,92 @@ class GameUI {
             skillNode.style.top = `${skill.node.y}px`;
 
             // Update skill node title and level text
-            skillNode.title = `${skill.name}\nLevel: ${skill.level}/${skill.maxLevel}\nCost: ${skill.cost}\n${skill.description}`;
+            skillNode.title = `${skill.name}\nLevel: ${skill.level}/${skill.maxLevel}\nCost: ${new Decimal(skill.calcTreesMap.get("cost").getCacheValue(this.multiplierString).toNumber())}\n${skill.description}`;
             const levelText = skillNode.querySelector('.skill-level');
             levelText.textContent = `${skill.level}/${skill.maxLevel}`;
         });
     }
 
+    populateEssenceTab() {
+        const essenceUpgrades = this.gameManager.gameContent.essenceUpgrades;
+        let targetCol = this.essenceCol1;
+        essenceUpgrades.forEach(upgrade => {
+            const upgradeId = `upgrade-${upgrade.id}`;
+            let upgradeCell = targetCol.querySelector(`#${upgradeId}`);
+            if (!upgradeCell) {
+                upgradeCell = document.createElement('div');
+                upgradeCell.id = upgradeId;
+                upgradeCell.classList.add('upgrade-cell');
+
+                const upgradeName = document.createElement('div');
+                upgradeName.className = 'upgrade-name';
+                upgradeName.textContent = upgrade.name + " lvl " + upgrade.level + "\n" + upgrade.description;
+                upgradeCell.appendChild(upgradeName);
+
+                const buttonContainer = document.createElement('div');
+                const button = document.createElement('button');
+                button.id = `button-${upgrade.id}`;
+                button.addEventListener('click', () => {
+                    this.buyFeature(upgrade.id);
+                });
+                buttonContainer.appendChild(button);
+                upgradeCell.appendChild(buttonContainer);
+
+                targetCol.appendChild(upgradeCell);
+            }
+
+            // Update upgrade level text
+            const upgradeName = upgradeCell.querySelector('.upgrade-name');
+            upgradeName.textContent = upgrade.name + " lvl " + upgrade.level;
+
+
+            // Update upgrade description text
+            let upgradeDescription = upgradeCell.querySelector('.upgrade-description');
+            if (!upgradeDescription) {
+                upgradeDescription = document.createElement('div');
+                upgradeDescription.className = 'upgrade-description';
+                upgradeDescription.setAttribute('style', 'font-size:10px; max-width: 150px;');
+                upgradeCell.appendChild(upgradeDescription);
+            }
+            upgradeDescription.textContent = "\n" + upgrade.description;
+
+            // Update button text, style, and clickability based on upgrade.active
+            const button = upgradeCell.querySelector(`#button-${upgrade.id}`);
+            button.setAttribute('style', 'white-space:pre;');
+            if (this.multiplierString === "-1") {
+                button.textContent = `x${upgrade.maxAffordableLevel}\r\n`;
+            }
+
+            else if (this.multiplierString === "-2") {
+                button.textContent = `x1\r\n`;
+            }
+
+            //if cache does not contain value that multiplier has set
+            else if (upgrade.calcTreesMap.get("cost").cacheMap.size < (new Decimal(this.multiplierString)).toNumber() + 2) {
+                button.textContent = `x${upgrade.maxAffordableLevel}\r\n`;
+            }
+            else {
+                button.textContent = `x${this.multiplierString}\r\n`;
+            }
+            let nextUpgradeCost = new Decimal(upgrade.calcTreesMap.get("cost").getCacheValue(this.multiplierString).toNumber());
+            button.textContent += `-${this.formatNumber(nextUpgradeCost)} ${upgrade.costType}\r\n`;
+
+
+            if (upgrade.active && upgrade.level.neq(upgrade.maxLevel) && this.isAffordable(upgrade)) {
+                button.disabled = false;
+                button.style.opacity = 1;
+            }
+            else if (upgrade.level.eq(upgrade.maxLevel)) {
+                button.disabled = true;
+                button.style.opacity = 0.6;
+                button.innerHTML = "max";
+            }
+            else {
+                button.disabled = true;
+                button.style.opacity = 0.6;
+            }
+        });
+    }
 
     formatNumber(num) {
         switch (this.numberNotation) {
@@ -1402,7 +2259,7 @@ class GameUI {
             case "toJSON":
                 return num.toJSON();
             case "toPrecision":
-                return num.toPrecision(2);
+                return num.toPrecision(3);
             case "toNumber":
                 return num.toNumber(2);
             case "toString":
@@ -1414,7 +2271,7 @@ class GameUI {
             case "mantissaWithDecimalPlaces":
                 return num.mantissaWithDecimalPlaces(2);
             default:
-                return num.toFixed(2);
+                return num.toPrecision(3);
         }
     }
 
@@ -1424,17 +2281,10 @@ class GameUI {
     }
 
     //dispatch buy feature event to gamemanager
-    buyGameFeature(id) {
-        this.eventManager.dispatchEvent('buyGameFeature', { id });
+    buyFeature(id) {
+        this.eventManager.dispatchEvent('handlePurchase', { id });
 
         this.eventManager.dispatchEvent('check-unlocks');
-    }
-
-    populateUnlocksTab() {
-        this.unlocksDiv.innerHTML = `LIST OF UNLOCKS:<br>`;
-        for (const unlock of this.gameManager.gameContent.unlocks) {
-            this.unlocksDiv.innerHTML += `${unlock.dependent.name} unlocks ${unlock.target.name} via ${unlock.conditionType} ${unlock.conditionValue}<br>`;
-        }
     }
 }
 
@@ -1445,7 +2295,7 @@ class GameManager {
 
         this.calcCycle = 0;
 
-        this.multiplier = 1;
+        this.multiplierString = "";
 
         this.eventManager.addListener('queryPlayerResource', (data, respond) => {
             const result = this.queryPlayerResource(data);
@@ -1454,170 +2304,124 @@ class GameManager {
             }
         });
 
-        this.eventManager.addListener('buyGameFeature', (data) => {
-            this.buyGameFeature(data.id);
+        this.eventManager.addListener('handlePurchase', (data) => {
+            this.handlePurchase(data.id);
         });
     }
 
-    onMultiplierChange(multiplier) {
-        this.multiplier = multiplier;
-        const originalMultiplier = multiplier;
-        // Iterate over each realm in the game content
-        for (const realm of this.gameContent.powerRealms.concat(this.gameContent.spiritRealms)) {
-            // Check if the realm is unlocked
-            if (realm.isUnlocked) {
-                // Get all trainings and upgrades for the current realm
-                const activeTrainingsAndUpgrades = [...realm.trainings, ...realm.upgrades];
+    handlePurchase(featureID) {
+        const feature = this.findObjectById(featureID);
 
-                // Iterate over each active training or upgrade
-                for (const item of activeTrainingsAndUpgrades) {
-                    //check if object's level will exceed max with multiplier
-                    multiplier = originalMultiplier;
-                    if ((item.maxLevel.minus(item.level)).lt(originalMultiplier)) {
-                        multiplier = item.maxLevel.minus(item.level);
-                    }
-                    // Iterate over each entry in the calculation trees map
-                    item.calcTreesMap.forEach((tree) => {
-                        tree.recalculateTreeFromNode(tree.nodes[0], item.level + multiplier, this);
-                        this.updateGameFeatureValues(item);
-                    });
-                }
-            }
-        }
-    }
+        //console.error("::::::::::::::::::", feature.name, "HANDLE PURCHASE", "::::::::::::::::::");
 
-    buyGameFeature(gameFeatureId) {
-        const gameFeature = this.findObjectById(gameFeatureId);
+        const levelUpCount = this.convertMultiplierString(feature);
 
-        if (this.isAffordable(gameFeature)) {
-            this.levelUp(gameFeature);
-        }
-        else {
-            //console.error("training not found or not affordable");
-        }
-    }
-
-    levelUp(feature) {
-        console.error("---------------------------");
-        console.error("---------------------------");
-        console.error("LEVEL UP:::::::", feature.name);
-        console.error("---------------------------");
-        console.error("---------------------------");
         this.calcCycle++;
 
-        this.deductCost(feature);
+        this.deductFeatureCost(feature, feature.costType, levelUpCount);
+
+        this.setFeatureValue(feature, this.multiplierString, true);
+
+        feature.levelUp(this, levelUpCount);
+
+        this.updateAllMaxCaches();
+
         this.eventManager.dispatchEvent('check-unlocks');
-
-        feature.levelUp(this.multiplier);
-
-        this.notifyObservers(feature);
     }
 
-    //finds active observers and triggers them to update calculation trees
-    notifyObservers(feature) {
-        for (const observer of feature.observers) {
-            if (observer.active) {
-                console.error(" obsActive", observer.name);
-                let source = observer.source;
-                let target = observer.target;
-
-                //Handle Type Target Mods
-                if (observer.targetType) {
-                    for (const tree of observer.calcTreeReferences) {
-                        console.error("  TypeMod:", observer.name,"updating tree:",tree.parent.name,tree.valueType);
-                        this.updateNodes(target, source, observer, tree);
-                    }
-                }
-                //Handle Individual Target Mods
-                else {
-                    target.calcTreesMap.forEach((tree) => {
-                        console.error("   obsActive", observer.name);
-                        this.updateNodes(target, source, observer, tree);
-                    });
-                }
-                console.error("    obsUpdated", observer.name);
-
-                this.updatePlayerValues();
+    convertMultiplierString(feature) {
+        if (this.multiplierString === "-1") {
+            return feature.maxAffordableLevel;;
+        }
+        else if (this.multiplierString === "-2") {
+            if (feature.featureType === "training") {
+                return feature.nextMilestoneLevel.minus(feature.level);
+            }
+            else {
+                return new Decimal(1);
             }
         }
+        else {
+            return new Decimal(this.multiplierString);
+        }
+
     }
 
-    updateNodes(target, source, observer, tree) {
-            let nodeIndex = tree.returnNodeIndex(observer.id);
-            if (nodeIndex !== -1) {
-                tree.recalculateTreeFromNode(tree.nodes[nodeIndex], source.level, this);
-                this.onMultiplierChange(this.multiplier);
-                //this.updateGameFeatureValues(tree.parent);
-            }
+    updateValues(targetTree) {
+        this.setFeatureValue(targetTree.parent, this.multiplierString, false);
+        this.updatePlayerResources(targetTree.parent);
     }
 
-    deductCost(data) {
-        switch (data.costType) {
+    deductFeatureCost(feature, costType, multiplier) {
+        let cost = feature.calcTreesMap.get("cost").cacheMap.get(multiplier.toString());
+        switch (costType) {
             case 'power':
-                this.gameContent.player.power = this.gameContent.player.power.minus(data.cost);
+                this.gameContent.player.power = this.gameContent.player.power.minus(cost);
                 break;
             case 'spirit':
-                this.gameContent.player.spirit = this.gameContent.player.spirit.minus(data.cost);
+                this.gameContent.player.spirit = this.gameContent.player.spirit.minus(cost);
                 break;
             case 'skillpoint':
-                this.gameContent.player.skillpoint = this.gameContent.player.skillpoint.minus(data.cost);
+                this.gameContent.player.skillpoint = this.gameContent.player.skillpoint.minus(cost);
+                break;
+            case 'essence':
+                this.gameContent.player.essence = this.gameContent.player.essence.minus(cost);
+                break;
+            case 'powerLevel':
+                //do not deduct anything
                 break;
             default:
                 console.error('Invalid subtractcost');
         }
     }
 
-    updateGameFeatureValues(feature) {
-
-        feature.displayCost = feature.cost;
-        feature.displayValue = feature.value;
-
-        feature.calcTreesMap.forEach((calcTree, key) => {
-            if (key === 'cost') {
-                feature.cost = calcTree.currentRunningResult;
-            } else if (key === 'value') {
-                feature.value = calcTree.currentRunningResult;
-            }
-        });
-
-
-        feature.displayCost = feature.cost.minus(feature.displayCost);
-        feature.displayValue = feature.value.minus(feature.displayValue);
-    }
-
-    updatePlayerValues() {
-        this.gameContent.player.powerIncome = new Decimal(0);
-        this.gameContent.player.spiritIncome = new Decimal(0);
-
-        for (const realm of this.gameContent.powerRealms.concat(this.gameContent.spiritRealms)) {
-            if (realm.isUnlocked) {
-                for (const training of realm.trainings) {
-                    if (training.active && training.level > 0) {
-                        this.updateIncome(training.valueType, training.value);
-                    }
-                }
-            }
+    setFeatureValue(feature, multiplier, isNewLevel) {
+        if (!isNewLevel) {
+            multiplier = "0";
+        }
+        if (feature.featureType === "training" && feature.level.gt(0)) {
+            feature.value = feature.calcTreesMap.get("value").cacheMap.get(multiplier);
         }
     }
 
-    updateIncome(valueType, trainingValue) {
-        switch (valueType) {
-            case 'powerIncome':
-                this.gameContent.player.powerIncome = this.gameContent.player.powerIncome.plus(trainingValue);
-                break;
-            case 'spiritIncome':
-                this.gameContent.player.spiritIncome = this.gameContent.player.spiritIncome.plus(trainingValue);
-                break;
-            default:
-                console.error('updateplayervalues error');
+    updatePlayerResources(feature) {
+        if (feature.featureType === "training" && feature.active) {
+            const incomeMap = this.gameContent.player.incomeMap;
+
+            let newValue = feature.value;
+
+            let valueToAdd = new Decimal(0);
+
+            if (incomeMap.get(feature.id)) {
+                valueToAdd = newValue.minus(incomeMap.get(feature.id));
+            }
+            else {
+                valueToAdd = newValue;
+            }
+
+            incomeMap.set(feature.id, newValue);
+
+            switch (feature.valueType) {
+                case 'powerIncome':
+                    this.gameContent.player.powerIncome = this.gameContent.player.powerIncome.plus(valueToAdd);
+                    break;
+                case 'spiritIncome':
+                    this.gameContent.player.spiritIncome = this.gameContent.player.spiritIncome.plus(valueToAdd);
+                    break;
+                default:
+                    console.error('updatePlayerResources error');
+            }
         }
     }
 
     calculatePlayerIncome() {
-
         this.gameContent.player.power = this.gameContent.player.power.plus(this.gameContent.player.powerIncome);
         this.gameContent.player.spirit = this.gameContent.player.spirit.plus(this.gameContent.player.spiritIncome);
         this.gameContent.player.powerLevel = this.gameContent.player.powerLevel.plus(this.gameContent.player.powerIncome).plus(this.gameContent.player.spiritIncome);
+
+
+        this.gameContent.player.lifetimePowerEarned = this.gameContent.player.lifetimePowerEarned.plus(this.gameContent.player.powerIncome);
+        this.gameContent.player.lifetimeSpiritEarned = this.gameContent.player.lifetimeSpiritEarned.plus(this.gameContent.player.spiritIncome);
     }
 
     queryPlayerResource(type) {
@@ -1630,6 +2434,16 @@ class GameManager {
                 return this.gameContent.player.essence;
             case 'skillpoint':
                 return this.gameContent.player.skillpoint;
+            case 'powerLevel':
+                return this.gameContent.player.powerLevel;
+            case 'all':
+                return [
+                    { 'type': 'power', 'value': this.gameContent.player.power },
+                    { 'type': 'spirit', 'value': this.gameContent.player.spirit },
+                    { 'type': 'essence', 'value': this.gameContent.player.essence },
+                    { 'type': 'skillpoint', 'value': this.gameContent.player.skillpoint },
+                    { 'type': 'powerLevel', 'value': this.gameContent.player.powerLevel }
+                ];
             default:
                 console.error('Invalid stat:', type);
         }
@@ -1657,8 +2471,33 @@ class GameManager {
         return undefined;
     }
 
-    isAffordable(data) {
-        return this.queryPlayerResource(data.costType).gte(data.cost);
+    updateAllMaxCaches() {
+        this.isCacheBuilding = true;
+        let allObjects = Array.from(this.gameContent.idToObjectMap.values());
+
+        let maxableObjects = this.filterMaxableObjects(allObjects);
+
+        const allResources = this.queryPlayerResource("all");
+
+        this.buildMaxCachesForFeatures(maxableObjects, allResources);
+        this.isCacheBuilding = false;
+    }
+
+    filterMaxableObjects(objects) {
+        let filterTypes = ["training", "upgrade", "skill"];
+        return objects.filter(object => filterTypes.includes(object.featureType));
+    }
+
+    buildMaxCachesForFeatures(features, resources) {
+        for (const feature of features) {
+            let matchingResource = resources.find(resource => resource.type === feature.costType);
+
+            if (matchingResource) {
+                feature.buildMaxCache(new Decimal(matchingResource.value));
+            } else {
+                console.error(`No resource found for costType: ${feature.costType}`);
+            }
+        }
     }
 }
 
@@ -1718,6 +2557,7 @@ class GameContent {
         this.skillTree = new SkillTree(eventManager);
         this.tournament = new Tournament(eventManager);
         this.unlocks = [];
+        this.essenceUpgrades = [];
     }
 }
 
@@ -1725,12 +2565,12 @@ class Player {
     constructor(eventManager) {
         this.eventManager = eventManager;
         this.powerLevel = new Decimal(5);
-        this.power = new Decimal(200);
+        this.power = new Decimal(2000);
         this.powerIncome = new Decimal(0);
         this.spirit = new Decimal(200);
         this.spiritIncome = new Decimal(0);
         this.essence = new Decimal(5);
-        this.skillpoint = new Decimal(105);
+        this.skillpoint = new Decimal(305);
 
         this.lifetimePowerEarned = new Decimal(0);
         this.lifetimeSpiritEarned = new Decimal(0);
@@ -1738,6 +2578,8 @@ class Player {
         this.maxProgressionStage = new Decimal(0);
         this.maxProgressionRank = new Decimal(0); //top rank within max stage
         this.lifetimeKills = new Decimal(0);
+
+        this.incomeMap = new Map();
 
         this.eventManager.addListener('addPlayerResource', (data) => {
             this.addPlayerResource(data);
@@ -1809,7 +2651,7 @@ class Mod extends Observable {
         this.calcTreeReferences = [];
 
         this.active = active;
-
+        
         this.lastCalcCycle = 0;
     }
 
@@ -1838,51 +2680,260 @@ class CalculationTree {
         this.parent = parent;
         this.valueType = valueType;
         this.currentRunningResult = new Decimal(0);
+        this.cacheMap = new Map();
+
+        this.maxKeyInCache = null;
+        this.maxCacheLevel = new Decimal(0);
+
+        this.isCacheBuilding = false;
     }
 
-    recalculateTreeFromNode(node, newSourceValue, gameManager) {
-        //update result & runResult of node
-        this.updateNode(node, newSourceValue, gameManager);
+    getCacheValue(value) {
+        value = new Decimal(value);  // ensure level is a Decimal
+        let cacheValue = null;
 
-        //update result & runResult of following active nodes
-        this.updateDownstreamNodes(node, gameManager);
-        gameManager.updateGameFeatureValues(this.parent);
-    }
-
-    updateNode(node, newSourceValue, gameManager) {
-        //update node result
-        node.result = this.calcNodeResult(node, newSourceValue, gameManager);
-
-        //update node runResult based on last active node's runResult(if any)
-        let lastActiveResult = this.getLastActiveResult(node);
-        if (!lastActiveResult) {
-            node.runningResult = node.result;
+        // check if the cacheMap has the level
+        if (this.cacheMap.has(value.toString())) {
+            cacheValue = this.cacheMap.get(value.toString());
         } else {
-            node.runningResult = this.calcNodeRunningResult(node, lastActiveResult);
+            // if the cache value doesn't exist, use the maximum available value
+            
+            cacheValue = this.cacheMap.get("1");
         }
 
-        
-        node.ref.lastCalcCycle = gameManager.calcCycle;
+        return cacheValue;
     }
 
-    updateDownstreamNodes(startNode, gameManager) {
-        let currentNode = startNode.nextNode;
-        let lastActiveNode = startNode;
+    buildCache(sourceLevel) {
+        this.isCacheBuilding = true;
+
+        this.clearCache();
+
+        let levelCap = null;
+        if (this.parent.maxLevel) {
+            levelCap = new Decimal(this.parent.maxLevel.minus(this.parent.level));
+        }
+
+        let cachePoints = this.assignCachePoints();
+
+        if (this.valueType === "cost") {
+            this.buildTree("cost", sourceLevel, cachePoints, levelCap);
+        }
+        else if (this.valueType === "value") {
+            this.buildTree("value", sourceLevel, cachePoints, levelCap);
+        }
+        this.isCacheBuilding = false;
+    }
+
+    buildTree(type, sourceLevel, cachePoints, levelCap) {
+        let minCacheLevel = new Decimal(cachePoints[0]);
+        let maxCacheLevel = new Decimal(cachePoints[cachePoints.length - 1]);
+        let cumulativeResult = new Decimal(0);
+
+        for (let j = minCacheLevel; j.lte(maxCacheLevel); j = j.plus(1)) {
+            if (levelCap && j.gte(levelCap)) {
+                if (type === "cost") {
+                    cumulativeResult = cumulativeResult.plus(this.currentRunningResult);
+                } else if (type === "value") {
+                    cumulativeResult = this.currentRunningResult;
+                }
+
+                this.cacheMap.set(j.toString(), cumulativeResult);
+                break;
+            }
+            let newLevel = sourceLevel.plus(new Decimal(j));
+            this.updateBaseNode(newLevel);
+            this.updateDownstreamNodes();
+
+            if (type === "cost") {
+                cumulativeResult = cumulativeResult.plus(this.currentRunningResult);
+            } else if (type === "value") {
+                cumulativeResult = this.currentRunningResult;
+            }
+
+            this.cacheMap.set(j.toString(), cumulativeResult);
+        } 
+    }
+
+    setNextMilestoneCachePoint() {
+        let milestoneCacheLevel = this.parent.nextMilestoneLevel.minus(this.parent.level);
+        let valueAtNextMilestone = this.cacheMap.get(milestoneCacheLevel.toString());
+        this.cacheMap.set("-2", valueAtNextMilestone);
+    }
+
+    assignCachePoints() {
+        let cachePoints;
+
+        if (this.parent.featureType === "fighter") {
+            cachePoints = [new Decimal(1)];
+        }
+        else if (this.parent.featureType === "skill") {
+
+            cachePoints = [new Decimal(1), new Decimal(5), new Decimal(10)];
+        }
+        else if (this.valueType === "cost") {
+            cachePoints = [new Decimal(1), new Decimal(5), new Decimal(10), new Decimal(100)];
+        }
+        else if (this.valueType === "value") {
+            cachePoints = [new Decimal(0), new Decimal(1), new Decimal(5), new Decimal(10), new Decimal(100)];
+        }
+
+        if (this.parent.featureType === "training") {
+            this.assignNextMilestoneCachePoint(cachePoints);
+        }
+
+        return cachePoints;
+    }
+
+    assignNextMilestoneCachePoint(cachePoints) {
+        let maxMilestoneLevel = this.parent.milestoneTiers[this.parent.milestoneTiers.length - 1];
+
+        //return 1 if above the max milestone level
+        if (this.parent.level.gte(maxMilestoneLevel)) {
+            this.parent.nextMilestoneLevel = this.parent.level.plus(1);
+            return;
+        }
+        let nextMilestoneLevel = this.parent.findNextMilestoneLevel();
+
+        if (this.parent.level.lte(nextMilestoneLevel)) {
+            let maxCachePoint = cachePoints[cachePoints.length - 1];
+            let nextMilestoneCachePoint = nextMilestoneLevel.minus(this.parent.level);
+
+            //only add if not already within cache range
+            if (nextMilestoneCachePoint.gte(maxCachePoint)) {
+                cachePoints.push(nextMilestoneCachePoint);
+            }
+        }
+    }
+
+    buildMaxCostCache(levelCap, resource) {
+        let maxCacheSize = new Decimal(1000);
+
+        //size of cache minus max(-1) and next(-2)
+        let currentCacheSize = new Decimal(this.cacheMap.size - 2);
+
+        let maxAffordableLevel = new Decimal(currentCacheSize);
+
+        //don't proceed if cache is already at max size
+        if (currentCacheSize.eq(maxCacheSize)) {
+            return;
+        }
+
+        //check if can afford a single level
+        if (resource.lt(this.cacheMap.get("1"))) {
+            this.cacheMap.set("-1", this.cacheMap.get("1"));
+            this.parent.maxAffordableLevel = new Decimal(0);
+            return;
+        }
+
+        //check if cache already contains affordable level
+        if (resource.lte(this.cacheMap.get(currentCacheSize.toString()))) {
+            let i = currentCacheSize;
+            while (i.gte(1)) {
+                if (resource.gte(this.cacheMap.get(i.toString()))) {
+                    maxAffordableLevel = i;
+                    break;
+                }
+                i = i.minus(1);
+            }
+
+            this.cacheMap.set("-1", this.cacheMap.get(maxAffordableLevel.toString()));
+            this.parent.maxAffordableLevel = maxAffordableLevel;
+            return;
+        }
+
+        //iterate upwards from current tree top until find max affordable level
+        let costMax = new Decimal(this.cacheMap.get(currentCacheSize.toString()));
+        let currentParentLevel = this.parent.level;
+
+        while (maxAffordableLevel.lt(maxCacheSize)) {
+            if (levelCap && maxAffordableLevel.gte(levelCap)) {
+                break;
+            }
+            maxAffordableLevel = maxAffordableLevel.plus(1);
+            this.updateBaseNode(maxAffordableLevel.plus(currentParentLevel));
+            this.updateDownstreamNodes();
+            if (resource.gte(this.currentRunningResult)) {
+                costMax = costMax.plus(this.currentRunningResult);
+                this.cacheMap.set(maxAffordableLevel.toString(), costMax);
+            }
+            if (resource.lt(costMax)) {
+                maxAffordableLevel = maxAffordableLevel.minus(1);
+                costMax = costMax.minus(this.currentRunningResult);
+                break;
+            }
+        }
+
+        this.cacheMap.set("-1", costMax);
+        this.parent.maxAffordableLevel = maxAffordableLevel;
+    }
+
+    buildMaxValueCache(levelCap, maxAffordableLevel) {
+        let maxCacheSize = new Decimal(1000);
+
+        //size of cache minus max(-1), next(-2) and 0(current value)
+        let currentCacheSize = new Decimal(this.cacheMap.size - 3);
+
+        //don't proceed if cache is already at max size
+        if (currentCacheSize.eq(maxCacheSize)) {
+            return;
+        }
+
+        //check if can afford a single level
+        if (maxAffordableLevel.eq(0)) {
+            this.cacheMap.set("-1", this.cacheMap.get("1"));
+            return;
+        }
+
+        //check if cache already contains affordable level
+        if (maxAffordableLevel.lte(currentCacheSize)){
+            this.cacheMap.set("-1", this.cacheMap.get(maxAffordableLevel.toString()));
+            return;
+        }
+        
+        //iterate upwards from current tree top until find max affordable level
+        let valueAtMax = this.cacheMap.get(currentCacheSize.toString());
+        let currCacheLevel = new Decimal(currentCacheSize);
+        let currentParentLevel = this.parent.level;
+
+        while (currCacheLevel.lt(maxAffordableLevel)) {
+            if (levelCap && currCacheLevel.gte(levelCap)) {
+                break;
+            }
+            currCacheLevel = currCacheLevel.plus(1);
+            this.updateBaseNode(currCacheLevel.plus(currentParentLevel));
+            this.updateDownstreamNodes();
+
+            valueAtMax = this.currentRunningResult;
+            this.cacheMap.set(currCacheLevel.toString(), valueAtMax);
+        }
+        this.cacheMap.set("-1", valueAtMax);
+    }
+
+    clearCache() {
+        this.cacheMap.clear();
+    }
+
+    updateBaseNode(newSourceLevel) {
+        this.nodes[0].result = this.calcNodeResult(this.nodes[0], newSourceLevel);
+        this.nodes[0].runningResult = this.nodes[0].result;
+    }
+
+    updateDownstreamNodes() {
+        let currentNode = this.nodes[0].nextNode;
+        let lastActiveNode = this.nodes[0];
 
         while (currentNode) {
-            //if (currentNode.ref.source === this.parent) {
-                currentNode.result = this.calcNodeResult(currentNode, currentNode.ref.source.level, gameManager);
-            //}
-
             if (currentNode.ref.active) {
-                currentNode.runningResult = this.calcNodeRunningResult(currentNode, lastActiveNode.runningResult);
+                currentNode.result = this.calcNodeResult(currentNode, currentNode.ref.source.level);
 
-                currentNode.ref.lastCalcCycle = gameManager.calcCycle;
+                currentNode.runningResult = this.calcNodeRunningResult(currentNode, lastActiveNode.runningResult);
 
                 lastActiveNode = currentNode;
             }
             currentNode = currentNode.nextNode;
         }
+ 
         this.currentRunningResult = lastActiveNode.runningResult;
     }
 
@@ -1895,7 +2946,11 @@ class CalculationTree {
             return this.performCalculation(node.ref.sourceCalcType, val, srcVal);
         }
 
-        if (node.ref.sourceCalcType === 'add' && this.valueType ==="value") {
+        if (node.ref.sourceCalcType === 'add' && this.valueType === "value") {
+            srcVal = srcVal.minus(1);
+        }
+
+        if (node.ref.sourceCalcType === 'add' && this.valueType === "cost") {
             srcVal = srcVal.minus(1);
         }
 
@@ -1938,30 +2993,6 @@ class CalculationTree {
         return calculation(val1, val2, base);
     }
 
-    getLastActiveResult(node) {
-        if (!node.previousNode) {
-            return null;
-        }
-        let lastActiveResult = null;
-        let prevNode = node.previousNode;
-        while (prevNode && !lastActiveResult) {
-            if (prevNode.ref.active) {
-                lastActiveResult = prevNode.runningResult;
-            }
-            prevNode = prevNode.previousNode;
-        }
-        return lastActiveResult;
-    }
-
-    returnNodeIndex(id) {
-        for (let i = 0; i < this.nodes.length; i++) {
-            if (this.nodes[i].ref.id === id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     addNode(mod) {
         let newNode = new CalculationTreeNode(mod, this);
         let insertIndex = this.nodes.length;
@@ -1998,43 +3029,121 @@ class GameFeature extends Observable {
         this.level = new Decimal(level);
         this.maxLevel = new Decimal(maxLevel);
 
-        this.displayCost = new Decimal();
-        this.cost = new Decimal();
         this.costType = costType;
 
-        this.displayValue = new Decimal();
         this.value = new Decimal();
         this.valueType = valueType;
 
         this.calcTreesMap = new Map();
 
         this.active = active;
+
+        this.maxAffordableLevel = new Decimal(0);
+        this.nextMilestoneLevel = new Decimal(0);
+
+        this.isCacheBuilding = false;
     }
+
+    buildMaxCache(resource) {
+        //all features have a cost tree. not all have a value tree.
+        this.isCacheBuilding = true;
+        //builds the cost tree and sets this.maxAffLvl for value tree to use
+        this.buildCacheByType("cost", resource);
+        this.buildCacheByType("value");
+        this.isCacheBuilding = false;
+    }
+
+    buildCacheByType(type, resource = null) {
+        let tree = this.calcTreesMap.get(type);
+        let treeExists = tree ? tree.cacheMap : undefined;
+
+        let levelCap = this.maxLevel ? new Decimal(this.maxLevel.minus(this.level)) : null;
+
+        if (treeExists) {
+            if (type === "cost") {
+                tree.buildMaxCostCache(levelCap, resource);
+            }
+            else if (type === "value") {
+                tree.buildMaxValueCache(levelCap, this.maxAffordableLevel);
+            }
+        } 
+    }
+
 
     setActive() {
         this.active = true;
-        console.error(this.name, "activated");
+        //console.error(this.name, "activated");
     }
 
-    levelUp(count) {
+    levelUp(gameManager, count) {
+        let newCount = count;
+
         if (this.level.eq(0)) {
             for (const observer of this.observers) {
                 observer.active = true;
             }
         }
-        //isAffordable is already processed
-        let newCount = new Decimal(count);
-        if ((this.maxLevel - this.level) < count) {
+
+        if ( (this.maxLevel.minus(this.level)).lt(count) ) {
             newCount = this.maxLevel.minus(this.level);
         }
-        if (this.featureType !== "skill") {
-            this.level = this.level.plus(newCount);
-        }
-        else {
-            this.level = this.level.plus(1);
-        }
 
-        
+        this.level = this.level.plus(newCount);
+
+        this.eventManager.dispatchEvent('check-unlocks');
+        this.updateObservers(gameManager);
+        if (this.featureType === "training") {
+            this.setNewMilestoneLevel();
+            for (const [key, calcTree] of this.calcTreesMap) {
+                calcTree.setNextMilestoneCachePoint();
+            }
+        }
+    }
+
+    updateObservers(gameManager) {
+        for (const observer of this.observers) {
+            if (observer.active) {
+
+                //Handle self-targeting mods
+                if (!observer.targetType && (observer.target === observer.source)) {
+                    for (const targetCalcTree of observer.calcTreeReferences) {
+                        if (targetCalcTree.parent.active) {
+                            targetCalcTree.buildCache(observer.source.level);
+
+                            gameManager.updateValues(targetCalcTree);
+                        }
+                    }
+                }
+
+                //handle non-self single target mods
+                else if ((observer.source && observer.target) && (observer.target != observer.source)) {
+                    observer.target.calcTreesMap.forEach((targetCalcTree) => {
+                        if (targetCalcTree.parent.active){
+
+                            //console.error("  single-target mod:", observer.name, "updating", targetCalcTree.parent.name, targetCalcTree.valueType, "tree");
+
+                            targetCalcTree.buildCache(observer.target.level);
+
+                            gameManager.updateValues(targetCalcTree);
+                        }
+                    });
+                }
+
+                //Handle Type Target Mods
+                else if (observer.targetType) {
+                    for (const targetCalcTree of observer.calcTreeReferences) {
+                        if (targetCalcTree.parent.active){
+
+                            //console.error("  TypeMod:", observer.name, "updating tree:", targetCalcTree.parent.name, targetCalcTree.valueType);
+
+                            targetCalcTree.buildCache(targetCalcTree.parent.level);
+
+                            gameManager.updateValues(targetCalcTree);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -2043,6 +3152,28 @@ class Training extends GameFeature {
         super(eventManager, id, name, description, level, maxLevel, costType, valueType, active);
         this.featureType = "training";
         this.realmID = realmID;
+
+        this.milestoneTiers = [];
+    }
+
+    setNewMilestoneLevel() {
+        for (let i = 0; i < this.milestoneTiers.length; i++) {
+            let milestone = this.milestoneTiers[i];
+            if (this.level.lt(milestone)) {
+                this.nextMilestoneLevel = new Decimal(milestone);
+                break;
+            }
+        }
+    }
+
+    findNextMilestoneLevel() {
+        for (let i = 0; i < this.milestoneTiers.length; i++) {
+            let milestone = this.milestoneTiers[i];
+            if (this.level.lt(milestone)) {
+                return new Decimal(milestone);
+                break;
+            }
+        }
     }
 }
 
@@ -2054,6 +3185,13 @@ class Upgrade extends GameFeature {
     }
 }
 
+class EssenceUpgrade extends GameFeature {
+    constructor(eventManager, id, name, description, level, maxLevel, costType, valueType, active) {
+        super(eventManager, id, name, description, level, maxLevel, costType, valueType, active);
+        this.featureType = "essenceUpgrade";
+    }
+}
+
 class Fighter extends GameFeature {
     constructor(eventManager, id, stageID, name, active) {
         super(
@@ -2061,8 +3199,8 @@ class Fighter extends GameFeature {
             id,
             name,
             "", //description
-            0, // level - assuming fighters do not have a level
-            0, // maxLevel - assuming fighters do not have a max level
+            0, // level
+            2, // maxLevel - set at 2 to work with buildCache properly. gross for now
             "powerLevel", // costType
             "skillpoint", // valueType
             active
@@ -2073,34 +3211,26 @@ class Fighter extends GameFeature {
     }
 }
 
-class Skill extends GameFeature {
-    constructor(eventManager, id, name, description, level, maxLevel, active, connections) {
-        super(
-            eventManager,
-            id,
-            name,
-            description, // description
-            level, // level
-            maxLevel, // maxLevel
-            "skillpoint", // costType
-            null, // valueType
-            active
-        );
-        this.featureType = "skill";
-        this.skillSet = "01";
-        this.connections = connections;
-    }
-}
-
 class Realm {
-    constructor(eventManager, id, type, name, isUnlocked) {
+    constructor(eventManager, id, type, name, active) {
         this.eventManager = eventManager;
         this.id = id;
         this.type = type;
         this.name = name;
-        this.isUnlocked = isUnlocked;
+        this.active = active;
         this.trainings = [];
         this.upgrades = [];
+    }
+
+
+    setActive() {
+        this.active = true;
+        this.trainings.forEach(training => {
+            training.active = true;
+        });
+        this.upgrades.forEach(upgrade => {
+            upgrade.active = true;
+        });
     }
 }
 
@@ -2152,7 +3282,8 @@ class Stage {
 
         if (playerPowerLevel.gt(fighter.cost)) { // Changed from fighter.powerLevel to fighter.cost
             fighter.isDefeated = true;
-            this.eventManager.dispatchEvent('addPlayerResource', { rewardType: fighter.valueType, rewardValue: fighter.value });
+            let fighterValue = fighter.calcTreesMap.get("value").cacheMap.get("1");
+            this.eventManager.dispatchEvent('addPlayerResource', { rewardType: fighter.valueType, rewardValue: fighterValue });
 
 
             // Check if all fighters in the stage are defeated
@@ -2171,6 +3302,25 @@ class Stage {
         this.fighters.forEach(fighter => {
             fighter.active = true;
         });
+    }
+}
+
+class Skill extends GameFeature {
+    constructor(eventManager, id, name, description, level, maxLevel, active, connections) {
+        super(
+            eventManager,
+            id,
+            name,
+            description, // description
+            level, // level
+            maxLevel, // maxLevel
+            "skillpoint", // costType
+            null, // valueType
+            active
+        );
+        this.featureType = "skill";
+        this.skillSet = "01";
+        this.connections = connections;
     }
 }
 

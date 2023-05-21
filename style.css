@@ -86,14 +86,33 @@ background-color: lightblue;
 }
 
 #row-stats {
-    display:flex;
-    flex-direction:row;
-    justify-content:flex-start;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
-#row-stats * {
-    padding-left:5px;padding-right:5px;
+    #row-stats * {
+        padding-left: 5px;
+        padding-right: 5px;
+        width: 150px;
+        white-space: pre;
+        text-align: center;
+    }
+
+#row-stats2 {
+    margin-top:5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
+
+    #row-stats2 * {
+        padding-left: 5px;
+        padding-right: 5px;
+        width: 150px;
+        white-space: pre;
+        text-align: center;
+    }
 
 .training-cell {
     display:flex;
@@ -148,8 +167,8 @@ background-color: lightblue;
 .skill-node {
     color:black;
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background-color: lightblue;
     border: 1px solid black;
     display: flex;
@@ -157,6 +176,7 @@ background-color: lightblue;
     justify-content: center;
     cursor: pointer;
     z-index:1;
+    user-select:none;
 }
 
 .skill-line {
@@ -166,30 +186,88 @@ background-color: lightblue;
 }
 
     .skill-line.north {
-        top: -15px;
+        top: -10px;
         left: calc(50% - 1px);
         width: 2px;
-        height: 15px;
+        height: 10px;
     }
 
     .skill-line.south {
-        bottom: -15px;
+        bottom: -10px;
         left: calc(50% - 1px);
         width: 2px;
-        height: 15px;
+        height: 10px;
     }
 
     .skill-line.east {
-        right: -15px;
+        right: -10px;
         top: calc(50% - 1px);
-        width: 15px;
+        width: 10px;
         height: 2px;
     }
 
     .skill-line.west {
-        left: -15px;
+        left: -10px;
         top: calc(50% - 1px);
-        width: 15px;
+        width: 10px;
         height: 2px;
     }
 
+#save {
+    margin-left:20px;
+    width:150px;
+    transition: all 0.3s ease-in-out;
+}
+
+    #save.fade {
+        opacity: 0.5;
+    }
+
+
+#load {
+    width:150px;
+    transition: all 0.3s ease-in-out;
+}
+
+    #load.fade {
+        opacity: 0.5;
+    }
+
+
+#reset {
+    width:150px;
+    transition: all 0.3s ease-in-out;
+}
+
+    #reset.fade {
+        opacity: 0.5;
+    }
+
+
+#rebirth1 {
+    margin-left:20px;
+    width: 100px;
+    transition: all 0.3s ease-in-out;
+}
+
+    #rebirth1.fade {
+        opacity: 0.5;
+    }
+
+#rebirth2 {
+    width: 100px;
+    transition: all 0.3s ease-in-out;
+}
+
+    #rebirth2.fade {
+        opacity: 0.5;
+    }
+
+#rebirth3 {
+    width: 100px;
+    transition: all 0.3s ease-in-out;
+}
+
+    #rebirth3.fade {
+        opacity: 0.5;
+    }
