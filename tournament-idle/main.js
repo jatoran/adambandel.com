@@ -1,5 +1,5 @@
-import Decimal from './break_eternity.min.js';
-import infoIconSource from './assets/icons/info-icon.png';
+// import Decimal from './break_eternity.min.js';
+// import infoIconSource from './assets/icons/info-icon.png';
 
 async function fetchData() {
     const trainingDataResponse = await fetch('./assets/gameData/trainingData.json');
