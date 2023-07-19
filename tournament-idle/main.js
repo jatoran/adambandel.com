@@ -46,8 +46,6 @@ async function fetchData() {
 
     const tabDataResponse = await fetch('./assets/gameData/tabData.json');
     const tabData = await tabDataResponse.json();
-
-    initTrainings(trainingData);  // example of using the data
 }
 
 fetchData().catch(error => console.error(error));
