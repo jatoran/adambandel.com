@@ -1,0 +1,202 @@
+[
+    { "id": 6001, "name": "powerLevel 1e4", "description": "1e4 powerLevel = fTrain prodMult * 2", "unlockCategory": "stat", "conditionType": "powerLevel", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6201, "name": "achieveMod1", "type": "prodBase", "priority": null, "sourceID": 6001, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2, "value": 2, "active": false } ] },
+    { "id": 6002, "name": "powerLevel 1e8", "description": "1e8 powerLevel = fTrain prodMult * 20", "unlockCategory": "stat", "conditionType": "powerLevel", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e8, "setID": 6401,
+        "mods": [ { "id": 6202, "name": "achieveMod2", "type": "prodBase", "priority": null, "sourceID": 6002, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20, "value": 2, "active": false } ] },
+    { "id": 6003, "name": "powerLevel 1e12", "description": "1e12 powerLevel = fTrain prodMult * 200", "unlockCategory": "stat", "conditionType": "powerLevel", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e12, "setID": 6402,
+        "mods": [ { "id": 6203, "name": "achieveMod3", "type": "prodBase", "priority": null, "sourceID": 6003, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 200, "value": 2, "active": false } ]
+    },
+    { "id": 6004, "name": "powerLevel 1e15", "description": "1e15 powerLevel = fTrain prodMult * 2000", "unlockCategory": "stat", "conditionType": "powerLevel", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e15, "setID": 6403,
+        "mods": [ { "id": 6204, "name": "achieveMod4", "type": "prodBase", "priority": null, "sourceID": 6004, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2000, "value": 2, "active": false } ]
+    },
+    { "id": 6005, "name": "powerLevel 1e18", "description": "1e18 powerLevel = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "powerLevel", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e18, "setID": 6403,
+        "mods": [ { "id": 6205, "name": "achieveMod5", "type": "prodBase", "priority": null, "sourceID": 6005, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6006, "name": "wisdom 1e4", "description": "1e4 wisdom = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "wisdom", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 10000, "setID": 6403,
+        "mods": [ { "id": 6206, "name": "achieveMod6", "type": "prodBase", "priority": null, "sourceID": 6006, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 20000, "active": false } ]
+    },
+
+    
+
+
+
+
+    { "id": 6007, "name": "world1Achieve", "description": "world1 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000001, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6207, "name": "achieveMod7", "type": "prodBase", "priority": null, "sourceID": 6007, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6008, "name": "world2Achieve", "description": "world2 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000002, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6208, "name": "achieveMod8", "type": "prodBase", "priority": null, "sourceID": 6008, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6009, "name": "world3Achieve", "description": "world3 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000003, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6209, "name": "achieveMod9", "type": "prodBase", "priority": null, "sourceID": 6009, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6010, "name": "world4Achieve", "description": "world4 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000004, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6210, "name": "achieveMod10", "type": "prodBase", "priority": null, "sourceID": 6010, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6011, "name": "world5Achieve", "description": "world5 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000005, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6211, "name": "achieveMod11", "type": "prodBase", "priority": null, "sourceID": 6011, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6012, "name": "world6Achieve", "description": "world6 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000006, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6212, "name": "achieveMod12", "type": "prodBase", "priority": null, "sourceID": 6012, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6013, "name": "world7Achieve", "description": "world7 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000007, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6213, "name": "achieveMod13", "type": "prodBase", "priority": null, "sourceID": 6013, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6014, "name": "world8Achieve", "description": "world8 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000008, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6214, "name": "achieveMod14", "type": "prodBase", "priority": null, "sourceID": 6014, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6015, "name": "world9Achieve", "description": "world9 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000009, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6215, "name": "achieveMod15", "type": "prodBase", "priority": null, "sourceID": 6015, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6016, "name": "world10Achieve", "description": "world10 progressed = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isProgressed", "dependentID": 1000010, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6403,
+        "mods": [ { "id": 6216, "name": "achieveMod16", "type": "prodBase", "priority": null, "sourceID": 6016, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+
+
+
+
+
+    { "id": 6021, "name": "lifetimeForceEarnedAchieve", "description": "lifetimeForceEarned = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeForceEarned", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6221, "name": "achieveMod21", "type": "prodBase", "priority": null, "sourceID": 6021, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6022, "name": "lifetimeWisdomEarnedAchieve", "description": "lifetimeWisdomEarned = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeWisdomEarned", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6222, "name": "achieveMod22", "type": "prodBase", "priority": null, "sourceID": 6022, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6023, "name": "lifetimeEnergyEarnedAchieve", "description": "lifetimeEnergyEarned = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeEnergyEarned", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6223, "name": "achieveMod23", "type": "prodBase", "priority": null, "sourceID": 6023, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6024, "name": "lifetimeDivineEarnedAchieve", "description": "lifetimeDivineEarned = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeDivineEarned", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6224, "name": "achieveMod24", "type": "prodBase", "priority": null, "sourceID": 6024, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6025, "name": "lifetimeCrystalEarnedAchieve", "description": "lifetimeCrystalEarned = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeCrystalEarned", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6225, "name": "achieveMod25", "type": "prodBase", "priority": null, "sourceID": 6025, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    { "id": 6026, "name": "lifetimeEssenceEarnedAchieve", "description": "lifetimeEssenceEarned = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeEssenceEarned", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6226, "name": "achieveMod26", "type": "prodBase", "priority": null, "sourceID": 6026, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+
+    
+    {
+        "id": 6027, "name": "totalPlaytimeAchieve", "description": "totalPlaytime = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "totalPlaytime", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6227, "name": "achieveMod27", "type": "prodBase", "priority": null, "sourceID": 6027, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    {
+        "id": 6029, "name": "maxProgressionRegionAchieve", "description": "maxProgressionRegion = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionRegion", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6229, "name": "achieveMod29", "type": "prodBase", "priority": null, "sourceID": 6029, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    {
+        "id": 6031, "name": "lifetimeZoneCompletionsAchieve", "description": "lifetimeZoneCompletions = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeZoneCompletions", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6231, "name": "achieveMod31", "type": "prodBase", "priority": null, "sourceID": 6031, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    {
+        "id": 6032, "name": "lifetimeRegionProgressionsAchieve", "description": "lifetimeRegionProgressions = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeRegionProgressions", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6232, "name": "achieveMod32", "type": "prodBase", "priority": null, "sourceID": 6032, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    {
+        "id": 6034, "name": "maxTournamentRankAchieve", "description": "maxTournamentRank = 10000 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxTournamentRank", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1e4, "setID": 6401,
+        "mods": [ { "id": 6234, "name": "achieveMod34", "type": "prodBase", "priority": null, "sourceID": 6034, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+    {
+        "id": 6035, "name": "lifetimeKillsAchieve", "description": "lifetimeKills = 5 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "lifetimeKills", "dependentID": null, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": 5, "setID": 6401,
+        "mods": [ { "id": 6235, "name": "achieveMod35", "type": "prodBase", "priority": null, "sourceID": 6035, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 20000, "value": 2, "active": false } ]
+    },
+
+
+
+
+    {
+        "id": 6050, "name": "sideBossAchieve1", "description": "Super Side Boss 1 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9007, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6051, "name": "sideBossAchieve2", "description": "Super Side Boss 2 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9026, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6051, "name": "sideBossAchieve3", "description": "Super Side Boss 3 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9047, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6052, "name": "sideBossAchieve4", "description": "Super Side Boss 4 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9069, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6053, "name": "sideBossAchieve5", "description": "Super Side Boss 5 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9087, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6054, "name": "sideBossAchieve6", "description": "Super Side Boss 6 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9107, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6055, "name": "sideBossAchieve7", "description": "Super Side Boss 7 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9127, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6056, "name": "sideBossAchieve8", "description": "Super Side Boss 8 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9147, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6057, "name": "sideBossAchieve9", "description": "Super Side Boss 9 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9167, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6058, "name": "sideBossAchieve10", "description": "Super Side Boss 10 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9187, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6059, "name": "sideBossAchieve11", "description": "Super Side Boss 11 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9207, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6060, "name": "sideBossAchieve12", "description": "Super Side Boss 12 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9227, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6061, "name": "sideBossAchieve13", "description": "Super Side Boss 13 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9247, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6062, "name": "sideBossAchieve14", "description": "Super Side Boss 14 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9270, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6063, "name": "sideBossAchieve15", "description": "Super Side Boss 15 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9287, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6064, "name": "sideBossAchieve16", "description": "Super Side Boss 16 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9317, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6065, "name": "sideBossAchieve17", "description": "Super Side Boss 17 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9347, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6066, "name": "sideBossAchieve18", "description": "Super Side Boss 18 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9377, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6067, "name": "sideBossAchieve19", "description": "Super Side Boss 19 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9407, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6068, "name": "sideBossAchieve20", "description": "Super Side Boss 20 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9437, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6069, "name": "sideBossAchieve21", "description": "Super Side Boss 21 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9467, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+    {
+        "id": 6070, "name": "sideBossAchieve22", "description": "Super Side Boss 22 defeated = fTrain prodMult * 20000", "unlockCategory": "id", "conditionType": "isDefeated", "dependentID": 9507, "radianceReward": 10, "triggerType": "setActive", "triggerValue":null, "conditionValue": true, "setID": 6404
+    },
+
+    
+    {
+        "id": 6101, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 1 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 1, "setID": 6401
+    },
+    {
+        "id": 6102, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 2 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 2, "setID": 6401
+    },
+    {
+        "id": 6103, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 3 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 3, "setID": 6401
+    },
+    {
+        "id": 6104, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 4 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 4, "setID": 6401
+    },
+    {
+        "id": 6105, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 5 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 5, "setID": 6401
+    },
+    {
+        "id": 6106, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 6 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 6, "setID": 6401
+    },
+    {
+        "id": 6107, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 7 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 7, "setID": 6401
+    },
+    {
+        "id": 6108, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 8 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 8, "setID": 6401
+    },
+    {
+        "id": 6109, "name": "maxProgressionWorldAchieve", "description": "maxProgressionworld = 9 = fTrain prodMult * 20000", "unlockCategory": "stat", "conditionType": "maxProgressionWorld", "dependentID": null, "radianceReward": 100, "triggerType": "setActive", "triggerValue":null, "conditionValue": 9, "setID": 6401
+    }
+]

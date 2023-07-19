@@ -1,0 +1,49 @@
+[
+    { "id": 611, "genChainID": 601, "evolutionTier": 1, "name": "Students", "description": "", "level": 0, "costType": "wisdom", "costBase": 1, "costGrowthRate": 1.3, "prodType": "wisdomIncome", "prodBase": 1, "prodGrowthRate": 1, "active": true,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "Scholars", "description": "The students have become scholars. Their thirst for knowledge is unstoppable.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "Savants", "description": "Now savants, they've transcended normal scholarly pursuits. Every thought is a fountain of wisdom.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 612, "genChainID": 601, "evolutionTier": 1, "name": "Trainers", "description": "", "level": 0, "costType": "wisdom", "costBase": 10, "costGrowthRate": 1.4, "prodType": "sGen1", "prodBase": 1, "prodGrowthRate": 1, "active": false,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "Coaches", "description": "The trainers have evolved into coaches, guiding their students with expertise and patience.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "Mentors", "description": "Now mentors, they've reached a pinnacle of guidance. Their wisdom shapes the future.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 613, "genChainID": 601, "evolutionTier": 1, "name": "Academies", "description": "", "level": 0, "costType": "wisdom", "costBase": 100, "costGrowthRate": 1.4, "prodType": "sGen2", "prodBase": 1, "prodGrowthRate": 1, "active": false,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "Universities", "description": "The academies have grown into universities, havens of learning and innovation.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "Centers of Excellence", "description": "They've become Centers of Excellence, pioneering the frontier of knowledge.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 614, "genChainID": 601, "evolutionTier": 1, "name": "Masters", "description": "", "level": 0, "costType": "wisdom", "costBase": 1000, "costGrowthRate": 1.4, "prodType": "sGen3", "prodBase": 1, "prodGrowthRate": 1, "active": false,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "Grandmasters", "description": "The masters have evolved into grandmasters, embodying the pinnacle of their discipline.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "Legends", "description": "Now legends, their skills and wisdom are unparalleled in history.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 615, "genChainID": 601, "evolutionTier": 1, "name": "Grandmasters", "description": "", "level": 0, "costType": "wisdom", "costBase": 10000, "costGrowthRate": 1.5, "prodType": "sGen4", "prodBase": 1, "prodGrowthRate": 1, "active": false,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "Pioneers", "description": "The grandmasters have become pioneers, charting new territories in their fields.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "Visionaries", "description": "Now visionaries, they are creating the future with their groundbreaking insights.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+
+
+
+
+
+
+    { "id": 711, "genChainID": 701, "evolutionTier": 1, "name": "dGen1", "description": "", "level": 0, "costType": "divine", "costBase": 1, "costGrowthRate": 1.3, "prodType": "divineIncome", "prodBase": 1, "prodGrowthRate": 1, "active": true,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "dGenPrime", "description": "The divine generator has evolved into dGenPrime, producing even greater divine energy.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "dGenUltra", "description": "Now dGenUltra, it emanates an astounding amount of divine power.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 712, "genChainID": 701, "evolutionTier": 1, "name": "dGen2", "description": "", "level": 0, "costType": "divine", "costBase": 10, "costGrowthRate": 1.4, "prodType": "dGen1", "prodBase": 1, "prodGrowthRate": 1, "active": false,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "dGen2Advanced", "description": "dGen2 has evolved into dGen2Advanced, multiplying its divine power generation.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "dGen2Superior", "description": "Now dGen2Superior, it's an epitome of divine energy generation.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 713, "genChainID": 701, "evolutionTier": 1, "name": "dGen3", "description": "", "level": 0, "costType": "divine", "costBase": 100, "costGrowthRate": 1.4, "prodType": "dGen2", "prodBase": 1, "prodGrowthRate": 1, "active": false,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "dGen3Pro", "description": "dGen3 has become dGen3Pro, radiating divine power more effectively.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "dGen3Ultra", "description": "Now dGen3Ultra, it's the ultimate divine generator.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 714, "genChainID": 701, "evolutionTier": 1, "name": "dGen4", "description": "", "level": 0, "costType": "divine", "costBase": 1000, "costGrowthRate": 1.4, "prodType": "dGen3", "prodBase": 1, "prodGrowthRate": 1, "active": false,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "dGen4Max", "description": "dGen4 has evolved into dGen4Max, reaching a new level of divine power generation.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "dGen4Supreme", "description": "Now dGen4Supreme, it's the apex of divine energy creation.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ] }, 
+    { "id": 715, "genChainID": 701, "evolutionTier": 1, "name": "dGen5", "description": "", "level": 0, "costType": "divine", "costBase": 10000, "costGrowthRate": 1.5, "prodType": "dGen4", "prodBase": 1, "prodGrowthRate": 1, "active": false ,
+        "evolutions":[
+            { "evolutionTier": 2, "name": "dGen5Ultimate", "description": "dGen5 has become dGen5Ultimate, epitomizing divine energy production.", "level": 0, "costBase": 10, "costGrowthRate": 1.3, "prodBase": 100, "prodGrowthRate": 1.1 },
+            { "evolutionTier": 3, "name": "dGen5Omega", "description": "Now dGen5Omega, it's the final word in divine generator evolution.", "level": 0, "costBase": 100, "costGrowthRate": 1.3, "prodBase": 1000, "prodGrowthRate": 1.1 } ]
+        }
+]
