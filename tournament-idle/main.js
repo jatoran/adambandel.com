@@ -1,22 +1,56 @@
 import Decimal from './break_eternity.min.js';
-
-import trainingData from './assets/gameData/trainingData.json';
-import generatorData from './assets/gameData/generatorData.json';
-import realmUpgradeData from './assets/gameData/realmUpgradeData.json';
-import forgeUpgradeData from './assets/gameData/forgeUpgradeData.json';
-import essenceUpgradeData from './assets/gameData/essenceUpgradeData.json';
-import radianceUpgradeData from './assets/gameData/radianceUpgradeData.json';
-import fighterData from './assets/gameData/fighterData.json';
-import skillData from './assets/gameData/skillData.json';
-import zoneData from './assets/gameData/zoneData.json';
-import regionData from './assets/gameData/regionData.json';
-import worldData from './assets/gameData/worldData.json';
-import artifactData from './assets/gameData/artifactData.json';
-import achievementData from './assets/gameData/achievementData.json';
-import interfaceElementData from './assets/gameData/interfaceElementData.json';
-import tabData from './assets/gameData/tabData.json';
-
 import infoIconSource from './assets/icons/info-icon.png';
+
+async function fetchData() {
+    const trainingDataResponse = await fetch('./assets/gameData/trainingData.json');
+    const trainingData = await trainingDataResponse.json();
+
+    const generatorDataResponse = await fetch('./assets/gameData/generatorData.json');
+    const generatorData = await generatorDataResponse.json();
+
+    const realmUpgradeDataResponse = await fetch('./assets/gameData/realmUpgradeData.json');
+    const realmUpgradeData = await realmUpgradeDataResponse.json();
+
+    const forgeUpgradeDataResponse = await fetch('./assets/gameData/forgeUpgradeData.json');
+    const forgeUpgradeData = await forgeUpgradeDataResponse.json();
+
+    const essenceUpgradeDataResponse = await fetch('./assets/gameData/essenceUpgradeData.json');
+    const essenceUpgradeData = await essenceUpgradeDataResponse.json();
+
+    const radianceUpgradeDataResponse = await fetch('./assets/gameData/radianceUpgradeData.json');
+    const radianceUpgradeData = await radianceUpgradeDataResponse.json();
+
+    const fighterDataResponse = await fetch('./assets/gameData/fighterData.json');
+    const fighterData = await fighterDataResponse.json();
+
+    const skillDataResponse = await fetch('./assets/gameData/skillData.json');
+    const skillData = await skillDataResponse.json();
+
+    const zoneDataResponse = await fetch('./assets/gameData/zoneData.json');
+    const zoneData = await zoneDataResponse.json();
+
+    const regionDataResponse = await fetch('./assets/gameData/regionData.json');
+    const regionData = await regionDataResponse.json();
+
+    const worldDataResponse = await fetch('./assets/gameData/worldData.json');
+    const worldData = await worldDataResponse.json();
+
+    const artifactDataResponse = await fetch('./assets/gameData/artifactData.json');
+    const artifactData = await artifactDataResponse.json();
+
+    const achievementDataResponse = await fetch('./assets/gameData/achievementData.json');
+    const achievementData = await achievementDataResponse.json();
+
+    const interfaceElementDataResponse = await fetch('./assets/gameData/interfaceElementData.json');
+    const interfaceElementData = await interfaceElementDataResponse.json();
+
+    const tabDataResponse = await fetch('./assets/gameData/tabData.json');
+    const tabData = await tabDataResponse.json();
+
+    initTrainings(trainingData);  // example of using the data
+}
+
+fetchData().catch(error => console.error(error));
 
 document.addEventListener('DOMContentLoaded', () => {
 	window.game = new Game();
