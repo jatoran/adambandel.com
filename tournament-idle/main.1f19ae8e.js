@@ -10871,28 +10871,28 @@ module.exports = [{
   "active": true
 }];
 },{}],"tournament-idle/assets/icons/info-icon.png":[function(require,module,exports) {
-module.exports = "/info-icon.4d6acb27.png";
+module.exports = "tournament-idle/assets/icons/info-icon.4d6acb27.png";
 },{}],"main.js":[function(require,module,exports) {
 var define;
 "use strict";
 
 var _break_eternityMin = _interopRequireDefault(require("./break_eternity.min.js"));
-var _trainingData = _interopRequireDefault(require("./assets/gameData/trainingData.json"));
-var _generatorData = _interopRequireDefault(require("./assets/gameData/generatorData.json"));
-var _realmUpgradeData = _interopRequireDefault(require("./assets/gameData/realmUpgradeData.json"));
-var _forgeUpgradeData = _interopRequireDefault(require("./assets/gameData/forgeUpgradeData.json"));
-var _essenceUpgradeData = _interopRequireDefault(require("./assets/gameData/essenceUpgradeData.json"));
-var _radianceUpgradeData = _interopRequireDefault(require("./assets/gameData/radianceUpgradeData.json"));
-var _fighterData = _interopRequireDefault(require("./assets/gameData/fighterData.json"));
-var _skillData = _interopRequireDefault(require("./assets/gameData/skillData.json"));
-var _zoneData2 = _interopRequireDefault(require("./assets/gameData/zoneData.json"));
-var _regionData = _interopRequireDefault(require("./assets/gameData/regionData.json"));
-var _worldData = _interopRequireDefault(require("./assets/gameData/worldData.json"));
-var _artifactData = _interopRequireDefault(require("./assets/gameData/artifactData.json"));
-var _achievementData = _interopRequireDefault(require("./assets/gameData/achievementData.json"));
-var _interfaceElementData = _interopRequireDefault(require("./assets/gameData/interfaceElementData.json"));
-var _tabData = _interopRequireDefault(require("./assets/gameData/tabData.json"));
-var _infoIcon = _interopRequireDefault(require("./assets/icons/info-icon.png"));
+var _trainingData = _interopRequireDefault(require("./tournament-idle/assets/gameData/trainingData.json"));
+var _generatorData = _interopRequireDefault(require("./tournament-idle/assets/gameData/generatorData.json"));
+var _realmUpgradeData = _interopRequireDefault(require("./tournament-idle/assets/gameData/realmUpgradeData.json"));
+var _forgeUpgradeData = _interopRequireDefault(require("./tournament-idle/assets/gameData/forgeUpgradeData.json"));
+var _essenceUpgradeData = _interopRequireDefault(require("./tournament-idle/assets/gameData/essenceUpgradeData.json"));
+var _radianceUpgradeData = _interopRequireDefault(require("./tournament-idle/assets/gameData/radianceUpgradeData.json"));
+var _fighterData = _interopRequireDefault(require("./tournament-idle/assets/gameData/fighterData.json"));
+var _skillData = _interopRequireDefault(require("./tournament-idle/assets/gameData/skillData.json"));
+var _zoneData2 = _interopRequireDefault(require("./tournament-idle/assets/gameData/zoneData.json"));
+var _regionData = _interopRequireDefault(require("./tournament-idle/assets/gameData/regionData.json"));
+var _worldData = _interopRequireDefault(require("./tournament-idle/assets/gameData/worldData.json"));
+var _artifactData = _interopRequireDefault(require("./tournament-idle/assets/gameData/artifactData.json"));
+var _achievementData = _interopRequireDefault(require("./tournament-idle/assets/gameData/achievementData.json"));
+var _interfaceElementData = _interopRequireDefault(require("./tournament-idle/assets/gameData/interfaceElementData.json"));
+var _tabData = _interopRequireDefault(require("./tournament-idle/assets/gameData/tabData.json"));
+var _infoIcon = _interopRequireDefault(require("./tournament-idle/assets/icons/info-icon.png"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _get() { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get.bind(); } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(arguments.length < 3 ? target : receiver); } return desc.value; }; } return _get.apply(this, arguments); }
 function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
@@ -20750,7 +20750,7 @@ var Tab = /*#__PURE__*/function () {
   }]);
   return Tab;
 }();
-},{"./break_eternity.min.js":"break_eternity.min.js","./assets/gameData/trainingData.json":"tournament-idle/assets/gameData/trainingData.json","./assets/gameData/generatorData.json":"tournament-idle/assets/gameData/generatorData.json","./assets/gameData/realmUpgradeData.json":"tournament-idle/assets/gameData/realmUpgradeData.json","./assets/gameData/forgeUpgradeData.json":"tournament-idle/assets/gameData/forgeUpgradeData.json","./assets/gameData/essenceUpgradeData.json":"tournament-idle/assets/gameData/essenceUpgradeData.json","./assets/gameData/radianceUpgradeData.json":"tournament-idle/assets/gameData/radianceUpgradeData.json","./assets/gameData/fighterData.json":"tournament-idle/assets/gameData/fighterData.json","./assets/gameData/skillData.json":"tournament-idle/assets/gameData/skillData.json","./assets/gameData/zoneData.json":"tournament-idle/assets/gameData/zoneData.json","./assets/gameData/regionData.json":"tournament-idle/assets/gameData/regionData.json","./assets/gameData/worldData.json":"tournament-idle/assets/gameData/worldData.json","./assets/gameData/artifactData.json":"tournament-idle/assets/gameData/artifactData.json","./assets/gameData/achievementData.json":"tournament-idle/assets/gameData/achievementData.json","./assets/gameData/interfaceElementData.json":"tournament-idle/assets/gameData/interfaceElementData.json","./assets/gameData/tabData.json":"tournament-idle/assets/gameData/tabData.json","./assets/icons/info-icon.png":"tournament-idle/assets/icons/info-icon.png"}],"../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./break_eternity.min.js":"break_eternity.min.js","./tournament-idle/assets/gameData/trainingData.json":"tournament-idle/assets/gameData/trainingData.json","./tournament-idle/assets/gameData/generatorData.json":"tournament-idle/assets/gameData/generatorData.json","./tournament-idle/assets/gameData/realmUpgradeData.json":"tournament-idle/assets/gameData/realmUpgradeData.json","./tournament-idle/assets/gameData/forgeUpgradeData.json":"tournament-idle/assets/gameData/forgeUpgradeData.json","./tournament-idle/assets/gameData/essenceUpgradeData.json":"tournament-idle/assets/gameData/essenceUpgradeData.json","./tournament-idle/assets/gameData/radianceUpgradeData.json":"tournament-idle/assets/gameData/radianceUpgradeData.json","./tournament-idle/assets/gameData/fighterData.json":"tournament-idle/assets/gameData/fighterData.json","./tournament-idle/assets/gameData/skillData.json":"tournament-idle/assets/gameData/skillData.json","./tournament-idle/assets/gameData/zoneData.json":"tournament-idle/assets/gameData/zoneData.json","./tournament-idle/assets/gameData/regionData.json":"tournament-idle/assets/gameData/regionData.json","./tournament-idle/assets/gameData/worldData.json":"tournament-idle/assets/gameData/worldData.json","./tournament-idle/assets/gameData/artifactData.json":"tournament-idle/assets/gameData/artifactData.json","./tournament-idle/assets/gameData/achievementData.json":"tournament-idle/assets/gameData/achievementData.json","./tournament-idle/assets/gameData/interfaceElementData.json":"tournament-idle/assets/gameData/interfaceElementData.json","./tournament-idle/assets/gameData/tabData.json":"tournament-idle/assets/gameData/tabData.json","./tournament-idle/assets/icons/info-icon.png":"tournament-idle/assets/icons/info-icon.png"}],"../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
