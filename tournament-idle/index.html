@@ -4,105 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tournament Idle</title>
-    <link rel="stylesheet" href="/tournament-idle/style.e308ff8e.css">
+    <link rel="stylesheet" href="/style.e308ff8e.css">
 
-    <!--remove stupid favicon 404 console error while using vscode-->
-    <link rel="shortcut icon" href="#">
+<script src="/style.e308ff8e.js"></script></head>
+    <body>
+        <div id="root" class="root"></div>
 
-<script src="/tournament-idle/style.e308ff8e.js"></script></head>
-<body>
-    <div class="container">
-        <!--<h1>Tournament Idle</h1>-->
-        <div id="row-stats"></div>
-
-        <div id="row-stats2"></div>
-
-        <div id="settings-container">
-            <label for="numberSettings">Number Notation:</label>
-            <select id="numberSettings">
-                <option value="toPrecision">toPrecision</option>
-                <option value="toFixed">toFixed</option>
-                <option value="toExponential">toExponential</option>
-                <option value="toString">To String</option>
-            </select>
-
-            <button id="multSettings">x1</button>
-
-
-            <button id="save">Save Game</button>
-            <button id="load">Load Game</button>
-            <button id="reset">Reset</button>
-            <button id="rebirth1">Rebirth1</button>
-            <button id="rebirth2">Rebirth2</button>
-            <button id="rebirth3">Rebirth3</button>
-        </div>
-        <div id="tab-buttons">
-            <button class="tabButton" id="powerTab">Power</button>
-            <button class="tabButton" id="spiritTab">Spirit</button>
-            <button class="tabButton" id="skillsTab">Skills</button>
-            <button class="tabButton" id="explorationTab">Exploration</button>
-            <button class="tabButton" id="essenceTab">Essence</button>
-            <button class="tabButton" id="achievementsTab">Achievements</button>
+        <!-- Offline Income Modal Testing -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="modal-message"></span>
+            </div>
         </div>
 
-        <div class="testing-content">
-            <div id="power" class="testing-content-tab">
-                <div id="power-realm-buttons" class="realm-buttons-row"></div>
-                <div class="testing-content-tab-columns">
-                    <div id="power-col1" class="testing-content-tab-col"></div>
-                    <div id="power-col2" class="testing-content-tab-col"></div>
-                </div>
-            </div>
-
-            <div id="spirit" class="testing-content-tab">
-                <div id="spirit-realm-buttons" class="realm-buttons-row"></div>
-                <div class="testing-content-tab-columns">
-                    <div id="spirit-col1" class="testing-content-tab-col"></div>
-                    <div id="spirit-col2" class="testing-content-tab-col"></div>
-                </div>
-            </div>
-
-            <div id="essence" class="testing-content-tab">
-                <div class="testing-content-tab-columns">
-                    <div id="essence-col1" class="testing-content-tab-col"></div>
-                    <div id="essence-col2" class="testing-content-tab-col"></div>
-                </div>
-            </div>
-
-            <div id="skills" class="testing-content-tab">
-                <div class="testing-content-tab-columns" style="width:300px; border:none;">
-                    <div id="skills-col1" class="testing-content-tab-col"></div>
-                    <div id="skills-col2" class="testing-content-tab-col"></div>
-                </div>
-            </div>
-
-            <div id="achievements" class="testing-content-tab">
-                <div class="testing-content-tab-columns" style="width:300px; border:none;">
-                    <div id="achievements-col1" class="testing-content-tab-col"></div>
-                    <div id="achievements-col2" class="testing-content-tab-col"></div>
-                </div>
-            </div>
-
-            <div id="exploration" class="testing-content-tab">
-                <div id="exploration-tab-buttons" class="realm-buttons-row">
-                    <button id="explorationSubTab" class="exploration-tab-button">Exploration</button>
-                    <button id="tournamentSubTab" class="exploration-tab-button">Tournament</button>
-                    <button id="gearSubTab" class="exploration-tab-button">Gear</button>
-                    <button id="workersSubTab" class="exploration-tab-button">Workers</button>
-                    <button id="crystalUpgradesSubTab" class="exploration-tab-button">Crystal Upgrades</button>
-                </div>
-                <div class="testing-content-tab-columns" style="width:300px; border:none;">
-                </div>
-            </div>
-
-        </div>
-        <div id="unlocksList">
-        </div>
-    </div>
-
-
-    <script src="/tournament-idle/break_eternity.min.1c29918f.js"></script>
-    <script type="module" src="/tournament-idle/main.1f19ae8e.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.5/math.js"></script>-->
-</body>
+        <script type="module" src="/main.1f19ae8e.js"></script>
+    </body>
 </html>
