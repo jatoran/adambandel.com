@@ -1781,7 +1781,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
   }();
   return k.dZero = g(0, 0, 0), k.dOne = g(1, 0, 1), k.dNegOne = g(-1, 0, 1), k.dTwo = g(1, 0, 2), k.dTen = g(1, 0, 10), k.dNaN = g(Number.NaN, Number.NaN, Number.NaN), k.dInf = g(1, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY), k.dNegInf = g(-1, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY), k.dNumberMax = m(1, 0, Number.MAX_VALUE), k.dNumberMin = m(1, 0, Number.MIN_VALUE), k.fromStringCache = new r(1023), l = k.fromValue_noAlloc, m = k.fromComponents, g = k.fromComponents_noNormalize, k.fromMantissaExponent, k.fromMantissaExponent_noNormalize, k;
 });
-},{}],"assets/gameData/trainingData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/trainingData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 1001,
   "realmID": 10,
@@ -2113,7 +2113,7 @@ module.exports = [{
     "prodGrowthRate": 1.1
   }]
 }];
-},{}],"assets/gameData/generatorData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/generatorData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 611,
   "genChainID": 601,
@@ -2445,7 +2445,7 @@ module.exports = [{
     "prodGrowthRate": 1.1
   }]
 }];
-},{}],"assets/gameData/realmUpgradeData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/realmUpgradeData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 1101,
   "realmID": 10,
@@ -3340,7 +3340,7 @@ module.exports = [{
     "prodGrowthRate": null
   }]
 }];
-},{}],"assets/gameData/forgeUpgradeData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/forgeUpgradeData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 10001,
   "name": "forceTrain multiply",
@@ -3854,7 +3854,7 @@ module.exports = [{
   "active": false,
   "mods": []
 }];
-},{}],"assets/gameData/essenceUpgradeData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/essenceUpgradeData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 100001,
   "name": "eUpgrade1",
@@ -3964,7 +3964,7 @@ module.exports = [{
   "specialTargetID": 1001,
   "mods": []
 }];
-},{}],"assets/gameData/radianceUpgradeData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/radianceUpgradeData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 120001,
   "name": "Time Radiance",
@@ -4004,7 +4004,7 @@ module.exports = [{
     "active": false
   }]
 }];
-},{}],"assets/gameData/fighterData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/fighterData.json":[function(require,module,exports) {
 module.exports = [{
   "name": "Sparrow's Fist Simon",
   "description": "",
@@ -4906,7 +4906,7 @@ module.exports = [{
   "active": false,
   "visible": false
 }];
-},{}],"assets/gameData/skillData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/skillData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 4001,
   "name": "Skill 1",
@@ -5443,7 +5443,7 @@ module.exports = [{
     "active": false
   }]
 }];
-},{}],"assets/gameData/zoneData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/zoneData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 9001,
   "regionID": 1010001,
@@ -8593,7 +8593,7 @@ module.exports = [{
   "angleFromParent": 0,
   "distanceFromParent": 150
 }];
-},{}],"assets/gameData/regionData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/regionData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 1010001,
   "worldID": 1000001,
@@ -8721,7 +8721,7 @@ module.exports = [{
   "name": "Dimensions Unknown",
   "shardType": "zetaShard"
 }];
-},{}],"assets/gameData/worldData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/worldData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 1000001,
   "name": "Peninsula",
@@ -8757,7 +8757,7 @@ module.exports = [{
   "id": 1000011,
   "name": "Beyond"
 }];
-},{}],"assets/gameData/artifactData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/artifactData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 5010,
   "name": "Garden Gnome Hat",
@@ -9385,7 +9385,7 @@ module.exports = [{
   "costBase": 10,
   "costGrowthRate": 1.5
 }];
-},{}],"assets/gameData/achievementData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/achievementData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 6001,
   "name": "powerLevel 1e4",
@@ -10487,7 +10487,7 @@ module.exports = [{
   "conditionValue": 9,
   "setID": 6401
 }];
-},{}],"assets/gameData/interfaceElementData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/interfaceElementData.json":[function(require,module,exports) {
 module.exports = [{
   "id": "row-stats",
   "variableName": "statsRow",
@@ -10785,7 +10785,7 @@ module.exports = [{
   "tag": "select",
   "options": ["scientific", "engineering", "log10", "string", "verbose", "standard"]
 }];
-},{}],"assets/gameData/tabData.json":[function(require,module,exports) {
+},{}],"tournament-idle/assets/gameData/tabData.json":[function(require,module,exports) {
 module.exports = [{
   "id": 110,
   "name": "training",
@@ -10870,7 +10870,7 @@ module.exports = [{
   "visible": true,
   "active": true
 }];
-},{}],"assets/icons/info-icon.png":[function(require,module,exports) {
+},{}],"tournament-idle/assets/icons/info-icon.png":[function(require,module,exports) {
 module.exports = "/info-icon.4d6acb27.png";
 },{}],"main.js":[function(require,module,exports) {
 var define;
@@ -20750,7 +20750,7 @@ var Tab = /*#__PURE__*/function () {
   }]);
   return Tab;
 }();
-},{"./break_eternity.min.js":"break_eternity.min.js","./assets/gameData/trainingData.json":"assets/gameData/trainingData.json","./assets/gameData/generatorData.json":"assets/gameData/generatorData.json","./assets/gameData/realmUpgradeData.json":"assets/gameData/realmUpgradeData.json","./assets/gameData/forgeUpgradeData.json":"assets/gameData/forgeUpgradeData.json","./assets/gameData/essenceUpgradeData.json":"assets/gameData/essenceUpgradeData.json","./assets/gameData/radianceUpgradeData.json":"assets/gameData/radianceUpgradeData.json","./assets/gameData/fighterData.json":"assets/gameData/fighterData.json","./assets/gameData/skillData.json":"assets/gameData/skillData.json","./assets/gameData/zoneData.json":"assets/gameData/zoneData.json","./assets/gameData/regionData.json":"assets/gameData/regionData.json","./assets/gameData/worldData.json":"assets/gameData/worldData.json","./assets/gameData/artifactData.json":"assets/gameData/artifactData.json","./assets/gameData/achievementData.json":"assets/gameData/achievementData.json","./assets/gameData/interfaceElementData.json":"assets/gameData/interfaceElementData.json","./assets/gameData/tabData.json":"assets/gameData/tabData.json","./assets/icons/info-icon.png":"assets/icons/info-icon.png"}],"../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./break_eternity.min.js":"break_eternity.min.js","./assets/gameData/trainingData.json":"tournament-idle/assets/gameData/trainingData.json","./assets/gameData/generatorData.json":"tournament-idle/assets/gameData/generatorData.json","./assets/gameData/realmUpgradeData.json":"tournament-idle/assets/gameData/realmUpgradeData.json","./assets/gameData/forgeUpgradeData.json":"tournament-idle/assets/gameData/forgeUpgradeData.json","./assets/gameData/essenceUpgradeData.json":"tournament-idle/assets/gameData/essenceUpgradeData.json","./assets/gameData/radianceUpgradeData.json":"tournament-idle/assets/gameData/radianceUpgradeData.json","./assets/gameData/fighterData.json":"tournament-idle/assets/gameData/fighterData.json","./assets/gameData/skillData.json":"tournament-idle/assets/gameData/skillData.json","./assets/gameData/zoneData.json":"tournament-idle/assets/gameData/zoneData.json","./assets/gameData/regionData.json":"tournament-idle/assets/gameData/regionData.json","./assets/gameData/worldData.json":"tournament-idle/assets/gameData/worldData.json","./assets/gameData/artifactData.json":"tournament-idle/assets/gameData/artifactData.json","./assets/gameData/achievementData.json":"tournament-idle/assets/gameData/achievementData.json","./assets/gameData/interfaceElementData.json":"tournament-idle/assets/gameData/interfaceElementData.json","./assets/gameData/tabData.json":"tournament-idle/assets/gameData/tabData.json","./assets/icons/info-icon.png":"tournament-idle/assets/icons/info-icon.png"}],"../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
