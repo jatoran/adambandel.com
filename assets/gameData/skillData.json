@@ -1,0 +1,93 @@
+[
+    { "id": 4001, "name": "Skill 1", "description": "fTrainProd*2", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 1, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": true,
+        "connections": { "east": 4002, "south": 4003, "west": 4004 },
+        "mods": [
+            { "id": 41011, "name": "skUpMod1", "type": "production", "priority": null, "sourceID": 4001, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2, "value": 2, "active": false }] 
+    },
+    { "id": 4002, "name": "Skill 2", "description": "fTrainProd*3", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 1, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "east": 4011 },
+        "mods": [
+            { "id": 41012, "name": "skUpMod2", "type": "production", "priority": null, "sourceID": 4002, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 3, "value": 3, "active": false }] 
+    },
+    { "id": 4003, "name": "Skill 3", "description": "fTrainProd*4", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 1, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "south": 4005 },
+        "mods": [
+            { "id": 41013, "name": "skUpMod3", "type": "production", "priority": null, "sourceID": 4003, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 4, "value": 4, "active": false }] 
+    },
+    { "id": 4004, "name": "Skill 4", "description": "fTrainProd*5", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 1, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "east": 4001, "west": 4016 },
+        "mods": [
+            { "id": 41014, "name": "skUpMod4", "type": "production", "priority": null, "sourceID": 4004, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 5, "value": 5, "active": false }] 
+    },
+    { "id": 4005, "name": "Skill 5", "description": "fTrainProd*6", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 2, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "south": 4006 },
+        "mods": [
+            { "id": 41015, "name": "skUpMod5", "type": "production", "priority": null, "sourceID": 4005, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 6, "value": 6, "active": false }] 
+    },
+    { "id": 4006, "name": "Skill 6", "description": "fTrainProd*7", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 2, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "east": 4007, "south": 4008, "west": 4013 },
+        "mods": [
+            { "id": 41016, "name": "skUpMod6", "type": "production", "priority": null, "sourceID": 4006, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 7, "value": 7, "active": false }] 
+    },
+    { "id": 4007, "name": "Skill 7", "description": "fTrainProd*8", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 2, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "south": 4009},
+        "mods": [
+            { "id": 41017, "name": "skUpMod7", "type": "production", "priority": null, "sourceID": 4007, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 8, "value": 8, "active": false }] 
+    },
+    { "id": 4008, "name": "Skill 8", "description": "fTrainProd*9", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 2, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": {},
+        "mods": [
+            { "id": 41018, "name": "skUpMod8", "type": "production", "priority": null, "sourceID": 4008, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 9, "value": 9, "active": false }] 
+    },
+    { "id": 4009, "name": "Skill 9", "description": "fTrainProd*10", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 2, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "south": 4010 },
+        "mods": [
+            { "id": 41019, "name": "skUpMod9", "type": "production", "priority": null, "sourceID": 4009, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 10, "value": 10, "active": false }] 
+    },
+    { "id": 4010, "name": "Skill 10", "description": "fTrainProd*11", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 3, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": {},
+        "mods": [
+            { "id": 41020, "name": "skUpMod10", "type": "production", "priority": null, "sourceID": 4010, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 11, "value": 11, "active": false }] 
+    },
+    { "id": 4011, "name": "Skill 11", "description": "fTrainProd*12", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 3, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "east": 4012 },
+        "mods": [
+            { "id": 41021, "name": "skUpMod11", "type": "production", "priority": null, "sourceID": 4011, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 12, "value": 12, "active": false }] 
+    },
+    { "id": 4012, "name": "Skill 12", "description": "fTrainProd*13", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 3, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "south": 4014 },
+        "mods": [
+            { "id": 41022, "name": "skUpMod12", "type": "production", "priority": null, "sourceID": 4012, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 13, "value": 13, "active": false }] 
+    },
+    { "id": 4013, "name": "Skill 13", "description": "fTrainProd*14", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 3, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": {},
+        "mods": [
+            { "id": 41023, "name": "skUpMod13", "type": "production", "priority": null, "sourceID": 4013, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 14, "value": 14, "active": false }] 
+    },
+    { "id": 4014, "name": "Skill 14", "description": "fTrainProd*15", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 3, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "south": 4015 },
+        "mods": [
+            { "id": 41024, "name": "skUpMod14", "type": "production", "priority": null, "sourceID": 4014, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 15, "value": 15, "active": false }] 
+    },
+    { "id": 4015, "name": "Skill 15", "description": "fTrainProd*16", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 4, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": {},
+        "mods": [
+            { "id": 41025, "name": "skUpMod15", "type": "production", "priority": null, "sourceID": 4015, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 16, "value": 16, "active": false }] 
+    },
+    { "id": 4016, "name": "Skill 16", "description": "fTrainProd*30", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 4, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "west": 4017 },
+        "mods": [
+            { "id": 41026, "name": "skUpMod15", "type": "production", "priority": null, "sourceID": 4016, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 30, "value": 30, "active": false }] 
+    },
+    { "id": 4017, "name": "Skill 17", "description": "fTrainProd*31", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 4, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": { "south": 4018 },
+        "mods": [
+            { "id": 41027, "name": "skUpMod15", "type": "production", "priority": null, "sourceID": 4017, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 31, "value": 31, "active": false }] 
+    },
+    { "id": 4018, "name": "Skill 18", "description": "fTrainProd*32", "level": 0, "maxLevel": 1, "costType": "skillpoint", "costBase": 4, "costGrowthRate": 1.2, "prodType": null, "prodBase": null, "prodGrowthRate": null, "active": false,
+        "connections": {},
+        "mods": [
+            { "id": 41028, "name": "skUpMod15", "type": "production", "priority": null, "sourceID": 4018, "sourceCalcType": "mult", "targetType": "forceTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 32, "value": 32, "active": false }]
+    }
+    
+]

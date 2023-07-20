@@ -1,0 +1,8 @@
+[
+    { "id": 120001, "name": "Time Radiance", "description": "game speed multiplier = 1 + (level * .1)", "level": 0, "costType": "radiance", "costBase": 1, "costGrowthRate": 1.3, "prodType": "timeMult", "prodBase": 1, "prodGrowthRate": 0.1, "active": true },
+    { "id": 120002, "name": "Income Radiance", "description": "all income ^ (level + 1)", "level": 0, "costType": "radiance", "costBase": 1, "costGrowthRate": 1.3, "prodType": "timeMult", "prodBase": 1, "prodGrowthRate": 2, "active": true,
+        "mods": [
+            { "id": 121002, "name": "rTarMod2", "type": "production", "priority": null, "sourceID": 120002, "sourceCalcType": "add", "targetType": "allTrain", "targetID": null, "runningCalcType": "exp", "baseValue": 1, "value": 1, "active": false } ]
+        
+    }
+]

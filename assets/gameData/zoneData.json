@@ -1,0 +1,352 @@
+
+[
+    { "id": 9001, "regionID": 1010001, "name": "Turtle Hatchling", "description": "description", "costType": "force", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 1, "active": true, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9002, "regionID": 1010001, "name": "Beach Chicken", "description": "description", "costType": "force", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9001, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9003, "regionID": 1010001, "name": "Adult Turtle", "description": "description", "costType": "force", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9002, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9004, "regionID": 1010001, "name": "Seagull", "description": "description", "costType": "force", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9003, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9005, "regionID": 1010001, "name": "Wild Boar", "description": "description", "costType": "force", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9004, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9006, "regionID": 1010001, "name": "Stingray", "description": "description", "costType": "force", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9005, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9007, "regionID": 1010001, "name": "Emerald Fox", "description": "description", "costType": "energy", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9006, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9008, "regionID": 1010001, "name": "Baby Eel", "description": "description", "costType": "force", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9006, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9009, "regionID": 1010001, "name": "Adolescent Shark", "description": "description", "costType": "force", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9008, "angleFromParent": 120, "distanceFromParent": 80 },
+    
+
+    
+    { "id": 9021, "regionID": 1010002, "name": "Giant Eagle", "description": "df", "costType": "force", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9022, "regionID": 1010002, "name": "Wolf", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9021, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9023, "regionID": 1010002, "name": "Black Bear", "description": "description", "costType": "force", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9022, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9024, "regionID": 1010002, "name": "Chimpanzee", "description": "description", "costType": "wisdom", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9023, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9025, "regionID": 1010002, "name": "Silverback", "description": "description", "costType": "force", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9024, "angleFromParent": 160, "distanceFromParent": 150 },
+    { "id": 9027, "regionID": 1010002, "name": "Polar Bear", "description": "description", "costType": "force", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9025, "angleFromParent": 90, "distanceFromParent": 90 },
+    { "id": 9026, "regionID": 1010002, "name": "Ruby Tiger", "description": "description", "costType": "energy", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9023, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+
+
+
+
+
+    { "id": 9041, "regionID": 1010003, "name": "Goat Demon", "description": "df", "costType": "force", "costBase": 100, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9042, "regionID": 1010003, "name": "Gargoyle", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9041, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9043, "regionID": 1010003, "name": "Pterodactyl Hatchling", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9042, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9044, "regionID": 1010003, "name": "Griffon", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9043, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9045, "regionID": 1010003, "name": "Dragon Hatchling", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9044, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9046, "regionID": 1010003, "name": "Wyvern", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9045, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9047, "regionID": 1010003, "name": "Topaz Panther", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9044, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9048, "regionID": 1010003, "name": "Elder Pterodactyl", "description": "description", "costType": "force", "costBase": 1000, "prodType": "alphaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9046, "angleFromParent": 160, "distanceFromParent": 150 },
+
+
+    
+    { "id": 9061, "regionID": 1010004, "name": "Jungle Troll", "description": "df", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9062, "regionID": 1010004, "name": "Basilisk", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9061, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9063, "regionID": 1010004, "name": "Chimaera", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9062, "angleFromParent": 180, "distanceFromParent": 150 },
+    { "id": 9064, "regionID": 1010004, "name": "Mantis Warrior", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9063, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9065, "regionID": 1010004, "name": "Poison Wyrm", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9064, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9066, "regionID": 1010004, "name": "Jungle Hydra", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9065, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9067, "regionID": 1010004, "name": "Forest Spirit", "description": "description", "costType": "wisdom", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9066, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9068, "regionID": 1010004, "name": "Treant Elder", "description": "description", "costType": "force", "costBase": 1000, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9067, "angleFromParent": 180, "distanceFromParent": 150 },
+    { "id": 9069, "regionID": 1010004, "name": "Diamond Fox", "description": "description", "costType": "energy", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9067, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+
+
+
+
+    { "id": 9081, "regionID": 1010005, "name": "Giant Scorpion", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9082, "regionID": 1010005, "name": "Sphynx", "description": "description", "costType": "force", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9081, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9083, "regionID": 1010005, "name": "Sandworm", "description": "description", "costType": "force", "costBase": 1000, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9082, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9084, "regionID": 1010005, "name": "Desert Chimera", "description": "description", "costType": "force", "costBase": 1000, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9083, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9085, "regionID": 1010005, "name": "Anubian Jackal Warrior", "description": "description", "costType": "force", "costBase": 1000, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9084, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9086, "regionID": 1010005, "name": "Solar Serpent", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9085, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9087, "regionID": 1010005, "name": "Sapphire Jaguar", "description": "description", "costType": "energy", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9086, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9088, "regionID": 1010005, "name": "Desert Spirit", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9086, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9089, "regionID": 1010005, "name": "Ancient Mummy", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9088, "angleFromParent": 0, "distanceFromParent": 150 },
+
+    
+
+    { "id": 9101, "regionID": 1010006, "name": "Stone Elemental", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9102, "regionID": 1010006, "name": "Yeti", "description": "description", "costType": "force", "costBase": 500, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9101, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9103, "regionID": 1010006, "name": "Frost Giant", "description": "description", "costType": "force", "costBase": 1000, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9102, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9104, "regionID": 1010006, "name": "White Dragon", "description": "description", "costType": "force", "costBase": 1000, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9103, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9105, "regionID": 1010006, "name": "Ice Spirit", "description": "description", "costType": "force", "costBase": 1000, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9104, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9106, "regionID": 1010006, "name": "Snow Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9105, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9107, "regionID": 1010006, "name": "Obsidian Puma", "description": "description", "costType": "energy", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9106, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9108, "regionID": 1010006, "name": "Mountain Titan", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9106, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9109, "regionID": 1010006, "name": "Frost Phoenix", "description": "description", "costType": "force", "costBase": 100, "prodType": "betaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9108, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+    { "id": 9121, "regionID": 1010007, "name": "Giant Squid", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9122, "regionID": 1010007, "name": "Killer Whale", "description": "description", "costType": "force", "costBase": 500, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9121, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9123, "regionID": 1010007, "name": "Colossal Eel", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9122, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9124, "regionID": 1010007, "name": "Titan Ray", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9123, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9125, "regionID": 1010007, "name": "Island Turtle", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9124, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9126, "regionID": 1010007, "name": "Megalodon", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9125, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9127, "regionID": 1010007, "name": "Pearl Seahorse", "description": "description", "costType": "energy", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9126, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9128, "regionID": 1010007, "name": "Kraken", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9126, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9129, "regionID": 1010007, "name": "Leviathan", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9128, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+
+    
+
+    { "id": 9141, "regionID": 1010008, "name": "Volcanic Dragon Hatchling", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9142, "regionID": 1010008, "name": "Magma Spider", "description": "description", "costType": "force", "costBase": 500, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9141, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9143, "regionID": 1010008, "name": "Ember Bat", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9142, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9144, "regionID": 1010008, "name": "Lava Golem", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9143, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9145, "regionID": 1010008, "name": "Flame Wraith", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9144, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9146, "regionID": 1010008, "name": "Volcanic Dragon Adult", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9145, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9147, "regionID": 1010008, "name": "Opal Firetail", "description": "description", "costType": "energy", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9146, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9148, "regionID": 1010008, "name": "Phoenix", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9146, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9149, "regionID": 1010008, "name": "Volcanic Titan", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9148, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+
+    
+
+    { "id": 9161, "regionID": 1010009, "name": "Velociraptor", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9162, "regionID": 1010009, "name": "Allosaurus", "description": "description", "costType": "force", "costBase": 500, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9161, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9163, "regionID": 1010009, "name": "Triceratops", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9162, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9164, "regionID": 1010009, "name": "Ankylosaurus", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9163, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9165, "regionID": 1010009, "name": "Argentinosaurus", "description": "description", "costType": "force", "costBase": 1000, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9164, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9166, "regionID": 1010009, "name": "Carcharodontosaurus", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9165, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9167, "regionID": 1010009, "name": "Amber Raptor", "description": "description", "costType": "energy", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9166, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9168, "regionID": 1010009, "name": "Gigantosaurus", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9166, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9169, "regionID": 1010009, "name": "Spinosaurus", "description": "description", "costType": "force", "costBase": 100, "prodType": "gammaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9168, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+
+    
+
+    { "id": 9181, "regionID": 1010010, "name": "Photon Specter", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9182, "regionID": 1010010, "name": "Magnetar Wyrm", "description": "description", "costType": "force", "costBase": 500, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9181, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9183, "regionID": 1010010, "name": "Neutron Beast", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9182, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9184, "regionID": 1010010, "name": "Pulsar Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9183, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9185, "regionID": 1010010, "name": "delta Ray Gargoyle", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9184, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9186, "regionID": 1010010, "name": "Stellar Wraith", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9185, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9187, "regionID": 1010010, "name": "Quantum Tiger", "description": "description", "costType": "energy", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9186, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9188, "regionID": 1010010, "name": "Black Hole Serpent", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9186, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9189, "regionID": 1010010, "name": "Quasar Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9188, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+
+
+    
+
+    { "id": 9201, "regionID": 1010011, "name": "Gas Giant Elemental", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9202, "regionID": 1010011, "name": "Nebula Phantom", "description": "description", "costType": "force", "costBase": 500, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9201, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9203, "regionID": 1010011, "name": "Cosmic Jellyfish", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9202, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9204, "regionID": 1010011, "name": "Star Cloud Beast", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9203, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9205, "regionID": 1010011, "name": "Astral Wyrm", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9204, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9206, "regionID": 1010011, "name": "Nebula Titan", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9205, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9207, "regionID": 1010011, "name": "delta Beast", "description": "description", "costType": "energy", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9206, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9208, "regionID": 1010011, "name": "Star Cluster Entity", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9206, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9209, "regionID": 1010011, "name": "Nebula Serpent", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9208, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+
+
+    
+
+    { "id": 9221, "regionID": 1010012, "name": "Void Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9222, "regionID": 1010012, "name": "Dark Matter Entity", "description": "description", "costType": "force", "costBase": 500, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9221, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9223, "regionID": 1010012, "name": "Quantum Horror", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9222, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9224, "regionID": 1010012, "name": "Cosmic Anomaly", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9223, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9225, "regionID": 1010012, "name": "Temporal Wraith", "description": "description", "costType": "force", "costBase": 1000, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9224, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9226, "regionID": 1010012, "name": "Singularity Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9225, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9227, "regionID": 1010012, "name": "Baryon Presence", "description": "description", "costType": "energy", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9226, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9228, "regionID": 1010012, "name": "Dimension Sightseer", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9226, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9229, "regionID": 1010012, "name": "Cosmic Horror", "description": "description", "costType": "force", "costBase": 100, "prodType": "deltaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9228, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+    
+
+    { "id": 9241, "regionID": 1010013, "name": "Galactic Kraken", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9242, "regionID": 1010013, "name": "Cosmic Cyclone", "description": "description", "costType": "force", "costBase": 500, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9241, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9243, "regionID": 1010013, "name": "Quantum Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9242, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9244, "regionID": 1010013, "name": "Celestial Phoenix", "description": "description", "costType": "force", "costBase": 1000, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9243, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9245, "regionID": 1010013, "name": "Star Forge Golem", "description": "description", "costType": "force", "costBase": 1000, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9244, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9246, "regionID": 1010013, "name": "Nebula Golem", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9245, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9247, "regionID": 1010013, "name": "Quark Plasma", "description": "description", "costType": "energy", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9246, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9248, "regionID": 1010013, "name": "Nebula Hydra", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9246, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9249, "regionID": 1010013, "name": "Stellar Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9248, "angleFromParent": 360, "distanceFromParent": 200 },
+    { "id": 9250, "regionID": 1010013, "name": "Black Hole Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9249, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9251, "regionID": 1010013, "name": "Astral Wraith", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9250, "angleFromParent": 180, "distanceFromParent": 150 },
+    { "id": 9252, "regionID": 1010013, "name": "Cosmic Sphynx", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9251, "angleFromParent": 180, "distanceFromParent": 150 },
+    { "id": 9253, "regionID": 1010013, "name": "Dimensional Drake", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9252, "angleFromParent": 270, "distanceFromParent": 70 },
+    { "id": 9254, "regionID": 1010013, "name": "Galaxy Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9253, "angleFromParent": 170, "distanceFromParent": 200 },
+
+
+
+
+
+
+    
+
+    { "id": 9261, "regionID": 1010014, "name": "Core Titan", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9262, "regionID": 1010014, "name": "Black Hole Entity", "description": "description", "costType": "force", "costBase": 500, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9261, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9263, "regionID": 1010014, "name": "Neutron Star Dragon", "description": "description", "costType": "force", "costBase": 1000, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9262, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9264, "regionID": 1010014, "name": "Gravity Elemental", "description": "description", "costType": "force", "costBase": 1000, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9263, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9265, "regionID": 1010014, "name": "Space-Time Anomaly", "description": "description", "costType": "force", "costBase": 1000, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9264, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9266, "regionID": 1010014, "name": "Core Devourer", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9265, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9267, "regionID": 1010014, "name": "Cosmic Vortex", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9266, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9268, "regionID": 1010014, "name": "Quantum Mall-Walker", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9267, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9269, "regionID": 1010014, "name": "Stellar Golem", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9268, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9270, "regionID": 1010014, "name": "Photonic Fool", "description": "description", "costType": "energy", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9269, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9271, "regionID": 1010014, "name": "Galaxy Hydra", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9269, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9272, "regionID": 1010014, "name": "Cosmic Leviathan", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9271, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9273, "regionID": 1010014, "name": "Galactic Entity", "description": "description", "costType": "force", "costBase": 100, "prodType": "epsilonShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9272, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+
+
+    { "id": 9281, "regionID": 1010015, "name": "Dark Matter Wraith", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9282, "regionID": 1010015, "name": "Quantum Entanglement Entity", "description": "description", "costType": "force", "costBase": 500, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9281, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9283, "regionID": 1010015, "name": "Space-Time Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9282, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9284, "regionID": 1010015, "name": "Reality Shifter", "description": "description", "costType": "force", "costBase": 1000, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9283, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9285, "regionID": 1010015, "name": "Constellation Dragon", "description": "description", "costType": "force", "costBase": 1000, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9284, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9286, "regionID": 1010015, "name": "Multiverse Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9285, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9287, "regionID": 1010015, "name": "Subspace Phenomenon", "description": "description", "costType": "energy", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9286, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9288, "regionID": 1010015, "name": "Universal Serpent", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9286, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9289, "regionID": 1010015, "name": "Star Serpent", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9288, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9290, "regionID": 1010015, "name": "Cosmic Kraken", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9289, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9291, "regionID": 1010015, "name": "Reality Warper", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9290, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9292, "regionID": 1010015, "name": "Cosmic Golem's Toe", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9291, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9293, "regionID": 1010015, "name": "Universal Entity Fragment", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9292, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9294, "regionID": 1010015, "name": "Nebula Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9293, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9295, "regionID": 1010015, "name": "Gas Cloud Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9294, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9296, "regionID": 1010015, "name": "Space-Time Elemental", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9295, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9297, "regionID": 1010015, "name": "Cosmic Behemoth", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9296, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9298, "regionID": 1010015, "name": "Dark Matter Phoenix", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9297, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9299, "regionID": 1010015, "name": "Cosmic Serial Killer", "description": "description", "costType": "force", "costBase": 100, "prodType": "zetaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9298, "angleFromParent": 0, "distanceFromParent": 150 },
+
+
+
+
+
+
+    
+    { "id": 9311, "regionID": 1010016, "name": "Supernova Specter", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9312, "regionID": 1010016, "name": "Nebula Consumer", "description": "description", "costType": "force", "costBase": 500, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9311, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9313, "regionID": 1010016, "name": "Celestial Pulsar", "description": "description", "costType": "force", "costBase": 1000, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9312, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9314, "regionID": 1010016, "name": "Galactic Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9313, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9315, "regionID": 1010016, "name": "Stellar Drifter", "description": "description", "costType": "force", "costBase": 1000, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9314, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9316, "regionID": 1010016, "name": "Quasar Hydra", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9315, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9317, "regionID": 1010016, "name": "Cosmic Nebula", "description": "description", "costType": "energy", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9316, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9318, "regionID": 1010016, "name": "Astral Titan", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9316, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9319, "regionID": 1010016, "name": "Binary Star Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9318, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9320, "regionID": 1010016, "name": "Nebula Phoenix", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9319, "angleFromParent": 90, "distanceFromParent": 80 },
+
+
+
+    { "id": 9341, "regionID": 1010017, "name": "Dark Matter Anomaly", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9342, "regionID": 1010017, "name": "Intergalactic Specter", "description": "description", "costType": "force", "costBase": 500, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9341, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9343, "regionID": 1010017, "name": "Void Serpent", "description": "description", "costType": "force", "costBase": 1000, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9342, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9344, "regionID": 1010017, "name": "Galactic Rift", "description": "description", "costType": "force", "costBase": 1000, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9343, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9345, "regionID": 1010017, "name": "Cosmic Singularity", "description": "description", "costType": "force", "costBase": 1000, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9344, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9346, "regionID": 1010017, "name": "Interstellar Leviathan", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9345, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9347, "regionID": 1010017, "name": "Quasar Elemental", "description": "description", "costType": "energy", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9346, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9348, "regionID": 1010017, "name": "Dark Energy Beast", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9346, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9349, "regionID": 1010017, "name": "Celestial Serpent", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9348, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9350, "regionID": 1010017, "name": "Astral Leviathan", "description": "description", "costType": "force", "costBase": 100, "prodType": "etaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9349, "angleFromParent": 90, "distanceFromParent": 80 },
+
+
+
+
+
+    
+
+
+
+
+    { "id": 9371, "regionID": 1010018, "name": "Galactic Wanderer", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9372, "regionID": 1010018, "name": "Supermassive Serpent", "description": "description", "costType": "force", "costBase": 500, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9371, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9373, "regionID": 1010018, "name": "Cosmic Core Guardian", "description": "description", "costType": "force", "costBase": 1000, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9372, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9374, "regionID": 1010018, "name": "Phase Dancer", "description": "description", "costType": "force", "costBase": 1000, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9373, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9375, "regionID": 1010018, "name": "Supercluster Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9374, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9376, "regionID": 1010018, "name": "Hypernova Wraith", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9375, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9377, "regionID": 1010018, "name": "Quantum Specter", "description": "description", "costType": "energy", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9376, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9378, "regionID": 1010018, "name": "Interdimensional Behemoth", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9376, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9379, "regionID": 1010018, "name": "Multiversal Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9378, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9380, "regionID": 1010018, "name": "Singularity Hydra", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9379, "angleFromParent": 90, "distanceFromParent": 80 },
+
+
+
+
+
+
+    { "id": 9401, "regionID": 1010019, "name": "Extragalactic Anomaly", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9402, "regionID": 1010019, "name": "Intergalactic Rift", "description": "description", "costType": "force", "costBase": 500, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9401, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9403, "regionID": 1010019, "name": "Dark Matter Hydra", "description": "description", "costType": "force", "costBase": 1000, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9402, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9404, "regionID": 1010019, "name": "Extragalactic Core", "description": "description", "costType": "force", "costBase": 1000, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9403, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9405, "regionID": 1010019, "name": "Hypernova Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9404, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9406, "regionID": 1010019, "name": "Quantum Behemoth", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9405, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9407, "regionID": 1010019, "name": "Celestial Nexus", "description": "description", "costType": "energy", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9406, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9408, "regionID": 1010019, "name": "Multiverse Serpent", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9406, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9409, "regionID": 1010019, "name": "Galactic Nexus", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9408, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9410, "regionID": 1010019, "name": "Extragalactic Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "thetaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9409, "angleFromParent": 90, "distanceFromParent": 80 },
+
+
+
+    
+
+    { "id": 9431, "regionID": 1010020, "name": "Cosmic Filament Guardian", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9432, "regionID": 1010020, "name": "Interdimensional Serpent", "description": "description", "costType": "force", "costBase": 500, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9431, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9433, "regionID": 1010020, "name": "Quantum Nexus", "description": "description", "costType": "force", "costBase": 1000, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9432, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9434, "regionID": 1010020, "name": "Filament Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9433, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9435, "regionID": 1010020, "name": "Celestial Behemoth", "description": "description", "costType": "force", "costBase": 1000, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9434, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9436, "regionID": 1010020, "name": "Multiverse Nexus", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9435, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9437, "regionID": 1010020, "name": "Dimensional Hydra", "description": "description", "costType": "energy", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9436, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9438, "regionID": 1010020, "name": "Cosmic Filament Wraith", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9436, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9439, "regionID": 1010020, "name": "Universal Nexus", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9438, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9440, "regionID": 1010020, "name": "Filament Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9439, "angleFromParent": 90, "distanceFromParent": 80 },
+
+
+
+
+
+
+
+    { "id": 9461, "regionID": 1010021, "name": "Void Nexus", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9462, "regionID": 1010021, "name": "Event Horizon Surfer", "description": "description", "costType": "force", "costBase": 500, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9461, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9463, "regionID": 1010021, "name": "Interdimensional Leviathan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9462, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9464, "regionID": 1010021, "name": "Quartic Anomaly", "description": "description", "costType": "force", "costBase": 1000, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9463, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9465, "regionID": 1010021, "name": "Multiversal Serpent", "description": "description", "costType": "force", "costBase": 1000, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9464, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9466, "regionID": 1010021, "name": "Dimensional Nexus", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9465, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9467, "regionID": 1010021, "name": "Celestial Hydra", "description": "description", "costType": "energy", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9466, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9468, "regionID": 1010021, "name": "Filamentary Wraith", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9466, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9469, "regionID": 1010021, "name": "Quantum Ant", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9468, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9470, "regionID": 1010021, "name": "Interfilament Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "iotaShard", "zoneType": "boss", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9469, "angleFromParent": 90, "distanceFromParent": 80 },
+
+
+
+    
+    { "id": 9501, "regionID": 1010022, "name": "Void Elemental", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": null, "angleFromParent": null, "distanceFromParent": null },
+    { "id": 9502, "regionID": 1010022, "name": "Reality Beast", "description": "description", "costType": "force", "costBase": 500, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9501, "angleFromParent": 360, "distanceFromParent": 130 },
+    { "id": 9503, "regionID": 1010022, "name": "Temporal Dragon", "description": "description", "costType": "force", "costBase": 1000, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9502, "angleFromParent": 120, "distanceFromParent": 80 },
+    { "id": 9504, "regionID": 1010022, "name": "Multiverse Titan", "description": "description", "costType": "force", "costBase": 1000, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9503, "angleFromParent": 150, "distanceFromParent": 120 },
+    { "id": 9505, "regionID": 1010022, "name": "Quantum Phoenix", "description": "description", "costType": "force", "costBase": 1000, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9504, "angleFromParent": 360, "distanceFromParent": 140  },
+    { "id": 9506, "regionID": 1010022, "name": "Cosmic Golem", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9505, "angleFromParent": 0, "distanceFromParent": 150 },
+    { "id": 9507, "regionID": 1010022, "name": "Universal Entity", "description": "description", "costType": "energy", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9506, "angleFromParent": 0, "distanceFromParent": 150, "isUnlockedByParent": false, "zoneType": "sideBoss" },
+    { "id": 9508, "regionID": 1010022, "name": "Reality Wraith", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9506, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9509, "regionID": 1010022, "name": "Temporal Wyrm", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9508, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9510, "regionID": 1010022, "name": "Quantum Kraken", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9509, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9511, "regionID": 1010022, "name": "Universal Leviathan", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9510, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9512, "regionID": 1010022, "name": "Cosmic Hydra", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9511, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9513, "regionID": 1010022, "name": "Dimension Shifter", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9512, "angleFromParent": 360, "distanceFromParent": 130 },
+    { "id": 9514, "regionID": 1010022, "name": "Temporal Titan", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9513, "angleFromParent": 360, "distanceFromParent": 130 },
+    { "id": 9515, "regionID": 1010022, "name": "Quantum Sphinx", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9514, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9516, "regionID": 1010022, "name": "Universal Griffin", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9515, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9517, "regionID": 1010022, "name": "Dimension Drake", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9516, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9518, "regionID": 1010022, "name": "Cosmic Chimera", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9517, "angleFromParent": 180, "distanceFromParent": 130 },
+    { "id": 9519, "regionID": 1010022, "name": "Universsal Phoenix", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9518, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9520, "regionID": 1010022, "name": "Multiversal Wyrm", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9519, "angleFromParent": 360, "distanceFromParent": 130 },
+    { "id": 9521, "regionID": 1010022, "name": "Dimension Leviathan", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9520, "angleFromParent": 360, "distanceFromParent": 130 },
+    { "id": 9522, "regionID": 1010022, "name": "Multiverse Behemoth", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9521, "angleFromParent": 360, "distanceFromParent": 130 },
+    { "id": 9523, "regionID": 1010022, "name": "Cosmic Titan", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9522, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9524, "regionID": 1010022, "name": "Universal Dragon", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9523, "angleFromParent": 150, "distanceFromParent": 80 },
+    { "id": 9525, "regionID": 1010022, "name": "Multiverse Golem", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "parentID": 9524, "angleFromParent": 90, "distanceFromParent": 80 },
+    { "id": 9526, "regionID": 1010022, "name": "Celestial God", "description": "description", "costType": "force", "costBase": 100, "prodType": "kappaShard", "prodBase": 1, "baseConquestTime": 0.1, "zoneType": "boss", "parentID": 9525, "angleFromParent": 0, "distanceFromParent": 150 }
+]

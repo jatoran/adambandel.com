@@ -1,0 +1,116 @@
+[
+    { "id": 5010, "name": "Garden Gnome Hat", "evolutionTier": 1, "gearType": "Helm", "description": "description", "costType": "alphaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5011, "active": false, "visible": false,
+        "mods": 
+            [ { "id": 5510, "name": "aTarMod1", "type": "production", "priority": null, "sourceID": 5010, "sourceCalcType": "add", "targetType": "allTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2, "value": 2, "active": false }  ] 
+    },
+    { "id": 5011, "name": "Bronze Colander Crown", "evolutionTier": 2, "gearType": "Helm", "description": "description", "costType": "alphaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5012,"active":false,"visible":false,
+        "mods": 
+            [ { "id": 5511, "name": "aTarMod1", "type": "production", "priority": null, "sourceID": 5011, "sourceCalcType": "add", "targetType": "allTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 22, "value": 22, "active": false }  ] 
+    },
+    { "id": 5012, "name": "Wi-Fi Enabled Toaster Helmet", "evolutionTier": 3, "gearType": "Helm", "description": "description", "costType": "alphaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5013 },
+    { "id": 5013, "name": "The Ultimate Tin Foil Hat", "evolutionTier": 4, "gearType": "Helm", "description": "description", "costType": "alphaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+    { "id": 5020, "name": "String Cheese Necklace", "evolutionTier": 1, "gearType": "Amulet", "description": "description", "costType": "betaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5021, "active": false, "visible": false,
+        "mods": [ { "id": 5520, "name": "aTarMod2", "type": "production", "priority": null, "sourceID": 5020, "sourceCalcType": "add", "targetType": "allTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2, "value": 2, "active": false }] 
+    },
+    { "id": 5021, "name": "Bling Bling Pendant", "evolutionTier": 2, "gearType": "Amulet", "description": "description", "costType": "betaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5022 },
+    { "id": 5022, "name": "Zip-Tie Tie", "evolutionTier": 3, "gearType": "Amulet", "description": "description", "costType": "alphaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5023 },
+    { "id": 5023, "name": "Glowing LED Scarf", "evolutionTier": 4, "gearType": "Amulet", "description": "description", "costType": "betaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5030, "name": "Bottle Cap Stud", "evolutionTier": 1, "gearType": "LeftEarring", "description": "description", "costType": "gammaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5031, "active": false, "visible": false,
+        "mods": [ { "id": 5530, "name": "aTarMod3", "type": "production", "priority": null, "sourceID": 5030, "sourceCalcType": "add", "targetType": "allTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2, "value": 2, "active": false }] 
+    },
+    { "id": 5031, "name": "Swirly Aluminum Earring", "evolutionTier": 2, "gearType": "LeftEarring", "description": "description", "costType": "gammaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5032 },
+    { "id": 5032, "name": "Bluetooth Earbud", "evolutionTier": 3, "gearType": "LeftEarring", "description": "description", "costType": "gammaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5033 },
+    { "id": 5033, "name": "Intergalactic Walkie-Talkie Stud", "evolutionTier": 4, "gearType": "LeftEarring", "description": "description", "costType": "gammaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5040, "name": "Pasta Shell Earring", "evolutionTier": 1, "gearType": "RightEarring", "description": "description", "costType": "deltaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5041, "active": false, "visible": false,
+        "mods": [ { "id": 5540, "name": "aTarMod4", "type": "production", "priority": null, "sourceID": 5040, "sourceCalcType": "add", "targetType": "allTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2, "value": 2, "active": false }] 
+    },
+    { "id": 5041, "name": "Gold Spray-Painted Washer", "evolutionTier": 2, "gearType": "RightEarring", "description": "description", "costType": "deltaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5042 },
+    { "id": 5042, "name": "Diamond Plastic Earring", "evolutionTier": 3, "gearType": "RightEarring", "description": "description", "costType": "deltaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5043 },
+    { "id": 5043, "name": "Subspace Transmission Tuner", "evolutionTier": 4, "gearType": "RightEarring", "description": "description", "costType": "deltaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5050, "name": "Burlap Sack", "evolutionTier": 1, "gearType": "Armor", "description": "description", "costType": "epsilonShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5051, "active": false, "visible": false,
+        "mods": [ { "id": 5550, "name": "aTarMod5", "type": "production", "priority": null, "sourceID": 5050, "sourceCalcType": "add", "targetType": "allTrain", "targetID": null, "runningCalcType": "mult", "baseValue": 2, "value": 2, "active": false }] 
+    },
+    { "id": 5051, "name": "'100% Authentic' Leather Armor", "evolutionTier": 2, "gearType": "Armor", "description": "description", "costType": "epsilonShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5052 },
+    { "id": 5052, "name": "Steel Wool Sweater", "evolutionTier": 3, "gearType": "Armor", "description": "description", "costType": "epsilonShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5053 },
+    { "id": 5053, "name": "Tunic of Indistinguishable Colors", "evolutionTier": 4, "gearType": "Armor", "description": "description", "costType": "epsilonShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5060, "name": "Duck Tape Wraps", "evolutionTier": 1, "gearType": "Gauntlets", "description": "description", "costType": "zetaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5061, "active": false, "visible": false },
+    { "id": 5061, "name": "Deluxe Oven Mitts", "evolutionTier": 2, "gearType": "Gauntlets", "description": "description", "costType": "zetaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5062 },
+    { "id": 5062, "name": "Swiss Army Gauntlets", "evolutionTier": 3, "gearType": "Gauntlets", "description": "description", "costType": "zetaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5063 },
+    { "id": 5063, "name": "Robotic Finger Exercisers", "evolutionTier": 4, "gearType": "Gauntlets", "description": "description", "costType": "zetaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5070, "name": "Cardboard Sandals", "evolutionTier": 1, "gearType": "Boots", "description": "description", "costType": "etaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5071, "active": false, "visible": false },
+    { "id": 5071, "name": "Boots of Unexpected Speed", "evolutionTier": 2, "gearType": "Boots", "description": "description", "costType": "etaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5072 },
+    { "id": 5072, "name": "Hoverboard Sneakers", "evolutionTier": 3, "gearType": "Boots", "description": "description", "costType": "etaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5073 },
+    { "id": 5073, "name": "Differential Equations Boots", "evolutionTier": 4, "gearType": "Boots", "description": "description", "costType": "etaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5080, "name": "Stick Ring", "evolutionTier": 1, "gearType": "Ring1", "description": "description", "costType": "thetaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5081, "active": false, "visible": false },
+    { "id": 5081, "name": "Ring Pop", "evolutionTier": 2, "gearType": "Ring1", "description": "description", "costType": "thetaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5082 },
+    { "id": 5082, "name": "Electrically Charged Friendship Band", "evolutionTier": 3, "gearType": "Ring1", "description": "description", "costType": "thetaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5083 },
+    { "id": 5083, "name": "Finger-Toe Ring", "evolutionTier": 4, "gearType": "Ring1", "description": "description", "costType": "thetaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5090, "name": "Pebble Ring", "evolutionTier": 1, "gearType": "Ring2", "description": "description", "costType": "iotaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5091, "active": false, "visible": false },
+    { "id": 5091, "name": "Onion Ring", "evolutionTier": 2, "gearType": "Ring2", "description": "description", "costType": "iotaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5092 },
+    { "id": 5092, "name": "Fitness Tracker Ring", "evolutionTier": 3, "gearType": "Ring2", "description": "description", "costType": "iotaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5093 },
+    { "id": 5093, "name": "Alternate Reality Mood Ring", "evolutionTier": 4, "gearType": "Ring2", "description": "description", "costType": "iotaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+
+    { "id": 5100, "name": "Broken Stick", "evolutionTier": 1, "gearType": "Weapon1", "description": "description", "costType": "kappaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5101, "active": false, "visible": false },
+    { "id": 5101, "name": "Damascus Steel Foam Sword ", "evolutionTier": 2, "gearType": "Weapon1", "description": "description", "costType": "kappaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5102 },
+    { "id": 5102, "name": "Lighter Saber", "evolutionTier": 3, "gearType": "Weapon1", "description": "description", "costType": "kappaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5103 },
+    { "id": 5103, "name": "Star-Pulverizing Rubber Hammer", "evolutionTier": 4, "gearType": "Weapon1", "description": "description", "costType": "kappaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+    { "id": 5110, "name": "Potato Gun", "evolutionTier": 1, "gearType": "Weapon2", "description": "description", "costType": "lambdaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5111, "active": false, "visible": false },
+    { "id": 5111, "name": "Supersoaker 5000", "evolutionTier": 2, "gearType": "Weapon2", "description": "description", "costType": "lambdaShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5112 },
+    { "id": 5112, "name": "Railgun with Training Wheels", "evolutionTier": 3, "gearType": "Weapon2", "description": "description", "costType": "lambdaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5113 },
+    { "id": 5113, "name": "Singularity Squirt Gun", "evolutionTier": 4, "gearType": "Weapon2", "description": "description", "costType": "lambdaShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 },
+
+
+
+
+    { "id": 5120, "name": "Rabbit's Foot", "evolutionTier": 1, "gearType": "Trinket", "description": "(Still attached to rabbit)", "costType": "muShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.1, "nextEvolveID": 5121, "active": false, "visible": false },
+    { "id": 5121, "name": "Worry Stone", "evolutionTier": 2, "gearType": "Trinket", "description": "description", "costType": "muShard", "maxLevel": 20, "costBase": 100, "costGrowthRate": 1.5, "nextEvolveID": 5122 },
+    { "id": 5122, "name": "Infinite Paperclip Chain", "evolutionTier": 3, "gearType": "Trinket", "description": "description", "costType": "muShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5, "nextEvolveID": 5123 },
+    { "id": 5123, "name": "Schrodinger's Paperweight", "evolutionTier": 4, "gearType": "Trinket", "description": "description", "costType": "muShard", "maxLevel": 20, "costBase": 10, "costGrowthRate": 1.5 }
+]

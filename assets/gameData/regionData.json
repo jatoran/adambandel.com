@@ -1,0 +1,37 @@
+[
+    { "id": 1010001, "worldID": 1000001, "name": "Beach Paradise", "shardType": "alphaShard", "active": true },
+    { "id": 1010002, "worldID": 1000001, "name": "Upper Grasslands", "shardType": "alphaShard" },
+    { "id": 1010003, "worldID": 1000001, "name": "Coastal Cliffs", "shardType": "alphaShard" },
+
+    { "id": 1010004, "worldID": 1000002, "name": "Dense Jungle", "shardType": "betaShard" },
+    { "id": 1010005, "worldID": 1000002, "name": "Massive Desert", "shardType": "betaShard" },
+    { "id": 1010006, "worldID": 1000002, "name": "Grand Mountain", "shardType": "betaShard" },
+
+    { "id": 1010007, "worldID": 1000003, "name": "Oceanic Depths", "shardType": "gammaShard" },
+    { "id": 1010008, "worldID": 1000003, "name": "Volcanic Range", "shardType": "gammaShard" },
+    { "id": 1010009, "worldID": 1000003, "name": "Primordial Jungle", "shardType": "gammaShard" }
+    ,
+    { "id": 1010010, "worldID": 1000004, "name": "Pulsar Fields", "shardType": "deltaShard" },
+    { "id": 1010011, "worldID": 1000004, "name": "Nebula Clouds", "shardType": "deltaShard" },
+    { "id": 1010012, "worldID": 1000004, "name": "Interstellar Void", "shardType": "deltaShard" },
+
+    { "id": 1010013, "worldID": 1000005, "name": "Outer Rim", "shardType": "epsilonShard" },
+    { "id": 1010014, "worldID": 1000005, "name": "Galactic Core", "shardType": "epsilonShard" },
+
+    { "id": 1010015, "worldID": 1000006, "name": "Local Group Region", "shardType": "epsilonShard" },
+
+    { "id": 1010016, "worldID": 1000007, "name": "Stellar Expanse", "shardType": "zetaShard" },
+    { "id": 1010017, "worldID": 1000007, "name": "Intercluster Void", "shardType": "zetaShard" },
+
+    { "id": 1010018, "worldID": 1000008, "name": "Supercluster Core", "shardType": "zetaShard" },
+    { "id": 1010019, "worldID": 1000008, "name": "Extragalactic Halo", "shardType": "zetaShard" },
+
+    { "id": 1010020, "worldID": 1000009, "name": "Filament Nexus", "shardType": "zetaShard" },
+    { "id": 1010021, "worldID": 1000009, "name": "Interfilament Void", "shardType": "zetaShard" },
+
+    { "id": 1010022, "worldID": 1000010, "name": "Universal Region", "shardType": "zetaShard" },
+
+    { "id": 1010023, "worldID": 1000011, "name": "Divine Realm", "shardType": "zetaShard" },
+    { "id": 1010024, "worldID": 1000011, "name": "Multiverse", "shardType": "zetaShard" },
+    { "id": 1010025, "worldID": 1000011, "name": "Dimensions Unknown", "shardType": "zetaShard" }
+]

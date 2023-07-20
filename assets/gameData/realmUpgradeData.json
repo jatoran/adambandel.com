@@ -1,0 +1,1009 @@
+[
+  {
+    "id": 1101,
+    "realmID": 10,
+    "evolutionTier": 1,
+    "name": "Increase Run Distance",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "force",
+    "costBase": 10,
+    "costGrowthRate": 1.3,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 1151,
+        "name": "pTarMod1",
+        "type": "production",
+        "priority": null,
+        "sourceID": 1101,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 1001,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "Marathon Training",
+        "description": "prodMult *= (this level + 2), Your strides have doubled in strength and length.",
+        "level": 0,
+        "costBase": 100,
+        "costGrowthRate": 1.3,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "Ultramarathon Training",
+        "description": "prodMult *= (this level + 3), You've entered a realm few dare to tread.",
+        "level": 0,
+        "costBase": 1000,
+        "costGrowthRate": 1.3,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 1102,
+    "realmID": 10,
+    "evolutionTier": 1,
+    "name": "Increase Pullup weight",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "force",
+    "costBase": 100,
+    "costGrowthRate": 1.1,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 1152,
+        "name": "pTarMod2",
+        "type": "production",
+        "priority": null,
+        "sourceID": 1102,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 1002,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "Weighted Pullups",
+        "description": "prodMult *= (this level + 2), Add weight, build strength.",
+        "level": 0,
+        "costBase": 100,
+        "costGrowthRate": 1.1,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "One-Arm Pullups",
+        "description": "prodMult *= (this level + 3), Only the truly dedicated can master this feat of strength.",
+        "level": 0,
+        "costBase": 1000,
+        "costGrowthRate": 1.1,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 1103,
+    "realmID": 10,
+    "evolutionTier": 1,
+    "name": "Add more wooden arms",
+    "description": "costMult /= (this level + 1.05)",
+    "level": 0,
+    "costType": "force",
+    "costBase": 1000,
+    "costGrowthRate": 1.4,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 1153,
+        "name": "pTarMod3",
+        "type": "cost",
+        "priority": null,
+        "sourceID": 1103,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 1003,
+        "runningCalcType": "div",
+        "baseValue": 1.05,
+        "value": 1.05,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "Enhanced Dummy",
+        "description": "costMult /= (this level + 2), The dummy is no longer just a wooden block, but a complex training tool.",
+        "level": 0,
+        "costBase": 100,
+        "costGrowthRate": 1.4,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "Ultimate Training Dummy",
+        "description": "costMult /= (this level + 3), Your dummy is a true masterpiece of martial arts engineering.",
+        "level": 0,
+        "costBase": 1000,
+        "costGrowthRate": 1.4,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 1104,
+    "realmID": 10,
+    "evolutionTier": 1,
+    "name": "Increase Squat Weight",
+    "description": "prodMult += (10 * this level)",
+    "level": 0,
+    "costType": "force",
+    "costBase": 5000,
+    "costGrowthRate": 1.5,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 1154,
+        "name": "pTarMod4",
+        "type": "production",
+        "priority": null,
+        "sourceID": 1104,
+        "sourceCalcType": "mult",
+        "targetType": null,
+        "targetID": 1004,
+        "runningCalcType": "add",
+        "baseValue": 10,
+        "value": 10,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "Atlas Squats",
+        "description": "prodMult += (20 * this level), Carry the weight of the world on your shoulders.",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "Titan Squats",
+        "description": "prodMult += (30 * this level), Not even a Titan could match your strength.",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 1105,
+    "realmID": 10,
+    "evolutionTier": 1,
+    "name": "Increase Deadlift weight",
+    "description": "prodMult * (this.level * 2)",
+    "level": 0,
+    "costType": "force",
+    "costBase": 10000,
+    "costGrowthRate": 1.6,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 1155,
+        "name": "pTarMod5",
+        "type": "production",
+        "priority": null,
+        "sourceID": 1105,
+        "sourceCalcType": "mult",
+        "targetType": null,
+        "targetID": 1005,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "Olympic Deadlift",
+        "description": "prodMult * (this.level * 3), Your power is now on par with Olympian strength.",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.6,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "World Record Deadlift",
+        "description": "prodMult * (this.level * 4), Records were made to be broken.",
+        "level": 0,
+        "costBase": 20000,
+        "costGrowthRate": 1.6,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 631,
+    "realmID": 20,
+    "evolutionTier": 1,
+    "name": "Better candidates",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "wisdom",
+    "costBase": 10,
+    "costGrowthRate": 1.3,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 641,
+        "name": "sTarMod1",
+        "type": "production",
+        "priority": null,
+        "sourceID": 631,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 611,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 632,
+    "realmID": 20,
+    "evolutionTier": 1,
+    "name": "Trainers study more",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "wisdom",
+    "costBase": 100,
+    "costGrowthRate": 1.1,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 642,
+        "name": "sTarMod2",
+        "type": "production",
+        "priority": null,
+        "sourceID": 632,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 612,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 633,
+    "realmID": 20,
+    "evolutionTier": 1,
+    "name": "Expand Academy Squarefootage",
+    "description": "costMult /= (this level + 1.05)",
+    "level": 0,
+    "costType": "wisdom",
+    "costBase": 1000,
+    "costGrowthRate": 1.4,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 643,
+        "name": "sTarMod3",
+        "type": "cost",
+        "priority": null,
+        "sourceID": 633,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 613,
+        "runningCalcType": "div",
+        "baseValue": 1.05,
+        "value": 1.05,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 634,
+    "realmID": 20,
+    "evolutionTier": 1,
+    "name": "Masters access historical texts",
+    "description": "prodMult += (10 * this level)",
+    "level": 0,
+    "costType": "wisdom",
+    "costBase": 5000,
+    "costGrowthRate": 1.5,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 644,
+        "name": "sTarMod4",
+        "type": "production",
+        "priority": null,
+        "sourceID": 634,
+        "sourceCalcType": "mult",
+        "targetType": null,
+        "targetID": 614,
+        "runningCalcType": "add",
+        "baseValue": 10,
+        "value": 10,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 635,
+    "realmID": 20,
+    "evolutionTier": 1,
+    "name": "Give grandmasters concubines",
+    "description": "prodMult * (this.level * 2)",
+    "level": 0,
+    "costType": "wisdom",
+    "costBase": 10000,
+    "costGrowthRate": 1.6,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 645,
+        "name": "sTarMod5",
+        "type": "production",
+        "priority": null,
+        "sourceID": 635,
+        "sourceCalcType": "mult",
+        "targetType": null,
+        "targetID": 615,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 2101,
+    "realmID": 30,
+    "evolutionTier": 1,
+    "name": "Higher density energy ball",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "energy",
+    "costBase": 10,
+    "costGrowthRate": 1.3,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 2151,
+        "name": "eTarMod1",
+        "type": "production",
+        "priority": null,
+        "sourceID": 2101,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 2001,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 2102,
+    "realmID": 30,
+    "evolutionTier": 1,
+    "name": "Maintain longer flight",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "energy",
+    "costBase": 100,
+    "costGrowthRate": 1.1,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 2152,
+        "name": "eTarMod2",
+        "type": "production",
+        "priority": null,
+        "sourceID": 2102,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 2002,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 2103,
+    "realmID": 30,
+    "evolutionTier": 1,
+    "name": "Extend aura",
+    "description": "costMult /= (this level + 1.05)",
+    "level": 0,
+    "costType": "energy",
+    "costBase": 1000,
+    "costGrowthRate": 1.4,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 2153,
+        "name": "eTarMod3",
+        "type": "cost",
+        "priority": null,
+        "sourceID": 2103,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 2003,
+        "runningCalcType": "div",
+        "baseValue": 1.05,
+        "value": 1.05,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 2104,
+    "realmID": 30,
+    "evolutionTier": 1,
+    "name": "Strengthen shield",
+    "description": "prodMult += (10 * this level)",
+    "level": 0,
+    "costType": "energy",
+    "costBase": 5000,
+    "costGrowthRate": 1.5,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 2154,
+        "name": "eTarMod4",
+        "type": "production",
+        "priority": null,
+        "sourceID": 2104,
+        "sourceCalcType": "mult",
+        "targetType": null,
+        "targetID": 2004,
+        "runningCalcType": "add",
+        "baseValue": 10,
+        "value": 10,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 2105,
+    "realmID": 30,
+    "evolutionTier": 1,
+    "name": "Increase blast power",
+    "description": "prodMult * (this.level * 2)",
+    "level": 0,
+    "costType": "energy",
+    "costBase": 10000,
+    "costGrowthRate": 1.6,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 2155,
+        "name": "eTarMod5",
+        "type": "production",
+        "priority": null,
+        "sourceID": 2105,
+        "sourceCalcType": "mult",
+        "targetType": null,
+        "targetID": 2005,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 731,
+    "realmID": 40,
+    "evolutionTier": 1,
+    "name": "desc",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "divine",
+    "costBase": 10,
+    "costGrowthRate": 1.3,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 741,
+        "name": "dTarMod1",
+        "type": "production",
+        "priority": null,
+        "sourceID": 731,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 711,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 732,
+    "realmID": 40,
+    "evolutionTier": 1,
+    "name": "desc",
+    "description": "prodMult *= (this level + 1)",
+    "level": 0,
+    "costType": "divine",
+    "costBase": 100,
+    "costGrowthRate": 1.1,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 742,
+        "name": "dTarMod2",
+        "type": "production",
+        "priority": null,
+        "sourceID": 732,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 712,
+        "runningCalcType": "mult",
+        "baseValue": 2,
+        "value": 2,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 733,
+    "realmID": 40,
+    "evolutionTier": 1,
+    "name": "desc",
+    "description": "costMult /= (this level + 1.05)",
+    "level": 0,
+    "costType": "divine",
+    "costBase": 1000,
+    "costGrowthRate": 1.4,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 743,
+        "name": "dTarMod3",
+        "type": "cost",
+        "priority": null,
+        "sourceID": 733,
+        "sourceCalcType": "add",
+        "targetType": null,
+        "targetID": 713,
+        "runningCalcType": "div",
+        "baseValue": 1.05,
+        "value": 1.05,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  },
+  {
+    "id": 734,
+    "realmID": 40,
+    "evolutionTier": 1,
+    "name": "desc",
+    "description": "prodMult += (10 * this level)",
+    "level": 0,
+    "costType": "divine",
+    "costBase": 5000,
+    "costGrowthRate": 1.5,
+    "prodType": null,
+    "prodBase": null,
+    "prodGrowthRate": null,
+    "active": false,
+    "mods": [
+      {
+        "id": 744,
+        "name": "dTarMod4",
+        "type": "production",
+        "priority": null,
+        "sourceID": 734,
+        "sourceCalcType": "mult",
+        "targetType": null,
+        "targetID": 714,
+        "runningCalcType": "add",
+        "baseValue": 10,
+        "value": 10,
+        "active": false
+      }
+    ],
+    "evolutions": [
+      {
+        "evolutionTier": 2,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 5000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      },
+      {
+        "evolutionTier": 3,
+        "name": "asdfasdf",
+        "description": "asdfasdf",
+        "level": 0,
+        "costBase": 10000,
+        "costGrowthRate": 1.5,
+        "prodBase": null,
+        "prodGrowthRate": null
+      }
+    ]
+  }
+]
