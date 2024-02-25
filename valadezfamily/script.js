@@ -79,7 +79,7 @@ const toggleSlideshow = () => {
         audioElement.pause(); // Pause the audio when the slideshow is paused
         audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>'; // Update audio control button to reflect muted state
     } else {
-        slideshowInterval = setInterval(moveToNextImage, 3000); // Change image every 3 seconds
+        slideshowInterval = setInterval(moveToNextImage, 5000); // Change image every 3 seconds
         pauseSlideshowButton.innerHTML = '<i class="fas fa-pause"></i>'; // Change to pause icon
         audioElement.play().catch(error => console.error("Audio play failed:", error)); // Play the audio when the slideshow starts
         audioControlButton.innerHTML = '<i class="fas fa-volume-up"></i>'; // Update audio control button to reflect unmuted state
