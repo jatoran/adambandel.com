@@ -74,9 +74,9 @@ button {
     }
 }
 
-#start-slideshow {
+/*#start-slideshow {
     display: none; /* Keep this hidden initially */
-}
+/*}*/
 
 /* Adjustments for control visibility and accessibility on mobile */
 #prev, #next, #play-pause-slideshow, #audio-control {
