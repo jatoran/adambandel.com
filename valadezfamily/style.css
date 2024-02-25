@@ -16,24 +16,25 @@ h1, h3 {
     /* Adjust font size based on viewport width, with min and max limits */
     font-size: clamp(16px, 4vw, 32px); /* min-size, preferred size, max-size */
 }
-
 #slideshow-container {
-    width: 90%;
-    max-width: 600px; /* Adjust based on preference */
-    margin: 20px auto; /* Center it horizontally */
+    width: 90%; /* Responsive width */
+    max-width: 600px; /* Max width to prevent the container from becoming too large */
+    margin: 20px auto; /* Center the container */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
+    aspect-ratio: 16 / 9; /* Adjust this based on your preferred aspect ratio */
 }
 
 #slideshow img {
-    max-width: 100%; /* Ensure it does not exceed the container's width */
+    max-width: 100%; /* Scale based on the container's width */
     height: auto; /* Adjust height automatically */
-    object-fit: contain; /* Ensures the entire image is visible */
-    margin: auto; /* Center the image within the container */
+    object-fit: contain; /* Ensure the image fits within the container without being clipped */
+    margin: auto; /* Center the image */
+    display: block; /* Remove any extra space below the image */
 }
 #controls {
     position: absolute;
