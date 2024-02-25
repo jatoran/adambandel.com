@@ -4,37 +4,96 @@ body, html {
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* You already have this */
+    justify-content: flex-start; /* Aligns content to the start of the flex container */
     align-items: center;
     background-color: #f0f0f0;
 }
 
-#slideshow {
-    position: relative;
+h1 {
+    margin-top: 20px; /* Add some space at the top */
+    text-align: center;
+}
+
+#slideshow-container {
     width: 60%;
     max-width: 600px;
+    height: 500px; /* Set a fixed height */
+    margin: 20px auto; /* Center it horizontally and add some margin on top */
+    display: flex;
+    flex-direction: column; /* Arrange children (slideshow and controls) in a column */
+    align-items: center; /* Center-align children */
+    justify-content: center; /* Center content vertically */
+    position: relative; /* Needed for absolute positioning of children */
+    overflow: hidden; /* Hide parts of the image that overflow the container */
+}
+
+#slideshow {
+    width: 100%; /* Make sure the slideshow takes the full width of the container */
+    position: relative; /* Needed for absolute positioning of buttons */
 }
 
 #slideshow img {
-    width: 100%;
-    border-radius: 8px;
+    max-height: 100%; /* Make sure the image does not exceed the container's height */
+    max-width: 100%; /* Make sure the image does not exceed the container's width */
+    object-fit: contain; /* Prevents distortion of images, keeping aspect ratio */
+    margin: auto; /* Center the image within the container */
+    display: block; /* Remove any extra space below the image */
+}
+
+#controls {
+    position: absolute; /* Position the controls at the bottom of the container */
+    bottom: 10px; /* Adjust as necessary to place it at the desired distance from the bottom */
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Adjust the space between the buttons */
+    width: 100%; /* Ensure the controls stretch across the container width */
 }
 
 button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     background-color: #333;
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    font-size: 16px;
 }
 
-#prev {
-    left: 0;
+/* Remove the positioning styles from individual buttons */
+#prev, #next, #play-pause-slideshow, #audio-control {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    z-index: 2; /* Adjust if needed */
 }
 
-#next {
-    right: 0;
+/*#audio-control, #start-slideshow {
+    position: fixed;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 20;
+}*/
+
+#start-slideshow {
+    /* display: none; Remove or comment this line */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #0084ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 20;
 }
+
+/*#audio-control {
+     display: flex;
+    justify-content: center;
+    align-items: center;
+}*/
