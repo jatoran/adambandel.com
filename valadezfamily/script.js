@@ -19,11 +19,31 @@ const images = [
     'images/photo (18).jpg',
     'images/photo (19).jpg',
     'images/photo (20).jpg',
-    'images/photo (21).jpg',
     'images/photo (22).jpg',
     'images/photo (23).jpg',
     'images/photo (24).jpg',
-    'images/photo (25).jpg'
+    'images/photo (25).jpg',
+    'images/photo (26).jpg',
+    'images/photo (27).jpg',
+    'images/photo (28).jpg',
+    'images/photo (29).jpg',
+    'images/photo (30).jpg',
+    'images/photo (31).jpg',
+    'images/photo (32).jpg',
+    'images/photo (33).jpg',
+    'images/photo (34).jpg',
+    'images/photo (35).jpg',
+    'images/photo (36).jpg',
+    'images/photo (37).jpg',
+    'images/photo (38).jpg',
+    'images/photo (39).jpg',
+    'images/photo (40).jpg',
+    'images/photo (41).jpg',
+    'images/photo (42).jpg',
+    'images/photo (43).jpg',
+    'images/photo (44).jpg',
+    'images/photo (45).jpg',
+    'images/photo (46).jpg'
 ];
 
 let currentIndex = 0;
