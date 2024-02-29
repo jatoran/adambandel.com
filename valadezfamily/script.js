@@ -43,7 +43,21 @@ const images = [
     'images/photo (43).jpg',
     'images/photo (44).jpg',
     'images/photo (45).jpg',
-    'images/photo (46).jpg'
+    'images/photo (46).jpg',
+    'images/photo (47).jpg',
+    'images/photo (48).jpg',
+    'images/photo (49).jpg',
+    'images/photo (50).jpg',
+    'images/photo (51).jpg',
+    'images/photo (52).jpg',
+    'images/photo (53).jpg',
+    'images/photo (54).jpg',
+    'images/photo (55).jpg',
+    'images/photo (56).jpg',
+    'images/photo (57).jpg',
+    'images/photo (58).jpg',
+    'images/photo (59).jpg',
+    'images/photo (60).jpg'
 ];
 
 let currentIndex = 0;
