@@ -1,4 +1,5 @@
 let lines = [];
+let currentDisplayMode = 'list'; // Default to 'list'
 
 document.addEventListener('DOMContentLoaded', function() {
     const categoryColors = {
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "DL": "yellow",
         "TRNS": "pink",
     };
+    
 
     document.querySelectorAll('[name="displayMethod"]').forEach(radio => {
         radio.addEventListener('change', (event) => {
@@ -18,8 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (event.target.value === 'list') {
                 canvas.style.display = 'none'; // Hide the canvas
                 dataList.style.display = 'block'; // Show the list
+                currentDisplayMode = 'list'
             } else if (event.target.value === 'spiral') {
                 dataList.style.display = 'none'; // Hide the list
+                currentDisplayMode = 'spiral'
                 displaySpiral(); // This already sets canvas display to block
             }
         });
@@ -87,19 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-            // Filter functionality
-            document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', () => {
-                    const selectedCategories = document.querySelectorAll('.filter-checkbox:checked');
-                    const selectedValues = Array.from(selectedCategories).map(cb => cb.value);
+    });
 
-                    document.querySelectorAll('.data-item').forEach(item => {
-                        const displayStyle = selectedValues.includes(item.dataset.category) ? '' : 'none';
-                        item.style.display = displayStyle;
-                    });
-                });
-            });
-        });
+
 
     let zoomLevel = 1;
 
@@ -245,20 +239,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    // Add event listeners to the filter checkboxes to update the spiral view on change
+    
+    // Adjusted filter change handler
     document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', () => {
-            // Update the dataList for the list view
             const selectedValues = Array.from(document.querySelectorAll('.filter-checkbox:checked')).map(cb => cb.value);
-            document.querySelectorAll('.data-item').forEach(item => {
-                const displayStyle = selectedValues.includes(item.dataset.category) ? '' : 'none';
-                item.style.display = displayStyle;
-            });
 
-            // Redraw the spiral with the new filters applied
-            displaySpiral();
+            if (currentDisplayMode === 'list') {
+                document.querySelectorAll('.data-item').forEach(item => {
+                    const displayStyle = selectedValues.includes(item.dataset.category) ? '' : 'none';
+                    item.style.display = displayStyle;
+                });
+            } else if (currentDisplayMode === 'spiral') {
+                displaySpiral(); // Only redraw the spiral if in spiral view
+            }
         });
     });
+
+    // Add event listeners to the filter checkboxes to update the spiral view on change
+    // document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+    //     checkbox.addEventListener('change', () => {
+    //         // Update the dataList for the list view
+    //         const selectedValues = Array.from(document.querySelectorAll('.filter-checkbox:checked')).map(cb => cb.value);
+    //         document.querySelectorAll('.data-item').forEach(item => {
+    //             const displayStyle = selectedValues.includes(item.dataset.category) ? '' : 'none';
+    //             item.style.display = displayStyle;
+    //         });
+
+    //         // Redraw the spiral with the new filters applied
+    //         displaySpiral();
+    //     });
+    // });
 
 
 
