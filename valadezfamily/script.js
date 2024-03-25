@@ -56,6 +56,25 @@ const images = [
     'images/april/Photo (56).jpg',
     'images/april/Photo (57).jpg',
     'images/april/Photo (58).jpg',
+    'images/april/Photo (59).jpg',
+    'images/april/Photo (60).jpg',
+    'images/april/Photo (61).jpg',
+    'images/april/Photo (62).jpg',
+    'images/april/Photo (63).jpg',
+    'images/april/Photo (64).jpg',
+    'images/april/Photo (65).jpg',
+    'images/april/Photo (66).jpg',
+    'images/april/Photo (67).jpg',
+    'images/april/Photo (68).jpg',
+    'images/april/Photo (69).jpg',
+    'images/april/Photo (70).jpg',
+    'images/april/Photo (71).jpg',
+    'images/april/Photo (72).jpg',
+    'images/april/Photo (73).jpg',
+    'images/april/Photo (74).jpg',
+    'images/april/Photo (75).jpg',
+    'images/april/Photo (76).jpg',
+    'images/april/Photo (77).jpg'
 ];
 
 let currentIndex = 0;
@@ -91,7 +110,7 @@ const toggleSlideshow = () => {
         audioElement.pause(); // Pause the audio when the slideshow is paused
         audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>'; // Update audio control button to reflect muted state
     } else {
-        slideshowInterval = setInterval(moveToNextImage, 3000); // Change image every 3 seconds
+        slideshowInterval = setInterval(moveToNextImage, 6000); // Change image every 6 seconds
         pauseSlideshowButton.innerHTML = '<i class="fas fa-pause"></i>'; // Change to pause icon
         audioElement.play().catch(error => console.error("Audio play failed:", error)); // Play the audio when the slideshow starts
         audioControlButton.innerHTML = '<i class="fas fa-volume-up"></i>'; // Update audio control button to reflect unmuted state
