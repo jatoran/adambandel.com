@@ -77,7 +77,6 @@ let slideshowInterval = null;
 let isSlideshowPlaying = false;
 
 const slideshowImage = document.getElementById('slideshow-image');
-const startSlideshowButton = document.getElementById('start-slideshow');
 const pauseSlideshowButton = document.getElementById('play-pause-slideshow');
 const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');
@@ -113,16 +112,12 @@ const toggleSlideshow = () => {
     isSlideshowPlaying = !isSlideshowPlaying;
 };
 
-
-// Simplify the event listeners
-startSlideshowButton.addEventListener('click', function() {
-    toggleSlideshow(); // Start the slideshow immediately
-    this.style.display = 'none'; // Hide start button
-    pauseSlideshowButton.style.display = 'inline-block'; // Show the pause button
-    audioElement.play().catch(error => console.error("Audio play failed:", error));
+pauseSlideshowButton.addEventListener('click', () => {
+    toggleSlideshow();
+    if (!isSlideshowPlaying) {
+        pauseSlideshowButton.style.display = 'inline-block'; // Show the play/pause button
+    }
 });
-
-pauseSlideshowButton.addEventListener('click', toggleSlideshow);
 
 nextButton.addEventListener('click', () => {
     moveToNextImage();
@@ -142,7 +137,6 @@ prevButton.addEventListener('click', () => {
     }
 });
 
-// Audio control with icons
 audioControlButton.addEventListener('click', function() {
     if (audioElement.muted) {
         audioElement.muted = false;
@@ -153,5 +147,4 @@ audioControlButton.addEventListener('click', function() {
     }
 });
 
-// Initialize slideshow with the first image
 updateImage(currentIndex);

@@ -74,6 +74,10 @@ button {
     }
 }
 
+#slideshow-image{
+    min-width:600px;
+}
+
 /*#start-slideshow {
     display: none; /* Keep this hidden initially */
 /*}*/
