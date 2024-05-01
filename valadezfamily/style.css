@@ -30,7 +30,7 @@ h1, h3 {
 }
 
 #slideshow img {
-    max-width: 100%; /* Scale based on the container's width */
+    max-width: 70vh; /* Scale based on the container's width */
     height: auto; /* Adjust height automatically */
     object-fit: contain; /* Ensure the image fits within the container without being clipped */
     margin: auto; /* Center the image */
