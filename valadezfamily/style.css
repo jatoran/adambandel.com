@@ -13,35 +13,44 @@ body, html {
 h1, h3 {
     margin-top: 20px;
     text-align: center;
-    /* Adjust font size based on viewport width, with min and max limits */
-    font-size: clamp(16px, 4vw, 32px); /* min-size, preferred size, max-size */
+    font-size: clamp(16px, 4vw, 32px);
 }
+
 #slideshow-container {
-    width: 90%; /* Responsive width */
-    max-width: 600px; /* Max width to prevent the container from becoming too large */
-    margin: 20px auto; /* Center the container */
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    aspect-ratio: 16 / 9; /* Adjust this based on your preferred aspect ratio */
+    aspect-ratio: 16 / 9;
+}
+
+#slideshow {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #slideshow img {
-    max-height: 70vh; /* Scale based on the container's width */
-    height: auto; /* Adjust height automatically */
-    object-fit: contain; /* Ensure the image fits within the container without being clipped */
-    margin: auto; /* Center the image */
-    display: block; /* Remove any extra space below the image */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: auto;
+    display: block;
 }
+
 #controls {
     position: absolute;
     bottom: 10px;
     display: flex;
     justify-content: center;
-    gap: 10px; /* Reduce gap for smaller screens */
+    gap: 10px;
     width: 100%;
 }
 
@@ -50,43 +59,30 @@ button {
     background-color: #333;
     color: white;
     border: none;
-    padding: 8px 15px; /* Slightly reduce padding for smaller screens */
+    padding: 8px 15px;
     cursor: pointer;
-/*    font-size: 4vw; /* Adjust button text size based on viewport width */*/
-    min-width: 60px; /* Ensure buttons are not too small on very narrow viewports */
+    min-width: 60px;
 }
 
 @media (max-width: 600px) {
     h1 {
-        font-size: 6vw; /* Increase size slightly for very small devices */
+        font-size: 6vw;
     }
 }
 
 @media (orientation: portrait) {
     #slideshow-container {
-        aspect-ratio: 9 / 16; /* Change aspect ratio for portrait mode */
+        aspect-ratio: 9 / 16;
     }
 }
 
-@media (min-width: 768px) {
-    #slideshow-container {
-        height: 70vh; /* Set a dynamic height based on the viewport height */
-    }
-}
-
-/*#start-slideshow {
-    display: none; /* Keep this hidden initially */
-/*}*/
-
-/* Adjustments for control visibility and accessibility on mobile */
 #prev, #next, #play-pause-slideshow, #audio-control {
     position: relative;
-    z-index: 10; /* Make sure controls are above the slideshow */
+    z-index: 10;
 }
-
 
 @media (min-width: 600px) and (max-width: 1200px) {
     h1, h3 {
-        font-size: clamp(18px, 3.5vw, 28px); /* Slightly adjust sizes for medium screens */
+        font-size: clamp(18px, 3.5vw, 28px);
     }
 }
