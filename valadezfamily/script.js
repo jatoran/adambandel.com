@@ -152,7 +152,7 @@
 
 
 const images = [
-    'images/june/Photo.jpg', 'images/june/Photo (1).jpg', 'images/june/Photo (2).jpg', 
+     'images/june/Photo (78).jpg','images/june/Photo.jpg', 'images/june/Photo (1).jpg', 'images/june/Photo (2).jpg', 
     'images/june/Photo (3).jpg', 'images/june/Photo (14).jpg', 'images/june/Photo (15).jpg', 
     'images/june/Photo (17).jpg', 'images/june/Photo (18).jpg', 'images/june/Photo (19).jpg', 
     'images/june/Photo (5).jpg', 'images/june/Photo (11).jpg', 'images/june/Photo (22).jpg', 
@@ -175,7 +175,9 @@ const images = [
     'images/june/Photo (13).jpg', 'images/june/Photo (63).jpg', 'images/june/Photo (64).jpg', 
     'images/june/Photo (65).jpg', 'images/june/Photo (66).jpg', 'images/june/Photo (67).jpg', 
     'images/june/Photo (68).jpg', 'images/june/Photo (60).jpg', 'images/june/Photo (69).jpg', 
-    'images/june/Photo (70).jpg', 'images/june/Photo (71).jpg'
+    'images/june/Photo (70).jpg', 'images/june/Photo (71).jpg', 'images/june/Photo (72).jpg',
+    'images/june/Photo (73).jpg', 'images/june/Photo (74).jpg', 'images/june/Photo (75).jpg',
+    'images/june/Photo (76).jpg', 'images/june/Photo (77).jpg',
 ];
 
 let currentIndex = 0;
