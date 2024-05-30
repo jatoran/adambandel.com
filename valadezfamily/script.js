@@ -152,11 +152,11 @@
 
 
 const images = [
-     'images/june/Photo (78).jpg','images/june/Photo.jpg', 'images/june/Photo (1).jpg', 'images/june/Photo (2).jpg', 
+     'images/june/Photo.jpg', 'images/june/Photo (1).jpg', 'images/june/Photo (2).jpg', 
     'images/june/Photo (3).jpg', 'images/june/Photo (14).jpg', 'images/june/Photo (15).jpg', 
     'images/june/Photo (17).jpg', 'images/june/Photo (18).jpg', 'images/june/Photo (19).jpg', 
     'images/june/Photo (5).jpg', 'images/june/Photo (11).jpg', 'images/june/Photo (22).jpg', 
-    'images/june/Photo (23).jpg', 'images/june/Photo (25).jpg', 'images/june/Photo (26).jpg', 
+    'images/june/Photo (23).jpg','images/june/Photo (78).jpg', 'images/june/Photo (25).jpg', 'images/june/Photo (26).jpg', 
     'images/june/Photo (6).jpg', 'images/june/Photo (27).jpg', 'images/june/Photo (28).jpg', 
     'images/june/Photo (29).jpg', 'images/june/Photo (30).jpg', 'images/june/Photo (31).jpg', 
     'images/june/Photo (7).jpg', 'images/june/Photo (32).jpg', 'images/june/Photo (33).jpg', 
@@ -178,6 +178,9 @@ const images = [
     'images/june/Photo (70).jpg', 'images/june/Photo (71).jpg', 'images/june/Photo (72).jpg',
     'images/june/Photo (73).jpg', 'images/june/Photo (74).jpg', 'images/june/Photo (75).jpg',
     'images/june/Photo (76).jpg', 'images/june/Photo (77).jpg',
+
+    'images/june/Photo (78).jpg', 'images/june/Photo (79).jpg', 'images/june/Photo (80).jpg',
+    'images/june/Photo (81).jpg', 'images/june/Photo (82).jpg',
 ];
 
 let currentIndex = 0;
