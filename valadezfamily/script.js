@@ -5,14 +5,15 @@ const images = [
     'images/june/Photo (5).jpg', 'images/june/Photo (11).jpg', 'images/june/Photo (22).jpg', 
     'images/june/Photo (23).jpg','images/june/Photo (78).jpg', 'images/june/Photo (25).jpg', 'images/june/Photo (26).jpg', 
     'images/june/Photo (6).jpg', 'images/june/Photo (28).jpg', 
-    'images/june/Photo (29).jpg', 'images/june/Photo (80).jpg', 'images/june/Photo (30).jpg', 'images/june/Photo (81).jpg',  'images/june/Photo (31).jpg', 'images/june/Photo (39).jpg',   'images/june/Photo (76).jpg', 
+    'images/june/Photo (29).jpg', 'images/june/Photo (80).jpg', 'images/june/Photo (30).jpg', 'images/june/Photo (81).jpg',
+    'images/june/Photo (31).jpg', 'images/june/Photo (39).jpg',   'images/june/Photo (76).jpg', 
     'images/june/Photo (7).jpg', 'images/june/Photo (32).jpg', 'images/june/Photo (33).jpg', 
     'images/june/Photo (34).jpg', 'images/june/Photo (44).jpg', 'images/june/Photo (45).jpg', 
     'images/june/Photo (16).jpg', 'images/june/Photo (35).jpg', 
     'images/june/Photo (37).jpg', 'images/june/Photo (38).jpg', 'images/june/Photo (57).jpg', 'images/june/Photo (58).jpg', 
     'images/june/Photo (8).jpg', 'images/june/Photo (9).jpg', 'images/june/Photo (40).jpg', 
     'images/june/Photo (41).jpg','images/june/Photo (82).jpg', 'images/june/Photo (42).jpg', 'images/june/Photo (43).jpg', 
-    'images/june/Photo (10).jpg', 'images/june/Photo (77).jpg'
+    'images/june/Photo (10).jpg', 'images/june/Photo (77).jpg',
     'images/june/Photo (24).jpg','images/june/Photo (71).jpg', 'images/june/Photo (48).jpg', 'images/june/Photo (49).jpg', 
     'images/june/Photo (50).jpg','images/june/Photo (36).jpg',  'images/june/Photo (51).jpg', 'images/june/Photo (20).jpg', 
     'images/june/Photo (52).jpg', 'images/june/Photo (53).jpg', 'images/june/Photo (54).jpg', 
@@ -23,11 +24,7 @@ const images = [
     'images/june/Photo (65).jpg', 'images/june/Photo (66).jpg', 'images/june/Photo (67).jpg', 
     'images/june/Photo (68).jpg', 'images/june/Photo (60).jpg', 'images/june/Photo (69).jpg', 
     'images/june/Photo (70).jpg',  'images/june/Photo (72).jpg', 'images/june/Photo (46).jpg', 'images/june/Photo (47).jpg',
-    'images/june/Photo (73).jpg', 
-  
-
-    
-   
+    'images/june/Photo (73).jpg'
 ];
 
 let currentIndex = 0;
