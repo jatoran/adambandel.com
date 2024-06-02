@@ -2,14 +2,16 @@ body, html {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
+    height:100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
+    overflow: auto; /* Added this line */
 }
+
 
 .nav-month-list{
     display:flex;
@@ -107,4 +109,28 @@ button:hover {
     h1, h3 {
         font-size: clamp(18px, 3.5vw, 28px);
     }
+}
+
+
+#video-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#video {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
