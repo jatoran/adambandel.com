@@ -1,7 +1,7 @@
 const images = [
+     'images/july/Photo (22).jpg',
      'images/july/Photo (13).jpg',
      'images/july/Photo (24).jpg',
-     'images/july/Photo (22).jpg',
      'images/july/Photo (47).jpg',
      'images/july/Photo (39).jpg',
      'images/july/Photo (55).jpg',
@@ -20,7 +20,7 @@ const images = [
      'images/july/Photo (16).jpg',
      'images/july/Photo (2).jpg',
      'images/july/Photo (43).jpg',
-     'images/july/Photo (17).jpg'
+     'images/july/Photo (17).jpg',
      'images/july/Photo (12).jpg',
      'images/july/Photo (54).jpg',
      'images/july/Photo.jpg', 
