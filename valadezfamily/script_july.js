@@ -8,7 +8,6 @@ const images = [
      'images/july/Photo (42).jpg',
      'images/july/Photo (60).jpg',
      'images/july/Photo (14).jpg',
-     'images/july/Photo (70).jpg',
      'images/july/Photo (10).jpg',
      'images/july/Photo (33).jpg',
      'images/july/Photo (11).jpg',
@@ -68,7 +67,6 @@ const images = [
      'images/july/Photo (34).jpg',
      'images/july/Photo (5).jpg',
      'images/july/Photo (27).jpg',
-     'images/july/Photo (69).jpg',
 ];
 
 let currentIndex = 0;
