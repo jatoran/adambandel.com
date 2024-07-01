@@ -13,6 +13,7 @@ const images = [
      'images/july/Photo (20).jpg',
      'images/july/Photo (35).jpg',
      'images/july/Photo (69).jpg',
+     'images/july/Photo (7).jpeg',
      'images/july/Photo (59).jpg',
      'images/july/Photo (64).jpg',
      'images/july/Photo (46).jpg',
