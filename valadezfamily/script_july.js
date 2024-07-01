@@ -1,5 +1,5 @@
 const images = [
-     'images/july/Photo (77).jpg',
+     'images/july/Photo (78).jpg',
      'images/july/Photo (24).jpg',
      'images/july/Photo (1).jpeg',
      'images/july/Photo (75).jpg',
