@@ -3,38 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rachel's Video</title>
+    <title>Valadez Vine Slideshow - Rachel's Video</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+   
 </head>
 <body>
     <header>
         <h1>Valadez Vine Slideshow</h1>
-        <h3>Rachel's Video</h3>
+        <h3 id="current-month">Rachel's Video</h3>
     </header>
-    <main id="video-container">
-        <div id="video">
-            <video controls width="100%" height="100%" id="rachel-video">
-                <source src="rachel.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+    
+    <nav>
+        <ul id="month-list" class="nav-month-list"></ul>
+    </nav>
+
+    <main>
+        <div id="video-container">
+            <div id="video">
+                <video controls id="rachel-video">
+                    <source src="assets/video/rachel.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
         </div>
     </main>
-    <div>
+
+    <div class="past-newsletters">
         <a href="https://us9.campaign-archive.com/home/?u=c69f6591ff871e2b9a315b29b&id=2abc3a3d56">View Past Newsletters</a>
     </div>
-    <div>
-        <p style="text-align:center;margin-top:30px; padding:0px;">Past Slideshows:</p>
-        <nav>
-            <ul class="nav-month-list">
-                <li><a href="july.html">July</a></li>
-                <li><a href="june.html">June</a></li>
-                <li><a href="may.html">May</a></li>
-                <li><a href="april.html">April</a></li>
-                <li><a href="march.html">March</a></li>
-                <li><a href="rachel.html">Rachel</a></li>
-            </ul>
-        </nav>
-    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', loadSlideshowData);
+        loadSlideshowData();
+    </script>
 </body>
 </html>

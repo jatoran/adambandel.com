@@ -1,136 +1,244 @@
-body, html {
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+    --accent-color: #3ce7de;
+  }
+  
+  * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    width: 100%;
-    height:100%;
+  }
+  
+  body, html {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    overflow: auto; /* Added this line */
-}
-
-
-.nav-month-list{
-    display:flex;
-    flex-direction:row;
-    gap:10px;
-    list-style-type: none;
-    justify-content:center;
-    padding:0px;
-}
-header {
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: white;
     text-align: center;
-    margin: 20px 0;
-}
-
-h1, h3 {
-    margin: 10px 0;
-    font-size: clamp(16px, 4vw, 32px);
-}
-
-#slideshow-container {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
+    padding: 1rem;
+    flex-shrink: 0;
+  }
+  
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 0.5rem;
+  }
+  
+  h3 {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    font-weight: normal;
+  }
+  
+  nav {
+    background-color: var(--secondary-color);
+    padding: 0.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .nav-month-list {
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+  }
+  
+  .nav-month-list li {
+    margin: 0 0.5rem;
+  }
+  
+  .nav-month-list a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-month-list a:hover, .nav-month-list a:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  main {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
+    align-items: center;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  
+  #slideshow-container, #video-container {
+    width: 100%;
+    max-width: 1200px;
     aspect-ratio: 16 / 9;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-}
-
-#slideshow {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  #slideshow, #video {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-#slideshow img {
+  }
+  
+  #slideshow img, #rachel-video {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    margin: auto;
-    display: block;
-}
-
-#controls {
+  }
+  
+  #controls {
     position: absolute;
-    bottom: 10px;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
-    gap: 10px;
-    width: 100%;
-}
-
-button {
-    font-size: calc(10px + 1vmin);
-    background-color: #333;
+    gap: 1rem;
+  }
+  
+  button {
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
     cursor: pointer;
-    min-width: 60px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #555;
-}
-
-@media (max-width: 600px) {
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  button:hover, button:focus {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+  }
+  
+  .past-newsletters {
+    text-align: center;
+    margin-top: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .past-newsletters a {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .past-newsletters a:hover, .past-newsletters a:focus {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    nav {
+      padding: 0.5rem 0;
+    }
+    
+    .nav-month-list {
+      justify-content: flex-start;
+      padding: 0 0.5rem;
+    }
+    
+    #controls {
+      flex-wrap: wrap;
+    }
+    
+    button {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
     h1 {
-        font-size: 6vw;
+      font-size: 1.5rem;
     }
-}
-
-@media (orientation: portrait) {
-    #slideshow-container {
-        aspect-ratio: 9 / 16;
+    
+    h3 {
+      font-size: 1rem;
     }
-}
-
-#prev, #next, #play-pause-slideshow, #audio-control {
-    position: relative;
-    z-index: 10;
-}
-
-@media (min-width: 600px) and (max-width: 1200px) {
-    h1, h3 {
-        font-size: clamp(18px, 3.5vw, 28px);
+    
+    .nav-month-list a {
+      padding: 0.3rem 0.6rem;
     }
-}
-
-
-#video-container {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-#video {
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    
+    #controls {
+      bottom: 0.5rem;
+    }
+    
+    button {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+    }
+  }
+  
+  @media (orientation: landscape) and (max-height: 500px) {
+    body {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  
+    header {
+      width: 100%;
+      padding: 0.5rem;
+    }
+  
+    nav {
+      width: 30%;
+      height: calc(100% - 60px);
+      overflow-y: auto;
+    }
+  
+    .nav-month-list {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    main {
+      width: 70%;
+      height: calc(100% - 60px);
+      padding: 0.5rem;
+    }
+  
+    #slideshow-container, #video-container {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+  
+    .past-newsletters {
+      width: 100%;
+      margin-top: 0;
+      padding: 0.5rem;
+    }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }

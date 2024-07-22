@@ -1,0 +1,136 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    overflow: auto; /* Added this line */
+}
+
+
+.nav-month-list{
+    display:flex;
+    flex-direction:row;
+    gap:10px;
+    list-style-type: none;
+    justify-content:center;
+    padding:0px;
+}
+header {
+    text-align: center;
+    margin: 20px 0;
+}
+
+h1, h3 {
+    margin: 10px 0;
+    font-size: clamp(16px, 4vw, 32px);
+}
+
+#slideshow-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#slideshow {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#slideshow img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: auto;
+    display: block;
+}
+
+#controls {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+button {
+    font-size: calc(10px + 1vmin);
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    min-width: 60px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 6vw;
+    }
+}
+
+@media (orientation: portrait) {
+    #slideshow-container {
+        aspect-ratio: 9 / 16;
+    }
+}
+
+#prev, #next, #play-pause-slideshow, #audio-control {
+    position: relative;
+    z-index: 10;
+}
+
+@media (min-width: 600px) and (max-width: 1200px) {
+    h1, h3 {
+        font-size: clamp(18px, 3.5vw, 28px);
+    }
+}
+
+
+#video-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#video {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

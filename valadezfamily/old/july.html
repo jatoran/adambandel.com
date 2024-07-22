@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>July Image Slideshow with Music</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Valadez Vine Slideshow</h1>
+        <h3>July 2024</h3>
+    </header>
+    <main id="slideshow-container">
+        <div id="slideshow">
+            <img src="" alt="Slideshow Image" id="slideshow-image">
+        </div>
+        <nav id="controls">
+            <button id="prev" aria-label="Previous Slide">‹</button>
+            <button id="play-pause-slideshow" aria-label="Play/Pause Slideshow"><i class="fas fa-play"></i></button>
+            <button id="audio-control" aria-label="Audio Control"><i class="fas fa-volume-up"></i></button>
+            <button id="next" aria-label="Next Slide">›</button>
+        </nav>
+    </main>
+    <audio id="background-audio" loop>
+        <source src="music_july.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div>
+        <a href="https://us9.campaign-archive.com/home/?u=c69f6591ff871e2b9a315b29b&id=2abc3a3d56">View Past Newsletters</a>
+    </div>
+    <div>
+        <p style="text-align:center;margin-top:30px; padding:0px;">Past Slideshows:</p>
+        <nav>
+            <ul class="nav-month-list">
+                <li><a href="july.html">July</a></li>
+                <li><a href="june.html">June</a></li>
+                <li><a href="may.html">May</a></li>
+                <li><a href="april.html">April</a></li>
+                <li><a href="march.html">March</a></li>
+                <li><a href="rachel.html">Rachel</a></li>
+            </ul>
+        </nav>
+    </div>
+    <script src="script_july.js"></script>
+</body>
+</html>
