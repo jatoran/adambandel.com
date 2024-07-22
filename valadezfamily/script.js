@@ -21,9 +21,15 @@ const navRight = document.querySelector('.nav-right');
 const currentImageElement = document.getElementById('current-image');
 const totalImagesElement = document.getElementById('total-images');
 
-// TRUE IF YOU WANT IT TO CHECK ALL IMAGES IN JSON EXIST
-const ENABLE_PRELOAD = false;
 
+
+function logImageCounts() {
+    for (const month in validImages) {
+        console.log(`${month}: ${validImages[month].length} images`);
+    }
+}
+// Set to true if you want to check if all images in JSON exist
+const ENABLE_PRELOAD = false;
 
 async function loadSlideshowData() {
     if (isInitialized) return;
@@ -41,11 +47,6 @@ async function loadSlideshowData() {
         console.error('Error loading slideshow data:', error);
     }
 }
-function logImageCounts() {
-    for (const month in validImages) {
-        console.log(`${month}: ${validImages[month].length} images`);
-    }
-}
 
 async function validateImages() {
     for (const month in slideshowData) {
@@ -53,13 +54,25 @@ async function validateImages() {
             const declaredCount = slideshowData[month].imageCount || slideshowData[month].images.length;
             validImages[month] = [];
 
+            // Use a Set to ensure unique images
+            const uniqueImages = new Set();
+            const duplicateImages = new Set();
+            const missingImages = new Set();
+
             for (const imagePath of slideshowData[month].images) {
+                if (uniqueImages.has(imagePath)) {
+                    duplicateImages.add(imagePath);
+                } else {
+                    uniqueImages.add(imagePath);
+                }
+
                 if (ENABLE_PRELOAD) {
                     try {
                         await preloadImage(imagePath);
                         validImages[month].push(imagePath);
                     } catch (error) {
                         console.error(`Failed to load image: ${imagePath}`, error);
+                        missingImages.add(imagePath);
                     }
                 } else {
                     validImages[month].push(imagePath);
@@ -68,18 +81,32 @@ async function validateImages() {
 
             console.log(`${month}:`);
             console.log(`  Declared count: ${declaredCount}`);
-            console.log(`  Actual image paths: ${slideshowData[month].images.length}`);
+            console.log(`  Total image paths: ${slideshowData[month].images.length}`);
+            console.log(`  Unique image paths: ${uniqueImages.size}`);
             console.log(`  Valid images: ${validImages[month].length}`);
 
-            if (declaredCount !== validImages[month].length) {
-                console.warn(`Mismatch in image count for ${month}. Using declared count.`);
+            if (duplicateImages.size > 0) {
+                console.warn(`  Duplicate images found (${duplicateImages.size}):`);
+                duplicateImages.forEach(img => console.warn(`    ${img}`));
             }
 
-            // Use the declared count, falling back to the actual count if not provided
-            validImages[month].declaredCount = declaredCount;
+            if (missingImages.size > 0) {
+                console.warn(`  Missing images (${missingImages.size}):`);
+                missingImages.forEach(img => console.warn(`    ${img}`));
+            }
+
+            if (declaredCount !== validImages[month].length) {
+                console.warn(`Mismatch in image count for ${month}.`);
+                console.warn(`  Declared: ${declaredCount}, Actual: ${validImages[month].length}`);
+                console.warn(`  Difference: ${Math.abs(declaredCount - validImages[month].length)}`);
+            }
+
+            // Use the declared count, but ensure it doesn't exceed the number of valid images
+            validImages[month].declaredCount = Math.min(declaredCount, validImages[month].length);
         }
     }
 }
+
 
 function preloadImage(src) {
     return new Promise((resolve, reject) => {
@@ -93,10 +120,9 @@ function preloadImage(src) {
 function updateImageCounter() {
     if (currentImageElement && totalImagesElement && validImages[currentMonth]) {
         currentImageElement.textContent = currentIndex + 1;
-        totalImagesElement.textContent = validImages[currentMonth].declaredCount;
+        totalImagesElement.textContent = validImages[currentMonth].length;
     }
 }
-
 function setupMonthList() {
     monthList.innerHTML = '';
     Object.keys(slideshowData).forEach(month => {
@@ -170,6 +196,7 @@ function setMonth(month) {
     }
 }
 
+
 function resetSlideshow() {
     if (slideshowInterval) clearInterval(slideshowInterval);
     isSlideshowPlaying = false;
@@ -181,30 +208,28 @@ function resetSlideshow() {
     if (audioControlButton) audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
 }
 
-
 function moveToNextImage() {
-    if (validImages[currentMonth] && validImages[currentMonth].declaredCount > 0) {
-        currentIndex = (currentIndex + 1) % validImages[currentMonth].declaredCount;
+    if (validImages[currentMonth] && validImages[currentMonth].length > 0) {
+        currentIndex = (currentIndex + 1) % validImages[currentMonth].length;
         updateImage();
         updateImageCounter();
     }
 }
 
 function moveToPrevImage() {
-    if (validImages[currentMonth] && validImages[currentMonth].declaredCount > 0) {
-        currentIndex = (currentIndex - 1 + validImages[currentMonth].declaredCount) % validImages[currentMonth].declaredCount;
+    if (validImages[currentMonth] && validImages[currentMonth].length > 0) {
+        currentIndex = (currentIndex - 1 + validImages[currentMonth].length) % validImages[currentMonth].length;
         updateImage();
         updateImageCounter();
     }
 }
 
 function updateImage() {
-    if (slideshowImage && validImages[currentMonth] && validImages[currentMonth].declaredCount > 0) {
-        const imagePath = validImages[currentMonth][currentIndex % validImages[currentMonth].length];
+    if (slideshowImage && validImages[currentMonth] && validImages[currentMonth].length > 0) {
+        const imagePath = validImages[currentMonth][currentIndex];
         if (ENABLE_PRELOAD) {
             slideshowImage.src = imagePath;
         } else {
-            // If preloading is disabled, we need to handle potential loading errors
             const img = new Image();
             img.onload = () => {
                 slideshowImage.src = imagePath;
