@@ -12,9 +12,14 @@
     margin: 0;
     padding: 0;
   }
-  
+
   body, html {
-    font-family: 'Roboto', Arial, sans-serif;
+    /* font-family: 'Roboto', Arial, sans-serif; */
+    /* font-family: 'Playfair Display', Arial, sans-serif; */
+    /* font-family: 'Merriweather', Arial, sans-serif; */
+     font-family: 'Lora', Arial, sans-serif;
+    /* font-family: 'Libre Baskerville', Arial, sans-serif; */
+    /* font-family: 'Crimson Text', Arial, sans-serif;  */
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
