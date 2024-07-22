@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valadez Vine Slideshow - Rachel's Video</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-   
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -15,8 +14,10 @@
         <h3 id="current-month">Rachel's Video</h3>
     </header>
     
-    <nav>
+    <nav class="month-nav">
+        <div class="nav-arrow nav-left"><i class="fas fa-chevron-left"></i></div>
         <ul id="month-list" class="nav-month-list"></ul>
+        <div class="nav-arrow nav-right"><i class="fas fa-chevron-right"></i></div>
     </nav>
 
     <main>
@@ -35,9 +36,5 @@
     </div>
 
     <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', loadSlideshowData);
-        loadSlideshowData();
-    </script>
 </body>
 </html>

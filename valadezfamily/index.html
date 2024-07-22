@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valadez Vine Slideshow</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>The Valadez Vine</h1>
+        <h1>Valadez Vine Slideshow</h1>
         <h3 id="current-month"></h3>
     </header>
     
-    <nav>
+    <nav class="month-nav">
+        <div class="nav-arrow nav-left"><i class="fas fa-chevron-left"></i></div>
         <ul id="month-list" class="nav-month-list"></ul>
+        <div class="nav-arrow nav-right"><i class="fas fa-chevron-right"></i></div>
     </nav>
 
     <main>
@@ -23,11 +25,16 @@
             <div id="slideshow">
                 <img id="slideshow-image" alt="Slideshow Image">
             </div>
+            <div class="swipe-area swipe-left"></div>
+            <div class="swipe-area swipe-right"></div>
             <div id="controls">
-                <button id="prev"><i class="fas fa-backward"></i></button>
+                <button id="prev"><i class="fas fa-chevron-left"></i></button>
                 <button id="play-pause-slideshow"><i class="fas fa-play"></i></button>
-                <button id="next"><i class="fas fa-forward"></i></button>
+                <button id="next"><i class="fas fa-chevron-right"></i></button>
                 <button id="audio-control"><i class="fas fa-volume-mute"></i></button>
+            </div>
+            <div class="image-counter">
+                <span id="current-image">1</span> / <span id="total-images"></span>
             </div>
         </div>
     </main>

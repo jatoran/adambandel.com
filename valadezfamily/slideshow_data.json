@@ -1,5 +1,6 @@
 {
   "August 2024": {
+    "imageCount": 88,
     "images": [
       "assets/images/august/Photo (78).jpg",
       "assets/images/august/Photo (25).jpg",
@@ -97,12 +98,14 @@
       "assets/images/august/Photo (27).jpg"
     ],
     "audio": [
-      "assets/music/august_2024.mp3"
+      "assets/music/august_2024_1.mp3",
+      "assets/music/august_2024_2.mp3"
     ],
     "interval": 6000
   },
 
   "July 2024": {
+    "imageCount": 86,
     "images": [
       "assets/images/july/Photo (78).jpg",
       "assets/images/july/Photo (25).jpg",
@@ -197,6 +200,7 @@
   },
 
   "June 2024": {
+    "imageCount": 84,
     "images": [
       "assets/images/june/Photo.jpg", 
       "assets/images/june/Photo (13).jpg",
@@ -288,6 +292,7 @@
   },
 
   "May 2024": {
+    "imageCount": 72,
     "images": [
       "assets/images/may/Photo.jpg",
       "assets/images/may/Photo (1).jpg",
@@ -368,6 +373,7 @@
   },
 
   "April 2024": {
+    "imageCount": 80,
     "images": [
       "assets/images/april/Photo.jpg",
       "assets/images/april/Photo (1).jpg",
@@ -456,6 +462,7 @@
   },
 
   "March 2024": {
+    "imageCount": 62,
     "images": [
       "assets/images/march/photo.jpg",
       "assets/images/march/photo (1).jpg",
