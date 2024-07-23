@@ -107,6 +107,25 @@ async function validateImages() {
     }
 }
 
+function adjustImageSize() {
+    const img = document.querySelector('#slideshow img');
+    const container = document.getElementById('slideshow-container');
+  
+    if (img && container) {
+      const containerAspect = container.clientWidth / container.clientHeight;
+      const imageAspect = img.naturalWidth / img.naturalHeight;
+  
+      if (imageAspect > containerAspect) {
+        // Horizontal image
+        img.style.width = '100%';
+        img.style.height = 'auto';
+      } else {
+        // Vertical image
+        img.style.width = 'auto';
+        img.style.height = '100%';
+      }
+    }
+  }
 
 function preloadImage(src) {
     return new Promise((resolve, reject) => {
@@ -122,6 +141,9 @@ function updateImageCounter() {
         currentImageElement.textContent = currentIndex + 1;
         totalImagesElement.textContent = validImages[currentMonth].length;
     }
+
+    const img = document.querySelector('#slideshow img');
+    img.onload = adjustImageSize;
 }
 function setupMonthList() {
     monthList.innerHTML = '';
@@ -333,3 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
 loadSlideshowData();
 
 logImageCounts();
+
+
+window.addEventListener('resize', adjustImageSize);
