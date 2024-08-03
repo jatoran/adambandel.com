@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valadez Family Birthdays</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        main {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .month-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .month-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .month-header:hover {
+            background-color: #3a80d2;
+        }
+
+        .month-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .month-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .month-section.active .month-content {
+            max-height: 1000px;
+        }
+
+        .birthday-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--background-color);
+        }
+
+        .birthday-item:last-child {
+            border-bottom: none;
+        }
+
+        .birthday-name {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .birthday-date {
+            color: var(--secondary-color);
+            font-weight: 300;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            background-color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Valadez Family Birthdays</h1>
+    </header>
+
+    <main>
+        <a href="index.html" class="back-link">Back to Home</a>
+        <div id="birthdayContainer">
+            <!-- Month sections will be dynamically inserted here -->
+        </div>
+    </main>
+    <script>
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June', 
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        function createMonthSection(month, birthdays) {
+            const section = document.createElement('div');
+            section.className = 'month-section';
+            section.innerHTML = `
+                <div class="month-header">
+                    <h2>${month} (${birthdays.length})</h2>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    ${birthdays.map(b => `
+                        <div class="birthday-item">
+                            <span class="birthday-name">${b.name}</span>
+                            <span class="birthday-date">${b.date}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            const header = section.querySelector('.month-header');
+            const toggleIcon = section.querySelector('.toggle-icon');
+
+            header.addEventListener('click', () => {
+                section.classList.toggle('active');
+                toggleIcon.textContent = section.classList.contains('active') ? '▲' : '▼';
+            });
+
+            return section;
+        }
+
+        function sortBirthdays(birthdays) {
+            return birthdays.sort((a, b) => {
+                const [aMonth, aDay] = a.date.split('-').map(Number);
+                const [bMonth, bDay] = b.date.split('-').map(Number);
+                if (aMonth === bMonth) {
+                    return aDay - bDay;
+                }
+                return aMonth - bMonth;
+            });
+        }
+
+        async function fetchBirthdaysAndRender() {
+            try {
+                const response = await fetch('birthdays.json');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch birthdays data');
+                }
+                const birthdays = await response.json();
+                
+                const sortedBirthdays = sortBirthdays(birthdays);
+                const container = document.getElementById('birthdayContainer');
+                
+                const birthdaysByMonth = months.reduce((acc, month) => {
+                    acc[month] = [];
+                    return acc;
+                }, {});
+
+                sortedBirthdays.forEach(birthday => {
+                    const [month, day] = birthday.date.split('-');
+                    const monthName = months[parseInt(month) - 1];
+                    birthdaysByMonth[monthName].push({ ...birthday, date: day });
+                });
+
+                months.forEach(month => {
+                    if (birthdaysByMonth[month].length > 0) {
+                        const monthSection = createMonthSection(month, birthdaysByMonth[month]);
+                        container.appendChild(monthSection);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching or rendering birthdays:', error);
+                document.getElementById('birthdayContainer').innerHTML = '<p>Error loading birthdays. Please try again later.</p>';
+            }
+        }
+
+        fetchBirthdaysAndRender();
+    </script>
+</body>
+</html>
