@@ -9,6 +9,50 @@
 <body>
     <div class="grid">
         <div class="box">
+            <div class="animation-container reaction-diffusion-container">
+                <canvas id="reactionDiffusionCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Reaction-Diffusion System</h3>
+                <p class="box-description">Observe emergent patterns from simulated chemical reactions.</p>
+                <div class="box-controls reaction-diffusion-controls">
+                    <input type="range" id="rdFeedRate" min="0.01" max="0.1" step="0.001" value="0.055">
+                    <label for="rdFeedRate">Feed Rate</label>
+                    <input type="range" id="rdKillRate" min="0.01" max="0.1" step="0.001" value="0.062">
+                    <label for="rdKillRate">Kill Rate</label>
+                    <button id="rdReset">Reset</button>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="animation-container double-pendulum-container">
+                <canvas id="doublePendulumCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Chaotic Double Pendulum</h3>
+                <p class="box-description">Visualize the chaotic motion of a double pendulum system.</p>
+                <div class="box-controls double-pendulum-controls">
+                    <input type="range" id="doublePendulumGravity" min="0.1" max="2" step="0.1" value="1">
+                    <label for="doublePendulumGravity">Gravity</label>
+                    <button id="doublePendulumReset">Reset</button>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="animation-container mandelbrot-explorer-container">
+                <canvas id="mandelbrotExplorerCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Mandelbrot Set Explorer</h3>
+                <p class="box-description">Explore the infinite complexity of the Mandelbrot Set fractal.</p>
+                <div class="box-controls mandelbrot-explorer-controls">
+                    <input type="range" id="mandelbrotIterations" min="50" max="1000" step="50" value="100">
+                    <label for="mandelbrotIterations">Iterations</label>
+                    <button id="mandelbrotResetZoom">Reset Zoom</button>
+                </div>
+            </div>
+        </div>
+        <div class="box">
             <div class="animation-container lorenz-attractor-container">
                 <canvas id="lorenzAttractorCanvas"></canvas>
             </div>
@@ -33,13 +77,26 @@
                 <h3 class="box-title">Predator-Prey Simulation</h3>
                 <p class="box-description">Watch a simple ecosystem evolve with predators and prey.</p>
                 <div class="box-controls predprey-controls">
-                    <input type="range" id="predpreyPreySpeed" min="0.1" max="2" step="0.1" value="1">
                     <label for="predpreyPreySpeed">Prey Speed</label>
-                    <input type="range" id="predpreyPredatorSpeed" min="0.1" max="2" step="0.1" value="0.8">
+                    <input type="range" id="predpreyPreySpeed" min="0.1" max="2" step="0.1" value="0.6">
+        
                     <label for="predpreyPredatorSpeed">Predator Speed</label>
+                    <input type="range" id="predpreyPredatorSpeed" min="0.1" max="2" step="0.1" value="0.7">
+        
+                    <label for="predpreyPreyBirthRate">Prey Birth Rate</label>
+                    <input type="range" id="predpreyPreyBirthRate" min="0.001" max="0.01" step="0.001" value="0.005">
+        
+                    <label for="predpreyPredatorBirthRate">Predator Birth Rate</label>
+                    <input type="range" id="predpreyPredatorBirthRate" min="0.001" max="0.01" step="0.001" value="0.001">
+        
+                    <label for="predpreyPredatorEnergyGain">Predator Energy Gain</label>
+                    <input type="range" id="predpreyPredatorEnergyGain" min="10" max="50" step="5" value="25">
+        
+                    <button id="predpreyResetButton">Reset Simulation</button>
                 </div>
             </div>
         </div>
+        
         <div class="box">
             <div class="animation-container hyperdimensional-mandelbrot-container">
                 <canvas id="mandelbrotTesseractCanvas"></canvas>

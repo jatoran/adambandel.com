@@ -1551,42 +1551,105 @@ document.addEventListener('DOMContentLoaded', initHDMT);
 
 
 
-
-
-
-// Predator-Prey Simulation
+// predator prey simulation
 const predprey9x7Canvas = document.getElementById('predpreyCanvas');
 const predprey9x7Ctx = predprey9x7Canvas.getContext('2d');
 const predprey9x7PreySpeedSlider = document.getElementById('predpreyPreySpeed');
 const predprey9x7PredatorSpeedSlider = document.getElementById('predpreyPredatorSpeed');
+const predprey9x7PreyBirthRateSlider = document.getElementById('predpreyPreyBirthRate');
+const predprey9x7PredatorBirthRateSlider = document.getElementById('predpreyPredatorBirthRate');
+const predprey9x7PredatorEnergyGainSlider = document.getElementById('predpreyPredatorEnergyGain');
+const predprey9x7ResetButton = document.getElementById('predpreyResetButton');
 
-let predprey9x7PreySpeed = 1;
-let predprey9x7PredatorSpeed = 0.8;
+let predprey9x7PreySpeed = 0.6;
+let predprey9x7PredatorSpeed = 0.7;
+let predprey9x7PreyBirthRate = 0.005;
+let predprey9x7PredatorBirthRate = 0.001;
+let predprey9x7PredatorEnergyGain = 25;
+
+let predprey9x7AutoRestartDelay = 2000; // Auto-restart delay in milliseconds
 
 function predprey9x7ResizeCanvas() {
-    predprey9x7Canvas.width = predprey9x7Canvas.offsetWidth;
-    predprey9x7Canvas.height = predprey9x7Canvas.offsetHeight;
+    predprey9x7Canvas.width = 250;
+    predprey9x7Canvas.height = 250;
 }
 
 predprey9x7ResizeCanvas();
-window.addEventListener('resize', predprey9x7ResizeCanvas);
 
 class Predprey9x7Agent {
     constructor(x, y, isPredator) {
         this.x = x;
         this.y = y;
         this.isPredator = isPredator;
-        this.energy = isPredator ? 100 : 50;
-        this.size = isPredator ? 6 : 4;
+        this.energy = isPredator ? 80 : 40;
+        this.size = isPredator ? 5 : 3;
+        this.visionRadius = isPredator ? 50 : 30; // Reduced vision radius for prey
+        this.direction = Math.random() * 2 * Math.PI; // Random initial direction
     }
 
-    predprey9x7Move() {
-        const speed = this.isPredator ? predprey9x7PredatorSpeed : predprey9x7PreySpeed;
-        this.x += (Math.random() - 0.5) * speed;
-        this.y += (Math.random() - 0.5) * speed;
-        this.x = Math.max(0, Math.min(this.x, predprey9x7Canvas.width));
-        this.y = Math.max(0, Math.min(this.y, predprey9x7Canvas.height));
-        this.energy -= 0.1;
+    predprey9x7Move(agents) {
+        let speed = this.isPredator ? predprey9x7PredatorSpeed : predprey9x7PreySpeed;
+        let target = null;
+        let closestDistance = Infinity;
+
+        if (this.isPredator) {
+            // Predator logic: chase the nearest prey
+            for (let agent of agents) {
+                if (!agent.isPredator) {
+                    let distance = Math.hypot(agent.x - this.x, agent.y - this.y);
+                    if (distance < closestDistance && distance < this.visionRadius) {
+                        closestDistance = distance;
+                        target = agent;
+                    }
+                }
+            }
+        } else {
+            // Prey logic: avoid the nearest predator
+            for (let agent of agents) {
+                if (agent.isPredator) {
+                    let distance = Math.hypot(agent.x - this.x, agent.y - this.y);
+                    if (distance < closestDistance && distance < this.visionRadius) {
+                        closestDistance = distance;
+                        target = agent;
+                    }
+                }
+            }
+        }
+
+        if (target) {
+            // Move towards or away from the target
+            let dx = target.x - this.x;
+            let dy = target.y - this.y;
+            let distance = Math.hypot(dx, dy);
+
+            if (this.isPredator) {
+                // Move towards the prey
+                this.x += (dx / distance) * speed;
+                this.y += (dy / distance) * speed;
+            } else {
+                // Move away from the predator
+                this.x -= (dx / distance) * speed;
+                this.y -= (dy / distance) * speed;
+            }
+        } else {
+            // Random wandering
+            this.direction += (Math.random() - 0.5) * 0.1; // Random slight direction change
+            this.x += Math.cos(this.direction) * speed;
+            this.y += Math.sin(this.direction) * speed;
+        }
+
+        // Wall avoidance
+        if (this.x <= this.size || this.x >= predprey9x7Canvas.width - this.size) {
+            this.direction = Math.PI - this.direction;
+        }
+        if (this.y <= this.size || this.y >= predprey9x7Canvas.height - this.size) {
+            this.direction = -this.direction;
+        }
+
+        // Keep within bounds
+        this.x = Math.max(this.size, Math.min(this.x, predprey9x7Canvas.width - this.size));
+        this.y = Math.max(this.size, Math.min(this.y, predprey9x7Canvas.height - this.size));
+        this.energy -= 0.2;
     }
 
     predprey9x7Draw() {
@@ -1598,37 +1661,38 @@ class Predprey9x7Agent {
 }
 
 let predprey9x7Agents = [];
+let predprey9x7AnimationFrame;
 
 function predprey9x7InitSimulation() {
     predprey9x7Agents = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 30; i++) {
         predprey9x7Agents.push(new Predprey9x7Agent(Math.random() * predprey9x7Canvas.width, Math.random() * predprey9x7Canvas.height, false));
     }
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         predprey9x7Agents.push(new Predprey9x7Agent(Math.random() * predprey9x7Canvas.width, Math.random() * predprey9x7Canvas.height, true));
     }
 }
 
 function predprey9x7UpdateSimulation() {
-    predprey9x7Ctx.fillStyle = 'rgba(26, 26, 26, 0.1)';
-    predprey9x7Ctx.fillRect(0, 0, predprey9x7Canvas.width, predprey9x7Canvas.height);
+    predprey9x7Ctx.clearRect(0, 0, predprey9x7Canvas.width, predprey9x7Canvas.height);
 
     const newAgents = [];
 
     for (let agent of predprey9x7Agents) {
-        agent.predprey9x7Move();
+        agent.predprey9x7Move(predprey9x7Agents);
         agent.predprey9x7Draw();
 
         if (agent.energy <= 0) continue;
 
-        if (Math.random() < 0.001) {
+        const birthRate = agent.isPredator ? predprey9x7PredatorBirthRate : predprey9x7PreyBirthRate;
+        if (Math.random() < birthRate) {
             newAgents.push(new Predprey9x7Agent(agent.x, agent.y, agent.isPredator));
         }
 
         if (agent.isPredator) {
             for (let prey of predprey9x7Agents) {
                 if (!prey.isPredator && Math.hypot(agent.x - prey.x, agent.y - prey.y) < agent.size + prey.size) {
-                    agent.energy += 20;
+                    agent.energy += predprey9x7PredatorEnergyGain;
                     prey.energy = 0;
                     break;
                 }
@@ -1638,7 +1702,19 @@ function predprey9x7UpdateSimulation() {
 
     predprey9x7Agents = predprey9x7Agents.filter(agent => agent.energy > 0).concat(newAgents);
 
-    requestAnimationFrame(predprey9x7UpdateSimulation);
+    const predators = predprey9x7Agents.filter(agent => agent.isPredator).length;
+    const prey = predprey9x7Agents.filter(agent => !agent.isPredator).length;
+
+    // Check if the simulation needs to be restarted
+    if (predators === 0 || prey === 0) {
+        cancelAnimationFrame(predprey9x7AnimationFrame);
+        setTimeout(() => {
+            predprey9x7InitSimulation();
+            predprey9x7UpdateSimulation();
+        }, predprey9x7AutoRestartDelay);
+    } else {
+        predprey9x7AnimationFrame = requestAnimationFrame(predprey9x7UpdateSimulation);
+    }
 }
 
 predprey9x7PreySpeedSlider.addEventListener('input', (e) => {
@@ -1649,8 +1725,43 @@ predprey9x7PredatorSpeedSlider.addEventListener('input', (e) => {
     predprey9x7PredatorSpeed = parseFloat(e.target.value);
 });
 
+predprey9x7PreyBirthRateSlider.addEventListener('input', (e) => {
+    predprey9x7PreyBirthRate = parseFloat(e.target.value);
+});
+
+predprey9x7PredatorBirthRateSlider.addEventListener('input', (e) => {
+    predprey9x7PredatorBirthRate = parseFloat(e.target.value);
+});
+
+predprey9x7PredatorEnergyGainSlider.addEventListener('input', (e) => {
+    predprey9x7PredatorEnergyGain = parseFloat(e.target.value);
+});
+
+predprey9x7ResetButton.addEventListener('click', () => {
+    cancelAnimationFrame(predprey9x7AnimationFrame);
+    predprey9x7InitSimulation();
+    predprey9x7UpdateSimulation();
+});
+
 predprey9x7InitSimulation();
 predprey9x7UpdateSimulation();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1729,3 +1840,366 @@ lorenzBetaSlider.addEventListener('input', (e) => {
 });
 
 lorenzAttractorAnimate();
+
+
+
+
+
+const mandelbrotExplorerCanvas = document.getElementById('mandelbrotExplorerCanvas');
+const mandelbrotExplorerCtx = mandelbrotExplorerCanvas.getContext('2d');
+const mandelbrotIterationsSlider = document.getElementById('mandelbrotIterations');
+const mandelbrotResetZoomButton = document.getElementById('mandelbrotResetZoom');
+
+let mandelbrotIterations = 100;
+let mandelbrotZoom = 1;
+let mandelbrotOffsetX = -0.5;
+let mandelbrotOffsetY = 0;
+
+function mandelbrotExplorerResizeCanvas() {
+    mandelbrotExplorerCanvas.width = mandelbrotExplorerCanvas.offsetWidth;
+    mandelbrotExplorerCanvas.height = mandelbrotExplorerCanvas.offsetHeight;
+    mandelbrotExplorerRender();
+}
+
+mandelbrotExplorerResizeCanvas();
+window.addEventListener('resize', mandelbrotExplorerResizeCanvas);
+
+function mandelbrotExplorerCalculate(cx, cy) {
+    let x = 0, y = 0;
+    for (let i = 0; i < mandelbrotIterations; i++) {
+        const x2 = x * x, y2 = y * y;
+        if (x2 + y2 > 4) return i;
+        y = 2 * x * y + cy;
+        x = x2 - y2 + cx;
+    }
+    return mandelbrotIterations;
+}
+
+function mandelbrotExplorerRender() {
+    const { width, height } = mandelbrotExplorerCanvas;
+    const imageData = mandelbrotExplorerCtx.createImageData(width, height);
+
+    for (let py = 0; py < height; py++) {
+        for (let px = 0; px < width; px++) {
+            const x = (px - width / 2) / (0.5 * width * mandelbrotZoom) + mandelbrotOffsetX;
+            const y = (py - height / 2) / (0.5 * height * mandelbrotZoom) + mandelbrotOffsetY;
+
+            const iterations = mandelbrotExplorerCalculate(x, y);
+            const index = (py * width + px) * 4;
+
+            if (iterations === mandelbrotIterations) {
+                imageData.data[index] = 0;
+                imageData.data[index + 1] = 0;
+                imageData.data[index + 2] = 0;
+            } else {
+                const hue = (iterations / mandelbrotIterations * 360 + 200) % 360;
+                const [r, g, b] = mandelbrotExplorerHSLToRGB(hue / 360, 1, 0.5);
+                imageData.data[index] = r;
+                imageData.data[index + 1] = g;
+                imageData.data[index + 2] = b;
+            }
+            imageData.data[index + 3] = 255;
+        }
+    }
+
+    mandelbrotExplorerCtx.putImageData(imageData, 0, 0);
+}
+
+function mandelbrotExplorerHSLToRGB(h, s, l) {
+    let r, g, b;
+
+    if (s === 0) {
+        r = g = b = l;
+    } else {
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+mandelbrotExplorerCanvas.addEventListener('click', (e) => {
+    const rect = mandelbrotExplorerCanvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    mandelbrotOffsetX += (x - mandelbrotExplorerCanvas.width / 2) / (0.5 * mandelbrotExplorerCanvas.width * mandelbrotZoom);
+    mandelbrotOffsetY += (y - mandelbrotExplorerCanvas.height / 2) / (0.5 * mandelbrotExplorerCanvas.height * mandelbrotZoom);
+    mandelbrotZoom *= 2;
+    
+    mandelbrotExplorerRender();
+});
+
+mandelbrotIterationsSlider.addEventListener('input', (e) => {
+    mandelbrotIterations = parseInt(e.target.value);
+    mandelbrotExplorerRender();
+});
+
+mandelbrotResetZoomButton.addEventListener('click', () => {
+    mandelbrotZoom = 1;
+    mandelbrotOffsetX = -0.5;
+    mandelbrotOffsetY = 0;
+    mandelbrotExplorerRender();
+});
+
+mandelbrotExplorerRender();
+
+
+
+const dpCanvas = document.getElementById('doublePendulumCanvas');
+const dpCtx = dpCanvas.getContext('2d');
+const dpGravitySlider = document.getElementById('doublePendulumGravity');
+const dpResetButton = document.getElementById('doublePendulumReset');
+
+let dpGravity = 1;
+let dpTime = 0;
+let dpTrail = [];
+
+class DpPendulum {
+    constructor(length, angle, mass) {
+        this.length = length;
+        this.angle = angle;
+        this.mass = mass;
+        this.angularVelocity = 0;
+        this.angularAcceleration = 0;
+    }
+}
+
+let dp1 = new DpPendulum(50, Math.PI / 2, 10);
+let dp2 = new DpPendulum(50, Math.PI / 2, 10);
+
+function dpResizeCanvas() {
+    dpCanvas.width = dpCanvas.offsetWidth;
+    dpCanvas.height = dpCanvas.offsetHeight;
+}
+
+dpResizeCanvas();
+window.addEventListener('resize', dpResizeCanvas);
+
+function dpCalculateAccelerations() {
+    const g = dpGravity;
+    const m1 = dp1.mass;
+    const m2 = dp2.mass;
+    const l1 = dp1.length;
+    const l2 = dp2.length;
+    const a1 = dp1.angle;
+    const a2 = dp2.angle;
+    const a1_v = dp1.angularVelocity;
+    const a2_v = dp2.angularVelocity;
+
+    const num1 = -g * (2 * m1 + m2) * Math.sin(a1);
+    const num2 = -m2 * g * Math.sin(a1 - 2 * a2);
+    const num3 = -2 * Math.sin(a1 - a2) * m2;
+    const num4 = a2_v * a2_v * l2 + a1_v * a1_v * l1 * Math.cos(a1 - a2);
+    const den = l1 * (2 * m1 + m2 - m2 * Math.cos(2 * a1 - 2 * a2));
+    dp1.angularAcceleration = (num1 + num2 + num3 * num4) / den;
+
+    const num5 = 2 * Math.sin(a1 - a2);
+    const num6 = a1_v * a1_v * l1 * (m1 + m2);
+    const num7 = g * (m1 + m2) * Math.cos(a1);
+    const num8 = a2_v * a2_v * l2 * m2 * Math.cos(a1 - a2);
+    const den2 = l2 * (2 * m1 + m2 - m2 * Math.cos(2 * a1 - 2 * a2));
+    dp2.angularAcceleration = (num5 * (num6 + num7 + num8)) / den2;
+}
+
+function dpUpdatePendulums(dt) {
+    dpCalculateAccelerations();
+    dp1.angularVelocity += dp1.angularAcceleration * dt;
+    dp2.angularVelocity += dp2.angularAcceleration * dt;
+    dp1.angle += dp1.angularVelocity * dt;
+    dp2.angle += dp2.angularVelocity * dt;
+}
+
+function dpDrawPendulums() {
+    const centerX = dpCanvas.width / 2;
+    const centerY = dpCanvas.height / 2;
+
+    const x1 = centerX + dp1.length * Math.sin(dp1.angle);
+    const y1 = centerY + dp1.length * Math.cos(dp1.angle);
+    const x2 = x1 + dp2.length * Math.sin(dp2.angle);
+    const y2 = y1 + dp2.length * Math.cos(dp2.angle);
+
+    dpCtx.strokeStyle = 'white';
+    dpCtx.lineWidth = 2;
+    dpCtx.beginPath();
+    dpCtx.moveTo(centerX, centerY);
+    dpCtx.lineTo(x1, y1);
+    dpCtx.lineTo(x2, y2);
+    dpCtx.stroke();
+
+    dpCtx.fillStyle = 'white';
+    dpCtx.beginPath();
+    dpCtx.arc(x1, y1, 5, 0, Math.PI * 2);
+    dpCtx.arc(x2, y2, 5, 0, Math.PI * 2);
+    dpCtx.fill();
+
+    dpTrail.push({x: x2, y: y2});
+    if (dpTrail.length > 200) dpTrail.shift();
+
+    dpCtx.beginPath();
+    dpCtx.moveTo(dpTrail[0].x, dpTrail[0].y);
+    for (let i = 1; i < dpTrail.length; i++) {
+        dpCtx.lineTo(dpTrail[i].x, dpTrail[i].y);
+    }
+    dpCtx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+    dpCtx.stroke();
+}
+
+function dpAnimate() {
+    dpCtx.fillStyle = 'rgba(26, 26, 26, 0.1)';
+    dpCtx.fillRect(0, 0, dpCanvas.width, dpCanvas.height);
+
+    dpUpdatePendulums(0.1);
+    dpDrawPendulums();
+
+    dpTime += 0.1;
+    requestAnimationFrame(dpAnimate);
+}
+
+dpGravitySlider.addEventListener('input', (e) => {
+    dpGravity = parseFloat(e.target.value);
+});
+
+dpResetButton.addEventListener('click', () => {
+    dp1 = new DpPendulum(50, Math.PI / 2, 10);
+    dp2 = new DpPendulum(50, Math.PI / 2, 10);
+    dpTrail = [];
+});
+
+dpAnimate();
+
+
+
+
+const rdCanvas = document.getElementById('reactionDiffusionCanvas');
+const rdCtx = rdCanvas.getContext('2d');
+const rdFeedRateSlider = document.getElementById('rdFeedRate');
+const rdKillRateSlider = document.getElementById('rdKillRate');
+const rdResetButton = document.getElementById('rdReset');
+
+let rdWidth, rdHeight;
+let rdGrid, rdNextGrid;
+let rdFeedRate = 0.055;
+let rdKillRate = 0.062;
+
+const rdDu = 0.2;
+const rdDv = 0.1;
+
+function rdResizeCanvas() {
+    rdWidth = rdCanvas.width = rdCanvas.offsetWidth;
+    rdHeight = rdCanvas.height = rdCanvas.offsetHeight;
+    rdInitializeGrid();
+}
+
+rdResizeCanvas();
+window.addEventListener('resize', rdResizeCanvas);
+
+function rdInitializeGrid() {
+    rdGrid = [];
+    rdNextGrid = [];
+    for (let y = 0; y < rdHeight; y++) {
+        rdGrid[y] = [];
+        rdNextGrid[y] = [];
+        for (let x = 0; x < rdWidth; x++) {
+            rdGrid[y][x] = { u: 1, v: 0 };
+            rdNextGrid[y][x] = { u: 1, v: 0 };
+        }
+    }
+
+    // Create an initial seed
+    const centerX = Math.floor(rdWidth / 2);
+    const centerY = Math.floor(rdHeight / 2);
+    for (let y = centerY - 5; y < centerY + 5; y++) {
+        for (let x = centerX - 5; x < centerX + 5; x++) {
+            rdGrid[y][x].u = 0.5;
+            rdGrid[y][x].v = 0.25;
+        }
+    }
+}
+
+function rdUpdateGrid() {
+    for (let y = 1; y < rdHeight - 1; y++) {
+        for (let x = 1; x < rdWidth - 1; x++) {
+            const cell = rdGrid[y][x];
+            
+            let laplaceU = 0;
+            let laplaceV = 0;
+            
+            laplaceU += rdGrid[y][x-1].u * 0.2;
+            laplaceU += rdGrid[y][x+1].u * 0.2;
+            laplaceU += rdGrid[y-1][x].u * 0.2;
+            laplaceU += rdGrid[y+1][x].u * 0.2;
+            laplaceU += rdGrid[y-1][x-1].u * 0.05;
+            laplaceU += rdGrid[y-1][x+1].u * 0.05;
+            laplaceU += rdGrid[y+1][x-1].u * 0.05;
+            laplaceU += rdGrid[y+1][x+1].u * 0.05;
+            laplaceU -= cell.u;
+            
+            laplaceV += rdGrid[y][x-1].v * 0.2;
+            laplaceV += rdGrid[y][x+1].v * 0.2;
+            laplaceV += rdGrid[y-1][x].v * 0.2;
+            laplaceV += rdGrid[y+1][x].v * 0.2;
+            laplaceV += rdGrid[y-1][x-1].v * 0.05;
+            laplaceV += rdGrid[y-1][x+1].v * 0.05;
+            laplaceV += rdGrid[y+1][x-1].v * 0.05;
+            laplaceV += rdGrid[y+1][x+1].v * 0.05;
+            laplaceV -= cell.v;
+
+            const reactionU = -cell.u * cell.v * cell.v + rdFeedRate * (1 - cell.u);
+            const reactionV = cell.u * cell.v * cell.v - (rdFeedRate + rdKillRate) * cell.v;
+
+            rdNextGrid[y][x].u = cell.u + (rdDu * laplaceU + reactionU);
+            rdNextGrid[y][x].v = cell.v + (rdDv * laplaceV + reactionV);
+        }
+    }
+
+    // Swap grids
+    [rdGrid, rdNextGrid] = [rdNextGrid, rdGrid];
+}
+
+function rdRenderGrid() {
+    const imageData = rdCtx.createImageData(rdWidth, rdHeight);
+    for (let y = 0; y < rdHeight; y++) {
+        for (let x = 0; x < rdWidth; x++) {
+            const cell = rdGrid[y][x];
+            const index = (y * rdWidth + x) * 4;
+            const value = Math.floor((cell.u - cell.v) * 255);
+            imageData.data[index] = value;
+            imageData.data[index + 1] = value;
+            imageData.data[index + 2] = value;
+            imageData.data[index + 3] = 255;
+        }
+    }
+    rdCtx.putImageData(imageData, 0, 0);
+}
+
+function rdAnimate() {
+    rdUpdateGrid();
+    rdRenderGrid();
+    requestAnimationFrame(rdAnimate);
+}
+
+rdFeedRateSlider.addEventListener('input', (e) => {
+    rdFeedRate = parseFloat(e.target.value);
+});
+
+rdKillRateSlider.addEventListener('input', (e) => {
+    rdKillRate = parseFloat(e.target.value);
+});
+
+rdResetButton.addEventListener('click', rdInitializeGrid);
+
+rdInitializeGrid();
+rdAnimate();
