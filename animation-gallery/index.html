@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced 3D Animation Showcase Grid</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="grid">
+        <div class="box">
+            <div class="animation-container lorenz-attractor-container">
+                <canvas id="lorenzAttractorCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Lorenz Attractor</h3>
+                <p class="box-description">Visualize the chaotic behavior of the Lorenz system in 3D space.</p>
+                <div class="box-controls lorenz-attractor-controls">
+                    <input type="range" id="lorenzSigma" min="0" max="20" step="0.1" value="10">
+                    <label for="lorenzSigma">Sigma</label>
+                    <input type="range" id="lorenzRho" min="0" max="50" step="0.1" value="28">
+                    <label for="lorenzRho">Rho</label>
+                    <input type="range" id="lorenzBeta" min="0" max="10" step="0.1" value="2.667">
+                    <label for="lorenzBeta">Beta</label>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="animation-container predprey-container">
+                <canvas id="predpreyCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Predator-Prey Simulation</h3>
+                <p class="box-description">Watch a simple ecosystem evolve with predators and prey.</p>
+                <div class="box-controls predprey-controls">
+                    <input type="range" id="predpreyPreySpeed" min="0.1" max="2" step="0.1" value="1">
+                    <label for="predpreyPreySpeed">Prey Speed</label>
+                    <input type="range" id="predpreyPredatorSpeed" min="0.1" max="2" step="0.1" value="0.8">
+                    <label for="predpreyPredatorSpeed">Predator Speed</label>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="animation-container hyperdimensional-mandelbrot-container">
+                <canvas id="mandelbrotTesseractCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Hyperdimensional Mandelbrot Tesseract Visualizer</h3>
+                <p class="box-description">Explore the intricate patterns of a 4D Mandelbrot set projected onto a rotating tesseract (4D hypercube).</p>
+                <div class="box-controls mandelbrot-tesseract-controls">
+                    <input type="range" id="mandelbrotIterations" min="10" max="1000" step="10" value="100">
+                    <label for="mandelbrotIterations">Mandelbrot Iterations</label>
+                    <input type="range" id="tesseractRotationSpeed" min="0" max="0.05" step="0.001" value="0.01">
+                    <label for="tesseractRotationSpeed">Tesseract Rotation Speed</label>
+                    <input type="range" id="mandelbrotZoom" min="0.1" max="2" step="0.1" value="1">
+                    <label for="mandelbrotZoom">Mandelbrot Zoom</label>
+                    <input type="range" id="colorShift" min="0" max="360" step="1" value="0">
+                    <label for="colorShift">Color Shift</label>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="animation-container quantum-fractal-container">
+                <canvas id="quantumFractalCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Quantum Fractal Harmonizer</h3>
+                <p class="box-description">Experience the mesmerizing dance of quantum particles through an ever-evolving fractal landscape, harmonizing the microscopic and macroscopic realms.</p>
+                <div class="box-controls quantum-fractal-controls">
+                    <input type="range" id="quantumInfluence" min="0" max="1" step="0.01" value="0.5">
+                    <label for="quantumInfluence">Quantum Influence</label>
+                    <input type="range" id="fractalComplexity" min="1" max="10" step="1" value="5">
+                    <label for="fractalComplexity">Fractal Complexity</label>
+                    <button id="harmonizeButton">Harmonize</button>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="animation-container synesthetic-container">
+                <canvas id="synestheticCanvas"></canvas>
+                <div id="audioVisualizer"></div>
+                <div id="thoughtStream"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Synesthetic Reality Weaver</h3>
+                <p class="box-description">Experience a multisensory quantum consciousness simulation with dynamic neural networks and synesthetic perceptions.</p>
+                <div class="box-controls synesthetic-controls">
+                    <input type="range" id="consciousnessLevel" min="0" max="1" step="0.01" value="0.5">
+                    <label for="consciousnessLevel">Consciousness Level</label>
+                    <input type="range" id="quantumInfluence" min="0" max="1" step="0.01" value="0.3">
+                    <label for="quantumInfluence">Quantum Influence</label>
+                    <button id="evolveConsciousness">Evolve Consciousness</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container multiverse-container">
+                <canvas id="multiverseCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">5D Fractal Multiverse Explorer</h3>
+                <p class="box-description">Journey through a 5-dimensional fractal multiverse with quantum entanglement effects.</p>
+                <div class="box-controls multiverse-controls">
+                    <input type="range" id="dimensionSlider" min="3" max="5" step="0.01" value="3">
+                    <label for="dimensionSlider">Dimension</label>
+                    <input type="range" id="entanglementStrength" min="0" max="1" step="0.01" value="0.5">
+                    <label for="entanglementStrength">Entanglement</label>
+                    <button id="jumpUniverse">Jump Universe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container hypercube-quantum-container">
+                <canvas id="hypercubeQuantumCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">4D Hypercube Quantum Projection</h3>
+                <p class="box-description">Visualize a 4D hypercube with quantum-inspired noise affecting its rotation and projection.</p>
+                <div class="box-controls hypercube-controls">
+                    <input type="range" id="rotationSpeed" min="0" max="0.1" step="0.001" value="0.02">
+                    <label for="rotationSpeed">Rotation Speed</label>
+                    <input type="range" id="quantumNoise" min="0" max="1" step="0.01" value="0.5">
+                    <label for="quantumNoise">Quantum Noise</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container terrain-container">
+                <canvas id="terrainCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Interactive 3D Terrain Generator</h3>
+                <p class="box-description">Generate and explore dynamic 3D terrains with adjustable roughness.</p>
+                <div class="box-controls terrain-controls">
+                    <input type="range" id="terrainRoughness" min="0" max="1" step="0.01" value="0.5">
+                    <label for="terrainRoughness">Roughness</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container quantum-container">
+                <canvas id="quantumCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Quantum Particle Entanglement</h3>
+                <p class="box-description">Observe the mysterious behavior of entangled quantum particles.</p>
+                <div class="box-controls quantum-controls">
+                    <button id="entangleButton">Entangle Particles</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container boids-container">
+                <canvas id="boidsCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Adaptive Flocking Boids</h3>
+                <p class="box-description">Watch an emergent flocking behavior with adjustable cohesion and separation forces.</p>
+                <div class="box-controls boids-controls">
+                    <input type="range" id="cohesionForce" min="0" max="0.02" step="0.001" value="0.005">
+                    <label for="cohesionForce">Cohesion</label>
+                    <input type="range" id="separationForce" min="0" max="0.05" step="0.001" value="0.025">
+                    <label for="separationForce">Separation</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container fractal-tree-container">
+                <canvas id="fractalTreeCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Fractal Tree Growth</h3>
+                <p class="box-description">Witness the organic growth of a fractal tree structure.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container particle-galaxy-container">
+                <canvas id="particleGalaxyCanvas"></canvas>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Particle Galaxy</h3>
+                <p class="box-description">Explore a swirling galaxy of colorful particles.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container origami-container">
+                <div class="origami-shape"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Geometric Origami Unfolding</h3>
+                <p class="box-description">Watch a mesmerizing 3D origami shape unfold and refold.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container kaleidoscope-container">
+                <div class="kaleidoscope"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Kaleidoscope</h3>
+                <p class="box-description">Experience a dazzling 3D kaleidoscope effect.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container escher-structure-container">
+                <div class="escher-structure"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Escher-Like Structure</h3>
+                <p class="box-description">Explore an impossible 3D structure inspired by Escher's works.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container liquid-metal-container">
+                <div class="liquid-metal"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Liquid Metal Morph</h3>
+                <p class="box-description">Watch a mesmerizing liquid metal transformation.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container portal-container">
+                <div class="portal">
+                    <div class="portal-layer"></div>
+                    <div class="portal-layer"></div>
+                    <div class="portal-layer"></div>
+                    <div class="portal-layer"></div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">4D Portal Effect</h3>
+                <p class="box-description">Peer into a mysterious 4D portal.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container hypercube-container">
+                <div class="hypercube"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Hypercube Rotation</h3>
+                <p class="box-description">Observe the mesmerizing rotation of a 3D projection of a hypercube.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container voxel-city-container">
+                <div class="voxel-city"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Voxel City</h3>
+                <p class="box-description">Explore a miniature city built from 3D voxels.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container mobius-container" id="mobiusContainer"></div>
+            <div class="box-info">
+                <h3 class="box-title">3D Möbius Strip</h3>
+                <p class="box-description">Watch particles traverse the twisting surface of a Möbius strip.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container scribble-container">
+                <svg id="scribbleSvg" width="100%" height="100%" viewBox="0 0 200 200"></svg>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">2D Hand-Drawn Scribble</h3>
+                <p class="box-description">Experience an evolving, hand-drawn style animation.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container rainbow-ripple-container" id="rainbowRippleContainer"></div>
+            <div class="box-info">
+                <h3 class="box-title">3D Rainbow Ripple</h3>
+                <p class="box-description">Observe mesmerizing rainbow ripples in 3D space.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container bubbles-container" id="bubblesContainer"></div>
+            <div class="box-info">
+                <h3 class="box-title">Floating Bubbles</h3>
+                <p class="box-description">Watch a serene display of floating, iridescent bubbles.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container glitch-container">
+                <div class="glitch" data-text="GLITCH">GLITCH</div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Glitch Text Effect</h3>
+                <p class="box-description">Experience a cyberpunk-inspired glitch text animation.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container folding-card-container">
+                <div class="folding-card" id="foldingCard">
+                    <div class="folding-card-front">Front</div>
+                    <div class="folding-card-back">Back</div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Folding Card</h3>
+                <p class="box-description">Interact with a 3D folding card animation.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container text-wave-container">
+                <div class="text-wave" id="textWave"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Text Wave</h3>
+                <p class="box-description">Watch text transform into a mesmerizing 3D wave.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container pyramid-container">
+                <div class="pyramid">
+                    <div class="pyramid-face"></div>
+                    <div class="pyramid-face"></div>
+                    <div class="pyramid-face"></div>
+                    <div class="pyramid-face"></div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Pyramid</h3>
+                <p class="box-description">Observe a rotating 3D pyramid with dynamic lighting effects.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container helix-container">
+                <div class="helix">
+                    <div class="helix-item" style="transform: rotateY(0deg) translateZ(50px);"></div>
+                    <div class="helix-item" style="transform: rotateY(120deg) translateZ(50px);"></div>
+                    <div class="helix-item" style="transform: rotateY(240deg) translateZ(50px);"></div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Helix</h3>
+                <p class="box-description">Watch a mesmerizing 3D helix rotation.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container galaxy-container">
+                <div class="galaxy">
+                    <div class="galaxy-star" style="transform: rotate(0deg) translateX(50px);"></div>
+                    <div class="galaxy-star" style="transform: rotate(45deg) translateX(70px);"></div>
+                    <div class="galaxy-star" style="transform: rotate(90deg) translateX(90px);"></div>
+                    <div class="galaxy-star" style="transform: rotate(135deg) translateX(110px);"></div>
+                    <div class="galaxy-star" style="transform: rotate(180deg) translateX(130px);"></div>
+                    <div class="galaxy-star" style="transform: rotate(225deg) translateX(110px);"></div>
+                    <div class="galaxy-star" style="transform: rotate(270deg) translateX(90px);"></div>
+                    <div class="galaxy-star" style="transform: rotate(315deg) translateX(70px);"></div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Spiral Galaxy</h3>
+                <p class="box-description">Witness the majestic rotation of a spiral galaxy.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container torus-container">
+                <div class="torus"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Twisting Torus</h3>
+                <p class="box-description">Observe the hypnotic twisting motion of a 3D torus.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container orbit-container">
+                <div class="planet"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Orbiting Planets</h3>
+                <p class="box-description">Watch planets orbit in a miniature solar system.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container wave-container">
+                <div class="wave"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Wave</h3>
+                <p class="box-description">Experience the mesmerizing motion of a 3D wave.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container rotating-card">
+                <div class="rotating-card-face rotating-card-front">Front</div>
+                <div class="rotating-card-face rotating-card-back">Back</div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Rotating Card</h3>
+                <p class="box-description">Watch a card rotate in 3D space, revealing both sides.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container pulsing-circle"></div>
+            <div class="box-info">
+                <h3 class="box-title">Pulsing Circle</h3>
+                <p class="box-description">Observe a circle pulsing with a soothing rhythm.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container bouncing-ball"></div>
+            <div class="box-info">
+                <h3 class="box-title">Bouncing Ball</h3>
+                <p class="box-description">Watch a ball bounce with realistic physics.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container loading-spinner"></div>
+            <div class="box-info">
+                <h3 class="box-title">Loading Spinner</h3>
+                <p class="box-description">A sleek, animated loading spinner.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container typing-text">Animation is fun!</div>
+            <div class="box-info">
+                <h3 class="box-title">Typing Text</h3>
+                <p class="box-description">Experience text being typed out in real-time.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container color-changing"></div>
+            <div class="box-info">
+                <h3 class="box-title">Color Changing</h3>
+                <p class="box-description">Watch a smooth transition through a spectrum of colors.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container cube-container">
+                <div class="cube">
+                    <div class="cube-face">1</div>
+                    <div class="cube-face">2</div>
+                    <div class="cube-face">3</div>
+                    <div class="cube-face">4</div>
+                    <div class="cube-face">5</div>
+                    <div class="cube-face">6</div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Cube</h3>
+                <p class="box-description">Interact with a 3D cube that rotates in space.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container particle-container" id="particleContainer"></div>
+            <div class="box-info">
+                <h3 class="box-title">Particle System</h3>
+                <p class="box-description">Observe a dynamic system of interacting particles.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">Front</div>
+                    <div class="flip-card-back">Back</div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Flip Card</h3>
+                <p class="box-description">Interact with a card that flips in 3D space.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container morph-shape"></div>
+            <div class="box-info">
+                <h3 class="box-title">Morphing Shape</h3>
+                <p class="box-description">Watch a shape morph between different forms.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container carousel-container">
+                <div class="carousel" id="carousel"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Carousel</h3>
+                <p class="box-description">Experience a 3D carousel of rotating elements.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container ripple-container" id="rippleContainer"></div>
+            <div class="box-info">
+                <h3 class="box-title">Ripple Effect</h3>
+                <p class="box-description">Watch ripples spread across the surface.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container logo-container">
+                <div class="logo">
+                    <div class="logo-face">3D</div>
+                    <div class="logo-face">3D</div>
+                </div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Animated Logo</h3>
+                <p class="box-description">Watch a logo come to life with 3D animation.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container sphere-container">
+                <div class="sphere"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Floating Sphere</h3>
+                <p class="box-description">Observe a sphere floating and rotating in space.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container text-container">
+                <div class="text-animation">Animate</div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">3D Text Animation</h3>
+                <p class="box-description">Watch text transform with 3D animations.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container wavy-container">
+                <div class="wavy-surface"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Wavy Surface</h3>
+                <p class="box-description">Experience a mesmerizing wavy surface animation.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container gradient-container"></div>
+            <div class="box-info">
+                <h3 class="box-title">Animated Gradient</h3>
+                <p class="box-description">Watch a smooth, animated color gradient transition.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="animation-container loading-container">
+                <div class="loading"></div>
+            </div>
+            <div class="box-info">
+                <h3 class="box-title">Loading Animation</h3>
+                <p class="box-description">A creative and engaging loading animation.</p>
+            </div>
+        </div>
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html>
