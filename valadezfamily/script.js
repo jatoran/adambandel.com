@@ -33,18 +33,39 @@ const ENABLE_PRELOAD = false;
 
 async function loadSlideshowData() {
     if (isInitialized) return;
-    isInitialized = true;
 
     try {
         const response = await fetch('slideshow_data.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         slideshowData = await response.json();
+        
         await validateImages();
         setupMonthList();
         
         const initialMonth = decodeURIComponent(window.location.hash.slice(1)) || Object.keys(slideshowData)[0];
+        
+        if (!slideshowData[initialMonth]) {
+            throw new Error(`Invalid month: ${initialMonth}`);
+        }
+        
         setMonth(initialMonth);
+        
+        isInitialized = true;
+        console.log('Slideshow data loaded successfully');
     } catch (error) {
         console.error('Error loading slideshow data:', error);
+        displayErrorMessage('Error loading slideshow. Please try refreshing the page.');
+    }
+}
+
+function displayErrorMessage(message) {
+    const container = document.getElementById('slideshow-container');
+    if (container) {
+        container.innerHTML = `<p class="error-message">${message}</p>`;
+    } else {
+        document.body.innerHTML += `<p class="error-message">${message}</p>`;
     }
 }
 
@@ -199,25 +220,6 @@ if (navRight) {
 window.addEventListener('resize', updateNavArrows);
 
 
-function setMonth(month) {
-    if (month !== currentMonth && validImages[month] && validImages[month].length > 0) {
-        resetSlideshow();
-        currentMonth = month;
-        if (currentMonthElement) currentMonthElement.textContent = month;
-
-        if (slideshowData[month] && slideshowData[month].type === "video") {
-            window.location.href = "rachel.html";
-        } else {
-            currentIndex = 0;
-            currentAudioIndex = 0;
-            updateImage();
-            updateAudio();
-            updateImageCounter();
-            window.location.hash = encodeURIComponent(month);
-        }
-    }
-}
-
 
 function resetSlideshow() {
     if (slideshowInterval) clearInterval(slideshowInterval);
@@ -230,11 +232,45 @@ function resetSlideshow() {
     if (audioControlButton) audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
 }
 
+const PRELOAD_COUNT = 3; // Number of images to preload ahead
+
+function preloadImages(startIndex) {
+    const imagesToLoad = [];
+    for (let i = 1; i <= PRELOAD_COUNT; i++) {
+        const index = (startIndex + i) % validImages[currentMonth].length;
+        imagesToLoad.push(validImages[currentMonth][index]);
+    }
+
+    imagesToLoad.forEach(imagePath => {
+        const img = new Image();
+        img.src = imagePath;
+    });
+}
+
+function updateImage() {
+    if (slideshowImage && validImages[currentMonth] && validImages[currentMonth].length > 0) {
+        const imagePath = validImages[currentMonth][currentIndex];
+        const img = new Image();
+        img.onload = () => {
+            slideshowImage.src = imagePath;
+            updateImageCounter();
+            adjustImageSize();
+            
+            // Preload the next few images
+            preloadImages(currentIndex);
+        };
+        img.onerror = () => {
+            console.error(`Failed to load image: ${imagePath}`);
+            moveToNextImage(); // Skip to the next image if this one fails to load
+        };
+        img.src = imagePath;
+    }
+}
+
 function moveToNextImage() {
     if (validImages[currentMonth] && validImages[currentMonth].length > 0) {
         currentIndex = (currentIndex + 1) % validImages[currentMonth].length;
         updateImage();
-        updateImageCounter();
     }
 }
 
@@ -242,25 +278,24 @@ function moveToPrevImage() {
     if (validImages[currentMonth] && validImages[currentMonth].length > 0) {
         currentIndex = (currentIndex - 1 + validImages[currentMonth].length) % validImages[currentMonth].length;
         updateImage();
-        updateImageCounter();
     }
 }
 
-function updateImage() {
-    if (slideshowImage && validImages[currentMonth] && validImages[currentMonth].length > 0) {
-        const imagePath = validImages[currentMonth][currentIndex];
-        if (ENABLE_PRELOAD) {
-            slideshowImage.src = imagePath;
+function setMonth(month) {
+    if (month !== currentMonth && validImages[month] && validImages[month].length > 0) {
+        resetSlideshow();
+        currentMonth = month;
+        if (currentMonthElement) currentMonthElement.textContent = month;
+
+        if (slideshowData[month] && slideshowData[month].type === "video") {
+            window.location.href = "rachel.html";
         } else {
-            const img = new Image();
-            img.onload = () => {
-                slideshowImage.src = imagePath;
-            };
-            img.onerror = () => {
-                console.error(`Failed to load image: ${imagePath}`);
-                moveToNextImage(); // Skip to the next image if this one fails to load
-            };
-            img.src = imagePath;
+            currentIndex = 0;
+            currentAudioIndex = 0;
+            updateImage(); // This will also trigger preloading
+            updateAudio();
+            updateImageCounter();
+            window.location.hash = encodeURIComponent(month);
         }
     }
 }

@@ -13,6 +13,13 @@
     padding: 0;
   }
 
+  .error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
   body, html {
     /* font-family: 'Roboto', Arial, sans-serif; */
     /* font-family: 'Playfair Display', Arial, sans-serif; */
