@@ -7,6 +7,7 @@ let slideshowData = {};
 let isInitialized = false;
 let validImages = {}; 
 
+
 const slideshowImage = document.getElementById('slideshow-image');
 const pauseSlideshowButton = document.getElementById('play-pause-slideshow');
 const prevButton = document.getElementById('prev');
@@ -53,7 +54,7 @@ async function loadSlideshowData() {
         setMonth(initialMonth);
         
         isInitialized = true;
-        console.log('Slideshow data loaded successfully');
+        // console.log('Slideshow data loaded successfully');
     } catch (error) {
         console.error('Error loading slideshow data:', error);
         displayErrorMessage('Error loading slideshow. Please try refreshing the page.');
@@ -221,17 +222,6 @@ window.addEventListener('resize', updateNavArrows);
 
 
 
-function resetSlideshow() {
-    if (slideshowInterval) clearInterval(slideshowInterval);
-    isSlideshowPlaying = false;
-    if (pauseSlideshowButton) pauseSlideshowButton.innerHTML = '<i class="fas fa-play"></i>';
-    if (audioElement) {
-        audioElement.pause();
-        audioElement.currentTime = 0;
-    }
-    if (audioControlButton) audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-}
-
 const PRELOAD_COUNT = 3; // Number of images to preload ahead
 
 function preloadImages(startIndex) {
@@ -280,8 +270,115 @@ function moveToPrevImage() {
         updateImage();
     }
 }
+let audioContext;
+let gainNode;
+let currentSource;
+let currentBuffer;
+let fadeDuration = 5; // 5 seconds for fade in/out
 
-function setMonth(month) {
+function initAudio() {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    gainNode = audioContext.createGain();
+    gainNode.connect(audioContext.destination);
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+}
+
+async function loadAudio(url) {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    return audioBuffer;
+}
+
+function playAudioWithFade(audioBuffer, fadeIn = true) {
+    if (currentSource) {
+        fadeOut().then(() => {
+            currentSource.stop();
+            startNewAudio(audioBuffer, fadeIn);
+        });
+    } else {
+        startNewAudio(audioBuffer, fadeIn);
+    }
+}
+
+function startNewAudio(audioBuffer, fadeIn) {
+    currentSource = audioContext.createBufferSource();
+    currentSource.buffer = audioBuffer;
+    currentSource.loop = true;
+    currentSource.connect(gainNode);
+
+    if (fadeIn) {
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + fadeDuration);
+    } else {
+        gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+    }
+
+    currentSource.start();
+    // console.log("Audio started"); // Debug log
+}
+
+function fadeOut() {
+    return new Promise((resolve) => {
+        gainNode.gain.setValueAtTime(gainNode.gain.value, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + fadeDuration);
+        setTimeout(resolve, fadeDuration * 1000);
+    });
+}
+
+async function updateAudio() {
+    if (!audioContext) {
+        initAudio();
+    }
+
+    if (slideshowData[currentMonth] && slideshowData[currentMonth].audio) {
+        const audioUrl = slideshowData[currentMonth].audio[currentAudioIndex];
+        currentBuffer = await loadAudio(audioUrl);
+        // console.log("Audio loaded:", audioUrl); // Debug log
+
+        if (isSlideshowPlaying) {
+            playAudioWithFade(currentBuffer, true);
+        }
+    }
+}
+
+async function moveToNextAudio() {
+    currentAudioIndex = (currentAudioIndex + 1) % slideshowData[currentMonth].audio.length;
+    if (isSlideshowPlaying) {
+        await updateAudio();
+    }
+}
+
+function toggleSlideshow() {
+    if (isSlideshowPlaying) {
+        clearInterval(slideshowInterval);
+        pauseSlideshowButton.innerHTML = '<i class="fas fa-play"></i>';
+        if (currentSource) {
+            fadeOut().then(() => {
+                currentSource.stop();
+                currentSource = null;
+            });
+        }
+    } else {
+        const interval = slideshowData[currentMonth].interval || 6000;
+        slideshowInterval = setInterval(moveToNextImage, interval);
+        pauseSlideshowButton.innerHTML = '<i class="fas fa-pause"></i>';
+        
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        
+        if (currentBuffer) {
+            playAudioWithFade(currentBuffer, true);
+        } else {
+            updateAudio();
+        }
+    }
+    isSlideshowPlaying = !isSlideshowPlaying;
+    console.log("Slideshow playing:", isSlideshowPlaying); // Debug log
+}
+
+async function setMonth(month) {
     if (month !== currentMonth && validImages[month] && validImages[month].length > 0) {
         resetSlideshow();
         currentMonth = month;
@@ -292,41 +389,24 @@ function setMonth(month) {
         } else {
             currentIndex = 0;
             currentAudioIndex = 0;
-            updateImage(); // This will also trigger preloading
-            updateAudio();
+            updateImage();
+            await updateAudio();
             updateImageCounter();
             window.location.hash = encodeURIComponent(month);
         }
     }
 }
 
-function updateAudio() {
-    if (audioElement && slideshowData[currentMonth] && slideshowData[currentMonth].audio) {
-        audioElement.src = slideshowData[currentMonth].audio[currentAudioIndex];
+function resetSlideshow() {
+    if (slideshowInterval) clearInterval(slideshowInterval);
+    isSlideshowPlaying = false;
+    if (pauseSlideshowButton) pauseSlideshowButton.innerHTML = '<i class="fas fa-play"></i>';
+    if (currentSource) {
+        fadeOut().then(() => {
+            currentSource.stop();
+            currentSource = null;
+        });
     }
-}
-
-
-function moveToNextAudio() {
-    currentAudioIndex = (currentAudioIndex + 1) % slideshowData[currentMonth].audio.length;
-    updateAudio();
-    audioElement.play().catch(error => console.error("Audio play failed:", error));
-}
-
-function toggleSlideshow() {
-    if (isSlideshowPlaying) {
-        clearInterval(slideshowInterval);
-        pauseSlideshowButton.innerHTML = '<i class="fas fa-play"></i>';
-        audioElement.pause();
-        audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-    } else {
-        const interval = slideshowData[currentMonth].interval || 6000;
-        slideshowInterval = setInterval(moveToNextImage, interval);
-        pauseSlideshowButton.innerHTML = '<i class="fas fa-pause"></i>';
-        audioElement.play().catch(error => console.error("Audio play failed:", error));
-        audioControlButton.innerHTML = '<i class="fas fa-volume-up"></i>';
-    }
-    isSlideshowPlaying = !isSlideshowPlaying;
 }
 
 if (pauseSlideshowButton) {
@@ -357,16 +437,23 @@ if (prevButton) {
 
 if (audioControlButton) {
     audioControlButton.addEventListener('click', () => {
-        audioElement.muted = !audioElement.muted;
-        audioControlButton.innerHTML = audioElement.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+        if (gainNode) {
+            if (gainNode.gain.value > 0) {
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+                audioControlButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        }
     });
 }
 
-if (audioElement) {
-    audioElement.addEventListener('ended', () => {
-        moveToNextAudio();
-    });
-}
+// if (audioElement) {
+//     audioElement.addEventListener('ended', () => {
+//         moveToNextAudio();
+//     });
+// }
 
 window.addEventListener('hashchange', () => {
     const month = decodeURIComponent(window.location.hash.slice(1));
@@ -375,9 +462,19 @@ window.addEventListener('hashchange', () => {
     }
 });
 
+document.addEventListener('click', function initializeAudio() {
+    if (!audioContext) {
+        initAudio();
+    }
+    document.removeEventListener('click', initializeAudio);
+}, { once: true });
+
 // Initialize the slideshow or video page
 document.addEventListener('DOMContentLoaded', () => {
     loadSlideshowData();
+    initAudio();
+
+    // special handling for rachel page
     if (window.location.pathname.includes('rachel.html')) {
         currentMonth = "Rachel's Video";
         if (currentMonthElement) {
@@ -386,7 +483,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Also call loadSlideshowData immediately in case DOMContentLoaded has already fired
 loadSlideshowData();
 
 logImageCounts();
