@@ -397,7 +397,7 @@ window.addEventListener('resize', adjustImageSize);
 
 
 
-// attempted audio fading
+// attempted audio fading - some minor issues, not fully save yet as of 8/31/24
 // let currentMonth = '';
 // let currentIndex = 0;
 // let currentAudioIndex = 0;
