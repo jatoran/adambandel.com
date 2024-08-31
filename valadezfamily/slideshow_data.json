@@ -227,8 +227,7 @@
     ],
     "audio": [
       "assets/music/august_2024_1.mp3",
-      "assets/music/august_2024_2.mp3",
-      "assets/music/august_2024_3.mp3"
+      "assets/music/august_2024_2.mp3"
     ],
     "interval": 6000
   },
