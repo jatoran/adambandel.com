@@ -6,6 +6,13 @@ let isSlideshowPlaying = false;
 let slideshowData = {};
 let isInitialized = false;
 let validImages = {}; 
+let isTestMode = false; // test mode for quicker song transition
+let testModeDuration = 10; // Duration in seconds for test mode
+let fadeOutTimeout;
+let nextAudioTimeout;
+let isMuted = false;
+let audioStartTime = 0;
+let audioPausedAt = 0;
 
 
 const slideshowImage = document.getElementById('slideshow-image');
@@ -289,7 +296,6 @@ async function loadAudio(url) {
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
     return audioBuffer;
 }
-
 function playAudioWithFade(audioBuffer, fadeIn = true) {
     if (currentSource) {
         fadeOut().then(() => {
@@ -301,22 +307,44 @@ function playAudioWithFade(audioBuffer, fadeIn = true) {
     }
 }
 
-function startNewAudio(audioBuffer, fadeIn) {
+function startNewAudio(audioBuffer, fadeIn = true, startFrom = 0) {
+    if (currentSource) {
+        currentSource.stop();
+    }
     currentSource = audioContext.createBufferSource();
     currentSource.buffer = audioBuffer;
-    currentSource.loop = true;
+    currentSource.loop = false;
     currentSource.connect(gainNode);
 
-    if (fadeIn) {
+    if (fadeIn && !isMuted) {
         gainNode.gain.setValueAtTime(0, audioContext.currentTime);
         gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + fadeDuration);
     } else {
-        gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(isMuted ? 0 : 1, audioContext.currentTime);
     }
 
-    currentSource.start();
-    // console.log("Audio started"); // Debug log
+    currentSource.onended = handleAudioEnd;
+
+    audioStartTime = audioContext.currentTime - startFrom;
+    currentSource.start(0, startFrom);
+    console.log("Audio started, index:", currentAudioIndex);
+
+    if (isTestMode) {
+        clearTimeout(fadeOutTimeout);
+        clearTimeout(nextAudioTimeout);
+        
+        nextAudioTimeout = setTimeout(() => {
+            handleAudioEnd();
+        }, (testModeDuration - startFrom) * 1000);
+    }
 }
+
+function handleAudioEnd() {
+    if (!isTestMode) {
+        moveToNextAudio();
+    }
+}
+
 
 function fadeOut() {
     return new Promise((resolve) => {
@@ -324,6 +352,16 @@ function fadeOut() {
         gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + fadeDuration);
         setTimeout(resolve, fadeDuration * 1000);
     });
+}
+
+async function moveToNextAudio() {
+    if (slideshowData[currentMonth] && slideshowData[currentMonth].audio) {
+        currentAudioIndex = (currentAudioIndex + 1) % slideshowData[currentMonth].audio.length;
+        if (isSlideshowPlaying) {
+            await updateAudio();
+        }
+    }
+    console.log("Moved to next audio, index:", currentAudioIndex);
 }
 
 async function updateAudio() {
@@ -334,32 +372,27 @@ async function updateAudio() {
     if (slideshowData[currentMonth] && slideshowData[currentMonth].audio) {
         const audioUrl = slideshowData[currentMonth].audio[currentAudioIndex];
         currentBuffer = await loadAudio(audioUrl);
-        // console.log("Audio loaded:", audioUrl); // Debug log
+        console.log("Audio loaded:", audioUrl);
 
         if (isSlideshowPlaying) {
-            playAudioWithFade(currentBuffer, true);
+            startNewAudio(currentBuffer, true);
         }
-    }
-}
-
-async function moveToNextAudio() {
-    currentAudioIndex = (currentAudioIndex + 1) % slideshowData[currentMonth].audio.length;
-    if (isSlideshowPlaying) {
-        await updateAudio();
     }
 }
 
 function toggleSlideshow() {
     if (isSlideshowPlaying) {
+        // Pause the slideshow
         clearInterval(slideshowInterval);
         pauseSlideshowButton.innerHTML = '<i class="fas fa-play"></i>';
         if (currentSource) {
-            fadeOut().then(() => {
-                currentSource.stop();
-                currentSource = null;
-            });
+            audioPausedAt = (audioContext.currentTime - audioStartTime) % currentSource.buffer.duration;
+            currentSource.stop();
         }
+        clearTimeout(fadeOutTimeout);
+        clearTimeout(nextAudioTimeout);
     } else {
+        // Resume the slideshow
         const interval = slideshowData[currentMonth].interval || 6000;
         slideshowInterval = setInterval(moveToNextImage, interval);
         pauseSlideshowButton.innerHTML = '<i class="fas fa-pause"></i>';
@@ -369,13 +402,28 @@ function toggleSlideshow() {
         }
         
         if (currentBuffer) {
-            playAudioWithFade(currentBuffer, true);
+            startNewAudio(currentBuffer, false, audioPausedAt);
         } else {
             updateAudio();
         }
     }
     isSlideshowPlaying = !isSlideshowPlaying;
-    console.log("Slideshow playing:", isSlideshowPlaying); // Debug log
+    console.log("Slideshow playing:", isSlideshowPlaying);
+}
+
+function resetSlideshow() {
+    if (slideshowInterval) clearInterval(slideshowInterval);
+    isSlideshowPlaying = false;
+    if (pauseSlideshowButton) pauseSlideshowButton.innerHTML = '<i class="fas fa-play"></i>';
+    if (currentSource) {
+        fadeOut().then(() => {
+            currentSource.stop();
+            currentSource = null;
+        });
+    }
+    clearTimeout(fadeOutTimeout);
+    clearTimeout(nextAudioTimeout);
+    currentAudioIndex = 0;
 }
 
 async function setMonth(month) {
@@ -397,17 +445,6 @@ async function setMonth(month) {
     }
 }
 
-function resetSlideshow() {
-    if (slideshowInterval) clearInterval(slideshowInterval);
-    isSlideshowPlaying = false;
-    if (pauseSlideshowButton) pauseSlideshowButton.innerHTML = '<i class="fas fa-play"></i>';
-    if (currentSource) {
-        fadeOut().then(() => {
-            currentSource.stop();
-            currentSource = null;
-        });
-    }
-}
 
 if (pauseSlideshowButton) {
     pauseSlideshowButton.addEventListener('click', toggleSlideshow);
@@ -437,12 +474,15 @@ if (prevButton) {
 
 if (audioControlButton) {
     audioControlButton.addEventListener('click', () => {
-        if (gainNode) {
-            if (gainNode.gain.value > 0) {
-                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        isMuted = !isMuted;
+        if (isMuted) {
+            fadeOut().then(() => {
                 audioControlButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            } else {
-                gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+            });
+        } else {
+            if (currentSource) {
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + fadeDuration);
                 audioControlButton.innerHTML = '<i class="fas fa-volume-up"></i>';
             }
         }
