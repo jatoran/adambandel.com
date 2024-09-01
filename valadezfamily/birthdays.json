@@ -1,5 +1,17 @@
 [
-    
+    { "name": "Matteo Valadez", "date": "12-24" },
+    { "name": "Christian Cruz", "date": "12-21" },
+    { "name": "Mike Easter", "date": "12-01" },
+    { "name": "Roy Balbuena", "date": "11-14" },
+    { "name": "Juanita Valadez", "date": "11-17" },
+    { "name": "Luis Tobon", "date": "11-17" },
+    { "name": "Lacey Balbuena", "date": "11-03" },
+    { "name": "Isabelle Mueller", "date": "10-31" },
+    { "name": "Jeannie Valadez", "date": "10-29" },
+    { "name": "Josephine Easter", "date": "10-25" },
+    { "name": "Ashley Villanueva", "date": "10-22" },
+    { "name": "Lilliana Mendez", "date": "10-21" },
+    { "name": "Aura Mueller", "date": "10-18" },
     { "name": "Shaun Mendez", "date": "09-28" },
     { "name": "Toni Cantu", "date": "09-24" },
     { "name": "Remy Mueller", "date": "09-21" },
@@ -8,6 +20,7 @@
     { "name": "Luca Easter", "date": "09-14" },
     { "name": "Diana Bandel", "date": "09-12" },
     { "name": "Kingston Porter", "date": "09-09" },
+    { "name": "Pickles Bandel", "date": "09-04" }
     { "name": "Frank Valdez", "date": "08-03" },
     { "name": "Michelle Baiko", "date": "08-08" },
     { "name": "Eli Valadez", "date": "08-18" },
