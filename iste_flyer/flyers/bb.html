@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProSales Connection - EdTech ROI Accelerator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .flyer {
+            width: 4.25in;
+            height: 5.5in;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 0.2in;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .header {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .subheader {
+            text-align: center;
+            font-size: 14px;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        .graph {
+            position: relative;
+            width: 90%;
+            height: 180px;
+            margin: 0 auto;
+            border-left: 2px solid #003366;
+            border-bottom: 2px solid #003366;
+        }
+        
+        .line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-top: 3px solid #32cd32;
+    border-right: 0;
+    transform: none;
+    clip-path: polygon(0 100%, 100% 0); /* Ensures upward trend */
+}
+
+        .marker {
+            position: absolute;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .marker-1 { left: 0; bottom: -20px; }
+        .marker-2 { right: -20px; top: 0; }
+        .marker-3 { left: 40%; top: 40%; color: #32cd32; }
+        .accelerators {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .accelerator {
+            width: 45%;
+            text-align: left;
+            font-size: 10px;
+            color: #003366;
+            margin-bottom: 5px;
+            padding-left: 15px;
+            position: relative;
+        }
+        .accelerator:before {
+            content: '➤';
+            position: absolute;
+            left: 0;
+            color: #32cd32;
+        }
+        .stats {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #003366;
+            margin-top: 10px;
+        }
+        .cta {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #32cd32;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            color: #003366;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="flyer">
+        <div class="header">EdTech ROI Accelerator</div>
+        <div class="subheader">Maximize Your K-12 Market Impact</div>
+        <div class="graph">
+            <svg width="100%" height="100%" viewBox="0 0 200 100">
+                <!-- A sharper, exponential-like curve -->
+                <path d="M 0 100 Q 50 90, 100 70 T 200 10" stroke="#32cd32" stroke-width="3" fill="transparent" />
+            </svg>
+            <div class="marker marker-1">Investment</div>
+            <div class="marker marker-2">ROI</div>
+            <div class="marker marker-3">ProSales Boost</div>
+        </div>
+        
+        
+        <div class="accelerators">
+            <div class="accelerator">Targeted Lead Generation</div>
+            <div class="accelerator">K-12 Decision Maker Access</div>
+            <div class="accelerator">EdTech-Specific Strategies</div>
+            <div class="accelerator">Shortened Sales Cycles</div>
+        </div>
+        <div class="stats">Average Client ROI: 302%</div>
+        <div class="footer">
+            ProSales Connection | www.prosalesconnection.com | 888-572-5050
+        </div>
+    </div>
+</body>
+</html>

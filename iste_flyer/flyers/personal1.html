@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProSales Connection - Personal Challenge</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .flyer {
+            width: 300px;
+            height: 450px;
+            background-color: #ff4500;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+        .message {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+        .personal-question {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+            z-index: 2;
+        }
+        .cta {
+            font-size: 24px;
+            font-weight: bold;
+            background-color: white;
+            color: #ff4500;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        .cta:hover {
+            background-color: #ff4500;
+            color: white;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+        .footer {
+            font-size: 14px;
+            margin-top: 20px;
+            z-index: 2;
+        }
+        .background-text {
+            position: absolute;
+            font-size: 200px;
+            font-weight: bold;
+            color: rgba(255,255,255,0.1);
+            z-index: 1;
+            transform: rotate(-30deg);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="flyer">
+        <div class="background-text">YES YOU</div>
+        <div class="header">Hey You!</div>
+        <div class="message">Yes, I'm talking to YOU.</div>
+        <div class="personal-question">Are your EdTech sales letting you down?</div>
+        <div class="message">Let's fix that. Right now.</div>
+        <a href="#" class="cta">Take the Challenge</a>
+        <div class="footer">
+            ProSales Connection<br>
+            We see you. We get you. We help you win.
+        </div>
+    </div>
+</body>
+</html>

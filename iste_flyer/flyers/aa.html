@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProSales Connection - EdTech Sales Funnel Optimizer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .flyer {
+            width: 4.25in;
+            height: 5.5in;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 0.2in;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .header {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .subheader {
+            text-align: center;
+            font-size: 14px;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        .funnel {
+            position: relative;
+            width: 80%;
+            height: 200px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .funnel-shape {
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-top: 200px solid #e6f2ff;
+            position: relative;
+            margin: 0 auto;
+        }
+        .stage {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #003366;
+        }
+        .stage-1 { top: 10px; }
+        .stage-2 { top: 60px; }
+        .stage-3 { top: 110px; }
+        .stage-4 { top: 160px; }
+        .optimization {
+            position: absolute;
+            right: -80px;
+            font-size: 10px;
+            color: #0066cc;
+            width: 80px;
+            text-align: left;
+        }
+        .opt-1 { top: 20px; }
+        .opt-2 { top: 70px; }
+        .opt-3 { top: 120px; }
+        .opt-4 { top: 170px; }
+        .benefits {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .benefit {
+            width: 45%;
+            text-align: left;
+            font-size: 10px;
+            color: #003366;
+            margin-bottom: 5px;
+        }
+        .cta {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #0066cc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            color: #003366;
+            margin-top: 10px;
+        }
+        .qr-code {
+            width: 80%;
+            margin: 0 auto;
+            height: 100px;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="flyer">
+        <div class="header">EdTech Sales Funnel Optimizer</div>
+        <div class="subheader">Supercharge Your K-12 Sales Pipeline</div>
+        <div class="funnel">
+            <div class="funnel-shape"></div>
+            <div class="stage stage-1">Awareness</div>
+            <div class="stage stage-2">Interest</div>
+            <div class="stage stage-3">Evaluation</div>
+            <div class="stage stage-4">Purchase</div>
+            <div class="optimization opt-1">Targeted K-12 Outreach</div>
+            <div class="optimization opt-2">Ed-Specific Content</div>
+            <div class="optimization opt-3">Decision-Maker Engagement</div>
+            <div class="optimization opt-4">Streamlined Procurement</div>
+        </div>
+        <div class="benefits">
+            <div class="benefit">✓ Increase Qualified Leads</div>
+            <div class="benefit">✓ Shorten Sales Cycles</div>
+            <div class="benefit">✓ Boost Conversion Rates</div>
+            <div class="benefit">✓ Maximize K-12 ROI</div>
+        </div>
+        <div class="qr-code">QR Code</div>
+        <div class="footer">
+            ProSales Connection | www.prosalesconnection.com | 888-572-5050
+        </div>
+    </div>
+</body>
+</html>
