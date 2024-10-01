@@ -1,6 +1,6 @@
 import os
 import concurrent.futures
-from PIL import Image, ImageFile, ImageOps
+from PIL import Image, ImageFile, ImageOps, ExifTags
 from tqdm import tqdm
 
 # To handle large or truncated images
@@ -22,7 +22,7 @@ MAX_WORKERS = os.cpu_count() or 4
 
 # Determine the appropriate resampling filter
 try:
-    from PIL import Image, ImageFile, ImageOps, Resampling
+    from PIL import Resampling
     RESAMPLE_FILTER = Resampling.LANCZOS
 except ImportError:
     RESAMPLE_FILTER = Image.LANCZOS  # For older Pillow versions
@@ -42,17 +42,40 @@ def resize_image(img, max_dimension):
 
     return img.resize((new_width, new_height), RESAMPLE_FILTER)
 
+def reset_image_orientation(img):
+    """Reset image orientation to default (no rotation) based on EXIF data."""
+    try:
+        exif = img._getexif()
+        if exif is not None:
+            for tag, value in exif.items():
+                decoded_tag = ExifTags.TAGS.get(tag, tag)
+                if decoded_tag == 'Orientation':
+                    if value != 1:
+                        # Rotate the image to the correct orientation
+                        img = ImageOps.exif_transpose(img)
+                    break
+    except AttributeError:
+        # Image has no EXIF data
+        pass
+    return img
+
 def convert_to_webp(input_path, output_path, webp_quality, max_dimension):
-    """Resize and convert an image to WebP format."""
+    """Resize and convert an image to WebP format without unintended rotation."""
     try:
         with Image.open(input_path) as img:
             img_format = img.format.upper()
+
+            # Reset orientation to prevent unintended rotation
+            img = reset_image_orientation(img)
 
             # Resize if necessary
             img = resize_image(img, max_dimension)
 
             # Enhance image contrast (optional)
             img = ImageOps.autocontrast(img)
+
+            # Strip EXIF data to prevent further issues
+            img.info.pop('exif', None)
 
             # Convert to WebP
             img.save(output_path, format='WEBP', quality=webp_quality, method=6, lossless=False)
