@@ -116,27 +116,27 @@ async function validateImages() {
                 }
             }
 
-            console.log(`${month}:`);
-            console.log(`  Declared count: ${declaredCount}`);
-            console.log(`  Total image paths: ${slideshowData[month].images.length}`);
-            console.log(`  Unique image paths: ${uniqueImages.size}`);
-            console.log(`  Valid images: ${validImages[month].length}`);
+            // console.log(`${month}:`);
+            // console.log(`  Declared count: ${declaredCount}`);
+            // console.log(`  Total image paths: ${slideshowData[month].images.length}`);
+            // console.log(`  Unique image paths: ${uniqueImages.size}`);
+            // console.log(`  Valid images: ${validImages[month].length}`);
 
-            if (duplicateImages.size > 0) {
-                console.warn(`  Duplicate images found (${duplicateImages.size}):`);
-                duplicateImages.forEach(img => console.warn(`    ${img}`));
-            }
+            // if (duplicateImages.size > 0) {
+            //     console.warn(`  Duplicate images found (${duplicateImages.size}):`);
+            //     duplicateImages.forEach(img => console.warn(`    ${img}`));
+            // }
 
-            if (missingImages.size > 0) {
-                console.warn(`  Missing images (${missingImages.size}):`);
-                missingImages.forEach(img => console.warn(`    ${img}`));
-            }
+            // if (missingImages.size > 0) {
+            //     console.warn(`  Missing images (${missingImages.size}):`);
+            //     missingImages.forEach(img => console.warn(`    ${img}`));
+            // }
 
-            if (declaredCount !== validImages[month].length) {
-                console.warn(`Mismatch in image count for ${month}.`);
-                console.warn(`  Declared: ${declaredCount}, Actual: ${validImages[month].length}`);
-                console.warn(`  Difference: ${Math.abs(declaredCount - validImages[month].length)}`);
-            }
+            // if (declaredCount !== validImages[month].length) {
+            //     console.warn(`Mismatch in image count for ${month}.`);
+            //     console.warn(`  Declared: ${declaredCount}, Actual: ${validImages[month].length}`);
+            //     console.warn(`  Difference: ${Math.abs(declaredCount - validImages[month].length)}`);
+            // }
 
             // Use the declared count, but ensure it doesn't exceed the number of valid images
             validImages[month].declaredCount = Math.min(declaredCount, validImages[month].length);
@@ -249,18 +249,6 @@ function resetSlideshow() {
 }
 
 
-
-
-function preloadFirstImage() {
-    if (validImages[currentMonth] && validImages[currentMonth].length > 0) {
-        const firstImagePath = validImages[currentMonth][0];
-        const img = new Image();
-        img.src = firstImagePath;
-    }
-}
-
-
-
 function moveToNextImage() {
     if (validImages[currentMonth] && validImages[currentMonth].length > 0) {
         currentIndex = (currentIndex + 1) % validImages[currentMonth].length;
@@ -309,7 +297,10 @@ function preloadImages(startIndex) {
 
     for (let i = 0; i < PRELOAD_COUNT; i++) {
         const index = (startIndex + i) % totalImages;
-        imagesToLoad.push(validImages[currentMonth][index]);
+        const imagePath = validImages[currentMonth][index];
+        if (!imagePreloader.getImage(imagePath)) {
+            imagesToLoad.push(imagePath);
+        }
     }
 
     imagePreloader.preload(imagesToLoad);
