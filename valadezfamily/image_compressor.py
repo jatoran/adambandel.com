@@ -1,23 +1,96 @@
-from PIL import Image
 import os
+import concurrent.futures
+from PIL import Image, ImageFile, ImageOps
+from tqdm import tqdm
 
-def compress_image(input_path, output_path, quality=85):
-    img = Image.open(input_path)
-    img.save(output_path, optimize=True, quality=quality)
+# To handle large or truncated images
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-def batch_compress_images(input_folder, output_folder, quality=85):
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+# --------------------------- Configuration --------------------------- #
+# Set your input and output directories here
+INPUT_FOLDER = r'C:\Users\Jatora\Desktop\asdf'          # Path to input images
+OUTPUT_FOLDER = r'C:\Users\Jatora\Desktop\asdf\ff'      # Path to save compressed images
 
-    for filename in os.listdir(input_folder):
-        if filename.endswith(('.jpg', '.jpeg', '.png')):
-            input_path = os.path.join(input_folder, filename)
-            output_path = os.path.join(output_folder, filename)
-            compress_image(input_path, output_path, quality)
-            print(f"Compressed: {filename}")
+# Compression settings
+WEBP_QUALITY = 80            # WebP quality (1-100). Lower means more compression
+MAX_DIMENSION = 1920         # Maximum width or height in pixels
 
-input_folder = r'C:\Users\Jatora\Desktop\asdf'
-output_folder = r'C:\Users\Jatora\Desktop\asdf\ff'
-quality = 85  # Adjust the quality between 1-100 (lower means more compression)
+# Number of parallel threads
+MAX_WORKERS = os.cpu_count() or 4
 
-batch_compress_images(input_folder, output_folder, quality)
+# --------------------------------------------------------------------- #
+
+# Determine the appropriate resampling filter
+try:
+    from PIL import Image, ImageFile, ImageOps, Resampling
+    RESAMPLE_FILTER = Resampling.LANCZOS
+except ImportError:
+    RESAMPLE_FILTER = Image.LANCZOS  # For older Pillow versions
+
+def resize_image(img, max_dimension):
+    """Resize image while maintaining aspect ratio."""
+    width, height = img.size
+    if max(width, height) <= max_dimension:
+        return img  # No resizing needed
+
+    if width > height:
+        new_width = max_dimension
+        new_height = int((max_dimension / width) * height)
+    else:
+        new_height = max_dimension
+        new_width = int((max_dimension / height) * width)
+
+    return img.resize((new_width, new_height), RESAMPLE_FILTER)
+
+def convert_to_webp(input_path, output_path, webp_quality, max_dimension):
+    """Resize and convert an image to WebP format."""
+    try:
+        with Image.open(input_path) as img:
+            img_format = img.format.upper()
+
+            # Resize if necessary
+            img = resize_image(img, max_dimension)
+
+            # Enhance image contrast (optional)
+            img = ImageOps.autocontrast(img)
+
+            # Convert to WebP
+            img.save(output_path, format='WEBP', quality=webp_quality, method=6, lossless=False)
+        
+        print(f"Processed: {os.path.basename(input_path)}")
+    
+    except Exception as e:
+        print(f"Failed to process {os.path.basename(input_path)}: {e}")
+
+def batch_convert_images():
+    """Batch process images: resize and convert to WebP."""
+    if not os.path.exists(OUTPUT_FOLDER):
+        os.makedirs(OUTPUT_FOLDER)
+
+    # Gather list of image files
+    image_extensions = ('.jpg', '.jpeg', '.png')
+    image_files = [
+        os.path.join(INPUT_FOLDER, f)
+        for f in os.listdir(INPUT_FOLDER)
+        if f.lower().endswith(image_extensions)
+    ]
+
+    if not image_files:
+        print("No images found in the input directory.")
+        return
+
+    print(f"Found {len(image_files)} images. Starting processing...")
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        list(tqdm(executor.map(process_wrapper, image_files), total=len(image_files)))
+
+    print("Processing completed.")
+
+def process_wrapper(image_path):
+    """Wrapper function to process each image."""
+    filename = os.path.splitext(os.path.basename(image_path))[0] + '.webp'
+    output_path = os.path.join(OUTPUT_FOLDER, filename)
+    convert_to_webp(image_path, output_path, WEBP_QUALITY, MAX_DIMENSION)
+
+if __name__ == "__main__":
+    batch_convert_images()
