@@ -1,4 +1,55 @@
 {
+  "November 2024": {
+    "imageCount": 42,
+    "images": [
+    "assets/images/november_2024/Photo (34).jpg",
+    "assets/images/november_2024/Photo (25).jpg",
+    "assets/images/november_2024/Photo (30).jpg",
+    "assets/images/november_2024/Photo (35).jpg",
+    "assets/images/november_2024/Photo (36).jpg",
+    "assets/images/november_2024/Photo (8).jpg",
+    "assets/images/november_2024/Photo (2).jpg",
+    "assets/images/november_2024/Photo (33).jpg",
+    "assets/images/november_2024/Photo (20).jpg",
+    "assets/images/november_2024/Photo (26).jpg",
+    "assets/images/november_2024/Photo (27).jpg",
+    "assets/images/november_2024/Photo (1).jpg",
+    "assets/images/november_2024/Photo (29).jpg",
+    "assets/images/november_2024/Photo (12).jpg",
+    "assets/images/november_2024/Photo (21).jpg",
+    "assets/images/november_2024/Photo (3).jpg",
+    "assets/images/november_2024/Photo (28).jpg",
+    "assets/images/november_2024/Photo (39).jpg",
+    "assets/images/november_2024/Photo (40).jpg",
+    "assets/images/november_2024/Photo (31).jpg",
+    "assets/images/november_2024/Photo (6).jpg",
+    "assets/images/november_2024/Photo (37).jpg",
+    "assets/images/november_2024/Photo (38).jpg",
+    "assets/images/november_2024/Photo (19).jpg",
+    "assets/images/november_2024/Photo (24).jpg",
+    "assets/images/november_2024/Photo (4).jpg",
+    "assets/images/november_2024/Photo (5).jpg",
+    "assets/images/november_2024/Photo (23).jpg",
+    "assets/images/november_2024/Photo (7).jpg",
+    "assets/images/november_2024/Photo (41).jpg",
+     "assets/images/november_2024/Photo.jpg",
+    "assets/images/november_2024/Photo (10).jpg",
+    "assets/images/november_2024/Photo (11).jpg",
+    "assets/images/november_2024/Photo (22).jpg",
+    "assets/images/november_2024/Photo (13).jpg",
+    "assets/images/november_2024/Photo (14).jpg",
+    "assets/images/november_2024/Photo (15).jpg",
+    "assets/images/november_2024/Photo (16).jpg",
+    "assets/images/november_2024/Photo (17).jpg",
+    "assets/images/november_2024/Photo (18).jpg",
+    "assets/images/november_2024/Photo (32).jpg"
+
+    ],
+    "audio": [
+      "assets/music/november_2024_1.mp3"
+    ],
+    "interval": 6000
+  },
   "October 2024": {
     "imageCount": 84,
     "images": [
