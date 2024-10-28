@@ -1,6 +1,6 @@
 {
   "November 2024": {
-    "imageCount": 58,
+    "imageCount": 60,
     "images": [
     "assets/images/november_2024/Photo (14).webp",
     "assets/images/november_2024/Photo (34).webp",
@@ -9,6 +9,7 @@
     "assets/images/november_2024/Photo (32).webp",   
     "assets/images/november_2024/Photo (5).webp",
     "assets/images/november_2024/Photo (23).webp",
+    "assets/images/november_2024/Photo.jpg",
     "assets/images/november_2024/Photo (44).webp",
     "assets/images/november_2024/Photo (49).webp",
     "assets/images/november_2024/Photo (39).webp",
@@ -24,6 +25,7 @@
     "assets/images/november_2024/Photo (21).webp",
     "assets/images/november_2024/Photo (19).webp",
     "assets/images/november_2024/Photo (56).webp",
+    "assets/images/november_2024/Photo (1).jpg",
     "assets/images/november_2024/Photo (22).webp",
     "assets/images/november_2024/Photo (54).webp",
     "assets/images/november_2024/Photo (51).webp",
@@ -65,7 +67,7 @@
     "audio": [
       "assets/music/november_2024_1.mp3"
     ],
-    "interval": 6000
+    "interval": 5700
   },
   "October 2024": {
     "imageCount": 84,
