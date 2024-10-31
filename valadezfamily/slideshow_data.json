@@ -1,6 +1,6 @@
 {
   "November 2024": {
-    "imageCount": 60,
+    "imageCount": 75,
     "images": [
     "assets/images/november_2024/Photo (14).webp",
     "assets/images/november_2024/Photo (34).webp",
@@ -26,6 +26,12 @@
     "assets/images/november_2024/Photo (19).webp",
     "assets/images/november_2024/Photo (56).webp",
     "assets/images/november_2024/Photo (1).jpg",
+    "assets/images/november_2024/Photo (2).jpg",
+    "assets/images/november_2024/Photo (3).jpg",
+    "assets/images/november_2024/Photo (4).jpg",
+    "assets/images/november_2024/Photo (5).jpg",
+    "assets/images/november_2024/Photo (6).jpg",
+    "assets/images/november_2024/Photo (7).jpg",
     "assets/images/november_2024/Photo (22).webp",
     "assets/images/november_2024/Photo (54).webp",
     "assets/images/november_2024/Photo (51).webp",
@@ -58,16 +64,26 @@
     "assets/images/november_2024/Photo (16).webp",
     "assets/images/november_2024/Photo (47).webp",
     "assets/images/november_2024/Photo (41).webp",
-     "assets/images/november_2024/Photo.webp",
+    "assets/images/november_2024/Photo.webp",
     "assets/images/november_2024/Photo (10).webp",
-    "assets/images/november_2024/Photo (57).webp"
+    "assets/images/november_2024/Photo (57).webp",
+    "assets/images/november_2024/Photo.jpeg",
+    "assets/images/november_2024/Photo (1).jpeg",
+    "assets/images/november_2024/Photo (2).jpeg",
+    "assets/images/november_2024/Photo (3).jpeg",
+    "assets/images/november_2024/Photo (4).jpeg",
+    "assets/images/november_2024/Photo (5).jpeg",
+    "assets/images/november_2024/Photo (6).jpeg",
+    "assets/images/november_2024/Photo (7).jpeg",
+    "assets/images/november_2024/Photo (8).jpeg",
+    "assets/images/november_2024/Photo (9).jpeg"
 
 
     ],
     "audio": [
       "assets/music/november_2024_1.mp3"
     ],
-    "interval": 5700
+    "interval": 4533
   },
   "October 2024": {
     "imageCount": 84,
