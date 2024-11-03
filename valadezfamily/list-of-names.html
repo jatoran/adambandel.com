@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valadez Family - List of Names</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #e67e22;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --header-bg: #4a90e2;
+            --header-text-color: #fff;
+            --table-header-bg: #4a90e2;
+            --table-header-text-color: #fff;
+            --table-row-bg: #fff;
+            --table-row-bg-alt: #f9f9f9;
+            --table-border-color: #e0e0e0;
+            --font-size-header: 1.8rem;
+            --font-size-table: 1rem;
+            --padding-main: 1.5rem;
+            --padding-header: 1rem;
+            --padding-table: 0.75rem;
+            --margin-bottom: 1rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--header-text-color);
+            text-align: center;
+            padding: var(--padding-header);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: var(--font-size-header);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            color: white;
+            background-color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: var(--shadow);
+            background-color: var(--table-row-bg);
+        }
+
+        th, td {
+            padding: var(--padding-table);
+            text-align: left;
+            border-bottom: 1px solid var(--table-border-color);
+        }
+
+        th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        tr:nth-child(odd) td {
+            background-color: var(--table-row-bg-alt);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 0 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Valadez Family - List of Names</h1>
+    </header>
+
+    <main>
+        <a href="birthdays.html" class="back-link">Back to Birthdays</a>
+        <table id="namesTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Birth Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sorted names will be inserted here -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Function to fetch and render the sorted list of names
+        async function fetchAndRenderNames() {
+            try {
+                const response = await fetch('birthdays.json');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch birthdays data');
+                }
+                const birthdays = await response.json();
+
+                // Function to extract first and last names
+                function parseName(fullName) {
+                    // Remove any content within parentheses
+                    const nameWithoutParentheses = fullName.split('(')[0].trim();
+
+                    // Split the name into parts
+                    const nameParts = nameWithoutParentheses.split(' ').filter(part => part !== '');
+
+                    if (nameParts.length === 0) {
+                        return { firstName: '', lastName: '' };
+                    }
+
+                    // Assume the last word is the last name
+                    const lastName = nameParts.pop();
+                    const firstName = nameParts.join(' ');
+
+                    return { firstName, lastName };
+                }
+
+                // Sort the birthdays by Last Name, then First Name
+                birthdays.sort((a, b) => {
+                    const aParts = parseName(a.name);
+                    const bParts = parseName(b.name);
+
+                    const lastNameComparison = aParts.lastName.localeCompare(bParts.lastName);
+                    if (lastNameComparison !== 0) {
+                        return lastNameComparison;
+                    }
+                    return aParts.firstName.localeCompare(bParts.firstName);
+                });
+
+                const tbody = document.querySelector('#namesTable tbody');
+
+                // Populate the table with sorted names
+                birthdays.forEach(person => {
+                    const { firstName, lastName } = parseName(person.name);
+                    const formattedName = lastName && firstName ? `${lastName}, ${firstName}` : person.name;
+
+                    const tr = document.createElement('tr');
+
+                    const nameTd = document.createElement('td');
+                    nameTd.textContent = formattedName;
+                    tr.appendChild(nameTd);
+
+                    const dateTd = document.createElement('td');
+                    // Format the date as Month Day (optional)
+                    const [month, day] = person.date.split('-');
+                    const dateObj = new Date(2000, parseInt(month) - 1, parseInt(day)); // Year is arbitrary
+                    const options = { month: 'long', day: 'numeric' };
+                    const formattedDate = dateObj.toLocaleDateString('en-US', options);
+                    dateTd.textContent = formattedDate;
+                    tr.appendChild(dateTd);
+
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error fetching or rendering names:', error);
+                const tbody = document.querySelector('#namesTable tbody');
+                tbody.innerHTML = '<tr><td colspan="2">Error loading names. Please try again later.</td></tr>';
+            }
+        }
+
+        fetchAndRenderNames();
+    </script>
+</body>
+</html>
