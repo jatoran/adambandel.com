@@ -1,6 +1,6 @@
 {
   "December 2024": {
-    "imageCount": 64,
+    "imageCount": 69,
     "images": [
 "assets/images/december_2024/Photo (23).webp",
 "assets/images/december_2024/Photo (54).webp",
@@ -9,6 +9,7 @@
 "assets/images/december_2024/Photo (53).webp",
 "assets/images/december_2024/Photo (52).webp",
 "assets/images/december_2024/Photo (41).webp",
+"assets/images/december_2024/Photo.jpg",
 "assets/images/december_2024/Photo (24).webp",
 "assets/images/december_2024/Photo (35).webp",
 "assets/images/december_2024/Photo (2).webp",
@@ -21,6 +22,7 @@
 "assets/images/december_2024/Photo (36).webp",
 "assets/images/december_2024/Photo (55).webp",
 "assets/images/december_2024/Photo (9).webp",
+"assets/images/december_2024/Photo (1).jpg",
 "assets/images/december_2024/Photo (22).webp",
 "assets/images/december_2024/Photo (25).webp",
 "assets/images/december_2024/Photo (26).webp",
@@ -30,6 +32,7 @@
 "assets/images/december_2024/Photo.webp",
 "assets/images/december_2024/Photo (4).webp",
 "assets/images/december_2024/Photo (57).webp",
+"assets/images/december_2024/Photo (2).jpg",
 "assets/images/december_2024/Photo (31).webp",
 "assets/images/december_2024/Photo (58).webp",
 "assets/images/december_2024/Photo (30).webp",
@@ -39,6 +42,7 @@
 "assets/images/december_2024/Photo (20).webp",
 "assets/images/december_2024/Photo (47).webp",
 "assets/images/december_2024/Photo (28).webp",
+"assets/images/december_2024/Photo (3).jpg",
 "assets/images/december_2024/Photo (42).webp",
 "assets/images/december_2024/Photo (50).webp",
 "assets/images/december_2024/Photo (1).webp",
@@ -49,6 +53,7 @@
 "assets/images/december_2024/Photo (33).webp",
 "assets/images/december_2024/Photo (34).webp",
 "assets/images/december_2024/Photo (62).webp",
+"assets/images/december_2024/Photo (4).jpg",
 "assets/images/december_2024/Photo (43).webp",
 "assets/images/december_2024/Photo (44).webp",
 "assets/images/december_2024/Photo (21).webp",
@@ -73,7 +78,7 @@
     "audio": [
       "assets/music/december_2024_1.mp3"
     ],
-    "interval": 3250
+    "interval": 3014
   },
   "November 2024": {
     "imageCount": 75,
