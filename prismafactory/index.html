@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>ASCII Factory Prototype</title>
-    <!-- Example of including a web font (optional) -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
-      rel="stylesheet"
-    />
-    <script type="module" crossorigin src="/prismafactory/assets/index-C5lxYTPB.js"></script>
-    <link rel="stylesheet" crossorigin href="/prismafactory/assets/index-4ctEzrUt.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>Prismactory Prototype - Modularized</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Prismactory Prototype - Modularized</h1>
+
+  <!-- Simple panel for inventory (iron) just for completeness -->
+  <div>
+    <span id="inventoryDisplay">Iron: 0/100</span>
+  </div>
+
+  <!-- Action selection (Mine / Remove / Conveyor / Extractor / Processor) -->
+  <div class="toolbar">
+    <strong>Action:</strong>
+    <label><input type="radio" name="action" value="mine" checked>Mine</label>
+    <label><input type="radio" name="action" value="remove">Remove Building</label>
+    <label><input type="radio" name="action" value="conveyor">Conveyor</label>
+    <label><input type="radio" name="action" value="extractor">Extractor</label>
+    <label><input type="radio" name="action" value="processor">Processor</label>
+    <label><input type="radio" name="action" value="accumulator">Accumulator</label>
+    <label><input type="radio" name="action" value="powerPole">Power Pole</label>
+  </div>
+
+  <!-- Direction selection for conveyors/extractors/processors -->
+  <div class="toolbar">
+    <strong>Output Direction:</strong>
+    <label><input type="radio" name="direction" value="up">Up</label>
+    <label><input type="radio" name="direction" value="down">Down</label>
+    <label><input type="radio" name="direction" value="left">Left</label>
+    <label><input type="radio" name="direction" value="right" checked>Right</label>
+  </div>
+
+  <!-- The game grid -->
+  <div id="grid"></div>
+
+  <!-- Load our JS modules -->
+  <script type="module" src="main.js"></script>
+</body>
 </html>

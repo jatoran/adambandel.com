@@ -1,48 +1,108 @@
 body {
+    background: #111;
+    color: #eee;
+    font-family: monospace;
     margin: 0;
-    padding: 0;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #000000; 
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-#app {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
+    padding: 0 1rem;
+  }
+  h1 {
+    color: #f0f;
+  }
+  
+  /* Grid container */
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(10, 32px);
+    grid-template-rows: repeat(10, 32px);
+    gap: 2px;
+    margin-top: 1rem;
+    user-select: none;
+  }
+  
+  /* Each cell in the grid */
+  .cell {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #444;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
+    justify-content: center;
+    position: relative;
+    font-size: 0.7rem;
+    transition: background 0.1s;
+  }
+  
+  /* Base backgrounds */
+  .empty {
+    background: #222;
+  }
+  .source {
+    background: #803380; /* Purple-ish for the source */
+  }
+  .conveyor {
+    background: #333; /* Dark grey for conveyor */
+  }
+  .extractor {
+    background: #9966cc; /* Light purple */
+  }
+  .processor {
+    background: #cc6600; /* Orange-ish */
+  }
+  .resource-node {
+    background: #228B22; /* Green for resource node */
+  }
+  
+  /* Player cell highlight */
+  .player-cell {
+    outline: 2px solid #fff; /* White border to show the player */
+  }
+  
+  /* Item indicator: small circle. We'll color-code raw vs processed */
+  .item-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .item-raw {
+    background: #ff0; /* yellow */
+  }
+  .item-processed {
+    background: cyan;
+  }
+  
+  /* Direction arrow overlay for conveyors, extractors, processors */
+  .arrow {
+    color: #0ff;
+    pointer-events: none;
+  }
+  
+  /* Interaction range highlight */
+  .in-range {
+    box-shadow: 0 0 0 2px rgba(255, 255, 0, 0.2) inset;
+  }
+  
+  /* Toolbar stuff */
+  .toolbar {
+    margin-top: 0.5rem;
+  }
+  .toolbar label {
+    margin-right: 1rem;
+  }
+  .toolbar input {
+    margin-right: 0.25rem;
+  }
+  
 
-.spritePosition {
-    margin: 10px 0 0 10px;
-    font-size: 0.8em;
-}
-
-.button {
-    width: 140px;
-    margin: 10px;
-    padding: 10px;
-    background-color: #000000;
-    color: rgba(255, 255, 255, 0.87);
-    border: 1px solid rgba(255, 255, 255, 0.87);
-    cursor: pointer;
-    transition: all 0.3s;
-
-    &:hover {
-        border: 1px solid #0ec3c9;
-        color: #0ec3c9;
-    }
-
-    &:active {
-        background-color: #0ec3c9;
-    }
-
-    /* Disabled styles */
-    &:disabled {
-        cursor: not-allowed;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: rgba(255, 255, 255, 0.3);
-    }
-}
+  .accumulator {
+    background: #bb33aa; /* pinkish / purple */
+  }
+  
+  .powerPole {
+    background: #555; /* darker grey for poles */
+  }
+  
+  /* If you want to highlight powered cells with a faint glow: */
+  .powered-cell {
+    box-shadow: inset 0 0 6px 2px rgba(0,255,255,0.3);
+  }
