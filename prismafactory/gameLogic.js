@@ -37,7 +37,7 @@ import {
      */
     init() {
       // 1) Example “source” spawner update (every 1 second)
-      setInterval(() => this.updateSource(), 1000);
+      // setInterval(() => this.updateSource(), 1000);
   
       // 2) Main factory logic loop (power checks, building logic, item movement)
       setInterval(() => {
@@ -65,28 +65,28 @@ import {
     /**
      * Example spawner: places a “raw” item at [0,1] if empty, purely for testing.
      */
-    updateSource() {
-      const { grid } = this.state;
-      const sourceCell = grid[0][0];
-      const targetRow = 0;
-      const targetCol = 1;
+    // updateSource() {
+    //   const { grid } = this.state;
+    //   const sourceCell = grid[0][0];
+    //   const targetRow = 0;
+    //   const targetCol = 1;
   
-      if (targetCol < this.state.gridSize) {
-        const targetCell = grid[targetRow][targetCol];
-        if (!this.hasAnyItem(targetCell)) {
-          // place a raw item
-          if (isBuilding(targetCell)) {
-            if (!targetCell.buildingState.item) {
-              targetCell.buildingState.item = { type: 'raw', id: Date.now() };
-            }
-          } else {
-            if (!targetCell.item) {
-              targetCell.item = { type: 'raw', id: Date.now() };
-            }
-          }
-        }
-      }
-    }
+    //   if (targetCol < this.state.gridSize) {
+    //     const targetCell = grid[targetRow][targetCol];
+    //     if (!this.hasAnyItem(targetCell)) {
+    //       // place a raw item
+    //       if (isBuilding(targetCell)) {
+    //         if (!targetCell.buildingState.item) {
+    //           targetCell.buildingState.item = { type: 'raw', id: Date.now() };
+    //         }
+    //       } else {
+    //         if (!targetCell.item) {
+    //           targetCell.item = { type: 'raw', id: Date.now() };
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   
     updatePortals() {
         const { gridSize, grid } = this.state;

@@ -40,7 +40,7 @@ export class GameState {
       }
   
       // Place source
-      this.grid[0][0].type = 'source';
+      // this.grid[0][0].type = 'source';
   
       // Place resource nodes (renamed to ironOre)
       this.grid[2][2].type = 'resource-node';
