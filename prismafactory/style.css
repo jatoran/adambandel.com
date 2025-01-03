@@ -1,6 +1,14 @@
+/* 
+  Neon ASCII-Style Refactor
+  =========================
+  - Retains the same DOM structure, classes, and layout.
+  - Uses ASCII characters, neon colors, and glow effects.
+  - Does not break any game functionality.
+*/
+
 body {
-    background: #111;
-    color: #eee;
+    background: #000;
+    color: #0ff;
     font-family: monospace;
     margin: 0;
     padding: 0 1rem;
@@ -9,7 +17,7 @@ body {
     color: #f0f;
   }
   
-  /* Grid container */
+  /* Grid container stays 10x10, each cell is 32px. */
   #grid {
     display: grid;
     grid-template-columns: repeat(10, 32px);
@@ -19,110 +27,199 @@ body {
     user-select: none;
   }
   
-  /* Each cell in the grid */
+  /* Each cell in the grid. 
+     We'll position ASCII text in the center using :before. */
   .cell {
+    position: relative;
     width: 32px;
     height: 32px;
-    border: 1px solid #444;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-size: 0.7rem;
-    transition: background 0.1s;
+    background: #000;
+    border: 1px solid #333;
+    box-sizing: border-box;
+    text-align: center;
+    overflow: hidden;
+    /* We rely on .cell:before or child elements for ASCII. */
   }
   
-  /* Base backgrounds */
-  .empty {
-    background: #222;
-  }
-  .source {
-    background: #803380; /* Purple-ish for the source */
-  }
-  .conveyor {
-    background: #333; /* Dark grey for conveyor */
-  }
-  .extractor {
-    background: #9966cc; /* Light purple */
-  }
-  .processor {
-    background: #cc6600; /* Orange-ish */
-  }
-  .resource-node {
-    background: #228B22; /* Green for resource node */
-  }
-  
-  /* Player cell highlight */
-  .player-cell {
-    outline: 2px solid #fff; /* White border to show the player */
-  }
-  
-  /* Item indicator: small circle. We'll color-code raw vs processed */
-  .item-indicator {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
+  /* Default ASCII placeholder for any cell that doesn't override. */
+  .cell::before {
+    content: ' ';
     position: absolute;
-  }
-  .item-raw {
-    background: #ff0; /* yellow */
-  }
-  .item-processed {
-    background: cyan;
-  }
-  /* Final item indicator: purple or magenta, for instance */
-  .item-final {
-    background: magenta;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #333;
+    font-size: 1rem;
+    text-shadow: none;
   }
   
-  /* Direction arrow overlay for conveyors, extractors, processors */
-  .arrow {
+  /* 
+    BUILDINGS / SPECIAL CELL TYPES
+    ===============================
+    We replace background colors with ASCII + neon text.
+  */
+  
+  /* Empty */
+  .empty::before {
+    content: '.';             /* A faint dot for empty space */
+    color: #222;
+  }
+  
+  /* Source cell */
+  .source::before {
+    content: 'S';
+    color: #f0f;
+    text-shadow: 0 0 5px #f0f;
+  }
+  
+  /* Resource node */
+  .resource-node::before {
+    content: 'R'; 
+    color: #0f0;
+    text-shadow: 0 0 5px #0f0;
+  }
+  
+  /* Conveyor */
+  .conveyor::before {
+    content: '=';
     color: #0ff;
+    text-shadow: 0 0 5px #0ff;
+  }
+  
+  /* Extractor */
+  .extractor::before {
+    content: 'E';
+    color: #ff0;
+    text-shadow: 0 0 5px #ff0;
+  }
+  
+  /* Processor */
+  .processor::before {
+    content: 'P';
+    color: #f0f;
+    text-shadow: 0 0 5px #f0f;
+  }
+  
+  /* Assembler */
+  .assembler::before {
+    content: 'A';
+    color: #ff6600;
+    text-shadow: 0 0 5px #ff6600;
+  }
+  
+  /* Storage */
+  .storage::before {
+    content: 'S';
+    color: #66f;
+    text-shadow: 0 0 5px #66f;
+  }
+  
+  /* Merger */
+  .merger::before {
+    content: 'M';
+    color: #44f;
+    text-shadow: 0 0 5px #44f;
+  }
+  
+  /* Splitter */
+  .splitter::before {
+    content: 'X';
+    color: #f44;
+    text-shadow: 0 0 5px #f44;
+  }
+  
+  /* Accumulator */
+  .accumulator::before {
+    content: 'U';
+    color: #f0f;
+    text-shadow: 0 0 6px #f0f;
+  }
+  
+  /* Power Pole */
+  .powerPole::before {
+    content: '|';
+    color: #fff;
+    text-shadow: 0 0 5px #fff;
+  }
+  
+  /* Portal */
+  .portal::before {
+    content: 'O';
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff;
+  }
+  
+  /* 
+    SPECIAL HIGHLIGHTS / EFFECTS
+    ============================
+  */
+  
+  /* Player cell gets a white border */
+  .player-cell {
+    outline: 2px solid #fff;
+  }
+  
+  /* If you want the cell to glow when powered, we apply a neon glow. */
+  .powered-cell {
+    box-shadow: inset 0 0 10px 2px rgba(0,255,255,0.5);
+  }
+  
+  /* When within player’s interaction range */
+  .in-range {
+    box-shadow: inset 0 0 5px 2px rgba(255,255,0,0.2);
+  }
+  
+  /* 
+    ITEM INDICATORS 
+    ===============
+    The game appends a child <div class="item-indicator item-raw|item-processed|item-final">.
+    We'll style them with ASCII letters in neon colors.
+  */
+  .item-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
     pointer-events: none;
   }
   
-  /* Interaction range highlight */
-  .in-range {
-    box-shadow: 0 0 0 2px rgba(255, 255, 0, 0.2) inset;
+  /* Default ASCII for item indicator (fallback) */
+  .item-indicator::before {
+    content: '?';
+    color: #ccc;
+    text-shadow: 0 0 4px #ccc;
   }
   
-  /* Toolbar stuff */
-  .toolbar {
-    margin-top: 0.5rem;
-  }
-  .toolbar label {
-    margin-right: 1rem;
-  }
-  .toolbar input {
-    margin-right: 0.25rem;
+  /* Raw item -> 'r' in bright yellow */
+  .item-raw::before {
+    content: 'r';
+    color: #ff0;
+    text-shadow: 0 0 5px #ff0;
   }
   
-
-  .accumulator {
-    background: #bb33aa; /* pinkish / purple */
+  /* Processed item -> 'p' in cyan */
+  .item-processed::before {
+    content: 'p';
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff;
   }
   
-  .powerPole {
-    background: #555; /* darker grey for poles */
+  /* Final item -> 'F' in magenta */
+  .item-final::before {
+    content: 'F';
+    color: #f0f;
+    text-shadow: 0 0 5px #f0f;
   }
   
-  /* If you want to highlight powered cells with a faint glow: */
-  .powered-cell {
-    box-shadow: inset 0 0 6px 2px rgba(0,255,255,0.3);
-  }
-
-  .assembler {
-    background: #6699cc; /* A light blue for the assembler */
-  }
-  
-  .storage {
-    background: #666; /* Some medium gray? */
-  }
-
+  /*
+    For storages, the game appends a nested container with multiple .item-indicator
+    We keep them small icons, each an ASCII letter.
+  */
   .storage-items {
     position: absolute;
-    top: 2px; 
-    left: 2px; 
+    top: 2px;
+    left: 2px;
     right: 2px;
     bottom: 2px;
     display: flex;
@@ -131,53 +228,84 @@ body {
     justify-content: flex-start;
   }
   .storage-items .item-indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
+    width: 12px;
+    height: 12px;
+    font-size: 0.7rem;
   }
   
-
-  .selected-action {
-    outline: 2px solid yellow;
+  /* 
+    The arrow is appended as a child .arrow inside the cell. 
+    We'll color it neon yellow for direction indicators.
+  */
+  .arrow {
+    color: #ff0;
+    text-shadow: 0 0 5px #ff0;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-weight: bold;
+    pointer-events: none;
   }
-
+  
+  /* 
+    BLUEPRINT PREVIEW
+    =================
+    This is the translucent overlay that appears when hovering with a building selected.
+  */
   .blueprint-preview {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    opacity: 0.3; /* translucent overlay */
-    pointer-events: none; /* so clicks pass through to the cell */
+    background: transparent;
+    pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-
+  
+  /* We'll show a large ASCII plus arrow for the blueprint */
+  .blueprint-preview::before {
+    content: attr(class);
+    /* We intentionally do not rely on "class" for content in real code, 
+       but to keep a purely ASCII aesthetic demonstration, 
+       you could refine. For simplicity, let's just do a placeholder. */
+    content: ''; /* Fallback: no text. 
+                   If you'd like, you can do content: '?' or something here. */
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff;
+    font-size: 1.2rem;
+  }
+  
+  /* The arrow within a blueprint preview is also neon. */
   .blueprint-preview .arrow {
-    color: #ff0;                /* Bright yellow */
-    font-size: 1.5rem;          /* Bigger font */
-    font-weight: bold;          
-    text-shadow: 0 0 5px #ff0;  /* A glow-like effect */
-  }
-
-  .merger {
-    background-color: #4444aa; /* or any color you like */
+    color: #0ff !important;
+    text-shadow: 0 0 5px #0ff !important;
   }
   
-  .splitter {
-    background-color: #aa4444;
+  /* 
+    ACTION BUTTONS / TOOLBAR
+    =========================
+  */
+  .toolbar {
+    margin-top: 0.5rem;
   }
   
-
-  .portal {
-    background-color: #006699; /* Some teal color for the portal */
-    box-shadow: inset 0 0 8px 2px rgba(0, 255, 255, 0.5);
+  .selected-action {
+    outline: 2px solid #ff0;
   }
-
+  
+  /*
+    MESSAGE LOG
+    ===========
+  */
   .message-log {
     margin-top: 1rem;
-    max-height: 100px;   /* or any size you like */
+    max-height: 100px;
     overflow-y: auto;
     border: 1px solid #555;
     padding: 4px;
     font-size: 0.9rem;
-    background: #222;
+    background: #111;
+    color: #0ff;
+    text-shadow: 0 0 3px #0ff;
   }
+  
