@@ -1,11 +1,14 @@
 /* 
-  Neon ASCII-Style Refactor
-  =========================
-  - Retains the same DOM structure, classes, and layout.
-  - Uses ASCII characters, neon colors, and glow effects.
-  - Does not break any game functionality.
+  style.css
+  =========
+  - Player's in-range cells have a dashed outline (no filled highlight).
+  - Player cell is marked by an '@' ASCII overlay (instead of white outline).
+  - Energy-region has distinct styling (ERG).
+  - Powered cells still have their glow.
+  - All building & resource ASCII styles are preserved.
 */
 
+/* Base page styling */
 body {
     background: #000;
     color: #0ff;
@@ -17,7 +20,7 @@ body {
     color: #f0f;
   }
   
-  /* Grid container stays 10x10, each cell is 32px. */
+  /* The game grid: 10×10 cells, 32px each. */
   #grid {
     display: grid;
     grid-template-columns: repeat(10, 32px);
@@ -27,8 +30,7 @@ body {
     user-select: none;
   }
   
-  /* Each cell in the grid. 
-     We'll position ASCII text in the center using :before. */
+  /* Each cell is 32×32. Default black bg and minimal ASCII placeholder. */
   .cell {
     position: relative;
     width: 32px;
@@ -36,14 +38,11 @@ body {
     background: #000;
     border: 1px solid #333;
     box-sizing: border-box;
-    text-align: center;
     overflow: hidden;
-    /* We rely on .cell:before or child elements for ASCII. */
+    text-align: center;
   }
-  
-  /* Default ASCII placeholder for any cell that doesn't override. */
   .cell::before {
-    content: ' ';
+    content: ' '; /* fallback for unstyled cells */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -51,132 +50,157 @@ body {
     color: #333;
     font-size: 1rem;
     text-shadow: none;
+    z-index: 0;
+  }
+  
+  /* Player's location: show an ASCII '@' overlay instead of a white outline. */
+  .player-cell {
+    outline: none !important; /* remove any old outline */
+    position: relative;
+  }
+  .player-cell::after {
+    content: '@';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    text-shadow: 0 0 5px #fff;
+    font-size: 1.2rem;
+    z-index: 10;
+  }
+  
+  /* Cells in player’s interaction range now get a dashed outline (no fill). */
+  .in-range {
+    /* box-shadow: none !important; */
+    outline: 2px dashed rgba(255, 255, 0, 0.5) !important;
+  }
+  
+  /* Powered cells keep an internal neon glow. */
+  .powered-cell {
+    box-shadow: inset 0 0 10px 2px rgba(0,255,255,0.5);
   }
   
   /* 
-    BUILDINGS / SPECIAL CELL TYPES
-    ===============================
-    We replace background colors with ASCII + neon text.
+    ENERGY REGION 
+    Shows "ERG" in bright yellow if the cell type is "energy-region" 
+    (before placing an accumulator, etc.).
+  */
+  .energy-region::before {
+    content: 'ERG';
+    color: #ff0;
+    text-shadow: 0 0 5px #ff0;
+    z-index: 0;
+  }
+  
+  /* 
+    BUILDING & SPECIAL CELL ASCII 
+    Each building type has unique text, color, and glow.
   */
   
-  /* Empty */
+  /* Empty cells */
   .empty::before {
-    content: '.';             /* A faint dot for empty space */
+    content: '.';
     color: #222;
   }
   
-  /* Source cell */
+  /* Source cell -> 'S' */
   .source::before {
     content: 'S';
     color: #f0f;
     text-shadow: 0 0 5px #f0f;
   }
   
-  /* Resource node */
+  /* Resource-node -> 'R' */
   .resource-node::before {
-    content: 'R'; 
+    content: 'R';
     color: #0f0;
     text-shadow: 0 0 5px #0f0;
   }
   
-  /* Conveyor */
+  /* Conveyor -> '>>>' (shown behind items). */
   .conveyor::before {
-    content: '=';
+    content: '>>>';
     color: #0ff;
-    text-shadow: 0 0 5px #0ff;
+    text-shadow: 0 0 3px #0ff, 0 0 5px #0ff;
+    z-index: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   
-  /* Extractor */
+  /* Extractor -> 'EXT' */
   .extractor::before {
-    content: 'E';
+    content: 'EXT';
     color: #ff0;
     text-shadow: 0 0 5px #ff0;
   }
   
-  /* Processor */
+  /* Processor -> 'PRC' */
   .processor::before {
-    content: 'P';
-    color: #f0f;
-    text-shadow: 0 0 5px #f0f;
-  }
-  
-  /* Assembler */
-  .assembler::before {
-    content: 'A';
-    color: #ff6600;
-    text-shadow: 0 0 5px #ff6600;
-  }
-  
-  /* Storage */
-  .storage::before {
-    content: 'S';
-    color: #66f;
-    text-shadow: 0 0 5px #66f;
-  }
-  
-  /* Merger */
-  .merger::before {
-    content: 'M';
-    color: #44f;
-    text-shadow: 0 0 5px #44f;
-  }
-  
-  /* Splitter */
-  .splitter::before {
-    content: 'X';
-    color: #f44;
-    text-shadow: 0 0 5px #f44;
-  }
-  
-  /* Accumulator */
-  .accumulator::before {
-    content: 'U';
-    color: #f0f;
-    text-shadow: 0 0 6px #f0f;
-  }
-  
-  /* Power Pole */
-  .powerPole::before {
-    content: '|';
-    color: #fff;
-    text-shadow: 0 0 5px #fff;
-  }
-  
-  /* Portal */
-  .portal::before {
-    content: 'O';
+    content: 'PRC';
     color: #0ff;
     text-shadow: 0 0 5px #0ff;
   }
   
-  /* 
-    SPECIAL HIGHLIGHTS / EFFECTS
-    ============================
-  */
-  
-  /* Player cell gets a white border */
-  .player-cell {
-    outline: 2px solid #fff;
+  /* Assembler -> 'ASM' */
+  .assembler::before {
+    content: 'ASM';
+    color: #ff6600;
+    text-shadow: 0 0 5px #ff6600;
   }
   
-  /* If you want the cell to glow when powered, we apply a neon glow. */
-  .powered-cell {
-    box-shadow: inset 0 0 10px 2px rgba(0,255,255,0.5);
+  /* Storage -> 'STG' */
+  .storage::before {
+    content: 'STG';
+    color: #66f;
+    text-shadow: 0 0 5px #66f;
   }
   
-  /* When within player’s interaction range */
-  .in-range {
-    box-shadow: inset 0 0 5px 2px rgba(255,255,0,0.2);
+  /* Merger -> 'MRG' */
+  .merger::before {
+    content: 'MRG';
+    color: #44f;
+    text-shadow: 0 0 5px #44f;
   }
   
-  /* 
-    ITEM INDICATORS 
-    ===============
-    The game appends a child <div class="item-indicator item-raw|item-processed|item-final">.
-    We'll style them with ASCII letters in neon colors.
+  /* Splitter -> 'SPL' */
+  .splitter::before {
+    content: 'SPL';
+    color: #f44;
+    text-shadow: 0 0 5px #f44;
+  }
+  
+  /* Accumulator -> 'ACC' */
+  .accumulator::before {
+    content: 'ACC';
+    color: #f0f;
+    text-shadow: 0 0 6px #f0f;
+  }
+  
+  /* PowerPole -> 'POL' */
+  .powerPole::before {
+    content: 'POL';
+    color: #fff;
+    text-shadow: 0 0 5px #fff;
+  }
+  
+  /* Portal -> 'POR' */
+  .portal::before {
+    content: 'POR';
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff;
+  }
+  
+  /*
+    ITEM INDICATORS
+    The game appends <div class="item-indicator ..."> for items.
+    We overlay ASCII letters (r, p, F, etc.) in neon colors.
   */
   .item-indicator {
     position: absolute;
+    z-index: 1; /* above building text */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -184,7 +208,7 @@ body {
     pointer-events: none;
   }
   
-  /* Default ASCII for item indicator (fallback) */
+  /* Default fallback item symbol: '?' */
   .item-indicator::before {
     content: '?';
     color: #ccc;
@@ -195,26 +219,53 @@ body {
   .item-raw::before {
     content: 'r';
     color: #ff0;
-    text-shadow: 0 0 5px #ff0;
+    text-shadow: 0 0 4px #ff0;
   }
   
   /* Processed item -> 'p' in cyan */
   .item-processed::before {
     content: 'p';
     color: #0ff;
-    text-shadow: 0 0 5px #0ff;
+    text-shadow: 0 0 4px #0ff;
   }
   
   /* Final item -> 'F' in magenta */
   .item-final::before {
     content: 'F';
     color: #f0f;
-    text-shadow: 0 0 5px #f0f;
+    text-shadow: 0 0 4px #f0f;
+  }
+  
+  /* OPTIONAL: distinct resource styling if code sets these classes. */
+  .item-ironOre::before {
+    content: 'Fe';
+    color: #aaa;
+    text-shadow: 0 0 4px #aaa;
+  }
+  .item-ironPlate::before {
+    content: '[Fe]';
+    color: #888;
+    text-shadow: 0 0 4px #888;
+  }
+  .item-ironGear::before {
+    content: 'Gear';
+    color: #ff0;
+    text-shadow: 0 0 5px #ff0;
+  }
+  .item-silver::before {
+    content: 'Ag';
+    color: #ddd;
+    text-shadow: 0 0 5px #ddd;
+  }
+  .item-copper::before {
+    content: 'Cu';
+    color: #fa0;
+    text-shadow: 0 0 5px #fa0;
   }
   
   /*
-    For storages, the game appends a nested container with multiple .item-indicator
-    We keep them small icons, each an ASCII letter.
+    STORAGE-ITEMS 
+    (multiple .item-indicator children in one cell)
   */
   .storage-items {
     position: absolute;
@@ -231,11 +282,13 @@ body {
     width: 12px;
     height: 12px;
     font-size: 0.7rem;
+    z-index: 1;
+    margin: 1px;
   }
   
-  /* 
-    The arrow is appended as a child .arrow inside the cell. 
-    We'll color it neon yellow for direction indicators.
+  /*
+    ARROW INDICATORS 
+    The game appends .arrow to indicate conveyor/building direction.
   */
   .arrow {
     color: #ff0;
@@ -245,57 +298,40 @@ body {
     right: 2px;
     font-weight: bold;
     pointer-events: none;
+    z-index: 2;
   }
   
-  /* 
-    BLUEPRINT PREVIEW
-    =================
-    This is the translucent overlay that appears when hovering with a building selected.
+  /*
+    BLUEPRINT PREVIEW 
+    A translucent overlay shown when hovering + selecting a building action.
   */
   .blueprint-preview {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: transparent;
+    background: rgba(0, 255, 255, 0.1);
     pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
   }
-  
-  /* We'll show a large ASCII plus arrow for the blueprint */
-  .blueprint-preview::before {
-    content: attr(class);
-    /* We intentionally do not rely on "class" for content in real code, 
-       but to keep a purely ASCII aesthetic demonstration, 
-       you could refine. For simplicity, let's just do a placeholder. */
-    content: ''; /* Fallback: no text. 
-                   If you'd like, you can do content: '?' or something here. */
-    color: #0ff;
-    text-shadow: 0 0 5px #0ff;
-    font-size: 1.2rem;
-  }
-  
-  /* The arrow within a blueprint preview is also neon. */
   .blueprint-preview .arrow {
     color: #0ff !important;
     text-shadow: 0 0 5px #0ff !important;
   }
   
-  /* 
-    ACTION BUTTONS / TOOLBAR
-    =========================
+  /*
+    TOOLBAR & ACTION BUTTONS
   */
   .toolbar {
     margin-top: 0.5rem;
   }
-  
   .selected-action {
     outline: 2px solid #ff0;
   }
   
   /*
     MESSAGE LOG
-    ===========
   */
   .message-log {
     margin-top: 1rem;

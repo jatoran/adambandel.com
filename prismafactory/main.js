@@ -19,9 +19,9 @@ const ui = new GameUI(state);
 ui.init();   // builds the grid DOM
 
 // Create the Inventory UI
-const inventoryUI = new InventoryUI(state, ui);
+const inventoryUI = new InventoryUI(state);
 inventoryUI.init();
-ui.inventoryUI = inventoryUI;
+ui.inventoryUI = inventoryUI;  // link them
 
 // Create the logic
 const logic = new GameLogic(state, ui);
