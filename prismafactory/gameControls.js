@@ -286,7 +286,7 @@ export class GameControls {
         cell.type = 'conveyor';
         cell.outputDir = this.currentDirection;
         cell.buildingState = { item: null };
-        reduceAutosaveInterval(); // trigger autosave frequency change
+        reduceAutosaveInterval(this.state);  // trigger autosave frequency change
         break;
       case 'extractor':
         if (cell.type !== 'resource-node') {
@@ -299,19 +299,19 @@ export class GameControls {
           item: null,
           lastSpawnTime: Date.now(),
         };
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'processor':
         cell.type = 'processor';
         cell.outputDir = this.currentDirection;
         cell.buildingState = { item: null };
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'assembler':
         cell.type = 'assembler';
         cell.outputDir = this.currentDirection;
         cell.buildingState = { item: null };
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'accumulator':
         if (!cell.energyRegion) {
@@ -320,12 +320,12 @@ export class GameControls {
         }
         cell.type = 'accumulator';
         cell.buildingState = {};
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'powerPole':
         cell.type = 'powerPole';
         cell.buildingState = {};
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'storage':
         cell.type = 'storage';
@@ -333,7 +333,7 @@ export class GameControls {
           storedItems: [],
           capacity: 3
         };
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'merger':
         cell.type = 'merger';
@@ -342,7 +342,7 @@ export class GameControls {
           inputs: [],
           output: null,
         };
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'splitter':
         cell.type = 'splitter';
@@ -352,7 +352,7 @@ export class GameControls {
           currentOutputIndex: 0,
           input: null
         };
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       case 'portal':
         cell.type = 'portal';
@@ -360,7 +360,7 @@ export class GameControls {
           storedItems: [],
           capacity: 999
         };
-        reduceAutosaveInterval();
+        reduceAutosaveInterval(this.state); 
         break;
       default:
         this.ui.showFeedback("Unknown action: ", action);

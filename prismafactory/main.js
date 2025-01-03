@@ -7,6 +7,7 @@ import { InventoryUI } from './inventoryUI.js';
 import { saveToLocalStorage, loadFromLocalStorage, initAutoSave } from './saveLoad.js';
 
 const state = new GameState();
+window._gameState = state; 
 
 // Attempt to load
 const success = loadFromLocalStorage(state);
@@ -19,7 +20,7 @@ const ui = new GameUI(state);
 ui.init();   // builds the grid DOM
 
 // Create the Inventory UI
-const inventoryUI = new InventoryUI(state);
+const inventoryUI = new InventoryUI(state, ui);
 inventoryUI.init();
 ui.inventoryUI = inventoryUI;  // link them
 
