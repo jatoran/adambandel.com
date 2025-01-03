@@ -149,6 +149,9 @@ export class GameControls {
       if (e.key.toLowerCase() === 'p') {
         this.setCurrentAction('splitter');
       }
+      if (e.key.toLowerCase() === 'o') {
+        this.setCurrentAction('portal');
+      }
 
       // Toggle crafting panel
       if (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'i') {
