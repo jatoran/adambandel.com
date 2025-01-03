@@ -116,6 +116,11 @@ export class GameUI {
       return;
     }
 
+    // Destroy any item on the ground before placing our new building
+    if (cell.item) {
+        cell.item = null;
+    }
+
     const dir = document.querySelector('input[name="direction"]:checked')?.value || 'right';
 
     if (action === 'accumulator') {
