@@ -70,6 +70,10 @@ body {
   .item-processed {
     background: cyan;
   }
+  /* Final item indicator: purple or magenta, for instance */
+  .item-final {
+    background: magenta;
+  }
   
   /* Direction arrow overlay for conveyors, extractors, processors */
   .arrow {
@@ -105,4 +109,44 @@ body {
   /* If you want to highlight powered cells with a faint glow: */
   .powered-cell {
     box-shadow: inset 0 0 6px 2px rgba(0,255,255,0.3);
+  }
+
+  .assembler {
+    background: #6699cc; /* A light blue for the assembler */
+  }
+  
+  .storage {
+    background: #666; /* Some medium gray? */
+  }
+
+  .storage-items {
+    position: absolute;
+    top: 2px; 
+    left: 2px; 
+    right: 2px;
+    bottom: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .storage-items .item-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+  
+
+  .selected-action {
+    outline: 2px solid yellow;
+  }
+
+  .blueprint-preview {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.3; /* translucent overlay */
+    pointer-events: none; /* so clicks pass through to the cell */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }

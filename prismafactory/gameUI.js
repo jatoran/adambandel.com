@@ -6,11 +6,9 @@ import { isBuilding } from './structures.js';
 export class GameUI {
   /**
    * @param {GameState} state - The shared game state
-   * @param {GameLogic} logic - The game logic instance (for flows, updates)
    */
-  constructor(state, logic) {
+  constructor(state) {
     this.state = state;
-    this.logic = logic;
 
     this.gridContainer = document.getElementById('grid');
     this.inventoryDisplay = document.getElementById('inventoryDisplay');
@@ -32,143 +30,28 @@ export class GameUI {
       }
     }
 
-    // Bind event listeners
-    this.bindEventListeners();
+    // No longer do we build action buttons or bind keyboard events here
+    // That's all in gameControls
 
     // Initial render
     this.render();
   }
 
-  bindEventListeners() {
-    // Global click on the grid
-    this.gridContainer.addEventListener('click', (e) => {
-      for (let r = 0; r < this.state.gridSize; r++) {
-        for (let c = 0; c < this.state.gridSize; c++) {
-          const cellDiv = this.cellElements[r][c];
-          if (cellDiv === e.target || cellDiv.contains(e.target)) {
-            this.onCellClicked(r, c);
-            return;
-          }
-        }
-      }
-    });
-
-    // WASD movement
-    window.addEventListener('keydown', (e) => {
-      const oldPos = { ...this.state.playerPos };
-      const { gridSize } = this.state;
-
-      if (e.key === 'w' || e.key === 'W') {
-        this.state.playerPos.row = Math.max(0, this.state.playerPos.row - 1);
-        e.preventDefault();
-      } else if (e.key === 's' || e.key === 'S') {
-        this.state.playerPos.row = Math.min(gridSize - 1, this.state.playerPos.row + 1);
-        e.preventDefault();
-      } else if (e.key === 'a' || e.key === 'A') {
-        this.state.playerPos.col = Math.max(0, this.state.playerPos.col - 1);
-        e.preventDefault();
-      } else if (e.key === 'd' || e.key === 'D') {
-        this.state.playerPos.col = Math.min(gridSize - 1, this.state.playerPos.col + 1);
-        e.preventDefault();
-      }
-      if (oldPos.row !== this.state.playerPos.row || oldPos.col !== this.state.playerPos.col) {
-        this.render();
-      }
-    });
-  }
-
-  onCellClicked(row, col) {
-    // Check range
-    if (!this.isInInteractionRange(row, col)) {
-      console.log("Out of range! Move closer to interact.");
-      return;
-    }
-
-    const action = document.querySelector('input[name="action"]:checked')?.value;
-    if (!action) return;
-
-    const cell = this.state.grid[row][col];
-
-    if (action === 'mine') {
-      // Harvest from resource node
-      if (cell.type === 'resource-node') {
-        this.handleResourceCollection(cell);
-        this.render();
-      }
-      return;
-    }
-
-    if (action === 'remove') {
-      // Remove building
-      if (cell.type === 'conveyor' || cell.type === 'extractor' || cell.type === 'processor') {
-        cell.type = 'empty';
-        cell.item = null;
-        cell.outputDir = null;
-        cell.buildingState = {};
-        this.render();
-      }
-      return;
-    }
-
-    // If placing a building: conveyor/extractor/processor
-    if (cell.type !== 'empty' && cell.type !== 'resource-node' && cell.type !== 'energy-region') {
-      console.log("Cell is not empty! Remove building first or place on resource node if it's an extractor.");
-      return;
-    }
-
-    // Destroy any item on the ground before placing our new building
-    if (cell.item) {
-        cell.item = null;
-    }
-
-    const dir = document.querySelector('input[name="direction"]:checked')?.value || 'right';
-
-    if (action === 'accumulator') {
-      // Must be on an energy region
-      if (!cell.energyRegion) {
-        console.log("Accumulators must be placed on an energy region!");
-        return;
-      }
-      cell.type = 'accumulator';
-      // accumulators don’t transport items, so no outputDir needed
-      // but we’ll keep buildingState for potential future expansions
-      cell.buildingState = { };
-    } else if (action === 'powerPole') {
-      cell.type = 'powerPole';
-      // power poles also do not push items, but we keep buildingState if needed
-      cell.buildingState = { };
-    } else if (action === 'conveyor') {
-    cell.type = 'conveyor';
-      cell.outputDir = dir;
-      cell.buildingState = { item: null };
-    } else if (action === 'extractor') {
-      cell.type = 'extractor';
-      cell.outputDir = dir;
-      cell.buildingState = {
-        item: null,
-        lastSpawnTime: Date.now(),
-      };
-    } else if (action === 'processor') {
-      cell.type = 'processor';
-      cell.outputDir = dir;
-      cell.buildingState = { item: null };
-    }
-
-    this.render();
-  }
-
-  handleResourceCollection(cell) {
-    if (!cell.resourceType) return;
-    const { playerInventory, maxResourceCount } = this.state;
-    if (playerInventory[cell.resourceType] < maxResourceCount) {
-      playerInventory[cell.resourceType]++;
-      this.updateUI();
-    }
-  }
-
-  /** Redraws the entire grid + UI */
+  /** Show the current state of the grid + player's inventory */
   render() {
     const { grid, playerPos, gridSize } = this.state;
+    // We'll also read hovered cell + selected building from controls
+    // So let's do a quick "if" check for that data
+    // We'll do so by referencing a global or passing them in. Typically you'd pass them in or store them in state, but let's assume we have:
+    //   this.state.controls  => an instance of GameControls
+    // Or you can have a direct reference if you pass it in. We'll assume the simplest approach:
+
+    const controls = this.state.controls; // if you store it in main.js
+    const hoveredR = controls ? controls.hoveredRow : null;
+    const hoveredC = controls ? controls.hoveredCol : null;
+    const action   = controls ? controls.currentAction : null;
+    const dir      = controls ? controls.currentDirection : null;
+
     for (let r = 0; r < gridSize; r++) {
       for (let c = 0; c < gridSize; c++) {
         const cell = grid[r][c];
@@ -179,18 +62,38 @@ export class GameUI {
         // Base class
         cellDiv.classList.add(cell.type);
 
-        // If the cell is powered, we can visually indicate that
-        // (Optional) Example: add a 'powered-cell' class with a subtle glow
+        // Powered cell highlight
         if (cell.powered) {
           cellDiv.classList.add('powered-cell');
         }
 
-        // If cell has an item on the cell itself
+        // If there's an item on ground
         if (cell.item) {
           const itemEl = document.createElement('div');
           itemEl.classList.add('item-indicator');
-          itemEl.classList.add(cell.item.type === 'raw' ? 'item-raw' : 'item-processed');
+          switch (cell.item.type) {
+            case 'raw':       itemEl.classList.add('item-raw'); break;
+            case 'processed': itemEl.classList.add('item-processed'); break;
+            case 'final':     itemEl.classList.add('item-final'); break;
+          }
           cellDiv.appendChild(itemEl);
+        }
+
+        // If building is storage, show stored items
+        if (cell.type === 'storage' && cell.buildingState?.storedItems) {
+          const container = document.createElement('div');
+          container.classList.add('storage-items');
+          for (const stItem of cell.buildingState.storedItems) {
+            const itemEl = document.createElement('div');
+            itemEl.classList.add('item-indicator');
+            switch (stItem.type) {
+              case 'raw':       itemEl.classList.add('item-raw'); break;
+              case 'processed': itemEl.classList.add('item-processed'); break;
+              case 'final':     itemEl.classList.add('item-final'); break;
+            }
+            container.appendChild(itemEl);
+          }
+          cellDiv.appendChild(container);
         }
 
         // If building has an internal item
@@ -198,13 +101,15 @@ export class GameUI {
           const buildingItem = cell.buildingState.item;
           const storedItemEl = document.createElement('div');
           storedItemEl.classList.add('item-indicator');
-          storedItemEl.classList.add(
-            buildingItem.type === 'raw' ? 'item-raw' : 'item-processed'
-          );
+          switch (buildingItem.type) {
+            case 'raw':       storedItemEl.classList.add('item-raw');       break;
+            case 'processed': storedItemEl.classList.add('item-processed'); break;
+            case 'final':     storedItemEl.classList.add('item-final');     break;
+          }
           cellDiv.appendChild(storedItemEl);
         }
 
-        // Output arrow
+        // If there's an output direction
         if (cell.outputDir && isBuilding(cell)) {
           const arrowEl = document.createElement('div');
           arrowEl.classList.add('arrow');
@@ -221,7 +126,39 @@ export class GameUI {
         if (r === playerPos.row && c === playerPos.col) {
           cellDiv.classList.add('player-cell');
         }
+
+        // ------------- BUILDING PREVIEW (BLUEPRINT) -------------
+        // If this cell is the hovered cell, and the current action is a building
+        // We want to draw a translucent preview
+        if (r === hoveredR && c === hoveredC) {
+          if (action && this.isPlaceableBuilding(action)) {
+            // We'll add an overlay to show the blueprint
+            const previewDiv = document.createElement('div');
+            previewDiv.classList.add('blueprint-preview');
+            previewDiv.classList.add(action); // so it looks like that building's color
+
+            // Possibly show direction arrow too
+            if (this.isDirectionNeeded(action) && dir) {
+              const arrowEl = document.createElement('div');
+              arrowEl.classList.add('arrow');
+              arrowEl.textContent = this.getArrowSymbol(dir);
+              previewDiv.appendChild(arrowEl);
+            }
+
+            cellDiv.appendChild(previewDiv);
+          }
+        }
       }
+    }
+
+    this.updateUI();
+  }
+
+  handleResourceCollection(cell) {
+    if (!cell.resourceType) return;
+    const { playerInventory, maxResourceCount } = this.state;
+    if (playerInventory[cell.resourceType] < maxResourceCount) {
+      playerInventory[cell.resourceType]++;
     }
     this.updateUI();
   }
@@ -246,5 +183,14 @@ export class GameUI {
       case 'right': return '→';
       default:      return '?';
     }
+  }
+
+  isPlaceableBuilding(action) {
+    // If it's not 'mine' or 'remove', we consider it placeable
+    return !(['mine','remove'].includes(action));
+  }
+
+  isDirectionNeeded(action) {
+    return ['conveyor','extractor','processor','assembler'].includes(action);
   }
 }
