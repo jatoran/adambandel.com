@@ -11,7 +11,6 @@ export class GameUI {
     this.state = state;
 
     this.gridContainer = document.getElementById('grid');
-    this.inventoryDisplay = document.getElementById('inventoryDisplay');
 
     // We'll store the DOM elements for each cell
     this.cellElements = [];
@@ -54,25 +53,49 @@ export class GameUI {
 
         // Base class
         cellDiv.classList.add(cell.type);
+        if (cell.type === 'conveyor') {
+          // Add a direction-specific class for styling
+          if (cell.outputDir) {
+            cellDiv.classList.add('dir-' + cell.outputDir);
+          }
+        
+          // Create an inner div for the animation
+          const conveyorAnim = document.createElement('div');
+          conveyorAnim.classList.add('conveyor-anim');
+          cellDiv.appendChild(conveyorAnim);
+        }
 
         // Powered cell highlight
         if (cell.powered) {
           cellDiv.classList.add('powered-cell');
         }
 
+        // If building, add a small label (e.g. [CV] for Conveyor)
+        if (isBuilding(cell) && cell.type !== 'conveyor') {
+          const labelEl = document.createElement('div');
+          labelEl.classList.add('building-label');
+          labelEl.textContent = this.getBuildingLabel(cell.type);
+          cellDiv.appendChild(labelEl);
+        }
+
         // If there's an item on ground
         if (cell.item) {
           const itemEl = document.createElement('div');
           itemEl.classList.add('item-indicator');
+          
+          // Show distinct ASCII text for each item type
           switch (cell.item.type) {
             case 'raw':
               itemEl.classList.add('item-raw');
+              // itemEl.textContent = 'RAW';
               break;
             case 'processed':
               itemEl.classList.add('item-processed');
+              // itemEl.textContent = 'PRC';
               break;
             case 'final':
               itemEl.classList.add('item-final');
+              // itemEl.textContent = 'FIN';
               break;
           }
           cellDiv.appendChild(itemEl);
@@ -85,15 +108,19 @@ export class GameUI {
           for (const stItem of cell.buildingState.storedItems) {
             const itemEl = document.createElement('div');
             itemEl.classList.add('item-indicator');
+            // Again, distinct text for each item type
             switch (stItem.type) {
               case 'raw':
                 itemEl.classList.add('item-raw');
+                // itemEl.textContent = 'RAW';
                 break;
               case 'processed':
                 itemEl.classList.add('item-processed');
+                // itemEl.textContent = 'PRC';
                 break;
               case 'final':
                 itemEl.classList.add('item-final');
+                // itemEl.textContent = 'FIN';
                 break;
             }
             container.appendChild(itemEl);
@@ -102,29 +129,33 @@ export class GameUI {
         }
 
         // If building has an internal item
-        if (isBuilding(cell) && cell.buildingState?.item) {
-          const buildingItem = cell.buildingState.item;
-          const storedItemEl = document.createElement('div');
-          storedItemEl.classList.add('item-indicator');
-          switch (buildingItem.type) {
-            case 'raw':
-              storedItemEl.classList.add('item-raw');
-              break;
-            case 'processed':
-              storedItemEl.classList.add('item-processed');
-              break;
-            case 'final':
-              storedItemEl.classList.add('item-final');
-              break;
-          }
-          cellDiv.appendChild(storedItemEl);
-        }
+        // if (isBuilding(cell) && cell.buildingState?.item) {
+        //   const buildingItem = cell.buildingState.item;
+        //   const storedItemEl = document.createElement('div');
+        //   storedItemEl.classList.add('item-indicator');
+        //   switch (buildingItem.type) {
+        //     case 'raw':
+        //       storedItemEl.classList.add('item-raw');
+        //       // storedItemEl.textContent = 'RAW';
+        //       break;
+        //     case 'processed':
+        //       storedItemEl.classList.add('item-processed');
+        //       // storedItemEl.textContent = 'PRC';
+        //       break;
+        //     case 'final':
+        //       storedItemEl.classList.add('item-final');
+        //       // storedItemEl.textContent = 'FIN';
+        //       break;
+        //   }
+        //   cellDiv.appendChild(storedItemEl);
+        // }
 
         // If there's an output direction
-        if (cell.outputDir && (cell.type === 'merger' || cell.type === 'splitter' || isBuilding(cell))) {
+        if (cell.outputDir && isBuilding(cell)) {
           const arrowEl = document.createElement('div');
           arrowEl.classList.add('arrow');
           arrowEl.textContent = this.getArrowSymbol(cell.outputDir);
+          arrowEl.classList.add(cell.outputDir);
           cellDiv.appendChild(arrowEl);
         }
 
@@ -144,9 +175,9 @@ export class GameUI {
           if (action && this.isPlaceableBuilding(action)) {
             const previewDiv = document.createElement('div');
             previewDiv.classList.add('blueprint-preview');
-            previewDiv.classList.add(action); // so it looks like that building's color
+            previewDiv.classList.add(action); // so it uses that building's color
 
-            // Possibly show direction arrow too
+            // Show arrow for blueprint direction
             if (this.isDirectionNeeded(action) && dir) {
               const arrowEl = document.createElement('div');
               arrowEl.classList.add('arrow');
@@ -159,8 +190,6 @@ export class GameUI {
         }
       }
     }
-
-    this.updateUI();
   }
 
   /**
@@ -172,48 +201,54 @@ export class GameUI {
     const rType = cell.resourceType; // e.g. "ironOre"
     const { playerInventory, maxResourceCount } = this.state;
 
-    // Make sure inventory for this rType exists
+    // Ensure inventory for this rType exists
     if (playerInventory[rType] == null) {
       playerInventory[rType] = 0;
     }
 
     if (playerInventory[rType] < maxResourceCount) {
       playerInventory[rType]++;
-      // Optionally remove the resource node or reduce the node's durability, etc.
-      // For now, it's infinite.
+      // (infinite node for now)
     }
 
-    // Update the UI + inventory panel
-    this.updateUI();
-    // If we have an inventoryUI, refresh it too:
+    // Update inventory panel
     if (this.state.controls && this.state.controls.ui && this.state.controls.ui.inventoryUI) {
       this.state.controls.ui.inventoryUI.render();
     }
   }
 
-  // Update the simple top-left inventory display (currently showing just ironOre capacity)
-  updateUI() {
-    // If you want to show only ironOre, do:
-    const { ironOre, ironPlate, ironGear } = this.state.playerInventory;
-    this.inventoryDisplay.textContent =
-      `Ore: ${ironOre}/${this.state.maxResourceCount} | ` +
-      `Plates: ${ironPlate} | Gears: ${ironGear}`;
-  }
 
-  // Helpers
   isInInteractionRange(row, col) {
     const { row: pr, col: pc } = this.state.playerPos;
     const dist = Math.abs(row - pr) + Math.abs(col - pc);
     return dist <= this.state.interactionRange;
   }
 
+  /* ASCII arrow symbols for a retro vibe */
   getArrowSymbol(dir) {
     switch (dir) {
-      case 'up':    return '↑';
-      case 'down':  return '↓';
-      case 'left':  return '←';
-      case 'right': return '→';
+      case 'up':    return '^';
+      case 'down':  return 'v';
+      case 'left':  return '<';
+      case 'right': return '>';
       default:      return '?';
+    }
+  }
+
+  /* Return an ASCII label for each building type. */
+  getBuildingLabel(type) {
+    switch (type) {
+      case 'conveyor':    return '[CV]';
+      case 'extractor':   return '[EX]';
+      case 'processor':   return '[PR]';
+      case 'assembler':   return '[AS]';
+      case 'storage':     return '[ST]';
+      case 'merger':      return '[MG]';
+      case 'splitter':    return '[SP]';
+      case 'portal':      return '[PO]';
+      case 'accumulator': return '[AC]';
+      case 'powerPole':   return '[PW]';
+      default:            return '[??]';
     }
   }
 

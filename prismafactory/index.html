@@ -6,31 +6,39 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Prismactory Prototype</h1>
-
-  <!-- Simple panel for inventory (iron) -->
-  <div>
-    <span id="inventoryDisplay">Iron: 0/100</span>
+  <div class="ascii-title">
+    <pre>
+__________        .__                       
+\______   \_______|__| ______ _____ _____   
+  |     ___/\_  __ \  |/  ___//     \\__  \  
+  |    |     |  | \/  |\___ \|  Y Y  \/ __ \_
+  |____|     |__|  |__/____  >__|_|  /____  /
+                          \/      \/     \/ 
+                              F A C T O R Y
+    </pre>
   </div>
 
+
   <!-- The game grid -->
-  <div id="grid"></div>
-  
+  <div id="grid" class="ascii-border"></div>
 
-  <!-- The dynamic action buttons will still appear here, or you can move them: -->
-  <div id="actionsContainer" class="toolbar"></div>
+  <!-- The dynamic action buttons -->
+  <div id="actionsContainer" class="toolbar ascii-border"></div>
 
-  <button id="saveButton">Save Game</button>
-  <button id="resetGameBtn">Reset Game</button>
+  <div class="ascii-panel">
+    <button id="saveButton">Save Game</button>
+    <button id="resetGameBtn">Reset Game</button>
+  </div>
   
-<div id="craftingPanel">
-    <h2>Inventory & Crafting</h2>
+  <div id="craftingPanel" class="ascii-panel">
+    <h2>Inventory &amp; Crafting</h2>
     <ul id="playerInventoryList"></ul>
-    <hr/>
+    <hr />
     <div id="recipesList"></div>
   </div>
 
-  <div id="messageLog" class="message-log"></div>
+  <div id="messageLog" class="message-log ascii-border"></div>
+
   <!-- Load our JS modules -->
   <script type="module" src="main.js"></script>
 </body>
