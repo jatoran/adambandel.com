@@ -150,3 +150,34 @@ body {
     align-items: center;
     justify-content: center;
   }
+
+  .blueprint-preview .arrow {
+    color: #ff0;                /* Bright yellow */
+    font-size: 1.5rem;          /* Bigger font */
+    font-weight: bold;          
+    text-shadow: 0 0 5px #ff0;  /* A glow-like effect */
+  }
+
+  .merger {
+    background-color: #4444aa; /* or any color you like */
+  }
+  
+  .splitter {
+    background-color: #aa4444;
+  }
+  
+
+  .portal {
+    background-color: #006699; /* Some teal color for the portal */
+    box-shadow: inset 0 0 8px 2px rgba(0, 255, 255, 0.5);
+  }
+
+  .message-log {
+    margin-top: 1rem;
+    max-height: 100px;   /* or any size you like */
+    overflow-y: auto;
+    border: 1px solid #555;
+    padding: 4px;
+    font-size: 0.9rem;
+    background: #222;
+  }

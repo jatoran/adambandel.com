@@ -22,6 +22,19 @@ export class ExtractorLogic {
       }
     }
   }
+
+   export class PortalLogic {
+       /**
+        * For the portal, we might eventually do special logic each tick,
+        * but for now, it behaves mostly like a Storage with unlimited capacity
+        * or a certain capacity. The difference is that the progression system
+        * will check if it has enough final items to move forward.
+        */
+       static update(cell) {
+         // If you want the portal to do anything each tick, do it here.
+         // For now, it just sits.
+       }
+     }
   
   export function isBuilding(cell) {
     return (
@@ -29,7 +42,10 @@ export class ExtractorLogic {
       cell.type === 'extractor' ||
       cell.type === 'processor' ||
       cell.type === 'assembler' ||
-      cell.type === 'storage'  
+      cell.type === 'storage'  ||
+      cell.type === 'merger'    ||
+      cell.type === 'splitter' ||
+      cell.type === 'portal'
     );
   }
   

@@ -30,9 +30,6 @@ export class GameUI {
       }
     }
 
-    // No longer do we build action buttons or bind keyboard events here
-    // That's all in gameControls
-
     // Initial render
     this.render();
   }
@@ -40,13 +37,9 @@ export class GameUI {
   /** Show the current state of the grid + player's inventory */
   render() {
     const { grid, playerPos, gridSize } = this.state;
-    // We'll also read hovered cell + selected building from controls
-    // So let's do a quick "if" check for that data
-    // We'll do so by referencing a global or passing them in. Typically you'd pass them in or store them in state, but let's assume we have:
-    //   this.state.controls  => an instance of GameControls
-    // Or you can have a direct reference if you pass it in. We'll assume the simplest approach:
 
-    const controls = this.state.controls; // if you store it in main.js
+    // Controls reference
+    const controls = this.state.controls; // if stored in state
     const hoveredR = controls ? controls.hoveredRow : null;
     const hoveredC = controls ? controls.hoveredCol : null;
     const action   = controls ? controls.currentAction : null;
@@ -72,9 +65,15 @@ export class GameUI {
           const itemEl = document.createElement('div');
           itemEl.classList.add('item-indicator');
           switch (cell.item.type) {
-            case 'raw':       itemEl.classList.add('item-raw'); break;
-            case 'processed': itemEl.classList.add('item-processed'); break;
-            case 'final':     itemEl.classList.add('item-final'); break;
+            case 'raw':
+              itemEl.classList.add('item-raw');
+              break;
+            case 'processed':
+              itemEl.classList.add('item-processed');
+              break;
+            case 'final':
+              itemEl.classList.add('item-final');
+              break;
           }
           cellDiv.appendChild(itemEl);
         }
@@ -87,9 +86,15 @@ export class GameUI {
             const itemEl = document.createElement('div');
             itemEl.classList.add('item-indicator');
             switch (stItem.type) {
-              case 'raw':       itemEl.classList.add('item-raw'); break;
-              case 'processed': itemEl.classList.add('item-processed'); break;
-              case 'final':     itemEl.classList.add('item-final'); break;
+              case 'raw':
+                itemEl.classList.add('item-raw');
+                break;
+              case 'processed':
+                itemEl.classList.add('item-processed');
+                break;
+              case 'final':
+                itemEl.classList.add('item-final');
+                break;
             }
             container.appendChild(itemEl);
           }
@@ -102,15 +107,21 @@ export class GameUI {
           const storedItemEl = document.createElement('div');
           storedItemEl.classList.add('item-indicator');
           switch (buildingItem.type) {
-            case 'raw':       storedItemEl.classList.add('item-raw');       break;
-            case 'processed': storedItemEl.classList.add('item-processed'); break;
-            case 'final':     storedItemEl.classList.add('item-final');     break;
+            case 'raw':
+              storedItemEl.classList.add('item-raw');
+              break;
+            case 'processed':
+              storedItemEl.classList.add('item-processed');
+              break;
+            case 'final':
+              storedItemEl.classList.add('item-final');
+              break;
           }
           cellDiv.appendChild(storedItemEl);
         }
 
         // If there's an output direction
-        if (cell.outputDir && isBuilding(cell)) {
+        if (cell.outputDir && (cell.type === 'merger' || cell.type === 'splitter' || isBuilding(cell))) {
           const arrowEl = document.createElement('div');
           arrowEl.classList.add('arrow');
           arrowEl.textContent = this.getArrowSymbol(cell.outputDir);
@@ -129,10 +140,8 @@ export class GameUI {
 
         // ------------- BUILDING PREVIEW (BLUEPRINT) -------------
         // If this cell is the hovered cell, and the current action is a building
-        // We want to draw a translucent preview
         if (r === hoveredR && c === hoveredC) {
           if (action && this.isPlaceableBuilding(action)) {
-            // We'll add an overlay to show the blueprint
             const previewDiv = document.createElement('div');
             previewDiv.classList.add('blueprint-preview');
             previewDiv.classList.add(action); // so it looks like that building's color
@@ -154,18 +163,41 @@ export class GameUI {
     this.updateUI();
   }
 
+  /**
+   * Collect resource from a resource-node cell (e.g. ironOre).
+   * We check maxResourceCount and increment the correct inventory key.
+   */
   handleResourceCollection(cell) {
     if (!cell.resourceType) return;
+    const rType = cell.resourceType; // e.g. "ironOre"
     const { playerInventory, maxResourceCount } = this.state;
-    if (playerInventory[cell.resourceType] < maxResourceCount) {
-      playerInventory[cell.resourceType]++;
+
+    // Make sure inventory for this rType exists
+    if (playerInventory[rType] == null) {
+      playerInventory[rType] = 0;
     }
+
+    if (playerInventory[rType] < maxResourceCount) {
+      playerInventory[rType]++;
+      // Optionally remove the resource node or reduce the node's durability, etc.
+      // For now, it's infinite.
+    }
+
+    // Update the UI + inventory panel
     this.updateUI();
+    // If we have an inventoryUI, refresh it too:
+    if (this.state.controls && this.state.controls.ui && this.state.controls.ui.inventoryUI) {
+      this.state.controls.ui.inventoryUI.render();
+    }
   }
 
+  // Update the simple top-left inventory display (currently showing just ironOre capacity)
   updateUI() {
-    const { iron } = this.state.playerInventory;
-    this.inventoryDisplay.textContent = `Iron: ${iron}/${this.state.maxResourceCount}`;
+    // If you want to show only ironOre, do:
+    const { ironOre, ironPlate, ironGear } = this.state.playerInventory;
+    this.inventoryDisplay.textContent =
+      `Ore: ${ironOre}/${this.state.maxResourceCount} | ` +
+      `Plates: ${ironPlate} | Gears: ${ironGear}`;
   }
 
   // Helpers
@@ -186,11 +218,31 @@ export class GameUI {
   }
 
   isPlaceableBuilding(action) {
-    // If it's not 'mine' or 'remove', we consider it placeable
     return !(['mine','remove'].includes(action));
   }
 
   isDirectionNeeded(action) {
-    return ['conveyor','extractor','processor','assembler'].includes(action);
+    return [
+      'conveyor',
+      'extractor',
+      'processor',
+      'assembler',
+      'merger',
+      'splitter'
+    ].includes(action);
   }
+
+  showFeedback(msg) {
+    const messageLog = document.getElementById('messageLog');
+    if (!messageLog) return;
+
+    // Clear existing messages
+    messageLog.innerHTML = '';
+
+    // Create a single new line
+    const line = document.createElement('div');
+    line.textContent = msg;
+    messageLog.appendChild(line);
+  }
+
 }

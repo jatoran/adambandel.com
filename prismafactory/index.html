@@ -15,10 +15,22 @@
 
   <!-- The game grid -->
   <div id="grid"></div>
+  
 
   <!-- The dynamic action buttons will still appear here, or you can move them: -->
   <div id="actionsContainer" class="toolbar"></div>
 
+  <button id="saveButton">Save Game</button>
+  <button id="resetGameBtn">Reset Game</button>
+  
+<div id="craftingPanel">
+    <h2>Inventory & Crafting</h2>
+    <ul id="playerInventoryList"></ul>
+    <hr/>
+    <div id="recipesList"></div>
+  </div>
+
+  <div id="messageLog" class="message-log"></div>
   <!-- Load our JS modules -->
   <script type="module" src="main.js"></script>
 </body>
