@@ -20,22 +20,21 @@ export class PowerLogic {
      * Called periodically by GameLogic to recalculate which cells are powered.
      */
     updatePowerCoverage() {
-      const { gridSize, grid } = this.state;
+      const { numRows, numCols, grid } = this.state;
   
       // First, clear any existing powered flags on the grid
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
           grid[r][c].powered = false;
         }
       }
   
       // 1) Mark cells with accumulators as powered (they produce power)
       //    BUT only if they are placed on an energy region (per design doc)
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
           const cell = grid[r][c];
           if (cell.type === 'accumulator' && cell.energyRegion) {
-            // The accumulator's own cell is definitely powered
             cell.powered = true;
           }
         }
@@ -52,18 +51,17 @@ export class PowerLogic {
       //    For bigger networks, you might do multi-step BFS or a union-find approach.
   
       // First pass: identify all powered cells, see if any power poles are in range -> they become powered
-      const powerPoleRadius = 2; // we can tweak radius as needed
+      const powerPoleRadius = 2;
       let changed = true;
       while (changed) {
         changed = false;
-        for (let r = 0; r < gridSize; r++) {
-          for (let c = 0; c < gridSize; c++) {
+        for (let r = 0; r < numRows; r++) {
+          for (let c = 0; c < numCols; c++) {
             const cell = grid[r][c];
-            if (cell.type === 'powerPole') {
-              // If this power pole is not yet powered, check if it's near a powered cell
-              if (!cell.powered && this.isNearPoweredCell(r, c, powerPoleRadius)) {
+            if (cell.type === 'powerPole' && !cell.powered) {
+              if (this.isNearPoweredCell(r, c, powerPoleRadius)) {
                 cell.powered = true;
-                changed = true; // We changed something, so we’ll need another pass
+                changed = true;
               }
             }
           }
@@ -71,25 +69,28 @@ export class PowerLogic {
       }
   
       // Second pass: any power pole that’s powered will power all cells in radius
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
           const cell = grid[r][c];
           if (cell.type === 'powerPole' && cell.powered) {
-            // Mark all cells in range as powered
             this.markCellsPowered(r, c, powerPoleRadius);
           }
         }
       }
     }
+    
   
     /**
      * Checks if there is any powered cell within `radius` of (r, c).
      */
     isNearPoweredCell(r, c, radius) {
-      const { gridSize, grid } = this.state;
+      const { numRows, numCols, grid } = this.state;
       for (let rr = r - radius; rr <= r + radius; rr++) {
         for (let cc = c - radius; cc <= c + radius; cc++) {
-          if (rr >= 0 && rr < gridSize && cc >= 0 && cc < gridSize) {
+          if (
+            rr >= 0 && rr < numRows &&
+            cc >= 0 && cc < numCols
+          ) {
             const dist = Math.abs(rr - r) + Math.abs(cc - c);
             if (dist <= radius && grid[rr][cc].powered) {
               return true;
@@ -104,10 +105,13 @@ export class PowerLogic {
      * Marks all cells within `radius` of (r, c) as powered.
      */
     markCellsPowered(r, c, radius) {
-      const { gridSize, grid } = this.state;
+      const { numRows, numCols, grid } = this.state;
       for (let rr = r - radius; rr <= r + radius; rr++) {
         for (let cc = c - radius; cc <= c + radius; cc++) {
-          if (rr >= 0 && rr < gridSize && cc >= 0 && cc < gridSize) {
+          if (
+            rr >= 0 && rr < numRows &&
+            cc >= 0 && cc < numCols
+          ) {
             const dist = Math.abs(rr - r) + Math.abs(cc - c);
             if (dist <= radius) {
               grid[rr][cc].powered = true;

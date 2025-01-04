@@ -13,6 +13,7 @@ import {
   } from './structures.js';
   import { PowerLogic } from './powerLogic.js';
   import { ProgressionLogic } from './progressionLogic.js';
+  import { ItemDefinitions } from './itemDefinitions.js';
 
   /**
    * GameLogic coordinates the “brains” of the game:
@@ -62,324 +63,361 @@ import {
       }, 300);
     }
   
-    /**
-     * Example spawner: places a “raw” item at [0,1] if empty, purely for testing.
-     */
-    // updateSource() {
-    //   const { grid } = this.state;
-    //   const sourceCell = grid[0][0];
-    //   const targetRow = 0;
-    //   const targetCol = 1;
-  
-    //   if (targetCol < this.state.gridSize) {
-    //     const targetCell = grid[targetRow][targetCol];
-    //     if (!this.hasAnyItem(targetCell)) {
-    //       // place a raw item
-    //       if (isBuilding(targetCell)) {
-    //         if (!targetCell.buildingState.item) {
-    //           targetCell.buildingState.item = { type: 'raw', id: Date.now() };
-    //         }
-    //       } else {
-    //         if (!targetCell.item) {
-    //           targetCell.item = { type: 'raw', id: Date.now() };
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
   
     updatePortals() {
-        const { gridSize, grid } = this.state;
-        for (let r = 0; r < gridSize; r++) {
-            for (let c = 0; c < gridSize; c++) {
-            const cell = grid[r][c];
-            if (cell.type === 'portal') {
-                // If you only want to run if it's "powered," you could do that check
-                PortalLogic.update(cell);
-            }
-            }
+      const { numRows, numCols, grid } = this.state;
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
+          const cell = grid[r][c];
+          if (cell.type === 'portal') {
+            PortalLogic.update(cell);
+          }
         }
+      }
     }
-
-        
-    /**
-     * Update logic for all storage cells (if needed).
-     */
+    
     updateStorages() {
-      const { gridSize, grid } = this.state;
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
+      const { numRows, numCols, grid } = this.state;
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
           const cell = grid[r][c];
           if (cell.type === 'storage') {
-            // Currently, there's no special “storage tick” logic
-            // but you could expand it if you like.
             StorageLogic.update(cell);
           }
         }
       }
     }
-  
-    /**
-     * Update logic for all extractors.
-     */
+    
     updateExtractors() {
       const now = Date.now();
-      const { gridSize, grid } = this.state;
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
+      const { numRows, numCols, grid } = this.state;
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
           const cell = grid[r][c];
-          if (cell.type === 'extractor') {
-            // Only run if powered
-            if (cell.powered) {
-              ExtractorLogic.update(cell, now);
-            }
+          if (cell.type === 'extractor' && cell.powered) {
+            ExtractorLogic.update(cell, now);
           }
         }
       }
     }
-  
-    /**
-     * Update logic for all processors.
-     */
+    
     updateProcessors() {
-      const { gridSize, grid } = this.state;
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
+      const { numRows, numCols, grid } = this.state;
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
           const cell = grid[r][c];
-          if (cell.type === 'processor') {
-            // Only run if powered
-            if (cell.powered) {
-              ProcessorLogic.update(cell);
-            }
+          if (cell.type === 'processor' && cell.powered) {
+            ProcessorLogic.update(cell);
           }
         }
       }
     }
-  
-    /**
-     * Update logic for all assemblers.
-     */
+    
     updateAssemblers() {
-      const { gridSize, grid } = this.state;
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
+      const { numRows, numCols, grid } = this.state;
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
           const cell = grid[r][c];
-          if (cell.type === 'assembler') {
-            // Only run if powered
-            if (cell.powered) {
-              AssemblerLogic.update(cell);
-            }
+          if (cell.type === 'assembler' && cell.powered) {
+            AssemblerLogic.update(cell);
           }
         }
       }
     }
-  
-    /**
-     * Master item flow function: moves items across conveyors, into/out of storages,
-     * merges, splits, etc. Runs every tick.
-     */
+    
     moveItems() {
-      const { gridSize, grid } = this.state;
-      // Make a copy of the current grid to ensure each item only moves once per tick
-      const nextGrid = structuredClone(grid);
-  
-      // 1) For each building, handle item output logic (merger, splitter, or standard)
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
-          const cell = grid[r][c];
-          if (!isBuilding(cell)) continue; // skip non-building cells
-  
+      const { numRows, numCols } = this.state;
+      const nextGrid = structuredClone(this.state.grid);
+    
+      // (A) Building outputs
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
+          const cell = this.getCell(r, c);
+          if (!cell) continue;  // T1/T2: out of bounds
+          if (!isBuilding(cell)) continue;
+    
           if (cell.type === 'merger') {
             this.handleMergerOutput(r, c, nextGrid);
-          }
-          else if (cell.type === 'splitter') {
+          } else if (cell.type === 'splitter') {
             this.handleSplitterOutput(r, c, nextGrid);
-          }
-          else {
-            // conveyors, extractors, processors, assemblers, storage
+          } else {
             this.handleStandardBuildingOutput(r, c, nextGrid);
           }
         }
       }
-  
-      // 2) Conveyors might “pull” items from the cell floor if not already holding one
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
-          const cell = grid[r][c];
+    
+      // (B) Conveyors might pull ground items
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
+          const cell = this.getCell(r, c);
+          if (!cell) continue;
           if (cell.type === 'conveyor' && !cell.buildingState.item && cell.item) {
-            // Move the ground item into the conveyor’s buildingState
-            nextGrid[r][c].item = null;
+            // Move ground item into conveyor
+            // We'll do the same structuredClone approach
             nextGrid[r][c].buildingState.item = structuredClone(cell.item);
+            nextGrid[r][c].item = null;
           }
         }
       }
-  
-      // 3) Commit nextGrid changes back to the real grid
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
-          grid[r][c].item = nextGrid[r][c].item;
-          grid[r][c].buildingState = structuredClone(nextGrid[r][c].buildingState);
+    
+      // (C) Commit changes back to the real state.grid
+      for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
+          if (!this.isValidCell(r, c)) continue;
+          this.state.grid[r][c].item = nextGrid[r][c].item;
+          this.state.grid[r][c].buildingState = structuredClone(nextGrid[r][c].buildingState);
         }
       }
     }
+    
   
     /**
-     * Mergers combine up to 3 inputs into one output direction.
-     */
+ * Mergers combine up to 3 inputs into one output direction.
+ */
     handleMergerOutput(r, c, nextGrid) {
-      const cell = this.state.grid[r][c];
-  
-      // 1) If the merger is empty, try to pull from up to 3 directions
+      const cell = this.getCell(r, c);
+      if (!cell) return;
+    
+      // 1) If the merger is empty, pull from up to 3 inputs
       if (!cell.buildingState.item) {
         const inputs = this.getMergerInputDirs(cell.outputDir);
         for (const inDir of inputs) {
-          const [sr, sc] = getNextCellCoords(r, c, inDir);
+          // We get the neighbor cell
+          let [sr, sc] = getNextCellCoords(r, c, inDir); 
+          // Now wrap or clamp for Tier 3
+          if (this.state.currentTier === 3) {
+            sr = (sr % this.state.numRows + this.state.numRows) % this.state.numRows;
+            sc = Math.max(0, Math.min(sc, this.state.numCols - 1));
+          }
           if (!this.isValidCell(sr, sc)) continue;
-  
-          const source = this.state.grid[sr][sc];
-          // If source is a building with an item, and it’s outputDir is pointing to us:
-          if (isBuilding(source) && source.buildingState.item && source.outputDir === oppositeDir(inDir)) {
-            // Pull one item
-            nextGrid[r][c].buildingState.item = structuredClone(source.buildingState.item);
-            nextGrid[sr][sc].buildingState.item = null;
-            break; // only pull one item this tick
+    
+          const source = this.getCell(sr, sc);
+          if (source && isBuilding(source) && source.buildingState.item &&
+              source.outputDir === oppositeDir(inDir)) {
+            // ...
+            // same logic as your existing code, just referencing source correctly
+            const incomingItem = source.buildingState.item;
+            if (this.canAcceptFrom(cell, oppositeDir(inDir), incomingItem)) {
+              // Pull one item
+              nextGrid[r][c].buildingState.item = structuredClone(incomingItem);
+              nextGrid[sr][sc].buildingState.item = null;
+              break; // only pull one
+            }
           }
         }
       }
-  
-      // 2) If the merger has an item, push it out in its single outputDir
+    
+      // 2) If the merger has an item, push it out
       const storedItem = cell.buildingState.item;
       if (storedItem) {
-        const [nr, nc] = getNextCellCoords(r, c, cell.outputDir);
-        if (this.isValidCell(nr, nc)) {
-          const nextCell = this.state.grid[nr][nc];
-          if (!this.hasAnyItem(nextCell) && this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir))) {
-            // Move item from the merger to the next cell
-            nextGrid[r][c].buildingState.item = null;
-            if (isBuilding(nextCell)) {
-              nextGrid[nr][nc].buildingState.item = structuredClone(storedItem);
-            } else {
-              nextGrid[nr][nc].item = structuredClone(storedItem);
-            }
-          }
+        let [nr, nc] = getNextCellCoords(r, c, cell.outputDir);
+        // Wrap/clamp for Tier 3
+        if (this.state.currentTier === 3) {
+          nr = (nr % this.state.numRows + this.state.numRows) % this.state.numRows;
+          nc = Math.max(0, Math.min(nc, this.state.numCols - 1));
         }
-      }
-    }
-  
-    /**
-     * Splitters take one input item and distribute it to up to 3 outputs.
-     */
-    handleSplitterOutput(r, c, nextGrid) {
-        const cell = this.state.grid[r][c];
-      
-        // 1) Initialize splitterOutputs if not present in nextGrid
-        //    We do it in nextGrid so it persists properly after copying.
-        if (!nextGrid[r][c].buildingState.splitterOutputs) {
-          nextGrid[r][c].buildingState.splitterOutputs = this.getSplitterOutputDirs(cell.outputDir);
-          nextGrid[r][c].buildingState.currentOutputIndex = 0;
-        }
-      
-        // 2) If splitter is empty, pull from the single “input” side
-        if (!cell.buildingState.item) {
-          // (We do the "pull" check on the current cell; that part is fine.)
-          const inDir = oppositeDir(cell.outputDir);
-          const [sr, sc] = getNextCellCoords(r, c, inDir);
-          if (this.isValidCell(sr, sc)) {
-            const source = this.state.grid[sr][sc];
-            // If source is a building with an item whose outputDir points our way
-            if (
-              isBuilding(source) &&
-              source.buildingState.item &&
-              source.outputDir === inDir
-            ) {
-              // Move item into the splitter on nextGrid
-              nextGrid[r][c].buildingState.item = structuredClone(source.buildingState.item);
-              // Remove item from the source building in nextGrid
-              nextGrid[sr][sc].buildingState.item = null;
-            }
-          }
-        }
-      
-        // 3) If splitter has an item, attempt round-robin placement
-        //    IMPORTANT: read from `cell`, write to `nextGrid`.
-        const storedItem = cell.buildingState.item;
-        if (storedItem) {
-          const outputs = nextGrid[r][c].buildingState.splitterOutputs;
-          const currentIndex = nextGrid[r][c].buildingState.currentOutputIndex ?? 0;
-          let placed = false;
-      
-          // We'll try up to outputs.length times, starting from currentIndex
-          for (let i = 0; i < outputs.length; i++) {
-            const index = (currentIndex + i) % outputs.length;
-            const outDir = outputs[index];
-            const [nr, nc] = getNextCellCoords(r, c, outDir);
-      
-            if (!this.isValidCell(nr, nc)) continue; // out of bounds
-            const nextCell = this.state.grid[nr][nc]; // read from current grid
-      
-            // Check if nextCell is free to accept from 'outDir'
-            if (!this.hasAnyItem(nextCell) && this.canAcceptFrom(nextCell, oppositeDir(outDir))) {
-              // Remove item from splitter in nextGrid
-              nextGrid[r][c].buildingState.item = null;
-      
-              // Place item in nextCell on nextGrid
-              if (isBuilding(nextCell)) {
-                nextGrid[nr][nc].buildingState.item = structuredClone(storedItem);
-              } else {
-                nextGrid[nr][nc].item = structuredClone(storedItem);
-              }
-      
-              // Advance the round-robin index on nextGrid
-              nextGrid[r][c].buildingState.currentOutputIndex = (index + 1) % outputs.length;
-      
-              placed = true;
-              break; // we placed the item, so stop
-            }
-          }
-          // If we never place the item, we do NOT advance currentOutputIndex,
-          // so next tick we try from the same index again.
-        }
-      }
-      
-  
-    /**
-     * Default handling for conveyors, extractors, processors, assemblers, storage
-     * that push items forward in a single outputDir.
-     */
-    handleStandardBuildingOutput(r, c, nextGrid) {
-      const cell = this.state.grid[r][c];
-      if (!cell.buildingState.item) return; // no item to move
-  
-      const buildingItem = cell.buildingState.item;
-      const [nr, nc] = getNextCellCoords(r, c, cell.outputDir);
-  
-      if (this.isValidCell(nr, nc)) {
-        const nextCell = this.state.grid[nr][nc];
-        // Check if next cell can accept
-        if (
-          !this.hasAnyItem(nextCell) ||
-          (nextCell.type === 'storage' && this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir)))
-        ) {
-          if (nextCell.type === 'storage') {
-            // Try storing
-            const success = StorageLogic.tryStoreItem(nextGrid[nr][nc], buildingItem);
-            if (success) {
-              nextGrid[r][c].buildingState.item = null;
-            }
+        if (!this.isValidCell(nr, nc)) return;
+    
+        const nextCell = this.getCell(nr, nc);
+        if (nextCell && !this.hasAnyItem(nextCell) &&
+            this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir), storedItem)) {
+          nextGrid[r][c].buildingState.item = null;
+          if (isBuilding(nextCell)) {
+            nextGrid[nr][nc].buildingState.item = structuredClone(storedItem);
           } else {
-            // Non-storage building or empty ground
-            if (this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir))) {
-              nextGrid[r][c].buildingState.item = null;
-              if (isBuilding(nextCell)) {
-                nextGrid[nr][nc].buildingState.item = structuredClone(buildingItem);
-              } else {
-                nextGrid[nr][nc].item = structuredClone(buildingItem);
-              }
-            }
+            nextGrid[nr][nc].item = structuredClone(storedItem);
           }
         }
       }
     }
+
+/**
+ * Splitters take one input item and distribute it to up to 3 outputs.
+ */
+handleSplitterOutput(r, c, nextGrid) {
+  const cell = this.getCell(r, c);
+  if (!cell) return;
+
+  // Ensure splitterOutputs is ready
+  if (!nextGrid[r][c].buildingState.splitterOutputs) {
+    nextGrid[r][c].buildingState.splitterOutputs = this.getSplitterOutputDirs(cell.outputDir);
+    nextGrid[r][c].buildingState.currentOutputIndex = 0;
+  }
+
+  // 1) If splitter empty, pull from input side
+  if (!cell.buildingState.item) {
+    const inDir = oppositeDir(cell.outputDir);
+    let [sr, sc] = getNextCellCoords(r, c, inDir);
+    if (this.state.currentTier === 3) {
+      sr = (sr % this.state.numRows + this.state.numRows) % this.state.numRows;
+      sc = Math.max(0, Math.min(sc, this.state.numCols - 1));
+    }
+    const source = this.getCell(sr, sc);
+    if (source && isBuilding(source) && source.buildingState.item && 
+        source.outputDir === inDir) {
+      const incomingItem = source.buildingState.item;
+      if (this.canAcceptFrom(cell, oppositeDir(inDir), incomingItem)) {
+        nextGrid[r][c].buildingState.item = structuredClone(incomingItem);
+        nextGrid[sr][sc].buildingState.item = null;
+      }
+    }
+  }
+
+  // 2) If splitter has item, attempt to place in outputs
+  const storedItem = cell.buildingState.item;
+  if (storedItem) {
+    const outputs = nextGrid[r][c].buildingState.splitterOutputs;
+    const currentIndex = nextGrid[r][c].buildingState.currentOutputIndex ?? 0;
+    let placed = false;
+
+    for (let i = 0; i < outputs.length; i++) {
+      const index = (currentIndex + i) % outputs.length;
+      const outDir = outputs[index];
+
+      let [nr, nc] = getNextCellCoords(r, c, outDir);
+      if (this.state.currentTier === 3) {
+        nr = (nr % this.state.numRows + this.state.numRows) % this.state.numRows;
+        nc = Math.max(0, Math.min(nc, this.state.numCols - 1));
+      }
+      const nextCell = this.getCell(nr, nc);
+      if (nextCell && !this.hasAnyItem(nextCell) &&
+          this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir), storedItem)) {
+        // Place item
+        nextGrid[r][c].buildingState.item = null;
+        if (isBuilding(nextCell)) {
+          nextGrid[nr][nc].buildingState.item = structuredClone(storedItem);
+        } else {
+          nextGrid[nr][nc].item = structuredClone(storedItem);
+        }
+        nextGrid[r][c].buildingState.currentOutputIndex = (index + 1) % outputs.length;
+        placed = true;
+        break;
+      }
+    }
+  }
+}
+  
+  /**
+ * Default handling for conveyors, extractors, processors, assemblers, storage
+ * that push items forward in a single outputDir.
+ */
+handleStandardBuildingOutput(r, c, nextGrid) {
+  const cell = this.getCell(r, c);
+  if (!cell || !cell.buildingState) return;
+
+  // If processor/assembler with outputBuffer:
+  if ((cell.type === 'processor' || cell.type === 'assembler') && cell.buildingState.outputBuffer) {
+    const bs = cell.buildingState;
+    if (bs.outputBuffer.length === 0) return;
+
+    // Look at the first item in the buffer
+    const itemToMove = bs.outputBuffer[0];
+    let [nr, nc] = getNextCellCoords(r, c, cell.outputDir);
+
+    // Wrap/clamp for Tier 3
+    if (this.state.currentTier === 3) {
+      nr = (nr % this.state.numRows + this.state.numRows) % this.state.numRows;
+      nc = Math.max(0, Math.min(nc, this.state.numCols - 1));
+    }
+    if (!this.isValidCell(nr, nc)) return;
+
+    const nextCell = this.getCell(nr, nc);
+    if (!nextCell) return;
+
+    // Attempt to place item
+    if (!this.hasAnyItem(nextCell) && this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir), itemToMove)) {
+      // Remove from output buffer
+      nextGrid[r][c].buildingState.outputBuffer.shift();
+
+      // If nextCell is a building, do the specialized inputBuffer logic
+      if (isBuilding(nextCell)) {
+        if (nextCell.type === 'processor') {
+          // push to inputBuffer
+          if (!nextGrid[nr][nc].buildingState.inputBuffer) {
+            nextGrid[nr][nc].buildingState.inputBuffer = [];
+          }
+          nextGrid[nr][nc].buildingState.inputBuffer.push(structuredClone(itemToMove));
+        } else if (nextCell.type === 'assembler') {
+          // push to inputBuffers
+          const resourceKey = itemToMove.resourceType || 'unknown';
+          if (!nextGrid[nr][nc].buildingState.inputBuffers) {
+            nextGrid[nr][nc].buildingState.inputBuffers = {};
+          }
+          if (!nextGrid[nr][nc].buildingState.inputBuffers[resourceKey]) {
+            nextGrid[nr][nc].buildingState.inputBuffers[resourceKey] = [];
+          }
+          nextGrid[nr][nc].buildingState.inputBuffers[resourceKey].push(structuredClone(itemToMove));
+        } else {
+          // e.g. conveyor, storage, powerPole, etc.
+          if (!nextGrid[nr][nc].buildingState.item) {
+            nextGrid[nr][nc].buildingState.item = structuredClone(itemToMove);
+          }
+        }
+      } else {
+        // Not a building => place on ground
+        nextGrid[nr][nc].item = structuredClone(itemToMove);
+      }
+    }
+    return;
+  }
+
+  // Otherwise (conveyor, etc.)
+  if (!cell.buildingState.item) return;
+  const buildingItem = cell.buildingState.item;
+  let [nr, nc] = getNextCellCoords(r, c, cell.outputDir);
+
+  if (this.state.currentTier === 3) {
+    nr = (nr % this.state.numRows + this.state.numRows) % this.state.numRows;
+    nc = Math.max(0, Math.min(nc, this.state.numCols - 1));
+  }
+  if (!this.isValidCell(nr, nc)) return;
+
+  const nextCell = this.getCell(nr, nc);
+  if (!nextCell) return;
+
+  // If nextCell is storage and has space...
+  if (nextCell.type === 'storage' && StorageLogic.hasSpace(nextCell)) {
+    if (this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir), buildingItem)) {
+      nextGrid[r][c].buildingState.item = null;
+      StorageLogic.tryStoreItem(nextGrid[nr][nc], structuredClone(buildingItem));
+    }
+    return;
+  }
+
+  // Otherwise normal check
+  if (!this.hasAnyItem(nextCell) && this.canAcceptFrom(nextCell, oppositeDir(cell.outputDir), buildingItem)) {
+    // remove from source
+    nextGrid[r][c].buildingState.item = null;
+
+    // If nextCell is processor -> push to inputBuffer, etc.
+    if (isBuilding(nextCell)) {
+      if (nextCell.type === 'processor') {
+        if (!nextGrid[nr][nc].buildingState.inputBuffer) {
+          nextGrid[nr][nc].buildingState.inputBuffer = [];
+        }
+        nextGrid[nr][nc].buildingState.inputBuffer.push(structuredClone(buildingItem));
+      } else if (nextCell.type === 'assembler') {
+        // push to inputBuffers
+        const resourceKey = buildingItem.resourceType || 'unknown';
+        if (!nextGrid[nr][nc].buildingState.inputBuffers) {
+          nextGrid[nr][nc].buildingState.inputBuffers = {};
+        }
+        if (!nextGrid[nr][nc].buildingState.inputBuffers[resourceKey]) {
+          nextGrid[nr][nc].buildingState.inputBuffers[resourceKey] = [];
+        }
+        nextGrid[nr][nc].buildingState.inputBuffers[resourceKey].push(structuredClone(buildingItem));
+      } else {
+        // e.g. conveyor
+        nextGrid[nr][nc].buildingState.item = structuredClone(buildingItem);
+      }
+    } else {
+      // Place on ground
+      nextGrid[nr][nc].item = structuredClone(buildingItem);
+    }
+  }
+}
+
+    
   
     // ──────────────────────────────
     //          HELPER METHODS
@@ -402,26 +440,93 @@ import {
     /**
      * Checks if a cell can accept an item from a given direction.
      * (Prevents pushing items into a building's output side, etc.)
+     * Also prevents non-recipe items being accepted by structures
      */
-    canAcceptFrom(cell, fromDir) {
-      if (isBuilding(cell)) {
-        // Storage can accept if it has space
-        if (cell.type === 'storage') {
-          return StorageLogic.hasSpace(cell);
-        }
-        // Other buildings: must be empty & not blocked by output direction
-        if (!cell.buildingState.item && cell.outputDir !== fromDir) {
-          return true;
-        }
-        return false;
-      } else {
-        // For empty ground or resource-node, just check if no item present
-        if (!cell.item) {
-          return true;
-        }
+    /**
+ * Checks if a cell can accept an item from a given direction.
+ * (Prevents pushing items into a building's output side, etc.)
+ * Also prevents non-recipe items being accepted by structures.
+ */
+canAcceptFrom(cell, fromDir, incomingItem) {
+  if (isBuilding(cell)) {
+    // 1) If storage, just check capacity
+    if (cell.type === 'storage') {
+      return StorageLogic.hasSpace(cell);
+    }
+
+    // 2) If processor:
+    if (cell.type === 'processor') {
+      // Must not be blocked by output direction
+      if (cell.outputDir === fromDir) {
         return false;
       }
+      // Must have a recipe
+      const recipeKey = cell.buildingState.recipe;
+      if (!recipeKey) {
+        return false;
+      }
+      // Check if incoming item is required by the recipe
+      const resourceKey = incomingItem?.resourceType;
+      const neededInputs = ItemDefinitions[recipeKey].inputs || {};
+      if (!resourceKey || !neededInputs[resourceKey]) {
+        return false;
+      }
+      // Check inputBuffer capacity
+      if (!cell.buildingState.inputBuffer) {
+        cell.buildingState.inputBuffer = [];
+      }
+      const maxBuffer = cell.buildingState.inputBufferMax ?? 5;
+      if (cell.buildingState.inputBuffer.length >= maxBuffer) {
+        return false; 
+      }
+      return true;
     }
+
+    // 3) If assembler (NEW separate per-resource buffers):
+    if (cell.type === 'assembler') {
+      // Must not be blocked by output direction
+      if (cell.outputDir === fromDir) {
+        return false;
+      }
+      // Must have a recipe
+      const recipeKey = cell.buildingState.recipe;
+      if (!recipeKey) {
+        return false;
+      }
+      // Check if incoming item is required by the recipe
+      const resourceKey = incomingItem?.resourceType;
+      const neededInputs = ItemDefinitions[recipeKey].inputs || {};
+      if (!resourceKey || !neededInputs[resourceKey]) {
+        return false;
+      }
+      // Separate buffer for this specific resource
+      if (!cell.buildingState.inputBuffers) {
+        cell.buildingState.inputBuffers = {};
+      }
+      if (!cell.buildingState.inputBuffers[resourceKey]) {
+        cell.buildingState.inputBuffers[resourceKey] = [];
+      }
+      const maxPerResource = cell.buildingState.perResourceBufferMax ?? 5;
+      if (cell.buildingState.inputBuffers[resourceKey].length >= maxPerResource) {
+        return false; // This resource's buffer is full
+      }
+      return true;
+    }
+
+    // 4) For other buildings (conveyor, merger, splitter, etc.)
+    if (!cell.buildingState.item && cell.outputDir !== fromDir) {
+      return true;
+    }
+    return false;
+  } else {
+    // For empty ground or resource-node
+    if (!cell.item) {
+      return true;
+    }
+    return false;
+  }
+}
+
   
     /**
      * For mergers: we define up to 3 potential input directions
@@ -451,13 +556,30 @@ import {
         default:      return [];
       }
     }
-  
-    /**
-     * Validates grid boundaries.
-     */
+    getCell(r, c) {
+      // For Tier 3, wrap row, clamp col
+      if (this.state.currentTier === 3) {
+        const wrappedR = (r % this.state.numRows + this.state.numRows) % this.state.numRows;
+        const wrappedC = Math.max(0, Math.min(c, this.state.numCols - 1));
+        return this.state.grid[wrappedR][wrappedC];
+      } else {
+        // For T1 & T2, clamp both row and col
+        if (r < 0 || r >= this.state.numRows || c < 0 || c >= this.state.numCols) {
+          return null; // out of bounds
+        }
+        return this.state.grid[r][c];
+      }
+    }
+    
     isValidCell(r, c) {
-      const { gridSize } = this.state;
-      return (r >= 0 && r < gridSize && c >= 0 && c < gridSize);
+      // For Tier 3, any row is valid (we wrap it), but col must be 0..numCols-1
+      if (this.state.currentTier === 3) {
+        return c >= 0 && c < this.state.numCols;
+      }
+      // For T1/T2, must be within the normal grid
+      return (
+        r >= 0 && r < this.state.numRows &&
+        c >= 0 && c < this.state.numCols
+      );
     }
   }
-  

@@ -2,229 +2,377 @@
 // =========
 
 import { isBuilding } from './structures.js';
+import { ItemDefinitions } from './itemDefinitions.js';
 
 export class GameUI {
-  /**
-   * @param {GameState} state - The shared game state
-   */
   constructor(state) {
     this.state = state;
-
     this.gridContainer = document.getElementById('grid');
-
-    // We'll store the DOM elements for each cell
     this.cellElements = [];
+    this.messageHideTimer = null;
   }
 
-  /** Called once at startup */
   init() {
-    // Create the DOM for the grid
-    for (let r = 0; r < this.state.gridSize; r++) {
+    const { numRows, numCols } = this.state;
+  
+    // Rebuild cell elements
+    for (let r = 0; r < numRows; r++) {
       this.cellElements[r] = [];
-      for (let c = 0; c < this.state.gridSize; c++) {
+      for (let c = 0; c < numCols; c++) {
         const cellDiv = document.createElement('div');
         cellDiv.classList.add('cell');
         this.gridContainer.appendChild(cellDiv);
         this.cellElements[r][c] = cellDiv;
       }
     }
-
-    // Initial render
+  
+    // Adjust the grid layout to numCols wide by numRows tall:
+    this.gridContainer.style.gridTemplateColumns = `repeat(${numCols}, var(--cell-size))`;
+    this.gridContainer.style.gridTemplateRows = `repeat(${numRows}, var(--cell-size))`;
+  
     this.render();
   }
+  
 
-  /** Show the current state of the grid + player's inventory */
+  /**
+ * Renders a 10×10 "camera" (viewport) around the player if Tier 3 is large.
+ * For Tiers 1 & 2 (smaller grids), if numRows/numCols <= 10, it will just show the entire grid anyway.
+ *
+ * Modify constants VIEW_ROWS, VIEW_COLS as desired.
+ */
   render() {
-    const { grid, playerPos, gridSize } = this.state;
+    const { grid, numRows, numCols, playerPos, currentTier } = this.state;
+    const controls = this.state.controls;
+    const hoveredR = controls?.hoveredRow ?? null;
+    const hoveredC = controls?.hoveredCol ?? null;
+    const action   = controls?.currentAction ?? null;
+    const dir      = controls?.currentDirection ?? null;
+  
+    const VIEW_ROWS = 10;
+    const VIEW_COLS = 10;
+  
+    // 1) Compute camera top-left
+    let topLeftRow, topLeftCol;
+  
+    if (currentTier < 3) {
+      // Tiers 1 & 2: clamp to keep camera within the grid
+      topLeftRow = playerPos.row - Math.floor(VIEW_ROWS / 2);
+      topLeftRow = Math.max(0, Math.min(topLeftRow, numRows - VIEW_ROWS));
+  
+      topLeftCol = playerPos.col - Math.floor(VIEW_COLS / 2);
+      topLeftCol = Math.max(0, Math.min(topLeftCol, numCols - VIEW_COLS));
+    } else {
+      // Tier 3: infinite vertical, but horizontally clamp
+      // topLeftRow is unbounded:
+      topLeftRow = playerPos.row - Math.floor(VIEW_ROWS / 2);
+  
+      // topLeftCol is clamped so we don't go beyond the grid horizontally
+      topLeftCol = playerPos.col - Math.floor(VIEW_COLS / 2);
+      topLeftCol = Math.max(0, Math.min(topLeftCol, numCols - VIEW_COLS));
+    }
+  
+    // 2) Prepare to wrap the player's row/col for highlight check
+    const { row: pRow, col: pCol } = playerPos;
+    let wrappedPlayerRow = pRow;
+    let wrappedPlayerCol = pCol;
+    if (currentTier === 3) {
+      // ring wrap vertically
+      wrappedPlayerRow = (pRow % numRows + numRows) % numRows;
+      // clamp horizontally
+      wrappedPlayerCol = Math.max(0, Math.min(pCol, numCols - 1));
+    }
+  
+    // 3) Clear existing DOM
+    this.gridContainer.innerHTML = '';
+    this.cellElements = [];
+  
+    // Build the 10×10 viewport
+    for (let vr = 0; vr < VIEW_ROWS; vr++) {
+      this.cellElements[vr] = [];
+      for (let vc = 0; vc < VIEW_COLS; vc++) {
+  
+        // "Global" coords in camera space
+        const globalR = topLeftRow + vr;
+        const globalC = topLeftCol + vc;
+  
+        // Now we wrap row if tier=3, clamp col
+        let wrappedRow, wrappedCol;
+        if (currentTier === 3) {
+          wrappedRow = (globalR % numRows + numRows) % numRows;
+          wrappedCol = Math.max(0, Math.min(globalC, numCols - 1));
+        } else {
+          wrappedRow = globalR;
+          wrappedCol = globalC;
+        }
+  
+        if (wrappedCol < 0 || wrappedCol >= numCols) {
+          // out of bounds horizontally => skip or show placeholder
+          wrappedCol = 0;
+        }
+  
+        // Access the cell
+        const cell = grid[wrappedRow][wrappedCol];
+  
+        // Create DOM
+        const cellDiv = document.createElement('div');
+        cellDiv.classList.add('cell');
+        this.cellElements[vr][vc] = cellDiv;
+        this.gridContainer.appendChild(cellDiv);
 
-    // Controls reference
-    const controls = this.state.controls; // if stored in state
-    const hoveredR = controls ? controls.hoveredRow : null;
-    const hoveredC = controls ? controls.hoveredCol : null;
-    const action   = controls ? controls.currentAction : null;
-    const dir      = controls ? controls.currentDirection : null;
+      // Reset the cell’s HTML/class
+      cellDiv.innerHTML = '';
+      cellDiv.classList.add(cell.type);
 
-    for (let r = 0; r < gridSize; r++) {
-      for (let c = 0; c < gridSize; c++) {
-        const cell = grid[r][c];
-        const cellDiv = this.cellElements[r][c];
-        cellDiv.className = 'cell';
-        cellDiv.innerHTML = '';
-
-        // Base class
-        cellDiv.classList.add(cell.type);
-        if (cell.type === 'conveyor') {
-          // Add a direction-specific class for styling
-          if (cell.outputDir) {
-            cellDiv.classList.add('dir-' + cell.outputDir);
+      // ──────────────────────────────────
+      // Extractor styling & resource icon
+      // ──────────────────────────────────
+      if (cell.type === 'extractor') {
+        const resType = cell.buildingState?.underlyingResourceType;
+        const resDef  = ItemDefinitions[resType];
+        if (resType && resDef && resDef.extractorStyle) {
+          // Inline style for the cell
+          for (const [prop, val] of Object.entries(resDef.extractorStyle)) {
+            cellDiv.style[prop] = val;
           }
-        
-          // Create an inner div for the animation
-          const conveyorAnim = document.createElement('div');
-          conveyorAnim.classList.add('conveyor-anim');
-          cellDiv.appendChild(conveyorAnim);
+          // Resource icon
+          const iconEl = document.createElement('div');
+          iconEl.classList.add('extractor-resource-icon');
+          iconEl.style.backgroundColor = resDef.itemColor;
+          iconEl.classList.add(`shape-${resDef.itemShape}`);
+          cellDiv.appendChild(iconEl);
         }
+      }
 
-        // Powered cell highlight
-        if (cell.powered) {
-          cellDiv.classList.add('powered-cell');
+      // ──────────────────────────────────
+      // Conveyor direction + animation
+      // ──────────────────────────────────
+      if (cell.type === 'conveyor' && cell.outputDir) {
+        cellDiv.classList.add('dir-' + cell.outputDir);
+        const conveyorAnim = document.createElement('div');
+        conveyorAnim.classList.add('conveyor-anim');
+        cellDiv.appendChild(conveyorAnim);
+      }
+
+      // Powered highlight
+      if (cell.powered) {
+        cellDiv.classList.add('powered-cell');
+      }
+
+      // Building label (except conveyor)
+      if (isBuilding(cell) && cell.type !== 'conveyor') {
+        const labelEl = document.createElement('div');
+        labelEl.classList.add('building-label');
+        labelEl.textContent = this.getBuildingLabel(cell.type);
+        cellDiv.appendChild(labelEl);
+      }
+
+      // ──────────────────────────────────
+      // Resource node
+      // ──────────────────────────────────
+      if (cell.type === 'resource-node') {
+        const resType = cell.resourceType;
+        const resDef  = ItemDefinitions[resType];
+        const label = document.createElement('div');
+        label.classList.add('resource-label');
+        if (resDef) {
+          label.textContent = resDef.displayName;
+          label.style.color = resDef.itemColor;
+        } else {
+          label.textContent = resType || "???";
         }
+        cellDiv.appendChild(label);
+      }
+      else if (cell.type === 'energy-region') {
+        const energyLabel = document.createElement('div');
+        energyLabel.classList.add('energy-label');
+        energyLabel.textContent = 'ENERGY';
+        energyLabel.style.color = '#00ffff';
+        cellDiv.appendChild(energyLabel);
+      }
 
-        // If building, add a small label (e.g. [CV] for Conveyor)
-        if (isBuilding(cell) && cell.type !== 'conveyor') {
-          const labelEl = document.createElement('div');
-          labelEl.classList.add('building-label');
-          labelEl.textContent = this.getBuildingLabel(cell.type);
-          cellDiv.appendChild(labelEl);
-        }
+      // ──────────────────────────────────
+      // Ground item
+      // ──────────────────────────────────
+      if (cell.item) {
+        const itemEl = document.createElement('div');
+        itemEl.classList.add('item-indicator');
 
-        // If there's an item on ground
-        if (cell.item) {
-          const itemEl = document.createElement('div');
-          itemEl.classList.add('item-indicator');
-          
-          // Show distinct ASCII text for each item type
-          switch (cell.item.type) {
-            case 'raw':
-              itemEl.classList.add('item-raw');
-              // itemEl.textContent = 'RAW';
-              break;
-            case 'processed':
-              itemEl.classList.add('item-processed');
-              // itemEl.textContent = 'PRC';
-              break;
-            case 'final':
-              itemEl.classList.add('item-final');
-              // itemEl.textContent = 'FIN';
-              break;
-          }
-          cellDiv.appendChild(itemEl);
-        }
-
-        // If building is storage, show stored items
-        if (cell.type === 'storage' && cell.buildingState?.storedItems) {
-          const container = document.createElement('div');
-          container.classList.add('storage-items');
-          for (const stItem of cell.buildingState.storedItems) {
-            const itemEl = document.createElement('div');
-            itemEl.classList.add('item-indicator');
-            // Again, distinct text for each item type
-            switch (stItem.type) {
-              case 'raw':
-                itemEl.classList.add('item-raw');
-                // itemEl.textContent = 'RAW';
-                break;
-              case 'processed':
-                itemEl.classList.add('item-processed');
-                // itemEl.textContent = 'PRC';
-                break;
-              case 'final':
-                itemEl.classList.add('item-final');
-                // itemEl.textContent = 'FIN';
-                break;
+        if (cell.item.type === 'raw') {
+          const itemRes = cell.item.resourceType;
+          if (itemRes && ItemDefinitions[itemRes]) {
+            itemEl.style.backgroundColor = ItemDefinitions[itemRes].itemColor;
+            const shapeName = ItemDefinitions[itemRes].itemShape;
+            if (shapeName) {
+              itemEl.classList.add(`shape-${shapeName}`);
             }
-            container.appendChild(itemEl);
+          } else {
+            itemEl.classList.add('item-raw');
           }
-          cellDiv.appendChild(container);
         }
-
-        // If building has an internal item
-        // if (isBuilding(cell) && cell.buildingState?.item) {
-        //   const buildingItem = cell.buildingState.item;
-        //   const storedItemEl = document.createElement('div');
-        //   storedItemEl.classList.add('item-indicator');
-        //   switch (buildingItem.type) {
-        //     case 'raw':
-        //       storedItemEl.classList.add('item-raw');
-        //       // storedItemEl.textContent = 'RAW';
-        //       break;
-        //     case 'processed':
-        //       storedItemEl.classList.add('item-processed');
-        //       // storedItemEl.textContent = 'PRC';
-        //       break;
-        //     case 'final':
-        //       storedItemEl.classList.add('item-final');
-        //       // storedItemEl.textContent = 'FIN';
-        //       break;
-        //   }
-        //   cellDiv.appendChild(storedItemEl);
-        // }
-
-        // If there's an output direction
-        if (cell.outputDir && isBuilding(cell)) {
-          const arrowEl = document.createElement('div');
-          arrowEl.classList.add('arrow');
-          arrowEl.textContent = this.getArrowSymbol(cell.outputDir);
-          arrowEl.classList.add(cell.outputDir);
-          cellDiv.appendChild(arrowEl);
+        else if (cell.item.type === 'processed') {
+          itemEl.classList.add('item-processed');
         }
-
-        // In-range highlight
-        if (this.isInInteractionRange(r, c)) {
-          cellDiv.classList.add('in-range');
+        else if (cell.item.type === 'final') {
+          itemEl.classList.add('item-final');
         }
+        cellDiv.appendChild(itemEl);
+      }
 
-        // Player cell
-        if (r === playerPos.row && c === playerPos.col) {
-          cellDiv.classList.add('player-cell');
+      // ──────────────────────────────────
+      // Storage contents
+      // ──────────────────────────────────
+      if (cell.type === 'storage' && cell.buildingState?.storedItems) {
+        const container = document.createElement('div');
+        container.classList.add('storage-items');
+        for (const stItem of cell.buildingState.storedItems) {
+          const stEl = document.createElement('div');
+          stEl.classList.add('item-indicator');
+          if (stItem.type === 'raw' && stItem.resourceType && ItemDefinitions[stItem.resourceType]) {
+            const def = ItemDefinitions[stItem.resourceType];
+            stEl.style.backgroundColor = def.itemColor;
+            stEl.classList.add(`shape-${def.itemShape}`);
+          }
+          else if (stItem.type === 'processed') {
+            stEl.classList.add('item-processed');
+          }
+          else if (stItem.type === 'final') {
+            stEl.classList.add('item-final');
+          }
+          container.appendChild(stEl);
         }
+        cellDiv.appendChild(container);
+      }
 
-        // ------------- BUILDING PREVIEW (BLUEPRINT) -------------
-        // If this cell is the hovered cell, and the current action is a building
-        if (r === hoveredR && c === hoveredC) {
-          if (action && this.isPlaceableBuilding(action)) {
-            const previewDiv = document.createElement('div');
-            previewDiv.classList.add('blueprint-preview');
-            previewDiv.classList.add(action); // so it uses that building's color
-
-            // Show arrow for blueprint direction
-            if (this.isDirectionNeeded(action) && dir) {
-              const arrowEl = document.createElement('div');
-              arrowEl.classList.add('arrow');
-              arrowEl.textContent = this.getArrowSymbol(dir);
-              previewDiv.appendChild(arrowEl);
-            }
-
-            cellDiv.appendChild(previewDiv);
+      // ──────────────────────────────────
+      // Processor / Assembler product icon
+      // ──────────────────────────────────
+      if (cell.type === 'processor' || cell.type === 'assembler') {
+        const recipeKey = cell.buildingState.recipe;
+        if (recipeKey) {
+          const outDef = ItemDefinitions[recipeKey];
+          if (outDef) {
+            const iconEl = document.createElement('div');
+            iconEl.classList.add('structure-product-icon');
+            iconEl.style.backgroundColor = outDef.itemColor;
+            iconEl.classList.add(`shape-${outDef.itemShape}`);
+            cellDiv.appendChild(iconEl);
           }
         }
       }
+
+      // If building is holding an item
+      if (isBuilding(cell) && cell.buildingState.item) {
+        const bItem = cell.buildingState.item;
+        const itemEl = document.createElement('div');
+        itemEl.classList.add('item-indicator');
+        if (bItem.type === 'raw' && bItem.resourceType && ItemDefinitions[bItem.resourceType]) {
+          const def = ItemDefinitions[bItem.resourceType];
+          itemEl.style.backgroundColor = def.itemColor;
+          itemEl.classList.add(`shape-${def.itemShape}`);
+        }
+        else if (bItem.type === 'processed') {
+          itemEl.classList.add('item-processed');
+        }
+        else if (bItem.type === 'final') {
+          itemEl.classList.add('item-final');
+        }
+        cellDiv.appendChild(itemEl);
+      }
+
+      // Output arrow
+      if (cell.outputDir && isBuilding(cell)) {
+        const arrowEl = document.createElement('div');
+        arrowEl.classList.add('arrow', cell.outputDir);
+        arrowEl.textContent = this.getArrowSymbol(cell.outputDir);
+        cellDiv.appendChild(arrowEl);
+      }
+
+      // Check "in-range" highlighting. 
+      // We must pass the real global coords (r,c) to isInInteractionRange.
+      if (this.isInInteractionRange(globalR, globalC)) {
+        cellDiv.classList.add('in-range');
+      }
+
+      // Player highlight:
+      if (wrappedRow === wrappedPlayerRow && wrappedCol === wrappedPlayerCol) {
+        cellDiv.classList.add('player-cell');
+      }
+
+      // Blueprint preview if hovered
+      if (globalR === hoveredR && globalC === hoveredC) {
+        if (action && this.isPlaceableBuilding(action)) {
+          const previewDiv = document.createElement('div');
+          previewDiv.classList.add('blueprint-preview', action);
+          if (this.isDirectionNeeded(action) && dir) {
+            const arrow = document.createElement('div');
+            arrow.classList.add('arrow', dir);
+            arrow.textContent = this.getArrowSymbol(dir);
+            previewDiv.appendChild(arrow);
+          }
+          cellDiv.appendChild(previewDiv);
+        }
+      }
+    }
+
+  // Set up the container for the 10×10 cells
+  this.gridContainer.style.gridTemplateRows = `repeat(${VIEW_ROWS}, var(--cell-size))`;
+  this.gridContainer.style.gridTemplateColumns = `repeat(${VIEW_COLS}, var(--cell-size))`;
+
+  // Store camera info if needed by other code
+  this.cameraTopLeftRow = topLeftRow;
+  this.cameraTopLeftCol = topLeftCol;
+  this.cameraRows = VIEW_ROWS;
+  this.cameraCols = VIEW_COLS;
+
+  // Tier Indicator
+  const tierIndicatorEl = document.getElementById('tierIndicator');
+    if (tierIndicatorEl) {
+      tierIndicatorEl.textContent = `Current Tier: ${this.state.currentTier}`;
     }
   }
+}
 
-  /**
-   * Collect resource from a resource-node cell (e.g. ironOre).
-   * We check maxResourceCount and increment the correct inventory key.
-   */
+
   handleResourceCollection(cell) {
     if (!cell.resourceType) return;
-    const rType = cell.resourceType; // e.g. "ironOre"
+    const rType = cell.resourceType;
     const { playerInventory, maxResourceCount } = this.state;
 
-    // Ensure inventory for this rType exists
     if (playerInventory[rType] == null) {
       playerInventory[rType] = 0;
     }
-
     if (playerInventory[rType] < maxResourceCount) {
       playerInventory[rType]++;
-      // (infinite node for now)
     }
 
-    // Update inventory panel
-    if (this.state.controls && this.state.controls.ui && this.state.controls.ui.inventoryUI) {
+    if (this.state.controls?.ui?.inventoryUI) {
       this.state.controls.ui.inventoryUI.render();
     }
   }
 
-
   isInInteractionRange(row, col) {
-    const { row: pr, col: pc } = this.state.playerPos;
-    const dist = Math.abs(row - pr) + Math.abs(col - pc);
-    return dist <= this.state.interactionRange;
+    const { currentTier, numRows, interactionRange } = this.state;
+    const playerRow = this.state.playerPos.row;
+    const playerCol = this.state.playerPos.col;
+  
+    // Horizontal distance is the same for all tiers
+    const dx = Math.abs(col - playerCol);
+  
+    let dy;
+    if (currentTier === 3) {
+      // Use ring-based vertical distance
+      const rawDiff = Math.abs(row - playerRow);
+      dy = Math.min(rawDiff, numRows - rawDiff);
+    } else {
+      // Normal vertical distance
+      dy = Math.abs(row - playerRow);
+    }
+  
+    // Manhattan distance
+    const dist = dx + dy;
+    return dist <= interactionRange;
   }
 
-  /* ASCII arrow symbols for a retro vibe */
   getArrowSymbol(dir) {
     switch (dir) {
       case 'up':    return '^';
@@ -235,7 +383,6 @@ export class GameUI {
     }
   }
 
-  /* Return an ASCII label for each building type. */
   getBuildingLabel(type) {
     switch (type) {
       case 'conveyor':    return '[CV]';
@@ -268,16 +415,24 @@ export class GameUI {
   }
 
   showFeedback(msg) {
-    const messageLog = document.getElementById('messageLog');
-    if (!messageLog) return;
+    const overlayEl = document.getElementById('messageOverlay');
+    if (!overlayEl) return;
 
-    // Clear existing messages
-    messageLog.innerHTML = '';
+    // Clear any existing timeout so we don't prematurely hide a new message
+    if (this.messageHideTimer) {
+      clearTimeout(this.messageHideTimer);
+      this.messageHideTimer = null;
+    }
 
-    // Create a single new line
-    const line = document.createElement('div');
-    line.textContent = msg;
-    messageLog.appendChild(line);
+    // Show message
+    overlayEl.textContent = msg;
+    overlayEl.style.display = 'block';
+
+    // Hide after ~2 seconds
+    this.messageHideTimer = setTimeout(() => {
+      overlayEl.style.display = 'none';
+      overlayEl.textContent = '';
+      this.messageHideTimer = null;
+    }, 2000);
   }
-
 }

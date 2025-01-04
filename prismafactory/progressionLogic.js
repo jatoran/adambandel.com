@@ -38,17 +38,14 @@ export class ProgressionLogic {
    * Tier 1 final items to unlock Tier 2.
    */
   isPortalReadyForTier2() {
-    const { gridSize, grid } = this.state;
-    // Example: we require 10 final items
-    const requiredCount = 10;
-
-    for (let r = 0; r < gridSize; r++) {
-      for (let c = 0; c < gridSize; c++) {
+    const { numRows, numCols, grid } = this.state;
+    const requiredCount = 10; // example
+  
+    for (let r = 0; r < numRows; r++) {
+      for (let c = 0; c < numCols; c++) {
         const cell = grid[r][c];
         if (cell.type === 'portal') {
-          // We'll assume portal also uses "storedItems" in buildingState
           const items = cell.buildingState.storedItems || [];
-          // Count how many are 'final' T1 items
           const finalCount = items.filter(it => it.type === 'final').length;
           if (finalCount >= requiredCount) {
             return true;
@@ -58,6 +55,7 @@ export class ProgressionLogic {
     }
     return false;
   }
+  
 
   /**
    * Called once the portal is loaded with enough T1 final items.
@@ -101,12 +99,11 @@ export class ProgressionLogic {
    * Optionally drain or reduce the final items from any portal after unlocking T2.
    */
   drainPortalItems() {
-    const { gridSize, grid } = this.state;
-    for (let r = 0; r < gridSize; r++) {
-      for (let c = 0; c < gridSize; c++) {
+    const { numRows, numCols, grid } = this.state;
+    for (let r = 0; r < numRows; r++) {
+      for (let c = 0; c < numCols; c++) {
         const cell = grid[r][c];
         if (cell.type === 'portal') {
-          // Wipe or reduce stored items
           cell.buildingState.storedItems = [];
         }
       }

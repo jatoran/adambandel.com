@@ -28,7 +28,6 @@ body {
 .ascii-title {
   color: var(--neon-pink);
   text-align: center;
-  margin-bottom: 8px;
   line-height: 1.1;
 }
 
@@ -50,8 +49,8 @@ body {
 /* Game grid styling */
 #grid {
   display: grid;
-  grid-template-columns: repeat(10, var(--cell-size));
-  grid-template-rows: repeat(10, var(--cell-size));
+  /* grid-template-columns: repeat(10, var(--cell-size)); */
+  /* grid-template-rows: repeat(10, var(--cell-size)); */
   justify-content: center;
   align-items: center;
   margin: 0 auto 12px auto;
@@ -69,87 +68,46 @@ body {
   color: var(--neon-green);
   font-size: 0.75rem;
   text-align: center;
-  overflow: hidden;
+
+  /* IMPORTANT: allow arrow to overflow the boundary */
+  overflow: visible;
 }
 
 /* Hovered or in-range highlight */
 .cell.in-range {
   background-color: rgba(57, 255, 20, 0.1);
 }
-/* .in-range {
-  box-shadow: 0 0 0 2px rgba(255, 255, 0, 0.2) inset;
-} */
 
 /* Player cell highlight */
 .cell.player-cell {
   border: 2px solid var(--neon-pink);
 }
 
-  /* Player's location: show an ASCII '@' overlay instead of a white outline. */
-  .player-cell {
-    outline: none !important; /* remove any old outline */
-    position: relative;
-  }
-  .player-cell::after {
-    content: '@';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    text-shadow: 0 0 5px #fff;
-    font-size: 1.2rem;
-    z-index: 10;
-  }
-
-/* Resource node, source, etc. */
-.cell.resource-node {
-  background-color: rgba(255, 255, 0, 0.3); /* was 0.1 */
-}
-.cell.energy-region {
-  background-color: rgba(0, 255, 255, 0.4); /* was 0.15 */
-}
-.cell.resource-node::after {
-  content: 'FE';
+/* Player ASCII '@' overlay */
+.player-cell::after {
+  content: '@';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #ffff00; /* bright yellow */
-  font-size: 1rem;
-  text-shadow: 0 0 4px #ffff00;
-  pointer-events: none;
+  color: #fff;
+  text-shadow: 0 0 5px #fff;
+  font-size: 1.2rem;
+  z-index: 10;
 }
-
-.cell.energy-region::after {
-  content: 'EN';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #00ffff;
-  font-size: 1rem;
-  text-shadow: 0 0 4px #00ffff;
-  pointer-events: none;
-}
-.cell.source {
-  background-color: rgba(255, 165, 0, 0.15);
-}
-
 
 /* Powered highlight */
 .cell.powered-cell {
   box-shadow: 0 0 8px var(--neon-blue);
 }
 
-/* Building types: color-coded (a bit more distinct) */
+/* BUILDINGS */
 .cell.conveyor {
-  position: relative; /* so child .conveyor-anim can be absolutely positioned */
+  position: relative;
   background-color: transparent;
-  /* You can remove the old static background-image, since we'll do it in .conveyor-anim */
 }
 
-/* The scrolling overlay for conveyors */
+/* Conveyor scrolling overlay */
 .conveyor-anim {
   position: absolute;
   inset: 0;
@@ -161,7 +119,7 @@ body {
     transparent 8px
   );
   animation: conveyorMove 0.3s linear infinite;
-  z-index: 1; /* base layer, arrow is above */
+  z-index: 1; 
 }
 
 @keyframes conveyorMove {
@@ -169,36 +127,24 @@ body {
   100% { background-position: 24px 0; }
 }
 
-/* Direction classes rotate the conveyor-anim div to face the correct direction */
+/* Direction-based conveyor rotation */
 .cell.conveyor.dir-up    .conveyor-anim { transform: rotate(270deg); }
 .cell.conveyor.dir-down  .conveyor-anim { transform: rotate( 90deg); }
-
 .cell.conveyor.dir-left  .conveyor-anim { transform: rotate(180deg); }
-/* dir-right is default horizontal, so no transform needed */
+/* .dir-right is default horizontal */
 
-/* Arrow on top of the stripes */
-.cell.conveyor .arrow {
-  position: absolute;
-  bottom: 4px;  /* a little padding from the bottom */
-  left: 4px;    /* a little padding from the left */
-  transform: none;
-  color: var(--neon-pink);
-  font-size: 0.8rem;
-  z-index: 20;
-}
+/* Other building backgrounds (light tint) */
+.cell.extractor    { background-color: rgba(255,  50,  50,  0.15); }
+.cell.processor    { background-color: rgba(  0, 160, 160, 0.15); }
+.cell.assembler    { background-color: rgba(160,   0, 160, 0.15); }
+.cell.storage      { background-color: rgba(255, 215,   0, 0.15); }
+.cell.merger       { background-color: rgba(  0, 100,   0, 0.15); }
+.cell.splitter     { background-color: rgba( 95, 158, 160, 0.15); }
+.cell.portal       { background-color: rgba(138,  43, 226, 0.15); }
+.cell.accumulator  { background-color: rgba(  0, 255, 127, 0.15); }
+.cell.powerPole    { background-color: rgba(255,  69,   0, 0.15); }
 
-
-.cell.extractor {   background-color: rgba(255, 50, 50, 0.15);  }
-.cell.processor {   background-color: rgba(0, 160, 160, 0.15);  }
-.cell.assembler {   background-color: rgba(160, 0, 160, 0.15);  }
-.cell.storage   {   background-color: rgba(255, 215, 0, 0.15);  }
-.cell.merger    {   background-color: rgba(0, 100, 0, 0.15);    }
-.cell.splitter  {   background-color: rgba(95, 158, 160, 0.15); }
-.cell.portal    {   background-color: rgba(138, 43, 226, 0.15); }
-.cell.accumulator { background-color: rgba(0, 255, 127, 0.15);  }
-.cell.powerPole   { background-color: rgba(255, 69, 0, 0.15);   }
-
-/* Building label for clarity (ASCII style) */
+/* Building label (ASCII style) */
 .building-label {
   position: absolute;
   top: 2px;
@@ -209,15 +155,37 @@ body {
   opacity: 0.85;
 }
 
+/* For bottom-right corner resource name on extractor */
+
+.extractor-resource-icon {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  width: 14px;   /* smaller than the usual item-indicator’s ~8px or 20% cell size */
+  height: 14px;
+  scale: .5;
+  pointer-events: none; /* don't let clicks interact with it */
+  z-index: 90;          /* behind the arrow, but above the building background */
+}
+
+.structure-product-icon {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  scale: 0.5;
+  pointer-events: none;
+  z-index: 90;
+  /* optional styling so it stands out */
+  opacity: 0.9;
+}
+
 /* Item indicators */
 .item-indicator {
-  /* size it smaller to avoid big squares */
   width: 20%;
   height: 20%;
-  border: none; /* remove dashed border */
-  display: block; /* or flex, if you prefer */
   position: relative;
-  /* No text needed anymore, so no alignment or color for text */
 }
 
 /* RAW -> circle */
@@ -226,13 +194,13 @@ body {
   border-radius: 50%;
 }
 
-/* PROCESSED -> diamond shape (square rotated 45deg) */
+/* PROCESSED -> diamond */
 .item-processed {
   background-color: var(--neon-blue);
   transform: rotate(45deg);
 }
 
-/* FINAL -> star shape (example polygon) */
+/* FINAL -> star shape */
 .item-final {
   background-color: var(--neon-pink);
   clip-path: polygon(
@@ -249,7 +217,7 @@ body {
   );
 }
 
-/* For storing multiple items visually in storage */
+/* Storage layout (multiple items) */
 .storage-items {
   display: flex;
   flex-wrap: wrap;
@@ -258,34 +226,80 @@ body {
   justify-content: center;
 }
 
-/* Arrow direction text (for building output directions) */
+/* "Resource node" or "ENERGY" label overlays */
+.resource-label,
+.energy-label {
+  position: absolute;
+  font-size: 0.8rem;
+  text-shadow: 0 0 4px currentColor;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Shapes for dynamic resources */
+.shape-circle {
+  border-radius: 50%;
+}
+
+.shape-diamond {
+  transform: rotate(45deg);
+}
+
+.shape-star {
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 72%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+/* Arrow direction text: now we position them outside the cell's edge */
+
 .arrow {
   position: absolute;
-  bottom: 4px;  /* a little padding from the bottom */
-  left: 4px;    /* a little padding from the left */
-  transform: none;
+  z-index: 100;
   color: var(--neon-pink);
-  font-size: 0.8rem;
-  z-index: 20;
+  font-size: 0.85rem;
+  pointer-events: none;
+  /* ensure the arrow is visible outside the cell */
+  white-space: nowrap;
 }
 
-
-
-/* Each direction sets one side of the triangle to neon-pink */
+/* one approach: offset each direction so it extends outside the cell. */
 .arrow.up {
-  border-bottom-color: var(--neon-pink);
-}
-.arrow.down {
-  border-top-color: var(--neon-pink);
-}
-.arrow.left {
-  border-right-color: var(--neon-pink);
-}
-.arrow.right {
-  border-left-color: var(--neon-pink);
+  top: -1.1em; /* above the cell boundary */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-/* Blueprint preview overlay (with dotted border and ASCII label) */
+.arrow.down {
+  bottom: -1em; /* below the cell */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.arrow.left {
+  left: -1em; /* to the left of the cell */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.arrow.right {
+  right: -0.8em; /* to the right of the cell */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Blueprint preview overlay */
 .blueprint-preview {
   position: absolute;
   inset: 0;
@@ -296,7 +310,6 @@ body {
   opacity: 0.8;
   pointer-events: none;
 }
-
 .blueprint-preview::before {
   content: "[BP]";
   position: absolute;
@@ -323,6 +336,30 @@ body {
 .selected-action {
   border-color: var(--neon-pink) !important;
 }
+
+#messageOverlay {
+  /* Overlaid at the top center of the grid; adjust to your liking */
+  position: absolute;
+  top: 50px;
+  left: 25%;
+  transform: translateX(-50%);
+  
+  /* So it's on top of grid but below modals (if you want) */
+  z-index: 500;
+
+  /* Some styling to make it readable */
+  background-color: rgba(0,0,0,0.7);
+  color: #fff;
+  padding: 6px 12px;
+  border: 1px dashed #39FF14; /* or your neon color */
+  border-radius: 4px;
+  min-width: 100px;
+  text-align: center;
+
+  /* Hidden by default until we show a message */
+  display: none;
+}
+
 
 /* Message log */
 .message-log {
@@ -351,9 +388,38 @@ hr {
 }
 
 
-.building-ascii pre {
-  margin: 0;
-  font-size: 0.5rem; /* or another size that looks good */
-  line-height: 0.7rem;
-  pointer-events: none; /* so clicks pass through to the cell */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: none; /* toggled by JS */
+  z-index: 999;  /* Above the game grid */
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;  /* or whatever size you like */
+  padding: 16px;
+  background-color: #111;
+  border: 2px solid #00ff00;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #700;
+  color: #fff;
+  border: 1px solid #900;
+  cursor: pointer;
+  font-size: 1rem;
 }
