@@ -230,7 +230,7 @@ body {
 .resource-label,
 .energy-label {
   position: absolute;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   text-shadow: 0 0 4px currentColor;
   pointer-events: none;
   top: 50%;
