@@ -335,7 +335,7 @@
 
 @media (min-width: 768px) {
   .nav-month-list {
-      justify-content: center;
+      /* justify-content: center; */
   }
 }
 

@@ -205,6 +205,8 @@ function setupMonthList() {
         }
     });
     updateNavArrows();
+    // Force the list to scroll all the way left on load
+  monthList.scrollLeft = 0;
 }
 
 function updateNavArrows() {
@@ -219,11 +221,19 @@ function updateNavArrows() {
 
 function scrollNav(direction) {
     const scrollAmount = monthList.clientWidth * 0.8;
-    monthList.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
+    let newScrollLeft = direction === 'left'
+      ? monthList.scrollLeft - scrollAmount
+      : monthList.scrollLeft + scrollAmount;
+  
+    // Clamp the scroll so it never goes beyond 0 or the max scroll width.
+    newScrollLeft = Math.max(0, Math.min(newScrollLeft, monthList.scrollWidth - monthList.clientWidth));
+  
+    monthList.scrollTo({
+      left: newScrollLeft,
+      behavior: 'smooth'
     });
-}
+  }
+  
 
 if (navLeft) {
     navLeft.addEventListener('click', () => scrollNav('left'));
