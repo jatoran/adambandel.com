@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grothendieck Fibration Visualization</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #1e1e1e;
+    }
+    canvas {
+      display: block;
+      background: radial-gradient(#202020, #0c0c0c);
+    }
+  </style>
+</head>
+<body>
+<canvas id="grothCanvas" width="900" height="600"></canvas>
+
+<script>
+// ----------------------------------------------------------------------------------
+// Conceptual Explanation:
+// 1. We define a "base line" of points (representing a base category).
+// 2. Above each base point, we draw swirling "fibers" to illustrate the idea of
+//    a Grothendieck fibration: each base object has a structured "fiber" of objects.
+// 3. Math & animation: we use trigonometric functions (sin & cos) and time
+//    to create swirling orbits, simulating how each fiber might "dance" above its base.
+//
+// Note: This is a playful visualization, not a literal 1:1 representation of fibrations!
+// ----------------------------------------------------------------------------------
+
+// Grab the canvas and set up 2D context
+const canvas = document.getElementById('grothCanvas');
+const ctx = canvas.getContext('2d');
+const w = canvas.width;
+const h = canvas.height;
+
+// Number of base points (objects in the base category)
+const NUM_BASE_POINTS = 6;
+
+// Each base point will have N fiber orbits
+const NUM_FIBERS_PER_BASE = 5;
+
+// Calculate base points evenly spaced along the width
+const basePoints = [];
+for (let i = 1; i <= NUM_BASE_POINTS; i++) {
+  let xPos = (i * w) / (NUM_BASE_POINTS + 1);
+  let yPos = h * 0.8;  // a line near the bottom
+  basePoints.push({ x: xPos, y: yPos });
+}
+
+// Animation time variable
+let time = 0;
+
+// Main animation loop
+function animate() {
+  // Clear the canvas each frame
+  ctx.clearRect(0, 0, w, h);
+
+  // OPTIONAL: Slight fade effect for trailing
+  // ctx.fillStyle = 'rgba(0,0,0,0.07)';
+  // ctx.fillRect(0, 0, w, h);
+
+  // Draw base line
+  ctx.strokeStyle = '#ffffff50';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, h * 0.8);
+  ctx.lineTo(w, h * 0.8);
+  ctx.stroke();
+
+  // Draw each base point
+  basePoints.forEach((base, idx) => {
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(base.x, base.y, 5, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // For each base point, draw swirling fiber objects
+    for (let f = 0; f < NUM_FIBERS_PER_BASE; f++) {
+      // Angle offset so each fiber has a unique orbit
+      let angleOffset = (2 * Math.PI * f) / NUM_FIBERS_PER_BASE;
+      // Orbit radius and rotation speed
+      let radius = 30 + 10 * f;
+      let speed = 0.007 + 0.001 * f;
+
+      // Calculate swirl coordinates
+      let swirlX = base.x + Math.cos(time * speed + angleOffset) * radius;
+      let swirlY = base.y - 100 + Math.sin(time * speed + angleOffset) * radius;
+
+      // Draw swirling fiber point
+      // Color changes with f + time for variety
+      let r = Math.floor(128 + 127 * Math.sin(time * 0.01 + f));
+      let g = Math.floor(128 + 127 * Math.sin(time * 0.013 + f * 2));
+      let b = Math.floor(128 + 127 * Math.sin(time * 0.017 + f * 3));
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.9)`;
+
+      ctx.beginPath();
+      ctx.arc(swirlX, swirlY, 4, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Optionally draw a line from the base point to the fiber (like a "fibration")
+      ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.5)`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(base.x, base.y);
+      ctx.lineTo(swirlX, swirlY);
+      ctx.stroke();
+    }
+  });
+
+  // Increase time
+  time += 1;
+
+  // Request next frame
+  requestAnimationFrame(animate);
+}
+
+// Start animation
+animate();
+</script>
+</body>
+</html>
