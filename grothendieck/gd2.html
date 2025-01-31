@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grothendieck Abstract Visualization</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(#222, #000);
+      font-family: sans-serif;
+      color: #ffffffcc;
+    }
+    #info {
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+      z-index: 9999;
+    }
+    #info h1 {
+      margin: 0;
+      font-weight: normal;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<div id="info">
+  <h1>Grothendieck's Cosmic Dance</h1>
+  <p>A multi-layered, ever-shifting visualization inspired by Grothendieck's higher-order abstractions.</p>
+</div>
+<canvas id="abstractCanvas"></canvas>
+
+<script>
+/* -----------------------------------------------------------------------------------
+   High-Level Explanation of the Visualization:
+
+   1) We define multiple "layers" (like higher categorical levels).
+      - Each layer has swirling points forming geometric circles or polygons.
+      - Each point within a layer also "spawns" smaller orbits (fiber objects).
+
+   2) We animate rotation, color shifts, and expansions over time.
+      - Sine and cosine functions manage smooth motion and color transitions.
+      - Each layer orbits at a different speed, simulating multiple scales of structure.
+
+   3) Visual Idea:
+      - Like infinitely stacked worlds (∞-categories) with fibered structures
+        swirling around them, continuously morphing.
+
+   4) The goal is to evoke the sense of complexity and depth in Grothendieck's universe,
+      not to literally depict it. Enjoy the mesmerizing animation!
+   ----------------------------------------------------------------------------------- */
+
+const canvas = document.getElementById('abstractCanvas');
+const ctx = canvas.getContext('2d');
+
+// Resize the canvas to fill the window
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Number of "layers" in our cosmic dance
+const NUM_LAYERS = 5;
+
+// Each layer consists of a ring (or polygon) of "nodes"
+const NODES_PER_LAYER = 12;
+
+// Each node spawns "fibers" that swirl around it
+const FIBERS_PER_NODE = 6;
+
+// We'll store info about each layer in an array
+const layers = [];
+
+// Initialize layers
+for (let i = 0; i < NUM_LAYERS; i++) {
+  // The radius of the layer from the center
+  let radius = 100 + i * 70;
+  // The rotational speed of this layer
+  let rotationSpeed = 0.0005 + i * 0.0002;
+
+  // The data structure for each layer
+  layers.push({
+    radius,
+    rotation: 0,     // Current rotation angle
+    rotationSpeed,   // Speed at which the layer rotates
+    nodes: []        // We will fill this with node data
+  });
+
+  // Populate the layer with nodes around a circle
+  for (let j = 0; j < NODES_PER_LAYER; j++) {
+    let angle = (2 * Math.PI * j) / NODES_PER_LAYER;
+
+    // Each node has a local "fiber swirl" angle
+    // and will spawn multiple orbiting fiber points
+    let fiberData = [];
+    for (let f = 0; f < FIBERS_PER_NODE; f++) {
+      fiberData.push({
+        offsetAngle: (2 * Math.PI * f) / FIBERS_PER_NODE, // base offset for orbit
+        orbitRadius: Math.random() * 20 + 10,             // how far each fiber orbits from node
+        orbitSpeed:  0.01 + 0.005 * Math.random()         // speed of orbit around the node
+      });
+    }
+
+    layers[i].nodes.push({
+      baseAngle: angle,
+      fiberData
+    });
+  }
+}
+
+// Animation time
+let time = 0;
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Center of the screen
+  let centerX = canvas.width / 2;
+  let centerY = canvas.height / 2;
+
+  // Draw each layer
+  layers.forEach((layer, layerIndex) => {
+    // Increment the layer's rotation
+    layer.rotation += layer.rotationSpeed;
+
+    // For color changes, let's incorporate layerIndex & time
+    // We'll produce a base color for the entire layer
+    let r = Math.floor(128 + 127 * Math.sin(time * 0.001 + layerIndex * 1.3));
+    let g = Math.floor(128 + 127 * Math.sin(time * 0.0012 + layerIndex * 1.7));
+    let b = Math.floor(128 + 127 * Math.sin(time * 0.0008 + layerIndex * 2.1));
+
+    // Node color
+    let nodeColor = `rgba(${r}, ${g}, ${b}, 0.8)`;
+
+    // Connect each node with lines to create a polygon ring
+    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.3)`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    layer.nodes.forEach((node, nodeIndex) => {
+      // Angle of this node, plus the global rotation
+      let globalAngle = node.baseAngle + layer.rotation;
+      let x = centerX + Math.cos(globalAngle) * layer.radius;
+      let y = centerY + Math.sin(globalAngle) * layer.radius;
+
+      // Move to the first node or line to subsequent nodes
+      if (nodeIndex === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    });
+    ctx.closePath();
+    ctx.stroke();
+
+    // Draw each node in the layer
+    layer.nodes.forEach((node) => {
+      let globalAngle = node.baseAngle + layer.rotation;
+      let x = centerX + Math.cos(globalAngle) * layer.radius;
+      let y = centerY + Math.sin(globalAngle) * layer.radius;
+
+      // Draw the node as a circle
+      ctx.fillStyle = nodeColor;
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Draw the swirling fiber points around the node
+      node.fiberData.forEach((fiber) => {
+        // Each fiber orbits around the node center
+        let fiberAngle = fiber.offsetAngle + (time * fiber.orbitSpeed);
+        let fiberX = x + Math.cos(fiberAngle) * fiber.orbitRadius;
+        let fiberY = y + Math.sin(fiberAngle) * fiber.orbitRadius;
+
+        // Let's vary the color slightly for each fiber
+        let fiberR = Math.floor(255 * (0.5 + 0.5 * Math.sin(time * 0.002 + fiberAngle)));
+        let fiberG = Math.floor(255 * (0.5 + 0.5 * Math.cos(time * 0.003 + fiberAngle)));
+        let fiberB = Math.floor(255 * (0.5 + 0.5 * Math.sin(time * 0.004 - fiberAngle)));
+        ctx.fillStyle = `rgba(${fiberR}, ${fiberG}, ${fiberB}, 0.8)`;
+
+        ctx.beginPath();
+        ctx.arc(fiberX, fiberY, 3, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Optionally connect the fiber back to its node
+        ctx.strokeStyle = `rgba(${fiberR}, ${fiberG}, ${fiberB}, 0.3)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(fiberX, fiberY);
+        ctx.stroke();
+      });
+    });
+  });
+
+  time += 1;
+  requestAnimationFrame(draw);
+}
+
+// Kick off the animation
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>
