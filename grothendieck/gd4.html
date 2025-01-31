@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>∞-Stacks Spectral Swirl</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%; overflow: hidden;
+      background: #000;
+      font-family: sans-serif; color: #ccc;
+    }
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 8px;
+      z-index: 9999;
+      text-align: center;
+      color: #fff;
+    }
+    #info h1 {
+      margin: 0;
+      font-weight: normal;
+      font-size: 1.2em;
+    }
+    #info p {
+      margin: 4px 0 0;
+      font-size: 0.9em;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div id="info">
+  <h1>∞-Stacks Spectral Swirl</h1>
+  <p>A cryptic glimpse into higher-category fractals, derived from nebulous universal constructions.</p>
+</div>
+<canvas id="theCanvas"></canvas>
+
+<script>
+/* --------------------------------------------------------------------------
+   Inspired by the notion of ∞-stacks and derived categories, this visualization:
+   - Generates multiple swirling fractal "layers" (like derived functors or spectral
+     sequences) that self-iterate in a cosmic dance of geometry.
+   - Uses random “phase shifts” to mimic how objects might transition through higher
+     homotopical structures (∞-groupoids).
+   - Continually shifts color via advanced wave functions—like an analogy to
+     how spectral sequences converge to stable homotopy invariants.
+
+   In short: It's an abstract swirl for concepts that remain borderline inaccessible,
+   but mesmerizing to watch.
+   -------------------------------------------------------------------------- */
+
+const canvas = document.getElementById('theCanvas');
+const ctx = canvas.getContext('2d');
+
+// Make the canvas fill the window
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Configuration
+const NUM_FRACTAL_LAYERS = 4;     // Like layers of derived categories
+const POINTS_PER_LAYER   = 300;   // Sample points that swirl in fractal arcs
+const MAX_RADIUS         = 350;   // Max swirl radius
+const COLOR_SHIFT_SPEED  = 0.001; // Speed of color wave
+const ROTATE_SPEED       = 0.0004;
+
+// Each fractal layer has a rotation, random offsets, etc.
+const fractalLayers = [];
+for(let i = 0; i < NUM_FRACTAL_LAYERS; i++){
+  fractalLayers.push({
+    rotation: 0,
+    rotationSpeed: ROTATE_SPEED * (i + 1),
+    offsetX: Math.random() * 1000,
+    offsetY: Math.random() * 1000
+  });
+}
+
+// Time variable for animation
+let time = 0;
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+
+  // Fade the background slightly for a trailing effect
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // For each fractal layer
+  fractalLayers.forEach((layer, index) => {
+    layer.rotation += layer.rotationSpeed;
+
+    // Draw many swirling points
+    for (let p = 0; p < POINTS_PER_LAYER; p++) {
+      // Angular position around the swirl
+      const angle = (2 * Math.PI * p) / POINTS_PER_LAYER + layer.rotation;
+      // The swirl radius is modulated by sinusoidal time-based fluctuations
+      const radius = MAX_RADIUS * 0.3 * (index + 1) +
+                     (MAX_RADIUS * 0.1) * Math.sin(time * 0.0005 + p * 0.01 + index);
+
+      // Additional offset for fractal-like layering
+      const fractalNoise = 50 * Math.sin(time * 0.002 + p * 0.1 + index);
+
+      const x = cx + (radius + fractalNoise) * Math.cos(angle);
+      const y = cy + (radius + fractalNoise) * Math.sin(angle);
+
+      // Color computations referencing advanced wave forms
+      // Using index-based phase shifts to layer complexity
+      const r = Math.floor(128 + 127 * Math.sin(time * COLOR_SHIFT_SPEED + index + p * 0.01));
+      const g = Math.floor(128 + 127 * Math.sin(time * COLOR_SHIFT_SPEED + 2 * index - p * 0.01));
+      const b = Math.floor(128 + 127 * Math.cos(time * COLOR_SHIFT_SPEED + index * p * 0.001));
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.6)`;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 2, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    // "Meta-lines" connecting random points in the swirl:
+    // an allusion to spectral sequences bridging pages (E_r to E_{r+1}).
+    if (Math.random() < 0.02) {
+      // pick two random swirl points
+      const p1 = Math.floor(Math.random() * POINTS_PER_LAYER);
+      const p2 = Math.floor(Math.random() * POINTS_PER_LAYER);
+      const angle1 = (2 * Math.PI * p1) / POINTS_PER_LAYER + layer.rotation;
+      const angle2 = (2 * Math.PI * p2) / POINTS_PER_LAYER + layer.rotation;
+
+      let radius1 = MAX_RADIUS * 0.3 * (index + 1) + 50 * Math.sin(time * 0.002 + p1 * 0.1 + index);
+      let radius2 = MAX_RADIUS * 0.3 * (index + 1) + 50 * Math.sin(time * 0.002 + p2 * 0.1 + index);
+
+      const x1 = cx + radius1 * Math.cos(angle1);
+      const y1 = cy + radius1 * Math.sin(angle1);
+      const x2 = cx + radius2 * Math.cos(angle2);
+      const y2 = cy + radius2 * Math.sin(angle2);
+
+      ctx.strokeStyle = `rgba(${255 - r}, ${255 - g}, ${255 - b}, 0.2)`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+  });
+
+  time++;
+  requestAnimationFrame(draw);
+}
+
+// Start animation
+draw();
+</script>
+
+</body>
+</html>
