@@ -1,7 +1,7 @@
 {
 
   "February 2025": {
-    "imageCount": 39,
+    "imageCount": 40,
     "images": [
       "assets/images/2025_02/Photo.webp",
       "assets/images/2025_02/Photo (10).webp",
@@ -15,6 +15,7 @@
       "assets/images/2025_02/Photo (16).webp",
       "assets/images/2025_02/Photo (21).webp",
       "assets/images/2025_02/Photo (22).webp",
+      "assets/images/2025_02/Photo (37).webp",
       "assets/images/2025_02/Photo (38).webp",
       "assets/images/2025_02/Photo (11).webp",
       "assets/images/2025_02/Photo (14).webp",
@@ -36,7 +37,6 @@
       "assets/images/2025_02/Photo (20).webp",
       "assets/images/2025_02/Photo (8).webp",
       "assets/images/2025_02/Photo (26).webp",
-      "assets/images/2025_02/Photo (39).webp",
       "assets/images/2025_02/Photo (30).webp",
       "assets/images/2025_02/Photo (13).webp",
       "assets/images/2025_02/Photo (31).webp",
@@ -48,7 +48,7 @@
     "audio": [
       "assets/music/2025_02_1.mp3"
     ],
-    "interval": 4923
+    "interval": 4800
   },
   
   "January 2025": {
