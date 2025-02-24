@@ -2,7 +2,6 @@
 "March 2025": {
     "imageCount": 60,
     "images": [
-      "assets/images/2025_03/Photo (37).webp",
       "assets/images/2025_03/Photo.webp",
       "assets/images/2025_03/Photo (27).webp",
       "assets/images/2025_03/Photo (50).webp",
@@ -28,6 +27,7 @@
       "assets/images/2025_03/Photo (54).webp",
       "assets/images/2025_03/Photo (47).webp",
       "assets/images/2025_03/Photo (48).webp",
+      "assets/images/2025_03/Photo (37).webp",
       "assets/images/2025_03/Photo (49).webp",
       "assets/images/2025_03/Photo (57).webp",
       "assets/images/2025_03/Photo (16).webp",
@@ -67,7 +67,7 @@
     "audio": [
       "assets/music/2025_03_1.mp3"
     ],
-    "interval": 4800
+    "interval": 3000
   },
   
   "February 2025": {
