@@ -1,6 +1,6 @@
 {
 "April 2025": {
-    "imageCount": 445,
+    "imageCount": 437,
     "images": [
       "assets/images/2025_04/Photo.jpg",
       "assets/images/2025_04/Photo.webp",
@@ -438,15 +438,7 @@
       "assets/images/2025_04/Photo (432).webp",
       "assets/images/2025_04/Photo (433).webp",
       "assets/images/2025_04/Photo (434).webp",
-      "assets/images/2025_04/Photo (435).webp",
-      "assets/images/2025_04/Photo (436).webp",
-      "assets/images/2025_04/Photo (437).webp",
-      "assets/images/2025_04/Photo (438).webp",
-      "assets/images/2025_04/Photo (439).webp",
-      "assets/images/2025_04/Photo (440).webp",
-      "assets/images/2025_04/Photo (441).webp",
-      "assets/images/2025_04/Photo (442).webp",
-      "assets/images/2025_04/Photo (443).webp"
+      "assets/images/2025_04/Photo (435).webp"
     ],
     "audio": [
       "assets/music/2025_04_1.mp3",
@@ -454,10 +446,10 @@
       "assets/music/2025_04_3.mp3",
       "assets/music/2025_04_4.mp3",
       "assets/music/2025_04_5.mp3",
-      "assets/music/2025_04_6.mp3",
+      "assets/music/2025_04_8.mp3",
       "assets/music/2025_04_13.mp3"
     ],
-    "interval": 4287
+    "interval": 4153
   },
 "March 2025": {
     "imageCount": 70,
