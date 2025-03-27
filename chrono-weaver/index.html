@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrono-Weaver: The Temporal Tapestry [Prototype]</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <header id="loom-header">
+            <h1>Chrono-Weaver // LOOM Interface v0.8 [Damaged]</h1>
+            <div id="system-alerts">ALERT: Core Matrix Instability Detected</div>
+        </header>
+
+        <main id="loom-main">
+            <section id="main-display-wrapper">
+                <h2>:: Main Display / Log ::</h2>
+                <div id="main-display" class="display-panel">
+                    <!-- Dynamic content appears here -->
+                </div>
+                <div id="command-line">
+                    <span id="prompt">></span>
+                    <input type="text" id="command-input" autofocus autocomplete="off">
+                </div>
+            </section>
+
+            <aside id="side-panels">
+                <section id="loom-status" class="side-panel">
+                    <h2>:: Loom Status ::</h2>
+                    <ul>
+                        <li>Chrono-Energy: <span id="chrono-energy">0</span> / <span id="max-chrono-energy">50</span> CE</li>
+                        <li>Integrity: <span id="loom-integrity">35%</span></li>
+                        <li>Residue Cache: <span id="temporal-residue">0</span> TR</li>
+                        <li>Stealth Profile: <span id="stealth-profile">Minimal</span></li>
+                        <li>Core Matrix: <span id="core-matrix-status" class="warning">Unstable</span></li>
+                        <li>Warden Sig.: <span id="warden-attention" class="normal">Negligible</span></li>
+                        <li>Available Modules: <span id="available-modules">Basic Scan, Fragile Weave</span></li>
+                    </ul>
+                    <div id="energy-bar-container">
+                        <div id="energy-bar"></div>
+                    </div>
+                </section>
+
+                <section id="node-scanner" class="side-panel">
+                    <h2>:: Resonance Scanner ::</h2>
+                    <ul id="node-list">
+                        <!-- Available nodes listed here -->
+                        <li class="placeholder">Scanning...</li>
+                    </ul>
+                </section>
+
+                <section id="timeline-viz" class="side-panel">
+                    <h2>:: Timeline Viz (Placeholder) ::</h2>
+                    <div id="timeline-graph" class="placeholder-graphic">
+                        [Complex animated graph showing branching timelines - Placeholder]
+                    </div>
+                    <p>Current Focus: <span id="current-focus">None</span></p>
+                    <p>Resolved Nodes: <span id="resolved-count">0</span></p>
+                </section>
+
+                 <section id="repair-bay" class="side-panel">
+                    <h2>:: Repair / Upgrade ::</h2>
+                    <ul id="upgrade-list">
+                         <!-- Existing -->
+                         <li> Stabilize Matrix (50 TR) - <button class="upgrade-button" data-upgrade="stabilize_matrix" data-action="REPAIR" disabled>REPAIR</button></li>
+                         <li> Energy Cap Mk1 (30 TR) - <button class="upgrade-button" data-upgrade="energy_cap_1" data-action="UPGRADE" disabled>UPGRADE</button></li>
+                         <li> Weave Intensifier (75 TR) - <button class="upgrade-button" data-upgrade="weave_intensifier_1" data-action="UPGRADE" disabled>UPGRADE</button></li>
+                         <!-- New -->
+                         <li> Energy Regen Mk1 (40 TR) - <button class="upgrade-button" data-upgrade="energy_regen_1" data-action="UPGRADE" disabled>UPGRADE</button></li>
+                         <li> Scan Enhancer Mk1 (60 TR) - <button class="upgrade-button" data-upgrade="scan_enhancer_1" data-action="UPGRADE" disabled>UPGRADE</button></li>
+                         <li> Weave Stabilizer Mk1 (55 TR) - <button class="upgrade-button" data-upgrade="weave_stabilizer_1" data-action="UPGRADE" disabled>UPGRADE</button></li>
+                         <li> Stealth Protocol Mk1 (100 TR) - <button class="upgrade-button" data-upgrade="stealth_protocol_1" data-action="INSTALL" disabled>INSTALL</button></li>
+                    </ul>
+                 </section>
+            </aside>
+        </main>
+
+        <footer id="loom-footer">
+            [SOUND PLACEHOLDER: Low hum, occasional static burst] | Status: Nominal (Relative) | User: Designate Weaver-734 (You)
+        </footer>
+    </div>
+
+    <!-- *** No changes needed here *** -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
