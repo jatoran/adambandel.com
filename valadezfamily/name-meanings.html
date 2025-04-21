@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Link to the main stylesheet for potential inheritance -->
     <link rel="stylesheet" href="style.css">
+    <!-- Navbar Stylesheet -->
+    <link rel="stylesheet" href="css/navbar.css">
     <style>
         /* Page-specific styles */
         :root {
@@ -22,11 +24,10 @@
             --list-border-color: #ddd;
             --list-item-bg-alt: #f9f9f9;
             --shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            --font-size-header: clamp(1.5rem, 5vw, 2.5rem);
+            --font-size-page-title: clamp(1.5rem, 5vw, 2.5rem); /* For page title */
             --font-size-name: 1.1rem;
             --font-size-meaning: 1rem;
             --padding-main: 1.5rem;
-            --padding-header: 1rem;
             --padding-list-item: 1rem;
             --margin-bottom: 1rem;
         }
@@ -43,65 +44,40 @@
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
-            /* Removed flex properties from previous attempt */
+            /* Ensure body doesn't interfere with main */
+            display: block !important;
         }
 
-        /* Header styling - Should largely match index.html */
-        header {
-            background-color: var(--primary-color);
-            color: var(--header-text-color);
-            text-align: center;
-            padding: var(--padding-header);
-            box-shadow: var(--shadow);
-        }
+        /* Removed old header styling */
 
-        header h1 {
+        h1.page-title { /* New class for the page title inside main */
             font-family: 'Lora', serif;
-            font-size: var(--font-size-header);
-            margin: 0; /* Remove default margins */
+            font-size: var(--font-size-page-title);
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem; /* Add space below navbar */
         }
 
-        /* Main content area - OVERRIDE inherited flex properties */
+        /* Main content area */
         main {
-            /* Override inherited styles from style.css */
-            display: block !important; /* Force block display */
-            flex-grow: initial !important; /* Reset flex-grow */
-            justify-content: initial !important; /* Reset */
-            align-items: initial !important; /* Reset */
-            overflow-y: visible !important; /* Let body scroll */
-
             /* Keep visual styles */
             max-width: 900px;
             width: 95%;
-            margin: 2rem auto;
+            margin: 0 auto 2rem auto; /* Center and add bottom margin */
             padding: var(--padding-main);
             background-color: var(--list-bg);
             border-radius: 8px;
             box-shadow: var(--shadow);
+            /* Reset flex potentially inherited from style.css */
+            display: block !important;
+            flex-grow: initial !important;
+            justify-content: initial !important;
+            align-items: initial !important;
+            overflow-y: visible !important;
         }
 
-        /* Back link styling */
-        .back-link-container {
-            margin-bottom: 1.5rem;
-            text-align: center; /* Center the link */
-        }
-
-        .back-link {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            color: white;
-            background-color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 25px; /* Match button style */
-            transition: background-color 0.3s, transform 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .back-link:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
+        /* Removed old back link container/styling */
 
         /* Name list styling */
         .name-list {
@@ -122,7 +98,6 @@
             border-bottom: none;
         }
 
-        /* Alternating row colors */
         .name-item:nth-child(odd) {
             background-color: var(--list-item-bg-alt);
         }
@@ -140,14 +115,18 @@
             font-size: var(--font-size-meaning);
             color: var(--text-color);
             flex-grow: 1; /* Allow meaning to take remaining space */
+            padding-left: 0; /* Reset padding if needed */
         }
 
         /* Responsive adjustments */
         @media (min-width: 600px) {
             .name-item {
-                flex-direction: row; /* Side-by-side layout on larger screens */
+                flex-direction: row; /* Side-by-side layout */
                 align-items: flex-start; /* Align items at the start */
                 gap: 1rem; /* Increase gap */
+            }
+            .name-meaning {
+                padding-left: 1rem; /* Add space only on wider screens */
             }
         }
 
@@ -155,74 +134,46 @@
             main {
                 padding: 1rem;
                 width: 100%;
-                margin: 1rem 0; /* Adjust margin for smaller screens */
+                margin: 0 0 1rem 0; /* Adjust margin for smaller screens */
                 border-radius: 0; /* Full width on small screens */
-                box-shadow: none; /* Optional: remove shadow on mobile if desired */
-                /* Ensure overrides apply on mobile too */
-                display: block !important;
-                overflow-y: visible !important;
+                box-shadow: none; /* Optional: remove shadow on mobile */
             }
 
              body {
                 padding: 0;
              }
 
+             h1.page-title {
+                 font-size: 1.8rem; /* Adjust title size for mobile */
+             }
+
             .name-title {
                  width: auto; /* Allow name title to wrap if needed */
                  margin-bottom: 0.5rem; /* Add space below title on stacked layout */
             }
-
-            .back-link {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.85rem;
-            }
+             .name-meaning {
+                 padding-left: 0; /* Ensure no left padding on stacked layout */
+             }
         }
 
-         /* Footer Nav Links */
-         .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem auto; /* Center nav links and add margin */
-            max-width: 900px; /* Match main's max-width */
-            width: 95%; /* Match main's width */
-            flex-wrap: wrap;
-            padding: 0;
-        }
-        .nav-links a {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            transition: background-color 0.3s, transform 0.3s;
-            box-shadow: var(--shadow);
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        .nav-links a:hover, .nav-links a:focus {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-        @media (max-width: 480px) {
-            .nav-links {
-                flex-direction: column;
-                align-items: stretch; /* Make buttons full width */
-                width: 90%; /* Adjust width for mobile */
-            }
-        }
+         /* Removed old Footer Nav Links styling */
+
     </style>
 </head>
 <body>
-    <header>
-        <h1>Valadez Family Name Meanings</h1>
-    </header>
+    <!-- === NAVBAR PLACEHOLDER (Main Site Navigation) === -->
+    <div id="navbar-placeholder">
+        <nav style="background-color: #2c3e50; color: white; min-height: 60px; display: flex; align-items: center; padding: 0 1rem; position: sticky; top: 0; z-index: 1000;">
+            Loading Navigation...
+        </nav>
+    </div>
+    <!-- === END NAVBAR PLACEHOLDER === -->
 
     <main>
-        <div class="back-link-container">
-            <a href="index.html" class="back-link"><i class="fas fa-home"></i> Back to Home</a>
-        </div>
+         <!-- Page Specific Title -->
+        <h1 class="page-title">Family Name Meanings</h1>
+
+        <!-- Removed old header and back link container -->
 
         <ul id="nameListContainer" class="name-list">
             <!-- Name meanings will be dynamically inserted here -->
@@ -230,14 +181,10 @@
         </ul>
     </main>
 
-    <!-- Footer Navigation Links -->
-    <div class="nav-links">
-        <a href="newsletter-archive.html">Past Newsletters</a>
-        <a href="birthdays.html">Family Birthdays</a>
-        <a href="name-meanings.html" style="background-color: var(--secondary-color);">Name Meanings</a>
-    </div>
+    <!-- Removed old Footer Navigation Links -->
 
     <script>
+        // Keep the existing script for fetching and rendering name data
         const nameData = `
 Aaron - Mountain of Strength, Exalted, strong warrior lion
 Aiden - Little fire; fiery one
@@ -364,13 +311,11 @@ Zachary - God Remembers, or The Lord has Remembered
             const names = lines.map(line => {
                 const parts = line.split(' - ');
                 const name = parts[0]?.trim();
-                const meaning = parts.slice(1).join(' - ').trim(); // Join remaining parts for meanings with '-'
+                const meaning = parts.slice(1).join(' - ').trim();
                 return { name, meaning };
-            }).filter(item => item.name && item.meaning); // Filter out any potential empty lines or parsing errors
+            }).filter(item => item.name && item.meaning);
 
-            // Sort alphabetically by name, case-insensitive
             names.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-
             return names;
         }
 
@@ -380,7 +325,7 @@ Zachary - God Remembers, or The Lord has Remembered
                 console.error("Name list container not found!");
                 return;
             }
-            container.innerHTML = ''; // Clear loading message or previous content
+            container.innerHTML = ''; // Clear loading message
 
             if (names.length === 0) {
                 container.innerHTML = '<li class="name-item"><span class="name-title">Error</span><span class="name-meaning">Could not load name data.</span></li>';
@@ -406,19 +351,24 @@ Zachary - God Remembers, or The Lord has Remembered
         }
 
         // Execute parsing and rendering when the DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                const sortedNames = parseAndSortNames(nameData);
-                renderNames(sortedNames);
-            } catch (error) {
-                console.error("Error processing name data:", error);
-                const container = document.getElementById('nameListContainer');
-                if (container) {
-                    container.innerHTML = '<li class="name-item"><span class="name-title">Error</span><span class="name-meaning">An error occurred while loading names.</span></li>';
-                }
-            }
-        });
+        // No need to wait for DOMContentLoaded here as the script is at the end of body
+        // unless navbar.js relies on it, but navbar.js has its own DOMContentLoaded listener.
+        // It's safer to just run it directly.
+         try {
+             const sortedNames = parseAndSortNames(nameData);
+             renderNames(sortedNames);
+         } catch (error) {
+             console.error("Error processing name data:", error);
+             const container = document.getElementById('nameListContainer');
+             if (container) {
+                 container.innerHTML = '<li class="name-item"><span class="name-title">Error</span><span class="name-meaning">An error occurred while loading names.</span></li>';
+             }
+         }
 
     </script>
+
+    <!-- === NAVBAR SCRIPT (defer ensures it runs after HTML parsing) === -->
+    <script src="js/navbar.js" defer></script>
+    <!-- === END NAVBAR SCRIPT === -->
 </body>
 </html>

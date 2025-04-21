@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valadez Family Birthdays</title>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Navbar Stylesheet -->
+    <link rel="stylesheet" href="css/navbar.css">
     <style>
+        /* Keep existing page-specific styles, but they might need adjustments if conflicts arise */
         :root {
             --primary-color: #4a90e2;
             --secondary-color: #e67e22; /* Changed to a darker orange for better contrast */
@@ -17,7 +24,7 @@
             --birthday-bg: #fff;
             --birthday-bg-alt: #f9f9f9; /* Added alternate background color */
             --birthday-border: #e0e0e0;
-            --font-size-header: 1.8rem;
+            --font-size-page-title: 1.8rem; /* Use for page specific title */
             --font-size-month: 1.2rem;
             --font-size-name: 1rem;
             --font-size-date: 0.9rem;
@@ -39,48 +46,34 @@
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.4;
+            /* Remove flex display from style.css for this page if it conflicts */
+            display: block !important;
         }
 
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: var(--padding-header);
-            box-shadow: var(--shadow);
-        }
+        /* Removed old header styling */
 
-        h1 {
+        h1.page-title { /* New class for the page title inside main */
             font-family: 'Lora', serif;
-            font-size: var(--font-size-header);
-            margin-bottom: 0.5rem;
+            font-size: var(--font-size-page-title);
+            color: var(--primary-color); /* Or keep original header color */
+            text-align: center;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem; /* Add some space below navbar */
         }
 
-        nav {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        nav a {
-            padding: 0.5rem 1rem;
-            background-color: var(--secondary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        nav a:hover {
-            background-color: darken(var(--secondary-color), 10%);
-        }
+        /* Removed old nav styling */
 
         main {
-            max-width: 400px;
+             /* Adjust main styles if needed, ensure it doesn't conflict with body flex settings from style.css */
+            max-width: 450px; /* Adjusted max-width slightly */
             margin: 0 auto;
             padding: var(--padding-main);
+            /* Reset flex properties potentially inherited from style.css */
+            display: block !important;
+            flex-grow: initial !important;
+            justify-content: initial !important;
+            align-items: initial !important;
+            overflow-y: visible !important;
         }
 
         .birthday-list {
@@ -107,13 +100,13 @@
         .birthday-item {
             display: flex;
             justify-content: space-between;
+            align-items: center; /* Vertically align items */
             padding: var(--padding-item);
             border-bottom: 1px solid var(--birthday-border);
             font-size: var(--font-size-name);
             background-color: var(--birthday-bg); /* Ensure default background color */
         }
 
-        /* Added: Alternate background color for every odd birthday item */
         .birthday-item:nth-child(odd) {
             background-color: var(--birthday-bg-alt);
         }
@@ -125,82 +118,93 @@
         .birthday-name {
             font-weight: 600;
             color: var(--text-color);
+            flex-grow: 1; /* Allow name to take available space */
+            margin-right: 10px; /* Space between name and date */
         }
 
         .birthday-date {
-            color: var(--secondary-color); /* Updated color for better contrast */
-            padding-left:10px;
-            padding-right:10px;
+            color: var(--secondary-color);
+            padding-left: 10px;
+            padding-right: 10px;
             font-weight: 600;
             font-size: var(--font-size-date);
+            flex-shrink: 0; /* Prevent date from shrinking */
+            text-align: right; /* Align date to the right */
         }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 1.5rem;
-            padding: 0.5rem 1rem;
-            color: white;
-            background-color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 20px;
-            transition: background-color 0.3s, transform 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .back-link:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-1px);
-        }
+        /* Removed old back-link styling */
 
         @media (max-width: 768px) {
             main {
                 padding: 1rem;
+                max-width: 100%; /* Allow full width */
+            }
+
+            h1.page-title {
+                font-size: 1.5rem; /* Adjust title size */
             }
 
             .month-header {
                 font-size: 1rem;
             }
 
+             .birthday-item {
+                font-size: 0.9rem;
+             }
+
             .birthday-date {
-                margin-top: 0.3rem;
-                /* font-size: 0.8rem; */
-            }
-
-            .back-link {
                 font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            nav a {
-                font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
             }
         }
+
+        @media (max-width: 400px) { /* More granular control for smaller screens */
+             .birthday-item {
+                flex-direction: column; /* Stack name and date */
+                align-items: flex-start; /* Align to start */
+                padding: 0.5rem;
+             }
+             .birthday-date {
+                margin-top: 0.2rem;
+                padding-left: 0; /* Remove padding when stacked */
+                padding-right: 0;
+                text-align: left; /* Align left when stacked */
+             }
+        }
+
     </style>
 </head>
 <body>
-    <header>
-        <h1>Valadez Family Birthdays</h1>
-    </header>
+    <!-- === NAVBAR PLACEHOLDER (Main Site Navigation) === -->
+    <div id="navbar-placeholder">
+        <nav style="background-color: #2c3e50; color: white; min-height: 60px; display: flex; align-items: center; padding: 0 1rem; position: sticky; top: 0; z-index: 1000;">
+            Loading Navigation...
+        </nav>
+    </div>
+    <!-- === END NAVBAR PLACEHOLDER === -->
 
     <main>
-        <nav>
-            <a href="index.html" class="back-link">Back to Home</a>
-            <a style="background-color:green"href="list-of-names.html" class="back-link">Alphabetical List</a>
-        </nav>
+        <!-- Page Specific Title -->
+        <h1 class="page-title">Family Birthdays by Month</h1>
+
+        <!-- Removed old header and nav -->
+
         <div id="birthdayContainer">
             <!-- Birthday lists will be dynamically inserted here -->
         </div>
-        <a style="margin-top:10px;" href="index.html" class="back-link">Back to Home</a>
+
+        <!-- Removed old "Back to Home" link -->
     </main>
+
     <script>
         const months = [
-            'January', 'February', 'March', 'April', 'May', 'June', 
+            'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
 
         function createMonthSection(month, birthdays) {
+            // Sort birthdays within the month by day
+            birthdays.sort((a, b) => a.date - b.date); // 'date' is now just the day number
+
             const section = document.createElement('div');
             section.className = 'birthday-list';
             section.innerHTML = `
@@ -217,14 +221,15 @@
             return section;
         }
 
-        function sortBirthdays(birthdays) {
+        function sortBirthdaysByMonthAndDay(birthdays) {
+            // Primary sort: month, Secondary sort: day
             return birthdays.sort((a, b) => {
                 const [aMonth, aDay] = a.date.split('-').map(Number);
                 const [bMonth, bDay] = b.date.split('-').map(Number);
-                if (aMonth === bMonth) {
-                    return aDay - bDay;
+                if (aMonth !== bMonth) {
+                    return aMonth - bMonth;
                 }
-                return aMonth - bMonth;
+                return aDay - bDay;
             });
         }
 
@@ -235,35 +240,51 @@
                     throw new Error('Failed to fetch birthdays data');
                 }
                 const birthdays = await response.json();
-                
-                const sortedBirthdays = sortBirthdays(birthdays);
+
+                const sortedBirthdays = sortBirthdaysByMonthAndDay(birthdays); // Sort all first
                 const container = document.getElementById('birthdayContainer');
-                
+                container.innerHTML = ''; // Clear any previous content or loading message
+
                 const birthdaysByMonth = months.reduce((acc, month) => {
                     acc[month] = [];
                     return acc;
                 }, {});
 
+                // Group sorted birthdays by month
                 sortedBirthdays.forEach(birthday => {
-                    const [month, day] = birthday.date.split('-');
-                    const monthName = months[parseInt(month, 10) - 1];
-                    const dayNumber = parseInt(day, 10); // Remove leading zero by parsing as integer
-                    birthdaysByMonth[monthName].push({ ...birthday, date: dayNumber });
+                    const [monthStr, dayStr] = birthday.date.split('-');
+                    const monthIndex = parseInt(monthStr, 10) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        const monthName = months[monthIndex];
+                        const dayNumber = parseInt(dayStr, 10); // Remove leading zero
+                        birthdaysByMonth[monthName].push({ ...birthday, date: dayNumber }); // Store only day number
+                    } else {
+                        console.warn(`Invalid month found in date: ${birthday.date} for ${birthday.name}`);
+                    }
                 });
 
+                // Render each month section if it has birthdays
                 months.forEach(month => {
                     if (birthdaysByMonth[month].length > 0) {
+                        // Birthdays within the month are already sorted by day due to the initial sort
                         const monthSection = createMonthSection(month, birthdaysByMonth[month]);
                         container.appendChild(monthSection);
                     }
                 });
             } catch (error) {
                 console.error('Error fetching or rendering birthdays:', error);
-                document.getElementById('birthdayContainer').innerHTML = '<p>Error loading birthdays. Please try again later.</p>';
+                const container = document.getElementById('birthdayContainer');
+                if (container) {
+                    container.innerHTML = '<p style="color: red; text-align: center;">Error loading birthdays. Please try again later.</p>';
+                }
             }
         }
 
         fetchBirthdaysAndRender();
     </script>
+
+    <!-- === NAVBAR SCRIPT (defer ensures it runs after HTML parsing) === -->
+    <script src="js/navbar.js" defer></script>
+    <!-- === END NAVBAR SCRIPT === -->
 </body>
 </html>

@@ -5,27 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valadez Valor Slideshow</title>
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet"> -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"> -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet"> -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet"> -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet"> -->
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
+    <!-- Navbar Stylesheet -->
+    <link rel="stylesheet" href="css/navbar.css">
 </head>
 <body>
+    <!-- === NAVBAR PLACEHOLDER (Main Site Navigation) === -->
+    <div id="navbar-placeholder">
+        <!-- Static fallback or loading message (optional) -->
+        <nav style="background-color: #2c3e50; color: white; min-height: 60px; display: flex; align-items: center; padding: 0 1rem; position: sticky; top: 0; z-index: 1000;">
+            Loading Navigation...
+        </nav>
+    </div>
+    <!-- === END NAVBAR PLACEHOLDER === -->
+
+    <!-- Page Specific Header -->
     <header>
         <h1>Valadez Valor Slideshow</h1>
-        <h3 id="current-month"></h3>
+        <h3 id="current-month"></h3> <!-- This will be updated by script.js -->
     </header>
 
-    <nav class="month-nav">
-        <div class="nav-arrow nav-left"><i class="fas fa-chevron-left"></i></div>
-        <ul id="month-list" class="nav-month-list"></ul>
-        <div class="nav-arrow nav-right"><i class="fas fa-chevron-right"></i></div>
-    </nav>
+    <!-- The <nav class="month-nav"> has been COMPLETELY REMOVED -->
 
     <main>
         <div id="slideshow-container">
@@ -41,19 +47,18 @@
                 <button id="audio-control"><i class="fas fa-volume-mute"></i></button>
             </div>
             <div class="image-counter">
-                <span id="current-image">1</span> / <span id="total-images"></span>
+                <span id="current-image">0</span> / <span id="total-images">0</span> <!-- Default to 0 -->
             </div>
         </div>
     </main>
 
-
-    <div class="nav-links">
-        <a href="newsletter-archive.html">Past Newsletters</a>
-        <a href="birthdays.html">Family Birthdays</a>
-        <a href="name-meanings.html">Name Meanings</a> <!-- Added link -->
-    </div>
     <audio id="background-audio" preload="auto"></audio>
 
+    <!-- Main slideshow script (ensure month-nav logic is removed from here too) -->
     <script src="script.js"></script>
+
+    <!-- === NAVBAR SCRIPT (defer ensures it runs after HTML parsing) === -->
+    <script src="js/navbar.js" defer></script>
+    <!-- === END NAVBAR SCRIPT === -->
 </body>
 </html>

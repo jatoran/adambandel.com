@@ -98,7 +98,7 @@
   
   #slideshow-container, #video-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     aspect-ratio: 16 / 9;
     background-color: white;
     box-shadow: var(--shadow);
