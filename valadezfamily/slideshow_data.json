@@ -1,5 +1,10 @@
 {
-"April 2025": {
+  "May 2025": {
+    "type": "video",
+    "videoSrc": "assets/video/May_2025_slideshow.mp4"
+  },
+  "April 2025": {
+    "type": "image", 
     "imageCount": 437,
     "images": [
       "assets/images/2025_04/Photo.png",
@@ -452,6 +457,7 @@
     "interval": 4107
   },
 "March 2025": {
+    "type": "image", 
     "imageCount": 70,
     "images": [
       "assets/images/2025_03/Photo (33).webp",
@@ -533,6 +539,7 @@
   },
   
   "February 2025": {
+    "type": "image", 
     "imageCount": 40,
     "images": [
       "assets/images/2025_02/Photo (37).webp",
@@ -584,6 +591,7 @@
   },
   
   "January 2025": {
+    "type": "image", 
     "imageCount": 124,
     "images": [
       "assets/images/jan_2025/Photo (32).webp",
@@ -720,6 +728,7 @@
   },
 
   "December 2024": {
+    "type": "image", 
     "imageCount": 69,
     "images": [
 "assets/images/december_2024/Photo (23).webp",
@@ -801,6 +810,7 @@
     "interval": 3014
   },
   "November 2024": {
+    "type": "image", 
     "imageCount": 75,
     "images": [
     "assets/images/november_2024/Photo.jpeg",
@@ -887,6 +897,7 @@
     "interval": 4533
   },
   "October 2024": {
+    "type": "image", 
     "imageCount": 84,
     "images": [
      "assets/images/october/Photo (78).jpg",
@@ -980,6 +991,7 @@
     "interval": 6000
   },
   "September 2024": {
+    "type": "image", 
     "imageCount": 93,
     "images": [
       "assets/images/september/Photo (84).jpg",
@@ -1083,6 +1095,7 @@
     "interval": 6000
   },
   "August 2024": {
+    "type": "image", 
     "imageCount": 119,
     "images": [
       "assets/images/august/Photo (84).jpg",
@@ -1213,6 +1226,7 @@
   },
 
   "July 2024": {
+    "type": "image", 
     "imageCount": 86,
     "images": [
       "assets/images/july/Photo (78).jpg",
@@ -1308,6 +1322,7 @@
   },
 
   "June 2024": {
+    "type": "image", 
     "imageCount": 84,
     "images": [
       "assets/images/june/Photo.jpg", 
@@ -1400,6 +1415,7 @@
   },
 
   "May 2024": {
+    "type": "image", 
     "imageCount": 72,
     "images": [
       "assets/images/may/Photo.jpg",
@@ -1481,6 +1497,7 @@
   },
 
   "April 2024": {
+    "type": "image", 
     "imageCount": 80,
     "images": [
       "assets/images/april/Photo.jpg",
@@ -1570,6 +1587,7 @@
   },
 
   "March 2024": {
+    "type": "image", 
     "imageCount": 62,
     "images": [
       "assets/images/march/photo.jpg",
@@ -1638,6 +1656,7 @@
     "interval": 6000
   },
   "Grandpa": {
+    "type": "image", 
     "imageCount": 12,
     "images": [
       "assets/images/grandpa/Photo.jpg",
