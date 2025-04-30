@@ -69,16 +69,11 @@ function populateSlideshowDropdown(slideshowData) {
         a.textContent = key; // e.g., "April 2025" or "Rachel's Video"
 
         // Determine link based on type
-        if (entry.type === 'video') {
-            // Special case: Keep Rachel's Video pointing directly to rachel.html
-            if (key === "Rachel's Video") {
-                a.href = 'rachel.html';
-            } else {
-                // Generic video link to video-player.html with parameters
-                const videoSrcEncoded = encodeURIComponent(entry.videoSrc);
-                const titleEncoded = encodeURIComponent(key);
-                a.href = `video-player.html?video=${videoSrcEncoded}&title=${titleEncoded}`;
-            }
+        if (entry.type === 'video' && entry.videoSrc) { // Check for video type and src
+            // Generic video link to video-player.html with parameters
+            const videoSrcEncoded = encodeURIComponent(entry.videoSrc);
+            const titleEncoded = encodeURIComponent(key);
+            a.href = `video-player.html?video=${videoSrcEncoded}&title=${titleEncoded}`;
         } else {
             // Assume image slideshow (type === 'image' or type missing)
             a.href = `index.html#${encodeURIComponent(key)}`;
@@ -88,7 +83,6 @@ function populateSlideshowDropdown(slideshowData) {
         dropdownMenu.appendChild(li);
     });
 }
-
 
 function initializeNavbar() {
     const toggler = document.getElementById('navbar-toggler');
@@ -100,67 +94,90 @@ function initializeNavbar() {
         return; // Exit if core elements are missing
     }
 
+    // --- Main Mobile Menu Toggle ---
     toggler.addEventListener('click', () => {
         const isActive = collapse.classList.toggle('active');
         toggler.classList.toggle('active', isActive); // Sync toggler animation class
         toggler.setAttribute('aria-expanded', isActive); // Accessibility
 
-        // If closing menu, also close any open mobile dropdowns
+        // If closing main menu, also close any open mobile dropdowns within it
         if (!isActive) {
-             document.querySelectorAll('.nav-item.dropdown.open').forEach(openDropdown => {
+             document.querySelectorAll('#navbar-collapse .nav-item.dropdown.open').forEach(openDropdown => {
                  openDropdown.classList.remove('open');
                  openDropdown.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
              });
         }
     });
 
-    // Handle dropdown clicks specifically for mobile (preventing page jump)
+    // --- Dropdown Toggle Click Handler (Mobile Specific Behavior + Always Prevent Default) ---
     dropdownToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
-            // Check if we are in mobile view (toggler is visible)
-            if (window.getComputedStyle(toggler).display !== 'none') {
-                // Find the immediate child link if it exists (to prevent parent action)
-                const childLink = e.target.closest('a');
-                if (childLink && childLink === toggle) { // Only act if the toggle itself was clicked
-                    e.preventDefault(); // Prevent default link behavior ONLY on mobile for the toggle
-                    const parentItem = toggle.closest('.nav-item.dropdown');
-                    if (parentItem) {
-                         const isOpen = parentItem.classList.toggle('open');
-                         toggle.setAttribute('aria-expanded', isOpen); // Accessibility
+            // *ALWAYS* prevent default link behavior (#) for the toggle itself
+            e.preventDefault();
 
-                         // Close other open dropdowns
-                         document.querySelectorAll('.nav-item.dropdown.open').forEach(openDropdown => {
+            // Check if we are in mobile view (toggler is visible) to handle opening/closing
+            if (window.getComputedStyle(toggler).display !== 'none') {
+                const parentItem = toggle.closest('.nav-item.dropdown');
+                if (parentItem) {
+                     const isOpen = parentItem.classList.toggle('open');
+                     toggle.setAttribute('aria-expanded', isOpen); // Accessibility
+
+                     // Close other open dropdowns when opening a new one
+                     if (isOpen) {
+                         document.querySelectorAll('#navbar-collapse .nav-item.dropdown.open').forEach(openDropdown => {
                              if (openDropdown !== parentItem) {
                                  openDropdown.classList.remove('open');
                                  openDropdown.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
                              }
                          });
-                    }
+                     }
                 }
             }
-            // On desktop, the default hover behavior handles it (CSS), and '#' links do nothing.
+            // On desktop, default hover/focus behavior (CSS) handles opening, and click does nothing useful now.
         });
     });
 
-    // Close mobile menu if clicking outside of it
+    // --- General Click Handlers for Closing Menus ---
+
+    // Close mobile menu if clicking OUTSIDE of it
     document.addEventListener('click', (e) => {
         if (collapse.classList.contains('active')) {
             // Ensure the click target is not the toggler itself or within the opened menu
             const isClickInsideNavbar = collapse.contains(e.target);
-            const isToggler = toggler.contains(e.target);
+            const isTogglerClick = toggler.contains(e.target);
 
-            if (!isClickInsideNavbar && !isToggler) {
-                collapse.classList.remove('active');
-                toggler.classList.remove('active');
-                toggler.setAttribute('aria-expanded', 'false');
-                // Close any open mobile dropdowns too
-                document.querySelectorAll('.nav-item.dropdown.open').forEach(openDropdown => {
-                    openDropdown.classList.remove('open');
-                    openDropdown.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
-                });
+            if (!isClickInsideNavbar && !isTogglerClick) {
+                closeMobileMenu(); // Use a helper function
             }
         }
     });
+
+    // Close mobile menu when a *non-toggle* navigation link INSIDE it is clicked
+    collapse.addEventListener('click', (e) => {
+        // Check if the clicked element is a link inside the collapse menu,
+        // if the menu is currently active (mobile view),
+        // AND if the clicked link is NOT a dropdown toggle itself.
+        const clickedLink = e.target.closest('a');
+        if (clickedLink && clickedLink.href && collapse.classList.contains('active') && !clickedLink.classList.contains('dropdown-toggle')) {
+            // This condition correctly targets dropdown items as well as regular nav links
+            closeMobileMenu(); // Use a helper function
+            console.log("Mobile menu closed due to link click inside.");
+        }
+    });
+
+    // Helper function to cleanly close the mobile menu and reset toggles
+    function closeMobileMenu() {
+        collapse.classList.remove('active');
+        toggler.classList.remove('active');
+        toggler.setAttribute('aria-expanded', 'false');
+        // Also close any open mobile dropdowns within the main menu
+        document.querySelectorAll('#navbar-collapse .nav-item.dropdown.open').forEach(openDropdown => {
+            openDropdown.classList.remove('open');
+            openDropdown.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+// End of initializeNavbar function
 }
 
 function setActiveLink() {
@@ -192,8 +209,8 @@ function setActiveLink() {
 
         // --- Matching Logic ---
 
-        // 1. Direct Page Match (excluding index.html, video-player.html, rachel.html for now)
-        if (pageName === linkPageName && !['index.html', 'video-player.html', 'rachel.html'].includes(pageName)) {
+        // 1. Direct Page Match (excluding index.html, video-player.html)
+        if (pageName === linkPageName && !['index.html', 'video-player.html'].includes(pageName)) {
             isActive = true;
         }
 
@@ -222,14 +239,6 @@ function setActiveLink() {
             }
         }
 
-        // 4. rachel.html Match
-        if (pageName === 'rachel.html' && linkPageName === 'rachel.html') {
-             // Check if the link specifically targets rachel.html (e.g., the dedicated navbar link or the dropdown)
-             if (linkHref === 'rachel.html' || link.textContent === "Rachel's Video") {
-                  isActive = true;
-             }
-        }
-
         // --- End Matching Logic ---
 
 
@@ -246,5 +255,7 @@ function setActiveLink() {
                  }
             }
         }
+
     });
+
 }

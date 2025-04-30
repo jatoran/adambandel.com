@@ -1655,7 +1655,18 @@
     ],
     "interval": 6000
   },
-  "Grandpa": {
+  
+  "Brandon Easter": {
+    "type": "video",
+    "videoSrc": "assets/video/Brandon_Slideshow_2025.mp4"
+  },
+  
+  "Rachel Valadez": {
+    "type": "video",
+    "videoSrc": "assets/video/rachel.mp4"
+  },
+  
+  "Antonio Valadez": {
     "type": "image", 
     "imageCount": 12,
     "images": [
@@ -1676,10 +1687,5 @@
       "assets/music/grandpa.mp3"
     ],
     "interval": 6000
-  },
-  
-  "Rachel's Video": {
-    "type": "video",
-    "videoSrc": "assets/video/rachel.mp4"
   }
 }

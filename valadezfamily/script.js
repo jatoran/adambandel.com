@@ -557,9 +557,7 @@ function setMonth(month) {
      if (slideshowData[month].type === 'video') {
          console.log(`Hash change detected for video entry: ${month}. Redirecting...`);
          const entry = slideshowData[month];
-         if (month === "Rachel's Video") { // Keep special case
-             window.location.href = 'rachel.html';
-         } else if (entry.videoSrc) {
+         if (entry.videoSrc) {
              const videoSrcEncoded = encodeURIComponent(entry.videoSrc);
              const titleEncoded = encodeURIComponent(month);
              window.location.href = `video-player.html?video=${videoSrcEncoded}&title=${titleEncoded}`;

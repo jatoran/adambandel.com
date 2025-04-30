@@ -1,3 +1,4 @@
+<!-- valadezfamily/video-player.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,66 +15,10 @@
     <link rel="stylesheet" href="style.css">
     <!-- Navbar Stylesheet -->
     <link rel="stylesheet" href="css/navbar.css">
-    <!-- Page Specific Styles -->
-    <style>
-        /* Styles similar to rachel.html for consistency */
-        main#video-main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start; /* Align container to top */
-            align-items: center;
-            padding: 1rem;
-            width: 100%;
-            margin-top: 1rem;
-        }
+    <!-- Page-specific styles for video player are now primarily in style.css -->
 
-        #video-container {
-            /* Inherits from style.css: width, max-width, aspect-ratio, background, shadow, border-radius, overflow, position */
-             width: 100%;
-             max-width: 1200px; /* Or adjust as needed */
-             aspect-ratio: 16 / 9;
-             background-color: black; /* Black background for video player */
-             box-shadow: var(--shadow);
-             border-radius: 10px;
-             overflow: hidden;
-             position: relative;
-             margin-bottom: 2rem; /* Space below video */
-        }
-
-        #video-player-element {
-            /* Inherits from style.css: max-width, max-height, object-fit */
-             width: 100%; /* Make video element fill the container */
-             height: 100%;
-             display: block; /* Remove extra space below video */
-             object-fit: contain;
-        }
-
-        h1.page-title {
-            font-family: 'Lora', serif;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 1rem;
-            font-size: clamp(1.5rem, 5vw, 2.2rem); /* Responsive title size */
-        }
-
-         /* Responsive adjustments */
-         @media (max-width: 768px) {
-             #video-container {
-                max-width: 100%; /* Allow full width */
-                border-radius: 0; /* Optional: remove radius on mobile */
-             }
-             main#video-main {
-                 padding: 0.5rem; /* Reduce padding */
-                 margin-top: 0.5rem;
-             }
-             h1.page-title {
-                 font-size: 1.5rem;
-             }
-         }
-    </style>
 </head>
-<body>
+<body class="page-video">
     <!-- === NAVBAR PLACEHOLDER (Main Site Navigation) === -->
     <div id="navbar-placeholder">
         <nav style="background-color: #2c3e50; color: white; min-height: 60px; display: flex; align-items: center; padding: 0 1rem; position: sticky; top: 0; z-index: 1000;">
