@@ -73,6 +73,63 @@ function lazyLoadFirstImage() {
     }
 }
 
+// --- NEW HELPER FUNCTION ---
+/**
+ * Parses slideshow keys (e.g., "Month YYYY" or other formats) to find the most recent one.
+ * Handles non-date keys gracefully.
+ * @param {object} data - The slideshowData object.
+ * @param {string|null} filterType - Optional: 'image' or 'video' to filter by type.
+ * @returns {string|null} The key of the most recent entry, or null if none found/parsed.
+ */
+function findMostRecentEntryKey(data, filterType = null) {
+      const monthMap = {
+        january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+        july: 6, august: 7, september: 8, october: 9, november: 10, december: 11
+      };
+    
+      let latestDate = null;
+      let latestKey = null;
+    
+      Object.keys(data).forEach(key => {
+        const entry = data[key];
+    
+        // Apply type filter if specified
+        if (filterType) {
+          if (filterType === 'image' && entry.type === 'video') {
+            return; // Skip video if filtering for images
+          }
+          if (filterType === 'video' && entry.type !== 'video') {
+            return; // Skip non-video if filtering for videos
+          }
+        }
+    
+        // Attempt to parse "Month YYYY" format
+        const parts = key.trim().split(' ');
+        if (parts.length === 2) {
+          const monthName = parts[0].toLowerCase();
+          const year = parseInt(parts[1], 10);
+          const monthIndex = monthMap[monthName];
+    
+          if (monthIndex !== undefined && !isNaN(year)) {
+            // Create a date object (use day 1 for comparison)
+            const currentDate = new Date(year, monthIndex, 1);
+    
+            if (!latestDate || currentDate > latestDate) {
+              latestDate = currentDate;
+              latestKey = key;
+            }
+          } else {
+            console.warn(`Could not parse date from key: "${key}"`);
+          }
+        } else {
+          console.warn(`Key "${key}" does not match "Month YYYY" format, skipping for date comparison.`);
+        }
+      });
+    
+      console.log(`Latest ${filterType || 'entry'} found: ${latestKey || 'None'}`);
+      return latestKey;
+    }
+
 // Basic helper to extract month key assumption from path - refine if needed
 function monthNameFromImagePath(path) {
     // Example: "assets/images/2025_04/Photo.webp" -> Try to find "April 2025" logic
@@ -87,8 +144,8 @@ function monthNameFromImagePath(path) {
 async function loadSlideshowData() {
     // Prevent multiple initializations
     if (window.slideshowInitialized) {
-         console.log("Slideshow already initialized.");
-         return;
+        console.log("Slideshow already initialized.");
+        return;
     }
     window.slideshowInitialized = true; // Set flag
 
@@ -105,49 +162,81 @@ async function loadSlideshowData() {
         await validateImages(); // Creates validImages object for image types
         logImageCounts(); // Log counts after validation
 
-        // Determine initial month from hash or first valid IMAGE entry
         let initialMonth = '';
         const hashMonth = decodeURIComponent(window.location.hash.slice(1));
 
-        // Check if hash corresponds to a valid IMAGE type entry
+        // 1. Check if hash corresponds to a valid IMAGE type entry
         if (hashMonth && slideshowData[hashMonth] && (slideshowData[hashMonth].type === 'image' || !slideshowData[hashMonth].type)) {
             initialMonth = hashMonth;
+            console.log(`Initial month set from valid image hash: ${initialMonth}`);
         } else {
-            // Find the first key in slideshowData that is an image type and has valid images
-             initialMonth = Object.keys(slideshowData).find(month =>
-                (slideshowData[month].type === 'image' || !slideshowData[month].type) && // Check type is image (or undefined)
-                validImages[month] && validImages[month].length > 0
-            ) || ''; // Fallback to empty string if no suitable image month found
+            console.log("No valid image hash found, determining most recent entry.");
+            // 2. Find the most recent entry (image or video)
+            const latestEntryKey = findMostRecentEntryKey(slideshowData);
+
+            if (latestEntryKey && slideshowData[latestEntryKey]) {
+                const latestEntry = slideshowData[latestEntryKey];
+                console.log(`Most recent entry determined as: ${latestEntryKey} (Type: ${latestEntry.type})`);
+
+                // 3. Check the type of the most recent entry
+                if (latestEntry.type === 'video') {
+                    if (latestEntry.videoSrc) {
+                        console.log(`Redirecting to video player for: ${latestEntryKey}`);
+                        const videoSrcEncoded = encodeURIComponent(latestEntry.videoSrc);
+                        const titleEncoded = encodeURIComponent(latestEntryKey);
+                        // Perform redirect
+                        window.location.href = `video-player.html?video=${videoSrcEncoded}&title=${titleEncoded}`;
+                        return; // Stop further processing in script.js after redirect
+                    } else {
+                        console.error(`Most recent entry "${latestEntryKey}" is type video but missing 'videoSrc'. Cannot redirect.`);
+                        // Fall through to try and find the latest IMAGE slideshow as a fallback
+                    }
+                }
+                // If it's not a video (must be image or undefined type), set it as initial month
+                else if (validImages[latestEntryKey] && validImages[latestEntryKey].length > 0) {
+                    initialMonth = latestEntryKey;
+                    console.log(`Initial month set to most recent image slideshow: ${initialMonth}`);
+                } else {
+                      console.warn(`Most recent entry "${latestEntryKey}" is image type but has no valid images. Looking for next most recent image slideshow.`);
+                }
+            } else {
+                console.warn("Could not determine the most recent entry.");
+            }
+
+            // 4. Fallback: If the most recent wasn't a usable image slideshow, find the latest *image* slideshow overall
+            if (!initialMonth) {
+                 console.log("Falling back to finding the most recent *image* slideshow specifically.");
+                 const latestImageMonthKey = findMostRecentEntryKey(slideshowData, 'image');
+                 if (latestImageMonthKey && validImages[latestImageMonthKey] && validImages[latestImageMonthKey].length > 0) {
+                     initialMonth = latestImageMonthKey;
+                     console.log(`Initial month set to fallback latest image slideshow: ${initialMonth}`);
+                 }
+            }
         }
 
-        console.log("Initial image month determined as:", initialMonth || "None");
-
+        // 5. Final Check and Load/Display Error
         if (!initialMonth) {
-             // No valid image slideshow found to start with
-             console.warn("No initial image slideshow found (hash invalid or no image entries). Displaying message.");
-             displayErrorMessage('Select an image slideshow from the navigation.');
-             if (currentMonthElement) currentMonthElement.textContent = "No Slideshow Selected";
-             // Don't throw an error, just wait for user navigation
-             isInitialized = true; // Mark as initialized even if no content shown initially
-             return; // Stop further processing
+            console.warn("No suitable initial slideshow found (hash invalid, no recent entry, or no image entries). Displaying message.");
+            displayErrorMessage('Select a slideshow from the navigation.');
+            if (currentMonthElement) currentMonthElement.textContent = "No Slideshow Selected";
+            isInitialized = true; // Mark as initialized even if no content shown initially
+            return; // Stop further processing
         }
 
+        // Ensure the chosen initial month exists (should be guaranteed by logic above, but good check)
         if (!slideshowData[initialMonth]) {
-             console.error(`Attempted initial month "${initialMonth}" not found in slideshowData.`);
-             // This case should be less likely now with the find logic, but as a fallback:
-             displayErrorMessage(`Error: Initial slideshow data for "${initialMonth}" not found.`);
-              window.slideshowInitialized = false; // Reset flag on critical error
-             return;
+            console.error(`Internal Error: Determined initial month "${initialMonth}" not found in slideshowData.`);
+            displayErrorMessage(`Error: Could not load initial slideshow data.`);
+            window.slideshowInitialized = false; // Reset flag on critical error
+            return;
         }
 
-        console.log("Setting initial month to:", initialMonth);
-        // Use requestAnimationFrame to ensure DOM is ready for image update
+        console.log("Setting initial month to (image slideshow):", initialMonth);
         requestAnimationFrame(() => {
-            setMonth(initialMonth); // Set month internally
-            // lazyLoadFirstImage() is now called within setMonth for image types
+            setMonth(initialMonth);
         });
 
-        isInitialized = true; // Mark as initialized *inside* try block
+        isInitialized = true;
         console.log('Slideshow initialized successfully');
 
     } catch (error) {

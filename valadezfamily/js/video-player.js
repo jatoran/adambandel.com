@@ -55,7 +55,7 @@ function loadVideoFromParams() {
         videoElement.load();
 
         // --- SET INITIAL VOLUME ---
-        videoElement.volume = 0.; // Set initial volume to 50%
+        videoElement.volume = 30.; // Set initial volume to 50%
         console.log(`Initial video volume set to: ${videoElement.volume}`);
         // -------------------------
 
