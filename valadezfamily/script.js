@@ -48,7 +48,7 @@ function lazyLoadFirstImage() {
             if(currentMonth === monthNameFromImagePath(firstImagePath)) { // Helper needed or refine logic
                  slideshowImage.src = firstImagePath;
                  updateImageCounter();
-                 adjustImageSize();
+                 adjustImageSize(); // Call adjust to clear potential old styles
                  preloadImages(1); // Preload next images
             } else {
                  console.log("First image loaded, but month changed. Ignoring.");
@@ -86,13 +86,13 @@ function findMostRecentEntryKey(data, filterType = null) {
         january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
         july: 6, august: 7, september: 8, october: 9, november: 10, december: 11
       };
-    
+
       let latestDate = null;
       let latestKey = null;
-    
+
       Object.keys(data).forEach(key => {
         const entry = data[key];
-    
+
         // Apply type filter if specified
         if (filterType) {
           if (filterType === 'image' && entry.type === 'video') {
@@ -101,41 +101,66 @@ function findMostRecentEntryKey(data, filterType = null) {
           if (filterType === 'video' && entry.type !== 'video') {
             return; // Skip non-video if filtering for videos
           }
+           // Additional check: ensure image type entries have images
+           if (filterType === 'image' && (!validImages[key] || validImages[key].length === 0)) {
+              console.log(`Skipping ${key} for latest image check: no valid images found.`);
+              return;
+           }
         }
-    
+
         // Attempt to parse "Month YYYY" format
         const parts = key.trim().split(' ');
         if (parts.length === 2) {
           const monthName = parts[0].toLowerCase();
           const year = parseInt(parts[1], 10);
           const monthIndex = monthMap[monthName];
-    
+
           if (monthIndex !== undefined && !isNaN(year)) {
             // Create a date object (use day 1 for comparison)
             const currentDate = new Date(year, monthIndex, 1);
-    
+
             if (!latestDate || currentDate > latestDate) {
               latestDate = currentDate;
               latestKey = key;
             }
           } else {
-            console.warn(`Could not parse date from key: "${key}"`);
+            // Could be a non-date key like "Rachel Valadez" - check if it matches filter
+            if (!filterType || (entry.type === filterType)) {
+                // If no date parsed, and no latestDate set yet, consider this non-date key if it matches type
+                if (!latestDate) {
+                    latestKey = key;
+                    // We can't compare non-dates, so the first one found that matches the type (if specified) becomes the candidate
+                    console.log(`Considering non-date key "${key}" as potential latest.`);
+                }
+            } else {
+                 console.warn(`Could not parse date from key: "${key}", skipping for date comparison.`);
+            }
           }
         } else {
-          console.warn(`Key "${key}" does not match "Month YYYY" format, skipping for date comparison.`);
+           // Handle non-"Month YYYY" keys like "Rachel Valadez", "Antonio Valadez"
+           if (!filterType || (entry.type === filterType)) {
+               // If no date parsed, and no latestDate set yet, consider this non-date key if it matches type
+               if (!latestDate) {
+                    latestKey = key;
+                    // We can't compare non-dates, so the first one found that matches the type (if specified) becomes the candidate
+                    console.log(`Considering non-standard key "${key}" as potential latest.`);
+               }
+           } else {
+                console.warn(`Key "${key}" does not match "Month YYYY" format and doesn't match filter, skipping.`);
+           }
         }
       });
-    
-      console.log(`Latest ${filterType || 'entry'} found: ${latestKey || 'None'}`);
+
+      console.log(`Latest ${filterType || 'entry'} determined: ${latestKey || 'None'}`);
       return latestKey;
     }
 
 // Basic helper to extract month key assumption from path - refine if needed
 function monthNameFromImagePath(path) {
-    // Example: "assets/images/2025_04/Photo.webp" -> Try to find "April 2025" logic
-    // This is brittle, relies heavily on path structure matching keys.
-    // A better approach might be to pass the month during the call.
-    // For now, returning currentMonth as a placeholder for the check logic.
+    // This function is currently not reliable for determining the month key.
+    // It's used in lazyLoadFirstImage for a safety check, but might be inaccurate.
+    // Returning currentMonth as a placeholder. A better approach would be needed
+    // if precise checking against the key is required here.
     return currentMonth;
 }
 
@@ -165,13 +190,13 @@ async function loadSlideshowData() {
         let initialMonth = '';
         const hashMonth = decodeURIComponent(window.location.hash.slice(1));
 
-        // 1. Check if hash corresponds to a valid IMAGE type entry
-        if (hashMonth && slideshowData[hashMonth] && (slideshowData[hashMonth].type === 'image' || !slideshowData[hashMonth].type)) {
+        // 1. Check if hash corresponds to a valid IMAGE type entry with images
+        if (hashMonth && slideshowData[hashMonth] && (slideshowData[hashMonth].type === 'image' || !slideshowData[hashMonth].type) && validImages[hashMonth]?.length > 0) {
             initialMonth = hashMonth;
             console.log(`Initial month set from valid image hash: ${initialMonth}`);
         } else {
-            console.log("No valid image hash found, determining most recent entry.");
-            // 2. Find the most recent entry (image or video)
+            console.log("No valid image hash found or hash is empty/invalid/video, determining most recent entry.");
+            // 2. Find the most recent entry (could be image or video)
             const latestEntryKey = findMostRecentEntryKey(slideshowData);
 
             if (latestEntryKey && slideshowData[latestEntryKey]) {
@@ -181,7 +206,7 @@ async function loadSlideshowData() {
                 // 3. Check the type of the most recent entry
                 if (latestEntry.type === 'video') {
                     if (latestEntry.videoSrc) {
-                        console.log(`Redirecting to video player for: ${latestEntryKey}`);
+                        console.log(`Most recent entry is video. Redirecting to video player for: ${latestEntryKey}`);
                         const videoSrcEncoded = encodeURIComponent(latestEntry.videoSrc);
                         const titleEncoded = encodeURIComponent(latestEntryKey);
                         // Perform redirect
@@ -192,7 +217,7 @@ async function loadSlideshowData() {
                         // Fall through to try and find the latest IMAGE slideshow as a fallback
                     }
                 }
-                // If it's not a video (must be image or undefined type), set it as initial month
+                // If it's not a video (must be image or undefined type), set it as initial month IF it has images
                 else if (validImages[latestEntryKey] && validImages[latestEntryKey].length > 0) {
                     initialMonth = latestEntryKey;
                     console.log(`Initial month set to most recent image slideshow: ${initialMonth}`);
@@ -203,11 +228,11 @@ async function loadSlideshowData() {
                 console.warn("Could not determine the most recent entry.");
             }
 
-            // 4. Fallback: If the most recent wasn't a usable image slideshow, find the latest *image* slideshow overall
+            // 4. Fallback: If the most recent wasn't a usable image slideshow, find the latest *image* slideshow overall that HAS images
             if (!initialMonth) {
                  console.log("Falling back to finding the most recent *image* slideshow specifically.");
-                 const latestImageMonthKey = findMostRecentEntryKey(slideshowData, 'image');
-                 if (latestImageMonthKey && validImages[latestImageMonthKey] && validImages[latestImageMonthKey].length > 0) {
+                 const latestImageMonthKey = findMostRecentEntryKey(slideshowData, 'image'); // findMostRecent now checks validImages
+                 if (latestImageMonthKey) { // No need to check validImages again here
                      initialMonth = latestImageMonthKey;
                      console.log(`Initial month set to fallback latest image slideshow: ${initialMonth}`);
                  }
@@ -216,9 +241,14 @@ async function loadSlideshowData() {
 
         // 5. Final Check and Load/Display Error
         if (!initialMonth) {
-            console.warn("No suitable initial slideshow found (hash invalid, no recent entry, or no image entries). Displaying message.");
-            displayErrorMessage('Select a slideshow from the navigation.');
+            console.error("No suitable initial image slideshow found (hash invalid, no recent entry, or no image entries with valid images). Displaying message.");
+            displayErrorMessage('Select an image slideshow from the navigation.');
             if (currentMonthElement) currentMonthElement.textContent = "No Slideshow Selected";
+            // Hide controls/counter if no slideshow is loaded
+             const controls = document.getElementById('controls');
+             const counter = document.querySelector('.image-counter');
+             if (controls) controls.style.display = 'none';
+             if (counter) counter.style.display = 'none';
             isInitialized = true; // Mark as initialized even if no content shown initially
             return; // Stop further processing
         }
@@ -232,6 +262,13 @@ async function loadSlideshowData() {
         }
 
         console.log("Setting initial month to (image slideshow):", initialMonth);
+
+        // Show controls/counter now that we have a slideshow to load
+        const controls = document.getElementById('controls');
+        const counter = document.querySelector('.image-counter');
+        if (controls) controls.style.display = 'flex'; // Assuming flex is the default display
+        if (counter) counter.style.display = 'block'; // Assuming block is the default display
+
         requestAnimationFrame(() => {
             setMonth(initialMonth);
         });
@@ -396,7 +433,7 @@ function resetSlideshow() {
         audioElement.src = ''; // Clear audio source
     }
     // Keep audio muted state as user set it
-    if (audioControlButton) {
+    if (audioControlButton && audioElement) { // Check audioElement exists
          audioControlButton.innerHTML = audioElement.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     }
 
@@ -404,6 +441,7 @@ function resetSlideshow() {
      if (slideshowImage) {
          slideshowImage.src = '';
          slideshowImage.alt = 'Select a slideshow';
+         adjustImageSize(); // Clear styles
      }
      // Reset counter
      if (currentImageElement) currentImageElement.textContent = '0';
@@ -538,7 +576,7 @@ function updateImage() {
         slideshowImage.onload = () => {
             console.log(`Image ${imagePath} loaded successfully into element.`);
             slideshowImage.alt = `${currentMonth} image ${currentIndex + 1}`; // Set final alt text
-            requestAnimationFrame(adjustImageSize); // Adjust size after successful load
+            requestAnimationFrame(adjustImageSize); // Call adjust to clear potential old styles
             updateImageCounter();
             preloadImages(currentIndex);
             slideshowImage.onload = null; // Clean up handler
@@ -549,7 +587,7 @@ function updateImage() {
             console.error(`Failed to load image into slideshow element: ${imagePath}`);
             slideshowImage.alt = `Error loading image ${currentIndex + 1}`;
              // Don't automatically clear src here, leave the alt text visible
-             requestAnimationFrame(adjustImageSize); // Adjust size based on failed state (might be small)
+             requestAnimationFrame(adjustImageSize); // Call adjust to clear potential old styles
              slideshowImage.onload = null; // Clean up handler
              slideshowImage.onerror = null; // Clean up handler
             // Handle advancing to next image
@@ -570,7 +608,6 @@ function updateImage() {
     }
 }
 
-// Ensure you also have the handleImageLoadError helper function from the previous step:
 function handleImageLoadError(failedPath) {
      console.warn(`Attempting to move to next image due to load error for ${failedPath}.`);
      const currentMonthValidImages = validImages[currentMonth];
@@ -594,41 +631,18 @@ function handleImageLoadError(failedPath) {
      }
 }
 
-// You may also want the refined adjustImageSize function from the previous step:
+// Simplified adjustImageSize - relies on CSS for layout.
+// This function now primarily clears any residual inline styles.
 function adjustImageSize() {
     const img = document.querySelector('#slideshow img');
-    const container = document.getElementById('slideshow-container');
+    if (!img) return;
 
-    if (!img || !container) return;
-
-    // Reset styles before calculating
+    // Reset potentially conflicting inline styles set by previous versions or errors
     img.style.width = '';
     img.style.height = '';
 
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
-
-    // Ensure container has dimensions AND image has loaded dimensions or src is empty
-    if (containerWidth > 0 && containerHeight > 0) {
-        if (img.naturalWidth > 0 && img.naturalHeight > 0) { // Image loaded
-            const containerAspect = containerWidth / containerHeight;
-            const imageAspect = img.naturalWidth / img.naturalHeight;
-
-            if (imageAspect > containerAspect) {
-                img.style.width = '100%';
-                img.style.height = 'auto';
-            } else {
-                img.style.width = 'auto';
-                img.style.height = '100%';
-            }
-        } else { // Image not loaded (src empty, error, or loading) - use auto sizing
-             img.style.width = 'auto';
-             img.style.height = 'auto';
-             // console.log(`Image not loaded or failed, using auto size.`);
-        }
-    } else if (containerWidth === 0 || containerHeight === 0) {
-         console.warn("Container dimensions are zero, cannot adjust image size properly yet.");
-    }
+    // console.log("AdjustImageSize called - relying on CSS for sizing.");
+    // No explicit calculations needed here anymore if CSS is correct.
 }
 
 
@@ -675,6 +689,12 @@ function setMonth(month) {
 
     // Handle Image Slideshow Type
     if (validImages[month]) { // Check if validImages entry exists
+         // Show controls/counter if they were hidden
+         const controls = document.getElementById('controls');
+         const counter = document.querySelector('.image-counter');
+         if (controls) controls.style.display = 'flex';
+         if (counter) counter.style.display = 'block';
+
         console.log(`Month ${month} has ${validImages[month].length} valid images.`);
         imagePreloader.clear(); // Clear cache for previous month's images
         updateImage(); // Display the first image (or placeholder if none)
@@ -685,6 +705,11 @@ function setMonth(month) {
          console.error(`Logic error: validImages entry missing or empty for image month ${month}.`);
          displayErrorMessage(`Error processing images for ${month}. Check image paths.`);
          updateImageCounter(); // Ensure counter shows 0/0 and is hidden
+         // Hide controls/counter
+          const controls = document.getElementById('controls');
+          const counter = document.querySelector('.image-counter');
+          if (controls) controls.style.display = 'none';
+          if (counter) counter.style.display = 'none';
     }
 }
 
@@ -694,9 +719,11 @@ function updateAudio() {
     const entry = slideshowData[currentMonth];
     const isImageSlideshow = currentMonth && (entry?.type === 'image' || !entry?.type);
 
+    if (!audioElement) return; // Exit if audio element doesn't exist
+
     if (!isImageSlideshow || !entry.audio || !Array.isArray(entry.audio) || entry.audio.length === 0) {
         // console.log(`No audio defined or not an image slideshow: ${currentMonth}.`);
-        if (audioElement) audioElement.src = ''; // Clear src if no audio
+        audioElement.src = ''; // Clear src if no audio
         return;
     }
 
@@ -716,58 +743,58 @@ function updateAudio() {
 
     console.log(`Updating audio to track ${currentAudioIndex}: ${audioSrc}`);
 
-    if (audioElement) {
-         // Only change src if it's different to avoid unnecessary reloads/pauses
-        try {
-            const currentSrcUrl = audioElement.currentSrc ? new URL(audioElement.currentSrc) : null;
-            const newSrcUrl = new URL(audioSrc, window.location.origin); // Resolve relative paths
 
-            if (!currentSrcUrl || currentSrcUrl.pathname !== newSrcUrl.pathname) {
-                 console.log("Audio source changed. Loading new track.");
-                 audioElement.src = audioSrc;
-                 audioElement.load(); // Explicitly load the new source
-             } else {
-                 console.log("Audio source is the same. Not reloading.");
-                 // If source is same but paused, and slideshow is playing, maybe resume?
-                 if (isSlideshowPlaying && audioElement.paused && !audioElement.muted) {
-                      audioElement.play().catch(e => console.warn("Failed to resume same audio track:", e.name));
-                 }
-             }
-        } catch (e) {
-             console.error("Error comparing or setting audio URLs:", e);
-             // Fallback to setting src directly
+     // Only change src if it's different to avoid unnecessary reloads/pauses
+    try {
+        const currentSrcUrl = audioElement.currentSrc ? new URL(audioElement.currentSrc) : null;
+        const newSrcUrl = new URL(audioSrc, window.location.origin); // Resolve relative paths
+
+        if (!currentSrcUrl || currentSrcUrl.pathname !== newSrcUrl.pathname || audioElement.src === '') { // Also update if src is empty
+             console.log("Audio source changed or empty. Loading new track.");
              audioElement.src = audioSrc;
-             audioElement.load();
-        }
+             audioElement.load(); // Explicitly load the new source
+         } else {
+             console.log("Audio source is the same. Not reloading.");
+             // If source is same but paused, and slideshow is playing, maybe resume?
+             if (isSlideshowPlaying && audioElement.paused && !audioElement.muted) {
+                  audioElement.play().catch(e => console.warn("Failed to resume same audio track:", e.name));
+             }
+         }
+    } catch (e) {
+         console.error("Error comparing or setting audio URLs:", e);
+         // Fallback to setting src directly
+         audioElement.src = audioSrc;
+         audioElement.load();
+    }
 
 
-        // Update control button based on muted state
-        if (audioControlButton) {
-            audioControlButton.innerHTML = audioElement.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-        }
+    // Update control button based on muted state
+    if (audioControlButton) {
+        audioControlButton.innerHTML = audioElement.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+    }
 
-         // If the slideshow is supposed to be playing, attempt to play audio
-         // Only play if source is valid and not muted
-        if (isSlideshowPlaying && audioElement.src && !audioElement.muted) {
-            // Use a promise to handle potential autoplay restrictions
-            const playPromise = audioElement.play();
-            if (playPromise !== undefined) {
-                 playPromise.then(_ => {
-                     // Autoplay started!
-                     console.log("Audio playback started.");
-                 }).catch(error => {
-                     // Autoplay was prevented.
-                     if (error.name === 'NotAllowedError') {
-                          console.warn("Audio autoplay prevented by browser. User interaction required.");
-                          // Optionally pause the visual slideshow until user interacts (e.g., unmutes)
-                          // toggleSlideshow(); // This would pause visually if desired
-                     } else {
-                          console.error("Audio play failed:", error);
-                     }
-                 });
-            }
+     // If the slideshow is supposed to be playing, attempt to play audio
+     // Only play if source is valid and not muted
+    if (isSlideshowPlaying && audioElement.src && !audioElement.muted) {
+        // Use a promise to handle potential autoplay restrictions
+        const playPromise = audioElement.play();
+        if (playPromise !== undefined) {
+             playPromise.then(_ => {
+                 // Autoplay started!
+                 console.log("Audio playback started.");
+             }).catch(error => {
+                 // Autoplay was prevented.
+                 if (error.name === 'NotAllowedError') {
+                      console.warn("Audio autoplay prevented by browser. User interaction required.");
+                      // Optionally pause the visual slideshow until user interacts (e.g., unmutes)
+                      // toggleSlideshow(); // This would pause visually if desired
+                 } else {
+                      console.error("Audio play failed:", error);
+                 }
+             });
         }
     }
+
 }
 
 
@@ -775,10 +802,12 @@ function moveToNextAudio() {
     const entry = slideshowData[currentMonth];
     const isImageSlideshow = currentMonth && (entry?.type === 'image' || !entry?.type);
 
+     if (!audioElement) return; // Check audio element exists
+
     if (!isImageSlideshow || !entry.audio || !Array.isArray(entry.audio) || entry.audio.length <= 1) { // Check length > 1
         // console.log("Not moving to next audio: Not image slideshow or <= 1 track.");
         // If only one track, maybe restart it?
-        if (entry?.audio?.length === 1 && audioElement && isSlideshowPlaying && !audioElement.muted) {
+        if (entry?.audio?.length === 1 && isSlideshowPlaying && !audioElement.muted) {
              console.log("Restarting single audio track.");
              audioElement.currentTime = 0;
              audioElement.play().catch(e => console.warn("Failed to restart single track:", e.name));
@@ -936,12 +965,12 @@ window.addEventListener('hashchange', () => {
         resetSlideshow(); // Stop slideshow, clear audio/image
         currentMonth = ''; // Reset current month tracking
          // Optionally, navigate to the first available image slideshow?
-         // const firstImageMonth = Object.keys(slideshowData).find(month => (slideshowData[month].type === 'image' || !slideshowData[month].type) && validImages[month]?.length > 0);
+         // const firstImageMonth = findMostRecentEntryKey(slideshowData, 'image');
          // if (firstImageMonth) window.location.hash = encodeURIComponent(firstImageMonth);
     }
 });
 
-// Adjust image size on window resize
+// Adjust image size on window resize - now just clears styles
 window.addEventListener('resize', adjustImageSize);
 
 // --- Initialization ---
