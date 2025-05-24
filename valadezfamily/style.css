@@ -103,7 +103,7 @@ main#video-main {
 main#video-main h1.page-title#video-page-title {
   font-family: 'Lora', serif;
   color: var(--primary-color);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   text-align: center;
   margin-bottom: 1rem;
   flex-shrink: 0; /* Prevent title from shrinking vertically */
