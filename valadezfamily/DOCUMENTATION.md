@@ -2,7 +2,7 @@
 
 ## Overview:
 
-The Valadez Valor site is a web-based application designed for the Valadez family. It serves as a central hub for viewing shared memories (photo slideshows and videos), accessing family information like birthdays and name meanings, and linking to archived newsletters. It's designed to be hosted on GitHub Pages, providing an accessible platform for family members.
+The Valadez Valor site is a web-based application designed for the Valadez family. It serves as a central hub for viewing shared memories (photo slideshows and videos), accessing family information like birthdays and name meanings, and linking to archived newsletters. It's designed to be hosted on GitHub Pages, providing an accessible platform for family members..
 
 Valadez Vine past issues:
 https://us9.campaign-archive.com/home/?u=c69f6591ff871e2b9a315b29b&id=2abc3a3d56
