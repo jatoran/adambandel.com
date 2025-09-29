@@ -296,7 +296,7 @@ permalink: /project-corpus/projects/<slug>/updates/<YYYY-MM-DD>-<kebab-title>/
   </html>
 ```
 
-Constraints and checks for the LLM:
+Constraints and checks for the LLM::
 
 - Keep pages inside `project-corpus/` and do not alter other folders.
 - Ensure the project’s `permalink` starts with `/project-corpus/projects/<slug>/` so it appears on the index.
