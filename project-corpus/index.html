@@ -39,18 +39,22 @@ title: Project Corpus
         </div>
 
         {% comment %}
-          Build unique tag set from project pages and sort alphabetically
+          Build unique tag set robustly by capturing a flat CSV and splitting.
+          This avoids Liquid sort errors on nested arrays in older Jekyll.
         {% endcomment %}
         {% assign all_projects = site.pages | where_exp: "p", "p.url contains '/project-corpus/projects/'" %}
-        {% assign tag_list = '' | split: '' %}
+        {% capture tags_csv %}
         {% for p in all_projects %}
           {% unless p.url contains '/updates/' %}
-          {% if p.tags %}
-            {% assign tag_list = tag_list | concat: p.tags %}
-          {% endif %}
+            {% if p.tags %}
+              {% for t in p.tags %}
+                {{ t | strip }}||
+              {% endfor %}
+            {% endif %}
           {% endunless %}
         {% endfor %}
-        {% assign tag_list = tag_list | uniq | sort %}
+        {% endcapture %}
+        {% assign tag_list = tags_csv | split: '||' | uniq | sort %}
 
         <div class="filter-row">
           <div class="filter-group">
@@ -66,9 +70,11 @@ title: Project Corpus
               <div class="dropdown-body">
                 <ul class="tag-list">
                   {% for t in tag_list %}
-                    <li>
-                      <label class="checkbox-tag"><input type="checkbox" class="tag-checkbox" value="{{ t | downcase }}" data-tag="{{ t | downcase }}"> <span>{{ t }}</span></label>
-                    </li>
+                    {% if t != '' %}
+                      <li>
+                        <label class="checkbox-tag"><input type="checkbox" class="tag-checkbox" value="{{ t | downcase }}" data-tag="{{ t | downcase }}"> <span>{{ t }}</span></label>
+                      </li>
+                    {% endif %}
                   {% endfor %}
                 </ul>
               </div>
@@ -81,7 +87,7 @@ title: Project Corpus
       <section>
         <div id="count" class="count"></div>
         <div id="grid" class="grid">
-          {% assign projects = all_projects | sort: 'date' | reverse %}
+          {% assign projects = all_projects %}
           {% for p in projects %}
             {% unless p.url contains '/updates/' %}
             {% assign tags = p.tags | join: ',' | downcase %}
