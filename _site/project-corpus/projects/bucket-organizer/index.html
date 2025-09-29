@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bucket Organizer — Project</title>
+    <meta name="description" content="Drag‑and‑drop bucketed organizer with hierarchical note tagging, link metadata, and clipboard workflows." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Bucket Organizer</h1>
+        <p class="project-subtitle">Drag‑and‑drop bucketed organizer with hierarchical note tagging, link metadata, and clipboard workflows.</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="UI showing buckets, grid view, and the tri‑pane Note Organizer" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Ideas, links, and snippets pile up quickly. Keeping them organized and actionable is hard:
+          you want to bucket items by theme, scan everything at a glance, tag notes without friction,
+          avoid duplicates, and transform the raw collection into something you can paste elsewhere
+          as clean, structured text.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Bucket Organizer pairs a fast React UI with an ultra‑light Express API to streamline capture,
+          organization, and export. The app offers three complementary views — Bucket View, Grid View,
+          and a tri‑pane Note Organizer — all powered by drag‑and‑drop, local persistence, and
+          automatic link enrichment for YouTube, Reddit, and general web pages.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Frontend (React 18) — Three views with lazy‑loading, context state, and custom hooks.</li>
+          <li>State model — Buckets + items map; Note Organizer with Unprocessed, Tagging Buckets (bucket/row/column), and Processed.</li>
+          <li>API layer (Express) — Endpoints for metadata: <code>/api/metadata</code>, <code>/api/reddit</code>, <code>/api/youtube</code>.</li>
+          <li>Link enrichment — Axios + Cheerio scrape titles/descriptions; typed handling for YouTube/Reddit vs generic links.</li>
+          <li>Persistence — LocalStorage for buckets, items, organizer state, and tabs.</li>
+          <li>Clipboard workflows — One‑click copy of bucket contents or structured Markdown from processed items.</li>
+          <li>Visual system — HSL‑based color generation for buckets, rows, and columns with hover/drag feedback.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>React, React DOM — UI and rendering</li>
+          <li>TypeScript (select components) — Safer and clearer organizer logic</li>
+          <li>react‑dnd + HTML5 backend — Precise multi‑list drag‑and‑drop</li>
+          <li>react‑tabs — Simple, accessible tab navigation</li>
+          <li>Express, CORS — Lightweight API server</li>
+          <li>Axios, Cheerio — Metadata fetching and HTML parsing</li>
+          <li>LocalStorage — Instant, offline‑friendly persistence</li>
+        </ul>
+
+        <h3>Features</h3>
+        <ul>
+          <li>Bucket View — Edit, copy, paste, and rearrange items with drag‑and‑drop.</li>
+          <li>Grid View — A high‑level, responsive overview of all buckets.</li>
+          <li>Note Organizer — Three panes: Unprocessed, Tagging Buckets (bucket/row/column), and Processed.</li>
+          <li>Duplicate detection — Prevents re‑adding identical text/links.</li>
+          <li>Link parsing — Auto‑detects YouTube/Reddit links for special handling; general metadata for others.</li>
+          <li>Clipboard ops — Copy a bucket, copy all un/processed items with structured Markdown.</li>
+          <li>Inline editing — Titles, tags, and item content can be edited directly.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Robust DnD across panes — Custom drag layer and clear drag‑over states to reduce misdrops.</li>
+          <li>Duplicate detection — Content/URL matching prevents clutter in both buckets and organizer flows.</li>
+          <li>Metadata variability — Timeouts and fallbacks ensure scraping failures don’t block workflows.</li>
+          <li>Color system — HSL strategy keeps hierarchy legible while scaling to many tags.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          Faster triage and better reuse. Buckets keep day‑to‑day items tidy; Grid View gives a quick
+          overview; the Note Organizer turns raw notes into structured text with clean Markdown headers
+          you can paste into documents, wikis, or tasks. Everything persists locally and stays snappy.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>React, Express, Drag-and-Drop, Productivity, Note Organizer, Web Scraping, TypeScript</dd>
+          <dt>Started</dt>
+          <dd>Sep 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

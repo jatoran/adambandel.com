@@ -33,9 +33,28 @@ body {
 .clear { height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--subtext); cursor: pointer; }
 .clear:hover { color: var(--text); border-color: #2b3444; }
 
-.tags { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 0 6px; }
-.tag { border: 1px solid var(--border); background: #0f172a; color: var(--subtext); padding: 6px 10px; border-radius: 999px; cursor: pointer; }
-.tag.active { background: rgba(96,165,250,0.15); color: #cfe4ff; border-color: rgba(96,165,250,0.35); }
+/* Tag dropdown filter */
+.filter-row { display: flex; gap: 10px; align-items: start; padding: 10px 0 6px; flex-wrap: wrap; }
+.filter-group { position: relative; }
+.menu-button { height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text); cursor: pointer; }
+.menu-button.active { border-color: rgba(96,165,250,0.45); box-shadow: 0 0 0 2px rgba(96,165,250,0.18) inset; }
+.dropdown { position: absolute; top: calc(100% + 8px); left: 0; width: 360px; max-width: min(360px, 90vw); border: 1px solid var(--border); border-radius: 12px; background: #0f172a; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+.dropdown-header { display: flex; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid var(--border); }
+.dropdown-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.dropdown-search { flex: 1; height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel); color: var(--text); }
+.link { height: 30px; padding: 0 8px; border: 1px solid transparent; background: transparent; color: var(--brand); cursor: pointer; }
+.icon-close { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--subtext); cursor: pointer; }
+.icon-close:hover { color: var(--text); border-color: #2b3444; }
+.dropdown-body { max-height: 320px; overflow: auto; padding: 6px 8px; }
+.tag-list { list-style: none; margin: 0; padding: 0; }
+.tag-list li { margin: 0; }
+.checkbox-tag { display: flex; align-items: center; gap: 8px; padding: 6px 6px; border-radius: 8px; cursor: pointer; color: var(--subtext); }
+.checkbox-tag:hover { background: #0b1220; color: var(--text); }
+.checkbox-tag input { width: 16px; height: 16px; }
+
+.selected-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; min-height: 38px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 999px; font-size: 12px; background: rgba(96,165,250,0.14); color: #cfe4ff; border: 1px solid rgba(96,165,250,0.25); }
+.chip button { background: transparent; border: none; color: inherit; cursor: pointer; padding: 0; font-size: 14px; line-height: 1; }
 
 .count { margin: 16px 0 8px; color: var(--muted); }
 
@@ -83,4 +102,3 @@ a:hover { text-decoration: underline; }
 /* Code */
 pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
 pre { background: #0b1220; border: 1px solid var(--border); border-radius: 10px; padding: 10px; overflow-x: auto; }
-

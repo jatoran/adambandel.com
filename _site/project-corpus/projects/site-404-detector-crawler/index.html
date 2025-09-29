@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Site 404 Detector + Crawler — Project</title>
+    <meta name="description" content="Robust Playwright-powered crawler that classifies outgoing links (OK, Broken, Forbidden, Redirect), checks indexed URLs, and ships Streamlit dashboards for analysis." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Site 404 Detector + Crawler</h1>
+        <p class="project-subtitle">Robust Playwright-powered crawler that classifies outgoing links (OK, Broken, Forbidden, Redirect), checks indexed URLs, and ships Streamlit dashboards for analysis.</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Abstract network graph illustration representing link checking and crawling" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Large content sites slowly accumulate dead or misrouted links, especially when parts of the site rely on client-side routing and asynchronous content. Traditional link checkers miss SPA/JS-driven pages, treat 429s naively, or generate load spikes that anger rate-limiters. SEO and support teams need a respectful, accurate way to crawl, classify, and triage link issues. Separately, teams also need to validate that <em>indexed</em> URLs still resolve (catching regressions where prominent pages drift to 404).
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          I built a two-track toolkit:
+          an <strong>internal link crawler + probe engine</strong> that renders pages with Playwright and classifies every discovered outgoing link, and a <strong>indexed URL verifier</strong> that loads a curated list of URLs (e.g., exported from analytics/search console) to confirm their final status. Both emit CSVs and include Streamlit dashboards for exploration and export.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li><strong>Crawler (robust_crawler.py)</strong> — Navigates pages with Playwright (Chromium, headless), extracts all anchor hrefs, normalizes URLs, and queues internal links to a bounded depth.</li>
+          <li><strong>Probe Engine</strong> — Threads perform <code>HEAD</code> requests (fallback to <code>GET</code> on 405), track redirect chains, assign classifications (OK, BROKEN, FORBIDDEN, REDIRECT, RATE_LIMITED_PERSISTENT), and stream rows to <code>link_report.csv</code>.</li>
+          <li><strong>Courtesy + Safety</strong> — Per-domain minimum delay, global inter-request delay, optional robots.txt compliance, and proper 429 Retry-After parsing (seconds or HTTP-date).</li>
+          <li><strong>Reporting</strong> — CSV output with: <em>source_url</em>, <em>target_url</em>, <em>classification</em>, <em>final_status</em>, <em>redirect_chain</em>; problems de-duped per target to stay readable.</li>
+          <li><strong>Dashboards</strong> — Streamlit apps: link report analyzer (top broken targets, sources, domain breakdown, status code analysis) and an indexed-pages report viewer.</li>
+          <li><strong>Focused Blog Scraper</strong> — A targeted crawler for <code>/blog/</code> paths that extracts titles, author/date, and article text with site-specific selectors and writes plain text files.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Python 3.12 — Modern async + typing-friendly baseline.</li>
+          <li>Playwright — Reliable rendering of JS/SPAs; async (crawler) and per-thread (indexed verifier).</li>
+          <li>Requests — Efficient <code>HEAD</code>/<code>GET</code> probing and header inspection.</li>
+          <li>Pandas — Lightweight CSV analysis in dashboards.</li>
+          <li>Streamlit — Fast internal dashboards for CSV exploration and exports.</li>
+          <li>TQDM — Realtime progress over pages and probes.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Dynamic sites — Using Playwright avoids false negatives on JS-rendered links.</li>
+          <li>HEAD vs GET — Many origins reject HEAD; the probe engine falls back to GET on 405.</li>
+          <li>Rate limiting — Honors Retry-After (seconds or HTTP-date) and enforces per-domain minimum delay.</li>
+          <li>Robots and courtesy — Optional robots.txt gating with per-domain caching; global inter-request delay.</li>
+          <li>Concurrency safety — Thread-safe CSV writes plus deduping to keep problem lists actionable.</li>
+        </ul>
+
+        <h2>Usage</h2>
+        <p>Full notes are in <code>DOCUMENTATION.md</code>. Typical flows:</p>
+        <h3>Crawl a site and probe every discovered link</h3>
+        <pre><code>python robust_crawler.py https://www.jar-systems.com/home
+# Options:
+#   --max-depth 4
+#   --timeout 10
+#   --respect-robots
+#   --max-workers 5
+#   --inter-request-delay 0.2
+#   --min-domain-delay 1.0
+#   --exclude-probe-domains twitter.com x.com ...
+
+# Analyze results
+streamlit run report_robust_crawler.py
+        </code></pre>
+
+        <h3>Verify a list of indexed/canonical URLs</h3>
+        <pre><code># Uses indexed-pages.csv by default
+uv run check_indexed_pages_status.py
+
+# Or specify inputs/behavior
+python check_indexed_pages_status.py \
+  --input-csv my_urls.csv \
+  --output-csv indexed_status_report.csv \
+  --max-workers 8 \
+  --respect-robots \
+  --timeout 20
+
+# View the report
+streamlit run report_indexed_page_status.py
+        </code></pre>
+
+        <h3>Focused blog scraper</h3>
+        <pre><code>python blog_scraper.py https://www.jar-systems.com/blog
+# Writes individual .txt files under blog_content/
+        </code></pre>
+
+        <h2>Outcomes</h2>
+        <p>
+          The toolkit provides fast, respectful link hygiene at scale and produces CSVs that are easy to hand off or automate. The crawler surfaces broken/forbidden links with traceable redirect chains; the indexed URL verifier catches regressions where high-signal pages land on 404. Streamlit dashboards make triage and export painless for non‑developers.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>Crawler, Link Checking, Playwright, Streamlit, Python, SEO, Observability</dd>
+          <dt>Started</dt>
+          <dd>Sep 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (local Streamlit)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

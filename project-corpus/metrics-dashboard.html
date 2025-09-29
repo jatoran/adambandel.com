@@ -1,0 +1,154 @@
+---
+title: Metrics Dashboard
+summary: DuckDB‑backed personal analytics pipeline unifying sleep, app usage, fitness, mood, and location into a single daily view with fast, reproducible rebuilds and Streamlit viewers.
+tags: [DuckDB, Data Engineering, ETL, Streamlit, Time Series, Personal Analytics]
+status: Active
+date: 2025-09-29
+cover_image: /project-corpus/placeholder.svg
+alt: Abstract dashboard illustration representing unified personal metrics
+permalink: /project-corpus/projects/metrics-dashboard/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Personal metrics live in many silos (Fitbit, ActivityWatch, RescueTime, manual trackers,
+          location history), making it hard to ask cross‑cutting questions like “How did sleep quality
+          affect focused desktop work?” or “What changed on days I walked more?” Traditional dashboards
+          show one source at a time and rarely align data on a common daily boundary.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Build a self‑hosted ingestion → unify → aggregate → explore pipeline around a single, local
+          DuckDB database. Each source has a dedicated parser that incrementally loads files, deduplicates
+          rows, and records file hashes so re‑runs are fast. Overlapping sources are unified with clear
+          priorities (e.g., ActivityWatch over RescueTime for desktop usage). Daily aggregators then roll
+          everything up using an offset day boundary that matches real‑world sleep/wake cycles. Lightweight
+          Streamlit viewers provide quick exploration and CSV export.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Parsers per source → <code>raw_data.duckdb</code> with <code>processed_files</code> for incremental loads.</li>
+          <li>Usage unify: device/day priority (ActivityWatch → RescueTime → AppUsage) into <code>unified_usage</code>.</li>
+          <li>Sleep unify: merge Fitbit + non‑Fitbit sessions into a common schema <code>unified_sleep</code>.</li>
+          <li>Daily aggregators: compute per‑day tables (sleep, usage, steps, HR, SpO2, distance, mood, weight, location).</li>
+          <li>Daily wide table: FULL OUTER JOIN across all per‑day tables → <code>daily_wide_metrics</code>.</li>
+          <li>Inspectors & viewers: validation utilities and Streamlit apps for quick, local exploration.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>DuckDB — Columnar analytics in a single local file; fast ad‑hoc queries.</li>
+          <li>Python (3.12), Pandas, ijson — Efficient parsing and streaming of large JSON/CSV exports.</li>
+          <li>python‑dotenv — Environment‑based paths/config for portability.</li>
+          <li>Streamlit + Altair — Minimal viewers for sampling, checks, and CSV downloads.</li>
+          <li>Joblib — Utility for batching/parallelizable tasks when needed.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Overlapping usage data — Resolved with per‑device/day source priority and a single unified table.</li>
+          <li>Cross‑midnight sleep — Credited to the day sleep ends; day boundary offset via <code>DAY_TERMINATION_HOUR</code>.</li>
+          <li>Incremental re‑runs — File hashing + sizes recorded in <code>processed_files</code> to skip unchanged inputs.</li>
+          <li>Large JSON exports — Streamed with <code>ijson</code> and buffered inserts to control memory.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          A reproducible personal analytics workspace: one DuckDB for raw data, one for aggregates, and a
+          daily‑wide table for correlation and time‑series work. Rebuilds are predictable, idempotent, and
+          typically fast after the first ingestion. Queries like “top uncategorized apps by time” or “sleep vs.
+          desktop usage” are a few lines of SQL and render instantly in viewers.
+        </p>
+
+        <h2>How It Fits Together</h2>
+        <p>The system is configured via <code>.env</code> and organized under <code>backend/scripts/</code>:</p>
+        <pre><code>ROOT_DIR=.
+PARSERS_DIR=./scripts/parsers
+UNIFY_DIR=./scripts/unify
+AGGREGATORS_DIR=./scripts/aggregators
+DB_INSPECTORS_DIR=./scripts/db_inspectors
+SOURCE_FILES_DIR=./source_files
+HELPERS_DIR=./scripts/_helpers
+
+DB_RAW_DATA_FILE=./database/raw_data.duckdb
+DB_AGGREGATES_FILE=./database/aggregates.duckdb
+DB_ANALYSIS_FILE=./database/analysis.duckdb
+
+DAY_TERMINATION_HOUR=5
+        </code></pre>
+        <p>
+          Helper scripts orchestrate the full flow: <code>run_all_parsers.py</code> → unify scripts →
+          <code>run_all_aggregators.py</code> → inspectors. A full clean rebuild is provided via
+          <code>_full_rebuild.py</code> which clears DB files and times each phase.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo — TBD</a></li>
+              <li><a href="#">GitHub — TBD</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

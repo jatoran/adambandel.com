@@ -10,7 +10,14 @@
   const grid = $('#grid');
   const cards = $$('.card', grid);
   const count = $('#count');
-  const tagButtons = $$('.tag');
+  // Tag dropdown elements
+  const tagFilterBtn = $('#tagFilterBtn');
+  const tagDropdown = $('#tagDropdown');
+  const tagSearchInput = $('#tagSearch');
+  const tagClearBtn = $('#clearTags');
+  const tagCloseBtn = $('#closeTagDropdown');
+  const tagCheckboxes = $$('.tag-checkbox');
+  const selectedTagsWrap = $('#selectedTags');
 
   const selectedTags = new Set();
 
@@ -62,17 +69,64 @@
     items.concat(others).forEach(el => grid.appendChild(el));
   }
 
-  function toggleTag(btn) {
-    const tag = normalize(btn.dataset.tag);
-    if (selectedTags.has(tag)) {
-      selectedTags.delete(tag);
-      btn.classList.remove('active');
-    } else {
-      selectedTags.add(tag);
-      btn.classList.add('active');
-    }
+  function updateTagButtonLabel() {
+    if (!tagFilterBtn) return;
+    const n = selectedTags.size;
+    tagFilterBtn.textContent = n > 0 ? `Tags (${n})` : 'Tags';
+  }
+
+  function renderSelectedTags() {
+    if (!selectedTagsWrap) return;
+    selectedTagsWrap.innerHTML = '';
+    selectedTags.forEach((t) => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `${t} <button type="button" aria-label="Remove tag ${t}">×</button>`;
+      chip.querySelector('button').addEventListener('click', () => {
+        setTagSelection(t, false);
+      });
+      selectedTagsWrap.appendChild(chip);
+    });
+  }
+
+  function setTagSelection(tag, checked) {
+    const value = normalize(tag);
+    const cb = tagCheckboxes.find(x => x.value === value);
+    if (checked) selectedTags.add(value); else selectedTags.delete(value);
+    if (cb) cb.checked = checked;
+    updateTagButtonLabel();
+    renderSelectedTags();
     applyFilters();
     applySort();
+  }
+
+  function openTagDropdown() {
+    if (!tagDropdown || !tagFilterBtn) return;
+    tagDropdown.hidden = false;
+    tagFilterBtn.classList.add('active');
+    tagFilterBtn.setAttribute('aria-expanded', 'true');
+    requestAnimationFrame(() => tagSearchInput && tagSearchInput.focus());
+    document.addEventListener('click', onDocClickClose, { capture: true });
+    document.addEventListener('keydown', onEscClose);
+  }
+
+  function closeTagDropdown() {
+    if (!tagDropdown || !tagFilterBtn) return;
+    tagDropdown.hidden = true;
+    tagFilterBtn.classList.remove('active');
+    tagFilterBtn.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', onDocClickClose, { capture: true });
+    document.removeEventListener('keydown', onEscClose);
+  }
+
+  function onDocClickClose(e) {
+    if (!tagDropdown || tagDropdown.hidden) return;
+    if (tagDropdown.contains(e.target) || tagFilterBtn.contains(e.target)) return;
+    closeTagDropdown();
+  }
+
+  function onEscClose(e) {
+    if (e.key === 'Escape') closeTagDropdown();
   }
 
   // Wire up events
@@ -83,14 +137,41 @@
     search.value = '';
     status.value = '';
     selectedTags.clear();
-    tagButtons.forEach(b => b.classList.remove('active'));
+    if (tagCheckboxes) tagCheckboxes.forEach(cb => (cb.checked = false));
+    updateTagButtonLabel();
+    renderSelectedTags();
     applyFilters();
     applySort();
   });
-  tagButtons.forEach(btn => btn.addEventListener('click', () => toggleTag(btn)));
+
+  // Tag dropdown wiring
+  if (tagFilterBtn) tagFilterBtn.addEventListener('click', () => {
+    if (tagDropdown.hidden) openTagDropdown(); else closeTagDropdown();
+  });
+  if (tagCloseBtn) tagCloseBtn.addEventListener('click', closeTagDropdown);
+  if (tagClearBtn) tagClearBtn.addEventListener('click', () => {
+    selectedTags.clear();
+    if (tagCheckboxes) tagCheckboxes.forEach(cb => (cb.checked = false));
+    updateTagButtonLabel();
+    renderSelectedTags();
+    applyFilters();
+    applySort();
+  });
+  if (tagCheckboxes) tagCheckboxes.forEach(cb => {
+    cb.addEventListener('change', () => setTagSelection(cb.value, cb.checked));
+  });
+  if (tagSearchInput) tagSearchInput.addEventListener('input', () => {
+    const q = normalize(tagSearchInput.value);
+    $$('.tag-list li').forEach(li => {
+      const label = $('span', li);
+      const text = normalize(label ? label.textContent : '');
+      li.style.display = !q || text.includes(q) ? '' : 'none';
+    });
+  });
 
   // Initial render
+  updateTagButtonLabel();
+  renderSelectedTags();
   applyFilters();
   applySort();
 })();
-

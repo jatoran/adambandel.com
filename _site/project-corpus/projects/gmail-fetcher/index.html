@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gmail Fetcher — Project</title>
+    <meta name="description" content="Fetches Gmail messages, categorizes them, and extracts structured text for notes, links, and chats." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Gmail Fetcher</h1>
+        <p class="project-subtitle">Fetches Gmail messages, categorizes them, and extracts structured text for notes, links, and chats.</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Abstract illustration representing email parsing and data pipelines" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Personal email often contains durable artifacts—quick notes, saved links, chat transcripts, and other
+          references—that are hard to reuse outside the inbox. Manually copying and organizing these fragments is
+          tedious and error‑prone. I wanted a reliable way to continuously fetch messages from Gmail, organize them
+          into meaningful buckets, and extract clean text outputs that could feed downstream systems and notes.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          I built a small, composable ETL pipeline in Python. The pipeline authenticates with Gmail via OAuth,
+          fetches messages in batches with backoff and pagination, parses MIME parts (plain and HTML), and emits a
+          normalized JSON schema. A post‑processor classifies each message (text, link‑only, no‑body, YouTube), and
+          focused extractor scripts turn those buckets into consumable text files (InstaNotes, chat logs, and
+          generic <code>body_plain</code> dumps). Each run is captured in a timestamped folder to keep results
+          deterministic and auditable.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li><strong>Fetcher</strong> — <code>main.py</code> lists message IDs by query and fetches details in batches; retries with exponential backoff.</li>
+          <li><strong>Parser</strong> — Robust MIME handling extracts <code>body_plain</code> and <code>body_html</code>; preserves headers and snippet.</li>
+          <li><strong>Classifier</strong> — <code>post_processor.py</code> separates messages into <em>text</em>, <em>link‑only</em> (YouTube/other), <em>no_body</em>, and <em>unclassified</em>.</li>
+          <li><strong>Extractors</strong> —
+            <code>instanote_extractor.py</code> (subject = “InstaNote”),
+            <code>chat_extractor.py</code> (forwarded Google Chat HTML),
+            <code>link_extractor.py</code> (plain‑text export for any JSON bucket).
+          </li>
+          <li><strong>Run Artifacts</strong> — Outputs live under <code>processed_output/&lt;source_timestamp&gt;/</code> with filenames carrying counts, e.g. <code>text-YYYYMMDD_HHMMSS (74).json</code>.</li>
+          <li><strong>Idempotent by design</strong> — Each run writes to a new timestamped directory; source JSON is copied alongside categorized files.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Python 3.12 — Core language for scripting and I/O</li>
+          <li>google‑api‑python‑client + oauthlib — Gmail API auth and calls</li>
+          <li>python‑dotenv — Simple, explicit environment configuration</li>
+          <li>BeautifulSoup + lxml — HTML parsing for forwarded chat emails</li>
+          <li>uv (PEP 723/pyproject) — Fast venv + dependency management</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Gmail MIME variability — Nested multiparts and odd roots. Addressed with recursive parsing and fallbacks.</li>
+          <li>Rate limits and transient errors — Batched requests with exponential backoff and jitter.</li>
+          <li>HTML chat structure — Targeted selectors for avatars and <code>white-space:pre-wrap</code> spans to reconstruct dialogues.</li>
+          <li>Deterministic outputs — Filenames embed counts; runs are timestamped to keep artifacts auditable.</li>
+          <li>Privacy and secrets — <code>client_secret.json</code> and tokens are local; nothing sensitive is committed.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          Example run using <code>GMAIL_QUERY=label:inbox category:primary</code> fetched <strong>205</strong> messages
+          into <code>initial_fetched_emails/</code> and produced a structured snapshot under
+          <code>processed_output/my_primary_emails_20250824_162934/</code>:
+        </p>
+        <ul>
+          <li>YouTube links: 24</li>
+          <li>Other link‑only messages: 58</li>
+          <li>Text messages: 74 (with <strong>25</strong> InstaNotes extracted; 49 remaining)</li>
+          <li>No‑body items: 49 (0 parsed as forwarded chats in this run)</li>
+        </ul>
+        <p>
+          Extractors emitted <code>instanotes_extracted.txt</code> and <code>*_body_plain.txt</code> files for easy
+          downstream use in notes, search, or LLM pipelines.
+        </p>
+
+        <h2>Usage</h2>
+        <p>Local setup with <code>uv</code>:</p>
+        <pre><code># one-time
+uv venv
+uv pip install .
+
+# fetch messages (browser auth on first run)
+uv run python main.py
+
+# categorize into buckets
+uv run python post_processor.py
+
+# optional extractions
+uv run python instanote_extractor.py
+uv run python chat_extractor.py
+uv run python link_extractor.py
+</code></pre>
+        <p>
+          Configure <code>.env</code> with <code>CLIENT_SECRET_FILE</code>, <code>SCOPES</code>, <code>TOKEN_FILE</code>,
+          <code>OUTPUT_JSON_FILE</code>, and <code>GMAIL_QUERY</code>. First‑run OAuth populates <code>token.json</code>.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>Python, Gmail API, OAuth, ETL, Data Extraction, CLI</dd>
+          <dt>Started</dt>
+          <dd>Aug 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo</a></li>
+              <li><a href="#">GitHub</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

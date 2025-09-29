@@ -39,22 +39,42 @@ title: Project Corpus
         </div>
 
         {% comment %}
-          Build unique tag set from project pages under project-corpus/projects/*/index.md
+          Build unique tag set from project pages and sort alphabetically
         {% endcomment %}
         {% assign all_projects = site.pages | where_exp: "p", "p.url contains '/project-corpus/projects/'" %}
         {% assign tag_list = '' | split: '' %}
         {% for p in all_projects %}
           {% unless p.url contains '/updates/' %}
           {% if p.tags %}
-            {% assign tag_list = tag_list | concat: p.tags | uniq %}
+            {% assign tag_list = tag_list | concat: p.tags %}
           {% endif %}
           {% endunless %}
         {% endfor %}
+        {% assign tag_list = tag_list | uniq | sort %}
 
-        <div class="tags" role="group" aria-label="Filter by tag">
-          {% for t in tag_list %}
-            <button class="tag" data-tag="{{ t | downcase }}" type="button">{{ t }}</button>
-          {% endfor %}
+        <div class="filter-row">
+          <div class="filter-group">
+            <button id="tagFilterBtn" class="menu-button" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="tagDropdown">Tags</button>
+            <div id="tagDropdown" class="dropdown" role="dialog" aria-label="Filter by tags" hidden>
+              <div class="dropdown-header">
+                <input id="tagSearch" class="dropdown-search" type="search" placeholder="Search tags…" aria-label="Search tags" />
+                <div class="dropdown-actions">
+                  <button id="clearTags" class="link" type="button">Clear tags</button>
+                  <button id="closeTagDropdown" class="icon-close" type="button" aria-label="Close">×</button>
+                </div>
+              </div>
+              <div class="dropdown-body">
+                <ul class="tag-list">
+                  {% for t in tag_list %}
+                    <li>
+                      <label class="checkbox-tag"><input type="checkbox" class="tag-checkbox" value="{{ t | downcase }}" data-tag="{{ t | downcase }}"> <span>{{ t }}</span></label>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="selectedTags" class="selected-tags" aria-live="polite"></div>
         </div>
       </section>
 

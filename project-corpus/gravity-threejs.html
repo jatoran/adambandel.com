@@ -1,0 +1,168 @@
+---
+title: Gravity Three.js Galaxy
+summary: Interactive particle galaxy simulation with an orbiting attractor and a soft bounding well, built with Three.js + Vite.
+tags: [Three.js, WebGL, Vite, Physics, Particles, Visualization]
+status: Active
+date: 2025-09-29
+cover_image: /project-corpus/placeholder.svg
+alt: Colorful point‑based galaxy rendered in Three.js with orbiting attractor and soft bounding well
+permalink: /project-corpus/projects/gravity-threejs/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Build an interactive, real‑time galaxy visualization to explore simple
+          n‑body style dynamics with intuitive controls: gravity strength,
+          masses, an orbiting secondary attractor, damping, and a soft boundary
+          to keep particles in frame. The goal is a visually engaging, tunable
+          simulation that hosts cleanly as a static site.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          The simulation renders thousands of particles as a <em>Three.js</em>
+          <code>Points</code> cloud with additive blending. Positions, colors,
+          and velocities are stored in typed arrays for efficient per‑frame
+          updates. Two attractors influence particles via an inverse‑square law:
+          a stationary central mass and a secondary mass that orbits the center.
+          A soft <em>bounding well</em> gently pulls stragglers back when they
+          exceed a configurable radius, preventing runaway trajectories without
+          hard collisions. A <em>lil‑gui</em> control panel exposes parameters
+          and can re‑initialize the particle field on demand.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>
+            Rendering core — Three.js <code>Scene</code>,
+            <code>PerspectiveCamera</code>, <code>WebGLRenderer</code>, and
+            <code>OrbitControls</code> for smooth pan/zoom; a
+            <code>BufferGeometry</code> carries <code>position</code> and
+            <code>color</code> attributes, drawn with <code>PointsMaterial</code>
+            using additive blending and <code>depthWrite=false</code> for glow.
+          </li>
+          <li>
+            Physics — Two attractors (central and orbiting) apply an
+            inverse‑square force with a small epsilon to avoid singularities.
+            Velocities are damped each step, then integrated into positions.
+            Optional soft bounding sphere pulls particles back when outside the
+            radius, with a light clamp to keep them just inside.
+          </li>
+          <li>
+            Data model — Float32Arrays store positions, velocities, and colors
+            for up to ~10k particles. Re‑initialization rebuilds the arrays and
+            geometry to match the current <code>particleCount</code>.
+          </li>
+          <li>
+            Controls — <code>lil‑gui</code> exposes: G, damping, time step,
+            masses, orbit radius, bounding enable/radius/pullStrength, and a
+            one‑click re‑init.
+          </li>
+          <li>
+            Build/hosting — Vite is configured with <code>base: './'</code> so
+            the built site loads chunks correctly from any static path.
+          </li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Three.js — Real‑time WebGL rendering and math utilities.</li>
+          <li>lil‑gui — Lightweight parameter panel for live tuning.</li>
+          <li>Vite — Fast dev server and static build output.</li>
+          <li>OrbitControls — Camera navigation with damping.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>
+            Numerical stability — Added epsilon in distance squared and velocity
+            damping to avoid blow‑ups near attractors.
+          </li>
+          <li>
+            Particle retention — Implemented a soft bounding well with
+            distance‑based pull and a light positional clamp to keep visuals
+            composed without harsh clipping.
+          </li>
+          <li>
+            Static hosting paths — Vite <code>base</code> set to <code>./</code>
+            so chunk URLs work from folder‑based hosting.
+          </li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The default scene renders ~3,000 particles smoothly on mainstream
+          hardware and scales to ~10,000 with acceptable performance. The GUI
+          enables rapid exploration of gravitational effects and aesthetics
+          (color gradient by radius, orbit radius, and damping), producing a
+          convincing "galaxy" look while remaining simple and hackable.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

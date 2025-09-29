@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inbox Sorter — Project</title>
+    <meta name="description" content="AI‑assisted triage that classifies notes into Tasks, Notes, or Projects, deduplicates/merges with context, and writes to the right files." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Inbox Sorter</h1>
+        <p class="project-subtitle">AI‑assisted triage that classifies notes into Tasks, Notes, or Projects, deduplicates/merges with context, and writes to the right files.</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Screenshot placeholder of the Inbox Sorter UI showing input, processing steps, and token usage panel" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Personal knowledge bases and daily capture quickly become noisy. Raw input mixes
+          actionable tasks, general notes, links, and project updates. Over time this creates
+          duplication, makes retrieval harder, and leaves work scattered across files. Manual
+          triage is slow and inconsistent; automation needs reliable context to place content in the
+          right spot without losing meaning.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Inbox Sorter is an agentic pipeline that turns free‑form text into structured updates.
+          A FastAPI backend accepts input, classifies it as <em>Task</em>, <em>Note</em>, or
+          <em>Project</em>, associates it with existing files using embeddings + FAISS, and either
+          writes, merges, or flags duplicates. A React UI streams processing steps over WebSockets
+          and surfaces token usage and estimated cost. Embedding assets are versioned per settings
+          to keep runs reproducible.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Backend — FastAPI service with async workers that process queued text blocks.</li>
+          <li>Agents — Classification, Project Manager, Note Manager, Task Manager, Link Manager, and a Single‑File Analyzer using OpenAI function calls.</li>
+          <li>Embeddings — OpenAI embeddings normalized and indexed in FAISS; per‑file aggregate vectors for file‑level similarity.</li>
+          <li>Similarity — Type‑filtered search (Task/Note/Project) across chunk and aggregate embeddings; logs top files/chunks.</li>
+          <li>Filesystem I/O — FileManager discovers vault files, caches summaries, and writes under targeted headings; writes gated by a safety flag.</li>
+          <li>Observability — Centralized logging, token usage tracking with per‑agent rollups, and readable interaction logs.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>FastAPI + Uvicorn — Async API, WebSockets, CORS.</li>
+          <li>Python (Pydantic Settings, httpx, aiofiles) — Config, HTTP, I/O.</li>
+          <li>OpenAI (chat + embeddings) — Function‑call agents and vector generation.</li>
+          <li>FAISS + NumPy + sklearn.normalize — Vector store with cosine similarity.</li>
+          <li>React + Material UI DataGrid — Live table for processing states; token usage modal.</li>
+          <li>Jekyll (subfolder site) — Project corpus and updates publishing.</li>
+        </ul>
+
+        <h3>Key Design Choices</h3>
+        <ul>
+          <li>Settings‑scoped vector store — Directories named by chunk size/overlap/model/dimension to avoid cross‑run conflicts.</li>
+          <li>Type‑aware similarity — Only compare Tasks vs task vectors, Notes vs note vectors, etc., for better ranking.</li>
+          <li>Aggregate + chunk search — File‑level vectors guide placement; chunk‑level logs aid transparency.</li>
+          <li>Write guard — <code>allow_write=False</code> prevents accidental edits while iterating; flip when confident.</li>
+          <li>Streaming UI — WebSocket feed reduces polling and shows step‑by‑step decisions.</li>
+        </ul>
+
+        <h3>Pipeline</h3>
+        <pre><code>Input → Parse → Classify (Task|Note|Project|Unknown)
+        → Project Manager (associate by summary + similarity)
+        → Task/Note Managers (dedupe, merge, or write under heading)
+        → Embedding generation → Type‑filtered similarity → Logging
+        → Token usage rollup → WebSocket update
+        </code></pre>
+
+        <h3>Components</h3>
+        <ul>
+          <li><strong>Classification Agent</strong> — GPT function call returns category with tokens tracked.</li>
+          <li><strong>Project Manager</strong> — Chooses a project file using file summaries, then analyzes full context.</li>
+          <li><strong>Single‑File Analyzer</strong> — Detects duplicates, suggests merges, and returns a placement heading.</li>
+          <li><strong>Note/Task Managers</strong> — Apply analyzer results and write/merge under the suggested heading.</li>
+          <li><strong>Embedding Manager</strong> — Loads FAISS, reconstructs vectors, and computes aggregate embeddings per file.</li>
+          <li><strong>File Manager</strong> — Discovers vault files, reads/writes, and caches <code>file_summaries.json</code>.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Dimension drift — Guardrails ensure FAISS index dimension matches the selected embedding model.</li>
+          <li>Deduplication — Analyzer compares new text with existing file context to avoid noisy duplication.</li>
+          <li>Token cost visibility — Frontend aggregates per‑agent tokens and estimates cost to guide usage.</li>
+          <li>Idempotent writes — Heading‑scoped inserts reduce merge conflicts and repeated appends.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          Inbox triage time drops from minutes to seconds while maintaining placement quality and auditability.
+          The combination of type‑aware similarity and per‑file aggregate vectors improved match accuracy versus
+          chunk‑only search. With <em>allow_write</em> gating, the system is safe to iterate on, and the UI provides
+          immediate feedback and token/cost awareness during development.
+        </p>
+
+        <h3>Usage Notes</h3>
+        <ul>
+          <li>Run summarizer and embedding scripts to populate <code>file_summaries.json</code> and the vector store before processing.</li>
+          <li>Set <code>top_level_folder</code> to your vault path; verify the Tasks input filename expected by FileManager.</li>
+          <li>Provide API keys via environment; keep them out of version control.</li>
+        </ul>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>LLM, FastAPI, React, FAISS, Embeddings, Obsidian, Automation, Agents</dd>
+          <dt>Started</dt>
+          <dd>Sep 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo</a></li>
+              <li><a href="#">GitHub</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

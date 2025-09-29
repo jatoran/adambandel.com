@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Delphi Engine — Project</title>
+    <meta name="description" content="FastAPI + Celery platform for market ingestion, analytics, and incremental recompute with first‑class observability." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Delphi Engine</h1>
+        <p class="project-subtitle">FastAPI + Celery platform for market ingestion, analytics, and incremental recompute with first‑class observability.</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Conceptual architecture of Delphi Engine data pipelines and services" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Building a reliable market data platform means more than downloading prices. It must ingest from diverse providers (prices, macro, news, SEC), adjust
+          prices correctly (splits/dividends), compute layered analytics (base, benchmark‑relative, contextual), and keep all of it incrementally up to date.
+          Full recomputes are too costly at scale; recompute must be bounded, observable, and coordinated across dependent datasets.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Delphi Engine is a FastAPI service with Celery workers and beat scheduler. It pairs a <em>processing ledger</em> with per‑instrument
+          <em>watermarks</em> to drive incremental recompute across datasets: PRICES_ADJUSTED → TECHNICALS → BREADTH, plus TECH_REL and TECH_CTX. A typed Redis
+          event bus provides system and audit events, and observability is first‑class via Prometheus metrics, Loki structured logs, and Grafana dashboards.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>API (FastAPI) — health/system endpoints, correlation IDs, Prometheus metrics, audit subscriber on startup.</li>
+          <li>Workers (Celery) — queues for <code>prices.*</code>, <code>news.default</code>, and <code>fundamentals.default</code>; beat orchestrates nightly flows.</li>
+          <li>Database (PostgreSQL + TimescaleDB) — hypertables for prices/technicals/breadth; processing ledger and per‑instrument watermarks bound windows.</li>
+          <li>Coordination — ledger scopes recompute; watermarks track <code>actions_through</code>, <code>prices_through</code>, <code>adjusted_through</code>, <code>technicals_through</code>, and <code>rebuild_from</code>.</li>
+          <li>Event Bus — Redis pub/sub with typed events and an audit fanout; audit subscriber persists compact entries.</li>
+          <li>Domain Services — importers (FRED, DBnomics, CBOE, SEC, Yahoo), technicals engine, fundamentals engines, ETF metrics, breadth SQL builders.</li>
+          <li>Orchestrators & CLI — thin coordinators under <code>delphi_engine/orchestrators</code> and a Typer CLI in <code>scripts/data_manager.py</code>.</li>
+          <li>Observability — Prometheus + Grafana dashboards (Celery, DB, market/econ), Loki logs via Promtail, and Flower for task introspection.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Python (FastAPI, SQLAlchemy 2.0, Pydantic, Pandas)</li>
+          <li>Celery + Redis (broker/backend + event bus)</li>
+          <li>PostgreSQL 16 + TimescaleDB (hypertables, optional CAGGs)</li>
+          <li>Providers: yfinance, FRED, DBnomics, CBOE, SEC bulk, Finnhub</li>
+          <li>Observability: Prometheus, Grafana, Loki/Promtail, Flower</li>
+          <li>Tooling: Typer CLI, Docker Compose, Ruff + Black</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Incremental recompute — Bounded by a processing ledger plus per‑instrument watermarks; cascades compute only where needed.</li>
+          <li>Provider rate limits — Disk caches, TTL/backoff, and a rate‑limiter ensure polite ingestion with retry/feathered queues.</li>
+          <li>Large historical loads — COPY‑style bulk loads, index drop/rebuild helpers, and Timescale hypertables keep throughput high.</li>
+          <li>Mode safety — A ModeManager enforces SIMULATION/REALTIME/PAPER semantics and gated features with fail‑fast startup validation.</li>
+          <li>Traceability — Correlation IDs, structured logs, and audit events provide consistent request→task→DB lineage.</li>
+          <li>Breadth coverage — Dynamic universes and index‑backed membership with coverage gating and gap recording for retries.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The platform supports end‑to‑end ingestion and analytics with deterministic, incremental updates and deep observability. In a populated dev snapshot it
+          handles ~10k instruments, multi‑million‑row macro series, and multi‑phase technicals and breadth, while avoiding full recomputes by design.
+        </p>
+
+        <h3>Highlights</h3>
+        <ul>
+          <li>APIs: <code>/health/*</code>, <code>/system/mode</code>, and <code>/metrics</code> for ops visibility and control.</li>
+          <li>Scheduled flows: nightly imports (CBOE/FRED/DBnomics/prices/actions), then ledger consumers for compute pipelines.</li>
+          <li>Layered analytics: base technicals, benchmark‑ and sector‑relative metrics, contextual/hybrid indicators, ETF premium/AUM, daily fundamentals.</li>
+          <li>Typed events: system lifecycle, telemetry, and data updates over Redis for decoupled subscribers.</li>
+        </ul>
+
+        <h2>Architecture Details</h2>
+        <h3>Datasets & Coordination</h3>
+        <p>
+          Producers write ledger rows for datasets like <code>PRICES_ADJUSTED</code>, <code>TECHNICALS</code>, <code>TECH_REL</code>, <code>TECH_CTX</code>, and <code>BREADTH</code> with precise time scopes
+          (ALL_BEFORE, RANGE). Consumers (Celery tasks) read DIRTY rows, compute within watermark∩scope bounds, update watermarks, and cascade downstream invalidations.
+          Corporate actions maintain a <code>rebuild_from</code> boundary to trigger bounded recompute when historical actions change.
+        </p>
+
+        <h3>Technicals & Contextual Signals</h3>
+        <p>
+          The technicals engine registers indicators from <code>services/technicals/*</code> and upserts to daily/intraday tables with <code>params_hash</code> for deterministic series keys.
+          Contextual (TECH_CTX) indicators combine price with breadth, macro (e.g., risk‑free trend), and fundamentals to produce gated or scaled signals.
+        </p>
+
+        <h3>Breadth & Universes</h3>
+        <p>
+          Breadth calculators support both index‑backed membership and dynamic universes (US_ALL, NYSE/NASDAQ/AMEX, sector slices, or filtered selections). Coverage gating ensures results only
+          write when sufficient member data exists; gaps are recorded for visibility and retry.</p>
+
+        <h2>Developer Experience</h2>
+        <p>Run locally with Docker Compose for full parity (API, workers, Redis, TimescaleDB, Grafana, and Flower).</p>
+        <pre><code>docker compose up -d --build
+
+# API at http://localhost:8183
+# Grafana at http://localhost:3000
+# Flower at http://localhost:8187
+
+# Quick health checks
+curl http://localhost:8183/health/db
+curl http://localhost:8183/health/event-bus
+curl http://localhost:8183/health/system
+
+# Switch modes
+curl -X POST http://localhost:8183/system/mode -H 'Content-Type: application/json' \
+  -d '{"mode":"REALTIME"}'
+</code></pre>
+
+        <h3>Targeted Data Pipeline (per symbol)</h3>
+        <pre><code># Example: run a full pipeline for MSFT
+docker compose exec app python scripts/data_manager.py seed-instruments
+docker compose exec app python scripts/data_manager.py import-prices --symbol MSFT
+docker compose exec app python scripts/data_manager.py populate-actions --symbol MSFT
+docker compose exec app python scripts/data_manager.py adjust-prices --symbol MSFT
+docker compose exec app python scripts/data_manager.py calculate-technicals --symbol MSFT
+docker compose exec app python scripts/data_manager.py import-sec-fundamentals --symbol MSFT
+docker compose exec app python scripts/data_manager.py calculate-fundamentals-ratios --symbol MSFT
+</code></pre>
+
+        <h3>Observability</h3>
+        <ul>
+          <li>Prometheus metrics exposed at <code>/metrics</code> (HTTP histograms, counters).</li>
+          <li>Loki via Promtail with structured JSON logs from Loguru (correlation IDs included).</li>
+          <li>Grafana dashboards for Celery, DB health, market/econ views, and quick links.</li>
+          <li>Flower for Celery task introspection.</li>
+        </ul>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>Data Engineering, Market Data, FastAPI, Celery, TimescaleDB, Redis, Grafana</dd>
+          <dt>Started</dt>
+          <dd>Sep 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="http://localhost:8183">Local API</a></li>
+              <li><a href="http://localhost:3000">Grafana</a></li>
+              <li><a href="http://localhost:8187">Flower</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

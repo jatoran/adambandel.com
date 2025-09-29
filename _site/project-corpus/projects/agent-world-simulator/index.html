@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agent World Simulator — Angel LLM Sandbox — Project</title>
+    <meta name="description" content="Deterministic ECS sandbox where agents can request new abilities from an Angel LLM that either grants from a curated vault or generates code on demand." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Agent World Simulator — Angel LLM Sandbox</h1>
+        <p class="project-subtitle">Deterministic ECS sandbox where agents can request new abilities from an Angel LLM that either grants from a curated vault or generates code on demand.</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Minimalist grid world with agents and resources rendered in a top-down view" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Explore emergent agent behavior in a small, testable world while enabling
+          agents to expand their capabilities mid‑simulation. The system should be
+          deterministic by default, runnable without cloud access, and structured so
+          that sophisticated features (LLMs, code generation, GUI) can be layered in
+          without compromising clarity or reliability.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Build a Python‑only, single‑process sandbox using a lightweight
+          Entity–Component–System (ECS) core and a modular AI pipeline. Agents make
+          decisions via an LLM manager with offline/echo/live modes. When an agent
+          requests a new skill, an Angel System either grants a pre‑built ability
+          from a curated Vault or prompts an LLM to generate new Python ability code
+          on the fly. The main loop pauses during Angel operations to keep state
+          consistent, then resumes and lets the requesting agent immediately rethink
+          its turn with the newly granted skill.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>ECS core — <code>World</code>, <code>EntityManager</code>, <code>ComponentManager</code>, <code>SystemsManager</code> (agent_world/core)</li>
+          <li>Systems — Physics, Movement, Visibility + Event Perception, Combat, Crafting, Ability, AI Reasoning, Behavior Tree, Angel, Action Execution</li>
+          <li>LLM pipeline — <code>LLMManager</code> with <em>offline</em>, <em>echo</em>, and <em>live</em> modes; background worker queue; caching</li>
+          <li>Angel System — Vault semantic lookup → optional LLM code generation → conceptual review → ability grant</li>
+          <li>Abilities — builtin (<code>melee_strike.py</code>, <code>ranged.py</code>), vault (<code>sample_fireball.py</code>), generated (hot‑loaded)</li>
+          <li>Persistence — snapshot and incremental saves; persistent event log for LLM prompts/responses and Angel actions</li>
+          <li>GUI — pygame renderer with camera/zoom; CLI thread for developer commands (<code>/pause</code>, <code>/follow</code>, <code>/save</code>, <code>/reload_abilities</code>)</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Python — core language and std‑lib (dataclasses, threading, asyncio)</li>
+          <li>Pygame — windowing and simple 2D rendering</li>
+          <li>httpx — live LLM requests (when enabled)</li>
+          <li>PyYAML — role definitions and configuration</li>
+          <li>pytest — unit and integration tests with an offline default</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Determinism vs. LLM — Default <em>offline</em> and <em>echo</em> modes keep tests reproducible; live mode is optional.</li>
+          <li>Safe code generation — Generated abilities are conceptually reviewed by the Angel’s LLM before being written, no runtime sandbox execution.</li>
+          <li>Concurrency — A background event loop and queue in <code>LLMManager</code> manages async calls, with caching and backpressure.</li>
+          <li>System coordination — Main loop uses a world‑pause gate (<code>world.paused_for_angel</code>) so Angel work doesn’t race simulation updates.</li>
+          <li>Hot‑loading abilities — <code>AbilitySystem</code> discovers modules under builtin, vault, and generated paths and can reload during dev.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          A compact simulation where agents can grow capabilities mid‑run via an Angel.
+          The codebase favors clarity and testability: core logic is deterministic,
+          runtime state is observable via logs and a CLI, and the GUI offers a quick,
+          legible view of the world. The Angel flow demonstrates both curated ability
+          reuse and on‑demand code synthesis, setting the stage for deeper planning
+          and emergent behavior experiments.
+        </p>
+
+        <h2>Highlights</h2>
+        <ul>
+          <li>Main loop with Angel pause/timeout: <code>agent_world/main.py</code></li>
+          <li>Angel flow &amp; conceptual review: <code>agent_world/ai/angel/system.py</code></li>
+          <li>Ability discovery and reloads: <code>agent_world/systems/ability/ability_system.py</code></li>
+          <li>LLM queue, modes, and logging: <code>agent_world/ai/llm/llm_manager.py</code></li>
+          <li>Components for agent state/skills: <code>agent_world/core/components/</code></li>
+          <li>Renderer and camera helpers: <code>agent_world/gui/renderer.py</code></li>
+        </ul>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>Python, ECS, LLM, Simulation, Procedural, Pygame, AI</dd>
+          <dt>Started</dt>
+          <dd>Sep 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

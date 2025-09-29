@@ -1,0 +1,135 @@
+---
+title: Window Layout
+summary: Windows utility that overlays a dynamic grid to snap/resize windows using global hooks, a Tkinter UI, and Win32 APIs.
+tags: [Windows, Python, Tkinter, Win32, Productivity, Desktop]
+status: Active
+date: 2025-09-29
+cover_image: /project-corpus/placeholder.svg
+alt: Grid overlay snapping a window across monitors on Windows
+permalink: /project-corpus/projects/window-layout/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Windows’ built-in snapping (e.g., Win+Arrow) is fast but limited to simple halves/quarters. When working across
+          multiple monitors or dense layouts, it’s hard to place windows precisely without manually dragging and fiddling with
+          edges. I wanted a lightweight, instant way to target exact regions across monitors using a consistent grid—preferably
+          with both mouse and keyboard workflows.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          The app installs global input hooks and presents a translucent Tkinter overlay that renders your monitors and a
+          configurable grid. Activate via a title bar gesture (Ctrl+Shift + click) or a global hotkey (Ctrl+Alt+S). Then either
+          two‑click/drag to define a union of grid cells or pick from presets (halves, quadrants, 3‑column, etc.). When you
+          release, the selected window is repositioned and resized via Win32 calls. A small system tray icon keeps the app
+          resident and provides quick access to exit and help.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Bootstrap (main.py) — Sets DPI awareness, hides the console, installs hooks, starts Tk/Tkinter loop.</li>
+          <li>Controller (modules/app_controller.py) — Global state for target window, mode, and UI coordination.</li>
+          <li>Overlay UI (modules/popup_window.py) — Floating overlay with canvas + top bar; radial mode picker.</li>
+          <li>Rendering (modules/canvas_renderer.py) — Scales monitor geometry, draws grids, outlines, and highlights.</li>
+          <li>Input hooks (modules/mouse_hook_listener.py, modules/hotkey_listener.py) — Ctrl+Shift title‑bar capture and Ctrl+Alt+S hotkey.</li>
+          <li>Handlers (modules/event_handlers/) — Mouse/keyboard gestures, Tab to cycle modes, Esc to hide overlay.</li>
+          <li>Snapping (modules/snapping_logic.py) — Computes unions and moves/resizes via Win32 (handles restore from maximized).</li>
+          <li>Tray & Help (modules/tray.py, modules/help_overlay.py) — Pystray menu and built‑in usage panel.</li>
+          <li>Utilities (modules/utils.py) — DPI, monitor enumeration, title‑bar hit testing, click‑through overlays.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Python 3.12 — Primary language/runtime.</li>
+          <li>Tkinter — Lightweight UI for the overlay and controls.</li>
+          <li>pywin32 + ctypes — Win32 integration for hooks, window geometry, topmost toggling, and focus management.</li>
+          <li>pystray — System tray integration for background operation.</li>
+          <li>PyInstaller — Packaging into a windowed executable (see <code>main.spec</code>).</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>DPI/Scaling — Mixed‑DPI monitors can skew coordinates. Solution: enable process DPI awareness and query per‑monitor DPI.</li>
+          <li>Reliable Title‑Bar Detection — Custom‑chrome apps vary. Solution: compute title‑bar region using system metrics and bounds checks.</li>
+          <li>Responsiveness — Keep Tk’s mainloop responsive while listening to hooks. Solution: background threads for hooks/hotkeys; queue into Tk.</li>
+          <li>Non‑intrusive Overlay — Avoid intercepting clicks except when needed. Solution: use click‑through layered windows and precise focus rules.</li>
+          <li>State Synchronization — UI highlight, overlay, and snapping must stay in sync. Solution: centralized controller and shared state dict.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          Precise, repeatable snapping across multi‑monitor setups with minimal overhead. Modes (default grid, halves, quadrants, tri/quad‑sections,
+          and 3‑column) accelerate common arrangements, while the two‑point union supports arbitrary rectangles. The overlay remains responsive
+          under global hooks, and the tray keeps the app available without clutter. Packaged builds run as a normal windowed app.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NODEX — Visual Node Editor — Project</title>
+    <meta name="description" content="PySide6 desktop canvas for mind‑mapping, with undo/redo, plugins, and async/AI stubs" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">NODEX — Visual Node Editor</h1>
+        <p class="project-subtitle">PySide6 desktop canvas for mind‑mapping, with undo/redo, plugins, and async/AI stubs</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Screenshot concept of NODEX canvas with text and image nodes connected by curved arrows" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Creative and technical work often starts as loosely connected ideas: notes,
+          screenshots, and references that need structure. Traditional outliners feel
+          too linear, while heavy diagram tools slow down early exploration. NODEX
+          aims to be a fast, desktop‑native canvas to sketch mind maps and visual
+          notes that can evolve into richer, plugin‑powered workflows.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Build on Qt’s Graphics View framework (via PySide6) to get a snappy 2D
+          canvas, model edits as undoable commands, and keep the architecture modular
+          around focused managers (storage, clipboard, history, plugins). Start with
+          strong editing ergonomics (drag, resize, rubber‑band select, zoom, and
+          clipboard), then scaffold async/AI and collaboration so advanced features
+          can be layered in without disrupting the core.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>UI shell — <code>MainWindow</code> with menus/toolbars, a <code>TabManager</code> for multi‑document, and a sidebar listing open docs.</li>
+          <li>Canvas — <code>CanvasWidget</code> (QGraphicsView/Scene) hosts nodes, rubber‑band selection, panning, zoom, and autosave timer.</li>
+          <li>Nodes — <code>BaseNodeItem</code> with manual dragging; <code>TextNodeItem</code> (edit on double‑click, resize handle), <code>ImageNodeItem</code> (free resize), and a curved <code>ConnectorItem</code> with arrowhead + label.</li>
+          <li>Undo/Redo — Per‑canvas <code>QUndoStack</code> with <code>QUndoGroup</code> across tabs; commands for Add/Delete/Move/Resize (move supports command merge).</li>
+          <li>Managers — <code>ClipboardManager</code>, <code>StorageManager</code> (JSON, autosave), <code>HistoryManager</code>, <code>PreferencesManager</code>, <code>PluginManager</code>, plus stubs: <code>AIManager</code> and <code>CollaborationManager</code>.</li>
+          <li>Persistence — JSON document format for nodes (type, text, position); session state (window layout, open docs) via <code>QSettings</code>.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Python 3.12 + PySide6 — Desktop UI, Graphics View, QUndoStack.</li>
+          <li>Qt Undo Framework — Command pattern for reliable, granular edits.</li>
+          <li>Async foundation — Optional <code>qasync</code> integration; async I/O stubs for autosave/AI calls.</li>
+          <li>JSON + QSettings — Human‑readable documents and session persistence.</li>
+          <li>Plugin discovery — Lightweight Python import scanning of <code>plugins/</code> for <code>NodePluginInterface</code>.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Smooth undo for drags — Solved by manual drag in nodes and a <code>MoveNodeCommand.mergeWith</code> implementation to compress many micro‑moves.</li>
+          <li>Text editing in scene — Wrapped with a child <code>QGraphicsTextItem</code> for inline edit and clipping when content exceeds node bounds.</li>
+          <li>Connectors that follow nodes — Computed curved path and label placement from node centers; redraw on position changes.</li>
+          <li>Async without UI stalls — Prepared coroutines and optional <code>qasync</code> loop bridge so AI/autosave can later run off the GUI thread.</li>
+          <li>Extensibility — Defined a small plugin interface so new node types can be dropped into <code>plugins/</code> and exposed via menu/toolbar.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The current build delivers a productive baseline: multi‑document tabs, a
+          responsive canvas, robust undo/redo, clipboard integration for text/images,
+          resizable nodes, and labeled curved connectors. A plugin loader, AI helper,
+          and collaboration manager are scaffolded for future capabilities. JSON
+          save/load and autosave support day‑to‑day use, while the architecture stays
+          small and modular for fast iteration.
+        </p>
+
+        <h2>Notable Features</h2>
+        <ul>
+          <li>Rubber‑band selection, panning on blank space, scroll‑wheel zoom.</li>
+          <li>Undoable Add/Delete/Move/Resize for nodes; deletion also cleans up connectors.</li>
+          <li>Double‑click to edit text nodes; context menu for bold/italic toggles.</li>
+          <li>Clipboard bridge (text/image) maps to node creation on paste.</li>
+          <li>Autosave timer to <code>autosave.json</code>; standard file dialogs for JSON export/import.</li>
+          <li>Sample plugin shows custom node creation via <code>NodePluginInterface</code>.</li>
+        </ul>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>PySide6, Qt, Node Editor, Mind Mapping, Plugins, Undo/Redo, Async, Desktop</dd>
+          <dt>Started</dt>
+          <dd>Sep 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo</a></li>
+              <li><a href="#">GitHub</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

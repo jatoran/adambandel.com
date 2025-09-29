@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Axiom — Project</title>
+    <meta name="description" content="Ground‑truth service + LLM agents that plan, execute, and prove changes using a minimal SEMPACK spec language." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Axiom</h1>
+        <p class="project-subtitle">Ground‑truth service + LLM agents that plan, execute, and prove changes using a minimal SEMPACK spec language.</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Placeholder cover image for the Axiom project" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Modern LLM projects generate lots of ideas and code, but it’s hard to
+          keep a canonical, auditable source of truth. We wanted a small, fast
+          system that: (1) encodes work as a structured spec, (2) lets multiple
+          agents plan and execute safely, (3) enforces evidence for changes, and
+          (4) stays deterministic and diff‑able across versions.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Axiom couples a lightweight spec format (SEMPACK) with a Go service
+          called the Ground Truth Service (GTS). Agents (Planner <code>A1</code>
+          and Builder <code>A2</code>) propose patches against the current head
+          CID. The GTS validates, applies, serializes, and persists each
+          version, returning a new content‑addressed ID. Closing tasks requires
+          <em>evidence</em> via a <code>supported_by</code> relation, turning
+          agent output into an auditable trail. A small CLI and end‑to‑end tests
+          complete the loop.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>
+            Ground Truth Service (Go/Gin) — HTTP API for spec operations
+            (<code>/ping</code>, <code>/spec/:cid</code>, <code>/agenda</code>,
+            <code>/diff/:base/:head</code>, <code>/propose</code>,
+            <code>/reset</code>, <code>/check-completion</code>), CAS semantics,
+            and evidence gating.
+          </li>
+          <li>
+            SEMPACK spec model — line‑based <code>E</code> (entities),
+            <code>K</code> (tasks), <code>R</code> (relations). Supported ops:
+            <code>addE</code>, <code>addK</code>/<code>setK</code>,
+            <code>addR</code>, <code>closeK</code>. Deterministic
+            serialization → SHA‑based <code>cid:…</code>.
+          </li>
+          <li>
+            Storage (PostgreSQL) — normalized tables for specs, entities,
+            tasks, relations, and a single <code>head</code> pointer; SQL
+            migrations and seed on boot.
+          </li>
+          <li>
+            Agents (Python) — <code>A1</code> Planner decomposes work; <code>A2</code>
+            Builder executes tasks. Both talk to GTS and use OpenRouter LLMs;
+            Builder auto‑adds evidence stubs when required.
+          </li>
+          <li>
+            CLI (<code>semctl</code>) — Cobra‑based tool for
+            <code>head</code>/<code>show</code>/<code>diff</code>/<code>propose</code>,
+            useful for local debugging and CI scripts.
+          </li>
+          <li>
+            Monitoring/Translator — a small monitor polls
+            <code>/check-completion</code> (no open tasks ⇒ complete) and
+            emits a Markdown report from the final spec.
+          </li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Go + Gin — Fast, minimal HTTP service for the GTS.</li>
+          <li>PostgreSQL — Durable spec ledger and query surfaces.</li>
+          <li>Cobra — Ergonomic CLI for workflow operations.</li>
+          <li>Python (httpx, dotenv) — Agent loops and translator.</li>
+          <li>OpenRouter — Model routing for Planner/Builder agents.</li>
+          <li>Docker Compose — One‑command local dev (GTS + DB).</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>
+            Concurrency & consistency — Resolved with compare‑and‑swap on
+            <code>head</code>; conflicts return the actual head so agents can
+            rebase and retry.
+          </li>
+          <li>
+            Evidence enforcement — The service rejects
+            <code>closeK</code> without a <code>supported_by</code> relation;
+            Builder includes an auto‑fix path for missing citations.
+          </li>
+          <li>
+            Deterministic IDs — Stable serializer orders records and hashes
+            content to a compact <code>cid</code> for versioning.
+          </li>
+          <li>
+            Bootstrapping — Safe first‑run seed plus migrations ensure
+            <code>/ping</code> and <code>/agenda</code> work immediately.
+          </li>
+          <li>
+            Explainable diffs — <code>/diff</code> surfaces added entities and
+            changed tasks for CI and reviews.
+          </li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The E2E suite exercises proposal flow, agenda slicing, conflict
+          recovery, and structured diffs. A generated final spec demonstrates a
+          non‑trivial case study (AI trading simulator) with traceable, cited work.
+          The system is fast to run locally via Docker and simple to extend with
+          new predicates, ops, or agent roles.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            <p>No updates yet.</p>
+          
+        </section>
+      </section>
+
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>Go, PostgreSQL, Gin, Cobra, Python, LLM, Agents, OpenRouter, Docker, CLI, Compiler</dd>
+          <dt>Started</dt>
+          <dd>Sep 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

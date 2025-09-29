@@ -1,0 +1,149 @@
+---
+title: Agent Thunderdome — Battle of Wits
+summary: Real‑time multi‑agent LLM simulation with FastAPI + PixiJS, streaming state via SSE and LLM‑judged “Battle of Wits”.
+tags: [LLM, FastAPI, SSE, PixiJS, Simulation, httpx]
+status: Active
+date: 2025-09-29
+cover_image: /project-corpus/placeholder.svg
+alt: Grid‑based visualization of agents engaged in an LLM‑driven battle of wits
+permalink: /project-corpus/projects/agent-thunderdome/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          LLM “agent battles” demos are often fragile, hard to reason about, and visually opaque.
+          I wanted a modular, testable engine that lets multiple personality‑driven agents act in a
+          shared world, with a live visualization, clear data contracts, and a deterministic
+          simulation loop. The system should expose costs/tokens, support themes for role‑play,
+          and explain why a battle round was judged a certain way.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          I built a FastAPI backend that orchestrates a grid‑world simulation and streams state
+          updates via Server‑Sent Events (SSE) to a PixiJS front‑end. Agents receive a structured
+          observation context and produce actions via an LLM. When adjacent, agents enter a
+          “Battle of Wits”: each generates a short remark and an impartial LLM referee selects a
+          round winner with a brief rationale. The engine tracks token usage and cost, supports a
+          user‑provided theme that shapes all remarks and judging, and prioritizes separation of
+          concerns so components remain independently testable.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Simulation Orchestrator — Central state holder driving turns, actions, and battles.</li>
+          <li>LLM Interface — httpx client for OpenRouter; retries, timeouts, and cost tracking with manual fallback.</li>
+          <li>Decision Component — Builds observation context and parses LLM text into structured actions.</li>
+          <li>Battle Manager — 3‑round taunt exchange with theme; LLM referee picks winner + rationale.</li>
+          <li>State Manager — Serializes canonical state for SSE; computes win condition and aggregates battle history.</li>
+          <li>Terrain/Visibility — Connected map generation, BFS connectivity checks, ray‑cast line‑of‑sight.</li>
+          <li>Routers — POST <code>/simulation/start</code>, GET <code>/simulation/stream</code> (SSE), POST <code>/simulation/stop</code>.</li>
+          <li>Frontend — PixiJS canvas renders grid/agents; vanilla JS modules for UI, SSE, and logs.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>FastAPI + Pydantic v2 — Typed DI, schemas, and clean routing.</li>
+          <li>httpx (async) — Robust OpenRouter calls with hooks, pooling, and retries.</li>
+          <li>sse-starlette — Simple, reliable state streaming to the browser.</li>
+          <li>PixiJS — High‑performance 2D rendering for the simulation grid.</li>
+          <li>pydantic-settings + dotenv — Environment‑driven config; <code>OPENROUTER_API_KEY</code> required.</li>
+          <li>uv/pyproject — Lightweight dependency and runtime management.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Action parsing — LLMs can be verbose; regex parsing with strict MOVE/WAIT/ATTACK grammar and WAIT fallbacks reduces failures.</li>
+          <li>Cost accounting — APIs sometimes report $0; added manual input/output cost fallbacks keyed by token counts.</li>
+          <li>JS module MIME types — Explicit route ensures correct <code>application/javascript</code> for ESM files.</li>
+          <li>Spawn/connectivity — BFS‑validated placement enforces connected floors; tuned wall density and spawn spacing.</li>
+          <li>Agent loops — Track <code>last_position</code> to discourage ping‑pong moves; planner suggests forward progress.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The result is a clear, live visualization of LLM‑driven agents moving, engaging, and
+          winning/losing based on judged remarks, with a transparent event stream and structured
+          battle logs (including round rationales). The modular boundaries (simulation, decisions,
+          battles, rendering) make it easy to evolve prompts, swap models for battle vs referee,
+          and adjust world rules without rewrites. Token/cost telemetry builds trust in runtime behavior.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+
+        <h2>Implementation Notes</h2>
+        <ul>
+          <li>Start flow: UI builds <code>StartRequestSchema</code> (agents + optional theme) → <code>/simulation/start</code> → SSE begins.</li>
+          <li>Turns: <code>turn_manager</code> selects next active agent; actions validated/executed with clear errors and retries.</li>
+          <li>Battles: alternating opens/responds; referee model enforces winner (no draws) and provides rationale text.</li>
+          <li>Streaming: SSE sends only changed state snapshots + periodic heartbeats.</li>
+          <li>Safety: basic path checks for static modules; env‑driven API keys; bounded retries and timeouts.</li>
+        </ul>
+      </section>
+
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo</a></li>
+              <li><a href="#">GitHub</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

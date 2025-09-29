@@ -1,0 +1,128 @@
+---
+title: Code Context Builder
+summary: Tauri desktop app to scan codebases and assemble robust, LLM‑ready prompts (Sentinel/Markdown/XML) with smart compression, presets, and token counting.
+tags: [Tauri, React, TypeScript, Rust, SQLite, Tree-sitter, Vite, LLM, Prompt Engineering, DevTools]
+status: Active
+date: 2025-09-29T00:00:00
+cover_image: /project-corpus/placeholder.svg
+alt: Placeholder cover image for Code Context Builder
+permalink: /project-corpus/projects/code-context-builder/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Modern LLM workflows depend on precise, reproducible context. Manually gathering files, pruning noise, and wrapping content in a structure models can reliably parse is slow and error‑prone. Teams also need guardrails (format instructions, stable markers, token budgeting) and a repeatable way to rebuild context when the code changes.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Code Context Builder is a desktop app (Tauri + React + Rust) that scans a project folder, tracks file stats, and lets you select the exact files to include. It then aggregates content into robust formats (Sentinel, Markdown, XML), optionally <em>prepends</em> a text tree of the repository, and wraps everything with customizable pre‑prompt and post‑prompt text. A preset system makes common prompt structures one‑click reusable. Smart compression (tree‑sitter) reduces boilerplate for supported languages while preserving meaning.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Frontend (React + Vite): project manager, file tree + search, prompt builder with presets.</li>
+          <li>Backend (Tauri/Rust): SQLite persistence, scanner + ignore rules, token counting, smart compression.</li>
+          <li>Events/IPC: progress + completion events from Rust; batched file reads to keep UI snappy.</li>
+          <li>File monitoring: lightweight freshness poll emits changed paths to encourage re‑scans.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Tauri (Rust + WebView) — Native desktop shell and IPC.</li>
+          <li>React + TypeScript + Vite — Fast, modular UI.</li>
+          <li>SQLite — Local project + cache storage next to the executable.</li>
+          <li>tree‑sitter — Smart code compression for Python and TS/TSX.</li>
+          <li>tiktoken‑rs — Approximate token counting for prompt sizing.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Reliable filtering — Combined global + project ignore rules with <code>ignore</code>‑style semantics.</li>
+          <li>Performance at scale — Parallel file stat updates with a cache and size limits (≤ 5 MB per file).</li>
+          <li>Stable formatting — Sentinel/XML structures designed to withstand LLM rewrites and preserve boundaries.</li>
+          <li>Cross‑platform UX — Persisted window geometry, keyboard shortcuts, and predictable file tree behavior.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The app turns ad‑hoc prompt assembly into a fast, repeatable operation. Teams get consistent wrappers, clear file delineation, and a trustworthy token count before sending to a model. Presets standardize collaboration, and the optional tree + compression reduce noise while keeping orientation.
+        </p>
+
+        <h3>Notable Features</h3>
+        <ul>
+          <li>Formats: Sentinel, Markdown, XML, Raw; optional file tree preamble.</li>
+          <li>Prompt presets: save/update/delete named pre/post prompt sets with custom wrapper tags.</li>
+          <li>Smart compression: remove comments and collapse boilerplate for supported languages.</li>
+          <li>Copy full prompt: one‑click or <code>Ctrl+Shift+C</code>; token count displayed live.</li>
+          <li>Stale file detection: gentle rescan nudges when sources change.</li>
+        </ul>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (desktop app) — N/A</a></li>
+              <li><a href="#">GitHub — TBD</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

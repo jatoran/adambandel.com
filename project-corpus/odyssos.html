@@ -1,0 +1,189 @@
+---
+title: Odyssos
+summary: Data‑driven idle RPG that blends training, exploration, artifacts, a skill tree, tournament combat, and multi‑layer rebirth.
+tags: [Idle Game, Incremental, JavaScript, Data‑Driven, Offline, Parcel]
+status: Active
+date: 2023-04-01
+cover_image: /project-corpus/placeholder.svg
+alt: Placeholder cover graphic for the Odyssos project
+permalink: /project-corpus/projects/odyssos/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Build a long‑form idle/incremental game that stays engaging well past the
+          first few hours by combining classic generator <em>training</em> with a
+          map‑based <em>exploration</em> layer, meaningful <em>meta‑progression</em>
+          (artifacts, skills, rebirths), and quality‑of‑life systems (offline
+          progress, autobuy, time‑based rewards) — all with approachable web tech
+          and a content pipeline that’s easy to expand and balance.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          Odyssos is structured around a modular, event‑driven core with a
+          data‑first content model. Nearly all content — trainings, generators,
+          upgrades, worlds/regions/zones, artifacts, skills, and achievements — is
+          defined in JSON. A central <em>mod system</em> composes effects across
+          features in a predictable priority order, while state and UI managers
+          keep the game loop responsive and the interface dynamic.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>
+            Core loop + managers — <code>_Game.js</code> orchestrates
+            <code>_GameManager.js</code> (content + calculations),
+            <code>_StateManager.js</code> (save/load, versioning), and
+            <code>_GameUI.js</code> (DOM skeleton, updates, tooltips).
+          </li>
+          <li>
+            Event bus — <code>_EventManager.js</code> decouples UI, gameplay, and
+            persistence via a lightweight observer pattern.
+          </li>
+          <li>
+            Data‑driven content — JSON under <code>assets/gameData/</code> powers
+            trainings, upgrades, worlds/regions/zones, artifacts, skills,
+            fighters, tabs, and interface structure.
+          </li>
+          <li>
+            Mod system — composable, priority‑based modifiers apply production,
+            cost, and global effects to specific targets or whole types (e.g.,
+            <code>allTrain</code>, <code>forceTrain</code>).
+          </li>
+          <li>
+            State + compression — saves serialize to JSON, then compress with
+            <code>lz-string</code> for localStorage; supports rebirth and reset
+            flows with simple version checks.
+          </li>
+          <li>
+            UI skeleton — layout is generated from
+            <code>interfaceElementData.json</code>; per‑tab managers handle
+            Training, Exploration (Odyssey), Forge, Skills, Essence, Achievements,
+            Settings, and Radiance.
+          </li>
+          <li>
+            Exploration (Odyssey) — worlds → regions → zones form a directed
+            graph with progression bosses, legendary bosses, and rewards; auto‑
+            conquest respects “beaten once” rules.
+          </li>
+          <li>
+            Tournament — tiered fighters pay out Crystal for powerful forge
+            upgrades; headband rank tracks progress.
+          </li>
+          <li>
+            Offline + rewards — dedicated managers compute idle gains and manage
+            hourly/daily rewards without blocking the main loop.
+          </li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Vanilla JavaScript (ES modules) — core game logic and UI</li>
+          <li>Parcel — zero‑config bundling for local dev</li>
+          <li>break_eternity — fast big‑number math for idle pacing</li>
+          <li>lz‑string — compressed saves in localStorage</li>
+          <li>Lodash — utilities where helpful</li>
+          <li>HTML/CSS — data‑driven, dynamic DOM generation</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>
+            Progression balance — many systems (training, zones, artifacts,
+            skills, tournament) interact; the priority‑based mod tree and JSON
+            content let balance iterate quickly without code churn.
+          </li>
+          <li>
+            Performance + memory — UI updates and large data sets required
+            careful caching; memory leak issues were mitigated with controlled
+            reloads during rebirth/reset flows and targeted refactors.
+          </li>
+          <li>
+            State size + integrity — compressed saves, per‑feature state modules,
+            and simple version checks keep persistence fast and compatible.
+          </li>
+          <li>
+            Dynamic UI complexity — a data‑driven skeleton and small UI managers
+            (tabs, hotkeys, multipliers, notifications) keep the DOM predictable.
+          </li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          Reached a stable, content‑rich alpha (v0.5.x) with a complete Training
+          loop, Odyssey exploration across multiple worlds/regions, a tiered
+          Tournament, artifacts and a skill tree, offline rewards, and autobuy.
+          Major refactors improved clarity and performance; the current structure
+          supports fast content authoring and future rebirth layers (Godhood,
+          Transcendence) outlined in the roadmap.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

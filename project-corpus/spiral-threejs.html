@@ -1,0 +1,144 @@
+---
+title: Spiral Galaxy (Three.js)
+summary: Interactive spiral galaxy renderer with a central black hole, accretion disk, and bloom post‑processing.
+tags: [Three.js, WebGL, Vite, Graphics, Procedural]
+status: Active
+date: 2025-01-18
+cover_image: /project-corpus/placeholder.svg
+alt: Rendered spiral galaxy with a central black hole and a thin accretion disk
+permalink: /project-corpus/projects/spiral-threejs/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          I wanted a lightweight, real‑time visualization of a spiral galaxy for the web that feels
+          immersive but stays performant on typical laptops and mobile GPUs. The goals: spiral arm
+          structure, a convincing central black hole, an accretion disk, and a subtle cinematic glow —
+          all without heavy assets or complex shaders.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          The scene is built with <strong>Three.js</strong> and bundled with <strong>Vite</strong>.
+          Stars are procedurally generated and rendered as <em>instanced spheres</em> to keep draw calls
+          minimal. A central black hole is represented by a dark sphere, and a thin, fast‑rotating
+          accretion disk uses a <em>Points</em> cloud. Post‑processing applies a restrained
+          <em>UnrealBloomPass</em> to make highlights glow without washing out the image.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Scene: <code>THREE.Scene</code> with a perspective camera and <code>OrbitControls</code> for interaction.</li>
+          <li>Galaxy generator: procedural star positions colored by radial interpolation (inside→outside).</li>
+          <li>Instancing: stars use <code>THREE.InstancedMesh</code> with additive blending and disabled depth writes for sparkle and performance.</li>
+          <li>Accretion disk: <code>THREE.Points</code> with a narrow annulus (inner/outer radii) and quick yaw rotation.</li>
+          <li>Post‑processing: <code>EffectComposer</code> + <code>RenderPass</code> + <code>UnrealBloomPass</code> for a subtle glow.</li>
+          <li>Responsiveness: resize handler updates camera aspect, renderer size, and composer size.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>Three.js — Core rendering, geometry, instancing, post‑processing passes.</li>
+          <li>Vite — Fast dev server and production bundling with <code>base: './'</code> for static hosting.</li>
+          <li>OrbitControls — Smooth camera orbit with damping.</li>
+          <li>UnrealBloomPass — Cinematic highlight bloom.</li>
+        </ul>
+
+        <h3>Galaxy generation highlights</h3>
+        <ul>
+          <li>Spiral arms: star <em>branch</em> is <code>i % branches</code>; angle is <code>branchAngle + r * spin</code>.</li>
+          <li>Radial coloring: interpolate from <code>insideColor</code> to <code>outsideColor</code> based on radius.</li>
+          <li>Thickness control: <code>verticalSpreadFactor</code> scales Y randomness to keep a thin disk.</li>
+          <li>Black‑hole exclusion: stars inside <code>blackHoleRadius</code> are skipped.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Performance with tens of thousands of stars — solved with <code>InstancedMesh</code> and small sphere geometry.</li>
+          <li>Glow balance — tuned bloom strength/radius/threshold to avoid washing out star colors.</li>
+          <li>Depth artifacts — used additive blending and <code>depthWrite: false</code> for clean highlights.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The result is a smooth, interactive spiral galaxy that runs well on typical hardware and
+          clearly communicates structural features: spiral arms, a dark core, and a thin accretion disk.
+          The scene is responsive, easy to host statically, and straightforward to iterate on.
+        </p>
+
+        <h2>Implementation Notes</h2>
+        <ul>
+          <li>Star count ~20k after black‑hole exclusion; instancing minimizes draw calls.</li>
+          <li>Accretion disk: ~1.5k points in an annulus <code>[0.7R, 1.2R]</code> around the core.</li>
+          <li>Bloom: strength ≈ 1.4, radius ≈ 0.4, threshold ≈ 0.85 (tuned by eye).</li>
+          <li>Camera: 75° FOV, near/far 0.1–100, positioned at <code>(0, 2, 8)</code>.</li>
+        </ul>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+
