@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Corpus</title>
+    <meta name="description" content="Showcase of projects by Adam Bandel" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>Project Corpus</h1>
+        <p class="subtitle">A growing collection of my projects, case studies, and process write‑ups.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="controls">
+        <div class="control-row">
+          <input id="search" class="search" type="search" placeholder="Search projects (title, summary, tags)…" aria-label="Search projects" />
+          <select id="sort" class="sort" aria-label="Sort projects">
+            <option value="recent" selected>Sort: Most recent</option>
+            <option value="title">Sort: Title A–Z</option>
+          </select>
+          <select id="status" class="status" aria-label="Filter by status">
+            <option value="">Status: All</option>
+            <option value="active">Active</option>
+            <option value="paused">Paused</option>
+            <option value="archived">Archived</option>
+          </select>
+          <button id="clear" class="clear" type="button" aria-label="Clear filters">Clear</button>
+        </div>
+
+        
+        
+        
+        
+
+        <div class="tags" role="group" aria-label="Filter by tag">
+          
+            <button class="tag" data-tag="iot" type="button">IoT</button>
+          
+            <button class="tag" data-tag="hardware" type="button">Hardware</button>
+          
+            <button class="tag" data-tag="esp32" type="button">ESP32</button>
+          
+            <button class="tag" data-tag="web" type="button">Web</button>
+          
+            <button class="tag" data-tag="webaudio" type="button">WebAudio</button>
+          
+            <button class="tag" data-tag="canvas" type="button">Canvas</button>
+          
+            <button class="tag" data-tag="music" type="button">Music</button>
+          
+            <button class="tag" data-tag="ux" type="button">UX</button>
+          
+            <button class="tag" data-tag="cli" type="button">CLI</button>
+          
+            <button class="tag" data-tag="devtools" type="button">DevTools</button>
+          
+            <button class="tag" data-tag="node" type="button">Node</button>
+          
+        </div>
+      </section>
+
+      <section>
+        <div id="count" class="count"></div>
+        <div id="grid" class="grid">
+          
+          
+            
+          
+            
+          
+            
+          
+            
+            
+            <a class="card" href="/project-corpus/projects/pixel-synth/" data-title="pixelsynth" data-summary="a visual music workstation that turns pixel art into sound, with real-time synthesis and performance controls." data-tags="webaudio,canvas,music,ux" data-status="active" data-date="1747526400">
+              <div class="media">
+                
+                  <img src="/project-corpus/placeholder.svg" alt="PixelSynth cover image" loading="lazy" />
+                
+              </div>
+              <div class="content">
+                <h3 class="card-title">PixelSynth</h3>
+                <p class="summary">A visual music workstation that turns pixel art into sound, with real-time synthesis and performance controls.</p>
+                <div class="meta">
+                  <span class="badge status active">Active</span>
+                  
+                    <div class="badges">
+                      
+                        <span class="badge">WebAudio</span>
+                      
+                        <span class="badge">Canvas</span>
+                      
+                        <span class="badge">Music</span>
+                      
+                        <span class="badge">UX</span>
+                      
+                    </div>
+                  
+                </div>
+              </div>
+            </a>
+            
+          
+            
+            
+            <a class="card" href="/project-corpus/projects/garden-monitor/" data-title="garden monitor iot" data-summary="low-power sensors log soil moisture, temp, and light with a tiny solar hub and web dashboard." data-tags="iot,hardware,esp32,web" data-status="active" data-date="1741478400">
+              <div class="media">
+                
+                  <img src="/project-corpus/placeholder.svg" alt="Garden Monitor cover image" loading="lazy" />
+                
+              </div>
+              <div class="content">
+                <h3 class="card-title">Garden Monitor IoT</h3>
+                <p class="summary">Low-power sensors log soil moisture, temp, and light with a tiny solar hub and web dashboard.</p>
+                <div class="meta">
+                  <span class="badge status active">Active</span>
+                  
+                    <div class="badges">
+                      
+                        <span class="badge">IoT</span>
+                      
+                        <span class="badge">Hardware</span>
+                      
+                        <span class="badge">ESP32</span>
+                      
+                        <span class="badge">Web</span>
+                      
+                    </div>
+                  
+                </div>
+              </div>
+            </a>
+            
+          
+            
+            
+            <a class="card" href="/project-corpus/projects/tidyops-cli/" data-title="tidyops cli" data-summary="a tiny cli to lint, format, and validate multi-repo workspaces with pluggable tasks." data-tags="cli,devtools,node" data-status="paused" data-date="1730937600">
+              <div class="media">
+                
+                  <img src="/project-corpus/placeholder.svg" alt="TidyOps CLI cover image" loading="lazy" />
+                
+              </div>
+              <div class="content">
+                <h3 class="card-title">TidyOps CLI</h3>
+                <p class="summary">A tiny CLI to lint, format, and validate multi-repo workspaces with pluggable tasks.</p>
+                <div class="meta">
+                  <span class="badge status paused">Paused</span>
+                  
+                    <div class="badges">
+                      
+                        <span class="badge">CLI</span>
+                      
+                        <span class="badge">DevTools</span>
+                      
+                        <span class="badge">Node</span>
+                      
+                    </div>
+                  
+                </div>
+              </div>
+            </a>
+            
+          
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+
+    <script src="/project-corpus/assets-app.js"></script>
+  </body>
+  </html>

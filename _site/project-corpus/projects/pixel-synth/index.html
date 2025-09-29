@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PixelSynth — Project</title>
+    <meta name="description" content="A visual music workstation that turns pixel art into sound, with real-time synthesis and performance controls." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">PixelSynth</h1>
+        <p class="project-subtitle">A visual music workstation that turns pixel art into sound, with real-time synthesis and performance controls.</p>
+      </div>
+    </header>
+
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <!-- Example: replace with a real demo video/embed if available -->
+          <img src="/project-corpus/placeholder.svg" alt="PixelSynth cover image" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>Turning visual ideas into sound composition typically requires multiple tools. I wanted a playful, immediate way to compose by painting—where colors, shapes, and density translate into timbre, pitch, and rhythm.</p>
+
+        <h2>Approach</h2>
+        <p>PixelSynth maps a canvas grid to a step sequencer. Each pixel row is a pitch, columns are time slices, and color hue maps to instrument/timbre. Saturation drives filter cutoff and brightness drives amplitude envelopes.</p>
+
+        <h3>Sound Architecture</h3>
+        <pre><code>// Pseudocode
+engine = AudioContext()
+bus = engine.createGain()
+seq = new Sequencer(steps=64, tracks=16)
+for track in seq.tracks:
+  synth = createSynth(type=track.hue)
+  fx = [compressor(), delay(tempoSync), reverb(room=0.3)]
+  chain = connect(synth, ...fx, bus)
+  track.output = chain
+bus.connect(engine.destination)
+</code></pre>
+
+        <h3>Interactions</h3>
+        <ul>
+          <li>Paint modes: pen, line, fill, eraser.</li>
+          <li>Live performance: mute/solo tracks, tempo nudge, swing, snapshot recall.</li>
+          <li>Export: render stems or master mix to WAV.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>Prototype produces musical loops reliably at 120 BPM with <code>&lt;10ms</code> scheduling jitter. Early testers report it “feels like playing an instrument” rather than drawing notes.</p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            
+              <article class="update">
+                <h3><a href="/project-corpus/projects/pixel-synth/updates/2025-07-23-first-prototype/">First public prototype</a></h3>
+                <time datetime="2025-07-23T00:00:00-05:00">Jul 23, 2025</time>
+                
+              </article>
+            
+          
+        </section>
+      </section>
+
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>WebAudio, Canvas, Music, UX</dd>
+          <dt>Started</dt>
+          <dd>May 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

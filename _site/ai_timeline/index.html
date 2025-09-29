@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data List Display</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="filter-container">
+        <!-- Checkboxes will be inserted here -->
+    </div>
+    <div class="display-method-container">
+        <label><input type="radio" name="displayMethod" value="list" checked>List View</label>
+        <label><input type="radio" name="displayMethod" value="spiral">Spiral View</label>
+    </div>
+    <canvas id="spiralCanvas" width="900" height="900" style="display:none;"></canvas>
+
+    <ul id="dataList" class="data-list"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>

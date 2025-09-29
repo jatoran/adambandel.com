@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Garden Monitor IoT — Project</title>
+    <meta name="description" content="Low-power sensors log soil moisture, temp, and light with a tiny solar hub and web dashboard." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">Garden Monitor IoT</h1>
+        <p class="project-subtitle">Low-power sensors log soil moisture, temp, and light with a tiny solar hub and web dashboard.</p>
+      </div>
+    </header>
+
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="/project-corpus/placeholder.svg" alt="Garden Monitor cover image" />
+        </div>
+
+        <h2>Process Write‑Up</h2>
+        <p>Early prototypes logged once per minute and chewed through CR2032 cells. I redesigned the duty cycle around a <em>wake‑sample‑transmit‑sleep</em> loop and added ultra‑low power modes on the ESP32 to hit <strong>&lt; 30µA</strong> deep sleep current.</p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Nodes: ESP32 + capacitive soil probe; BLE → gateway</li>
+          <li>Gateway: Solar ESP32 + Wi‑Fi MQTT bridge; local ring buffer</li>
+          <li>Cloud: InfluxDB + retention; Grafana dashboard</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Probe drift in wet soil → implemented auto‑calibration sweeps</li>
+          <li>BLE collisions across 6 nodes → randomized slot scheduling</li>
+        </ul>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          
+          
+          
+            
+              <article class="update">
+                <h3><a href="/project-corpus/projects/garden-monitor/updates/2025-07-10-solar-gateway/">Solar gateway tuned</a></h3>
+                <time datetime="2025-07-10T00:00:00-05:00">Jul 10, 2025</time>
+                
+              </article>
+            
+              <article class="update">
+                <h3><a href="/project-corpus/projects/garden-monitor/updates/2025-06-01-prototype/">Prototype nodes online</a></h3>
+                <time datetime="2025-06-01T00:00:00-05:00">Jun 01, 2025</time>
+                
+              </article>
+            
+          
+        </section>
+      </section>
+
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>IoT, Hardware, ESP32, Web</dd>
+          <dt>Started</dt>
+          <dd>Mar 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Hardware notes (TBD)</a></li>
+              <li><a href="#">Dashboard (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+
