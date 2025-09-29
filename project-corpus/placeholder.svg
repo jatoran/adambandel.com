@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#0b0e14"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <g fill="#60a5fa" opacity="0.18">
+    <circle cx="150" cy="120" r="90"/>
+    <circle cx="1100" cy="560" r="110"/>
+    <rect x="420" y="260" width="360" height="120" rx="16"/>
+  </g>
+  <g font-family="Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif" fill="#e5e7eb">
+    <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="42" font-weight="700">Project Cover</text>
+    <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-size="20" fill="#cbd5e1">Add a custom cover_image to override</text>
+  </g>
+</svg>
+

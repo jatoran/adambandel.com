@@ -1,0 +1,112 @@
+---
+title: PixelSynth
+summary: A visual music workstation that turns pixel art into sound, with real-time synthesis and performance controls.
+tags: [WebAudio, Canvas, Music, UX]
+status: Active
+date: 2025-05-18
+cover_image: /project-corpus/placeholder.svg
+alt: PixelSynth cover image
+permalink: /project-corpus/projects/pixel-synth/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <!-- Example: replace with a real demo video/embed if available -->
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>Turning visual ideas into sound composition typically requires multiple tools. I wanted a playful, immediate way to compose by painting—where colors, shapes, and density translate into timbre, pitch, and rhythm.</p>
+
+        <h2>Approach</h2>
+        <p>PixelSynth maps a canvas grid to a step sequencer. Each pixel row is a pitch, columns are time slices, and color hue maps to instrument/timbre. Saturation drives filter cutoff and brightness drives amplitude envelopes.</p>
+
+        <h3>Sound Architecture</h3>
+        <pre><code>// Pseudocode
+engine = AudioContext()
+bus = engine.createGain()
+seq = new Sequencer(steps=64, tracks=16)
+for track in seq.tracks:
+  synth = createSynth(type=track.hue)
+  fx = [compressor(), delay(tempoSync), reverb(room=0.3)]
+  chain = connect(synth, ...fx, bus)
+  track.output = chain
+bus.connect(engine.destination)
+</code></pre>
+
+        <h3>Interactions</h3>
+        <ul>
+          <li>Paint modes: pen, line, fill, eraser.</li>
+          <li>Live performance: mute/solo tracks, tempo nudge, swing, snapshot recall.</li>
+          <li>Export: render stems or master mix to WAV.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>Prototype produces musical loops reliably at 120 BPM with <code>&lt;10ms</code> scheduling jitter. Early testers report it “feels like playing an instrument” rather than drawing notes.</p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 3 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status active">Active</span></dd>
+          <dt>Tags</dt>
+          <dd>WebAudio, Canvas, Music, UX</dd>
+          <dt>Started</dt>
+          <dd>May 2025</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="#">Live demo (TBD)</a></li>
+              <li><a href="#">GitHub (TBD)</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+

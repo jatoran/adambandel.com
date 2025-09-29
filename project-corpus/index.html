@@ -1,0 +1,105 @@
+---
+title: Project Corpus
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }}</title>
+    <meta name="description" content="Showcase of projects by Adam Bandel" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>Project Corpus</h1>
+        <p class="subtitle">A growing collection of my projects, case studies, and process write‑ups.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="controls">
+        <div class="control-row">
+          <input id="search" class="search" type="search" placeholder="Search projects (title, summary, tags)…" aria-label="Search projects" />
+          <select id="sort" class="sort" aria-label="Sort projects">
+            <option value="recent" selected>Sort: Most recent</option>
+            <option value="title">Sort: Title A–Z</option>
+          </select>
+          <select id="status" class="status" aria-label="Filter by status">
+            <option value="">Status: All</option>
+            <option value="active">Active</option>
+            <option value="paused">Paused</option>
+            <option value="archived">Archived</option>
+          </select>
+          <button id="clear" class="clear" type="button" aria-label="Clear filters">Clear</button>
+        </div>
+
+        {% comment %}
+          Build unique tag set from project pages under project-corpus/projects/*/index.md
+        {% endcomment %}
+        {% assign all_projects = site.pages | where_exp: "p", "p.url contains '/project-corpus/projects/'" %}
+        {% assign tag_list = '' | split: '' %}
+        {% for p in all_projects %}
+          {% unless p.url contains '/updates/' %}
+          {% if p.tags %}
+            {% assign tag_list = tag_list | concat: p.tags | uniq %}
+          {% endif %}
+          {% endunless %}
+        {% endfor %}
+
+        <div class="tags" role="group" aria-label="Filter by tag">
+          {% for t in tag_list %}
+            <button class="tag" data-tag="{{ t | downcase }}" type="button">{{ t }}</button>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section>
+        <div id="count" class="count"></div>
+        <div id="grid" class="grid">
+          {% assign projects = all_projects | sort: 'date' | reverse %}
+          {% for p in projects %}
+            {% unless p.url contains '/updates/' %}
+            {% assign tags = p.tags | join: ',' | downcase %}
+            <a class="card" href="{{ p.url }}" data-title="{{ p.title | downcase }}" data-summary="{{ p.summary | default: '' | downcase }}" data-tags="{{ tags }}" data-status="{{ p.status | default: '' | downcase }}" data-date="{{ p.date | date: '%s' }}">
+              <div class="media">
+                {% if p.cover_image %}
+                  <img src="{{ p.cover_image }}" alt="{{ p.alt | default: p.title }}" loading="lazy" />
+                {% else %}
+                  <img src="/project-corpus/placeholder.svg" alt="{{ p.title }} cover image placeholder" loading="lazy" />
+                {% endif %}
+              </div>
+              <div class="content">
+                <h3 class="card-title">{{ p.title }}</h3>
+                {% if p.summary %}<p class="summary">{{ p.summary }}</p>{% endif %}
+                <div class="meta">
+                  {% if p.status %}<span class="badge status {{ p.status | downcase }}">{{ p.status }}</span>{% endif %}
+                  {% if p.tags %}
+                    <div class="badges">
+                      {% for t in p.tags %}
+                        <span class="badge">{{ t }}</span>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+            {% endunless %}
+          {% endfor %}
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+
+    <script src="/project-corpus/assets-app.js"></script>
+  </body>
+  </html>
