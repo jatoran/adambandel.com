@@ -1,0 +1,131 @@
+---
+title: Grothendieck Visualizations
+summary: Interactive canvas sketches that turn fibrations, stacks, and ∞‑categories into motion.
+tags: [Generative Art, Math, Visualization, JavaScript, Canvas]
+status: Active
+date: 2025-09-30
+cover_image: /project-corpus/placeholder.svg
+alt: Abstract animated visualization representing Grothendieck fibrations and stacks rendered on canvas
+permalink: /project-corpus/projects/grothendieck-visualizations/
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} — Project</title>
+    <meta name="description" content="{{ page.summary }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/project-corpus/assets-styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/project-corpus/" style="text-decoration:none;color:var(--muted)">← Back to all projects</a>
+        <h1 class="project-title">{{ page.title }}</h1>
+        <p class="project-subtitle">{{ page.summary }}</p>
+      </div>
+    </header>
+    <main class="container project-main">
+      <section class="project-content">
+        <div class="hero">
+          <img src="{{ page.cover_image }}" alt="{{ page.alt }}" />
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+          Higher category theory is powerful but notoriously abstract. This project explores how to make
+          concepts like Grothendieck fibrations, stacks, and layered ∞‑categories feel tangible by mapping
+          them to motion, rhythm, and visually legible systems on the HTML5 Canvas.
+        </p>
+
+        <h2>Approach</h2>
+        <p>
+          The codebase is a small suite of interactive sketches. Each sketch uses layered geometry,
+          orbiting “fiber” points, and color waves to evoke structures sitting over a base space.
+          The combined gallery (<code>gd.html</code>) hosts three mini‑visualizations; there are standalone
+          versions for deeper focus and an interactive playground with live controls.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Canvas loops — Each sketch runs a <code>requestAnimationFrame</code> loop with lightweight draws for smooth 60fps.</li>
+          <li>Layers → nodes → fibers — Arrays model circular layers; each node spawns orbiting “fiber” points.</li>
+          <li>Color and trails — Trigonometric color waves and semi‑transparent strokes imply motion and depth.</li>
+          <li>Responsive sizing — Sketches resize to the viewport; the playground adds sliders and mouse warping.</li>
+        </ul>
+
+        <h3>Stack</h3>
+        <ul>
+          <li>HTML5 Canvas — Real‑time rendering with simple primitives (arcs, lines, fills).</li>
+          <li>Vanilla JavaScript — Animation state, geometry, and interaction without dependencies.</li>
+          <li>CSS (inline) — Minimal styling for contrast and legibility.</li>
+        </ul>
+
+        <h3>Sketches</h3>
+        <ul>
+          <li><strong>Grothendieck Fibration Visualization</strong> (in <code>gd.html</code>): base points emit orbiting fibers connected back to the base line.</li>
+          <li><strong>Grothendieck’s Cosmic Dance</strong> (<code>gd2.html</code> and in <code>gd.html</code>): multi‑layer rings of nodes with local fiber swirls.</li>
+          <li><strong>∞‑Stacks Spectral Swirl</strong> (<code>gd4.html</code> and in <code>gd.html</code>): fractal‑like bands with color‑shifted particles and occasional “meta‑lines.”</li>
+          <li><strong>Playground</strong> (<code>gd3.html</code>): sliders for base count and fibers per base; mouse position warps orbits.</li>
+        </ul>
+
+        <h3>Challenges</h3>
+        <ul>
+          <li>Performance vs. richness — Balanced particle counts and draw order; used tiny primitives and alpha blends.</li>
+          <li>Clarity in abstraction — Tuned radii, speeds, and color phases so patterns read at a glance.</li>
+          <li>Responsiveness — Added resize handlers and parameter guards to keep behavior stable across viewports.</li>
+        </ul>
+
+        <h2>Outcomes</h2>
+        <p>
+          The combined gallery enables quick comparison between metaphors; the playground helps communicate how
+          “fibers over a base” behave as parameters change. Everything is dependency‑free and easy to remix.
+        </p>
+
+        <section class="updates">
+          <h2>Updates</h2>
+          {% assign updates_base = page.url | append: 'updates/' %}
+          {% assign updates = site.pages | where_exp: 'u', "u.url contains updates_base" | sort: 'date' | reverse %}
+          {% if updates.size > 0 %}
+            {% for u in updates limit: 5 %}
+              <article class="update">
+                <h3><a href="{{ u.url }}">{{ u.title }}</a></h3>
+                {% if u.date %}<time datetime="{{ u.date | date_to_xmlschema }}">{{ u.date | date: '%b %d, %Y' }}</time>{% endif %}
+                {% if u.excerpt %}<p>{{ u.excerpt }}</p>{% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No updates yet.</p>
+          {% endif %}
+        </section>
+      </section>
+      <aside class="project-aside">
+        <dl class="facts">
+          <dt>Status</dt>
+          <dd><span class="badge status {{ page.status | downcase }}">{{ page.status }}</span></dd>
+          <dt>Tags</dt>
+          <dd>{{ page.tags | join: ', ' }}</dd>
+          <dt>Started</dt>
+          <dd>{{ page.date | date: '%b %Y' }}</dd>
+          <dt>Links</dt>
+          <dd>
+            <ul>
+              <li><a href="/gd.html">Live demo (combined)</a></li>
+              <li><a href="/gd3.html">Playground</a></li>
+              <li><a href="#">GitHub — TBD</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ "now" | date: "%Y" }} Adam Bandel</small>
+      </div>
+    </footer>
+  </body>
+  </html>
+
