@@ -1,4 +1,8 @@
 {
+  "December 2025": {
+    "type": "video",
+    "videoSrc": "assets/video/December_2025_slideshow.mp4"
+  },
   "November 2025": {
     "type": "video",
     "videoSrc": "assets/video/November_2025_slideshow.mp4"
