@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map-Based Combat Simulation - Prototype</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: var(--biome-floor, #00ff00);
+            font-family: 'Courier New', Consolas, monospace;
+            min-height: 100vh;
+            --biome-floor: #00ff00;
+            --biome-wall: #666666;
+            --biome-hazard: #ff4444;
+            --biome-water: #4488ff;
+            --biome-bg: #0a0a0a;
+        }
+
+        /* Biome Theme: Rust Tides - Industrial amber/rust */
+        body.biome-rust_tides {
+            --biome-floor: #d4a574;
+            --biome-wall: #8b4513;
+            --biome-hazard: #ff6600;
+            --biome-water: #556b2f;
+            --biome-bg: #1a0f0a;
+        }
+
+        body.biome-rust_tides #display {
+            color: #d4a574;
+            background: #1a0f0a;
+        }
+
+        body.biome-rust_tides h1 {
+            color: #ff9944;
+        }
+
+        body.biome-rust_tides button {
+            border-color: #ff9944;
+            color: #ff9944;
+        }
+
+        body.biome-rust_tides button:hover:not(:disabled) {
+            background: #ff9944;
+            color: #000;
+        }
+
+        /* Biome Theme: Glass Flood - Crystal cyan/teal */
+        body.biome-glass_flood {
+            --biome-floor: #66ffff;
+            --biome-wall: #336699;
+            --biome-hazard: #ff66ff;
+            --biome-water: #0088ff;
+            --biome-bg: #0a1520;
+        }
+
+        body.biome-glass_flood #display {
+            color: #66ffff;
+            background: #0a1520;
+        }
+
+        body.biome-glass_flood h1 {
+            color: #88ffff;
+        }
+
+        body.biome-glass_flood button {
+            border-color: #66ffff;
+            color: #66ffff;
+        }
+
+        body.biome-glass_flood button:hover:not(:disabled) {
+            background: #66ffff;
+            color: #000;
+        }
+
+        /* Biome Theme: Neon Decay - Magenta/purple urban decay */
+        body.biome-neon_decay {
+            --biome-floor: #ff66cc;
+            --biome-wall: #663399;
+            --biome-hazard: #00ff66;
+            --biome-water: #9966ff;
+            --biome-bg: #150a15;
+        }
+
+        body.biome-neon_decay #display {
+            color: #ff66cc;
+            background: #150a15;
+        }
+
+        body.biome-neon_decay h1 {
+            color: #ff88dd;
+        }
+
+        body.biome-neon_decay button {
+            border-color: #ff66cc;
+            color: #ff66cc;
+        }
+
+        body.biome-neon_decay button:hover:not(:disabled) {
+            background: #ff66cc;
+            color: #000;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .map-container {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #0f0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        button {
+            background: #1a1a1a;
+            color: #0f0;
+            border: 1px solid #0f0;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.15s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #0f0;
+            color: #000;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        button.small {
+            padding: 6px 10px;
+            min-width: 30px;
+        }
+
+        button.accent {
+            border-color: #f80;
+            color: #f80;
+        }
+
+        button.accent:hover:not(:disabled) {
+            background: #f80;
+            color: #000;
+        }
+
+        input[type="number"] {
+            background: #1a1a1a;
+            color: #0f0;
+            border: 1px solid #333;
+            padding: 8px 10px;
+            font-family: inherit;
+            font-size: 14px;
+            width: 120px;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #0f0;
+        }
+
+        select {
+            background: #1a1a1a;
+            color: #0f0;
+            border: 1px solid #333;
+            padding: 8px 10px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        select:hover {
+            border-color: #0f0;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #0f0;
+        }
+
+        /* Skill Panel */
+        .skill-panel {
+            margin-top: 0;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .sidebar .skill-panel {
+            height: 100%;
+        }
+
+        .skill-panel h4 {
+            margin: 0 0 10px 0;
+            color: #0a0;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .skill-panel h4:hover {
+            color: #0f0;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .skill-item.disabled {
+            opacity: 0.5;
+        }
+
+        .skill-item label {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .skill-item input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .skill-item select {
+            font-size: 11px;
+            padding: 2px 4px;
+            min-width: 80px;
+        }
+
+        .skill-conditions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .skill-cooldown {
+            color: #666;
+            font-size: 10px;
+        }
+
+        .skill-damage {
+            color: #f80;
+            font-size: 10px;
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: #0f0;
+        }
+
+        label {
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* Strategy Panel */
+        .strategy-panel {
+            margin-top: 15px;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .strategy-panel h4 {
+            margin: 0 0 10px 0;
+            color: #0a0;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .strategy-section {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #222;
+        }
+
+        .strategy-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .strategy-section-title {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .strategy-slider-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .strategy-slider-row label {
+            flex: 0 0 85px;
+            font-size: 11px;
+            color: #888;
+        }
+
+        .strategy-slider-row input[type="range"] {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #333;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .strategy-slider-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #0f0;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .strategy-slider-row input[type="range"]::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #0f0;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .strategy-slider-row .slider-value {
+            flex: 0 0 35px;
+            text-align: right;
+            font-size: 10px;
+            color: #0a0;
+        }
+
+        .strategy-checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .strategy-checkbox-row input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .strategy-checkbox-row label {
+            font-size: 11px;
+            color: #888;
+            cursor: pointer;
+        }
+
+        .strategy-checkbox-row label:hover {
+            color: #0f0;
+        }
+
+        .strategy-select-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .strategy-select-row label {
+            flex: 0 0 85px;
+            font-size: 11px;
+        }
+
+        .strategy-select-row select {
+            flex: 1;
+            font-size: 11px;
+            padding: 3px 6px;
+            background: #1a1a1a;
+            color: #0f0;
+            border: 1px solid #333;
+            border-radius: 3px;
+        }
+
+        #speed-label {
+            min-width: 40px;
+            text-align: center;
+            color: #0f0;
+        }
+
+        #status-label {
+            margin-left: auto;
+            font-size: 14px;
+        }
+
+        #display-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        #display {
+            font-size: 11px;
+            line-height: 1.2;
+            white-space: pre;
+            background: #111;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        #weather-layer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 11px;
+            line-height: 1.2;
+            white-space: pre;
+            pointer-events: none;
+            margin: 0;
+            color: rgba(100, 80, 60, 0.6);
+        }
+
+        #effects-layer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 11px;
+            line-height: 1.2;
+            white-space: pre;
+            pointer-events: none;
+            margin: 0;
+            z-index: 5;
+            /* Above weather, below UI */
+        }
+
+        /* Biome-specific weather particle colors */
+        body.biome-rust_tides #weather-layer {
+            color: rgba(180, 140, 100, 0.5);
+        }
+
+        body.biome-glass_flood #weather-layer {
+            color: rgba(100, 160, 200, 0.6);
+        }
+
+        body.biome-neon_decay #weather-layer {
+            color: rgba(150, 100, 180, 0.5);
+        }
+
+        /* Fog of war - discovered but not currently visible tiles */
+        .dim {
+            opacity: 0.3;
+        }
+
+        /* Skill effect colors */
+        .attack {
+            color: #ff0;
+        }
+
+        .impact {
+            color: #f80;
+        }
+
+        .magic {
+            color: #88f;
+        }
+
+        .fire {
+            color: #f80;
+        }
+
+        .ice {
+            color: #8cf;
+        }
+
+        .heal {
+            color: #4f4;
+        }
+
+        .legend {
+            margin-top: 15px;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .legend h3 {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 5px;
+        }
+
+        .legend-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .legend-char {
+            color: #0f0;
+            font-weight: bold;
+            min-width: 15px;
+        }
+
+        .keyboard-hints {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #555;
+        }
+
+        .features {
+            margin-top: 10px;
+            padding: 8px;
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #555;
+        }
+
+        .features span {
+            color: #0a0;
+        }
+    </style>
+  <script type="module" crossorigin src="/assets/main-C6rHhgh3.js"></script>
+</head>
+
+<body>
+    <h1>🤖 Map-Based Combat Simulation v2 - Experimental</h1>
+
+    <div class="controls">
+        <div class="control-group">
+            <button id="play-btn">▶ Play</button>
+            <button id="pause-btn" disabled>⏸ Pause</button>
+            <button id="step-btn">→ Step</button>
+            <button id="reset-btn">↺ Reset</button>
+        </div>
+
+        <div class="control-group">
+            <label>Speed:</label>
+            <button id="speed-down" class="small">-</button>
+            <span id="speed-label">1x</span>
+            <button id="speed-up" class="small">+</button>
+        </div>
+
+        <div class="control-group">
+            <label>Seed:</label>
+            <input type="number" id="seed-input" value="12345">
+            <button id="random-seed-btn" class="accent small">🎲</button>
+        </div>
+
+        <div class="control-group">
+            <label>Class:</label>
+            <select id="class-select">
+                <option value="warrior">⚔️ Vanguard (Warrior)</option>
+                <option value="ranger" selected>🏹 Recon (Ranger)</option>
+                <option value="mage">🔮 Artillery (Mage)</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Biome:</label>
+            <select id="biome-select">
+                <option value="rust_tides" selected>🔶 Rust Tides</option>
+                <option value="glass_flood">💎 Glass Flood</option>
+                <option value="neon_decay">💜 Neon Decay</option>
+            </select>
+        </div>
+
+        <span id="status-label">Ready</span>
+    </div>
+
+    <div class="main-layout">
+        <div class="map-container">
+            <div id="display-container">
+                <pre id="display">Loading...</pre>
+                <pre id="weather-layer"></pre>
+                <pre id="effects-layer"></pre>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <!-- Skill Panel -->
+            <div class="skill-panel" style="margin-top: 0;">
+                <h4 id="skill-panel-header">⚔️ Skills (click to collapse)</h4>
+                <div id="skill-list" class="skill-list" style="display: flex;">
+                    <!-- Skills populated dynamically based on class -->
+                </div>
+            </div>
+
+            <!-- Strategy Panel -->
+            <div class="strategy-panel">
+                <h4>⚙️ Strategy</h4>
+
+                <!-- Preset Selection -->
+                <div class="strategy-select-row">
+                    <label>Preset:</label>
+                    <select id="strategy-preset-select">
+                        <option value="balanced">⚖️ Balanced</option>
+                        <option value="speedrunner">🏃 Speedrunner</option>
+                        <option value="completionist">💎 Completionist</option>
+                        <option value="treasure_hunter">💰 Treasure Hunter</option>
+                        <option value="boss_farmer">👹 Boss Farmer</option>
+                        <option value="elite_farmer">⭐ Elite Farmer</option>
+                        <option value="custom">🔧 Custom</option>
+                    </select>
+                </div>
+
+                <!-- Objectives -->
+                <div class="strategy-section">
+                    <div class="strategy-section-title">Objectives (Win Conditions)</div>
+                    <div class="strategy-checkbox-row">
+                        <input type="checkbox" id="obj-clear-mobs">
+                        <label for="obj-clear-mobs">Clear All Mobs</label>
+                    </div>
+                    <div class="strategy-checkbox-row">
+                        <input type="checkbox" id="obj-kill-boss">
+                        <label for="obj-kill-boss">Kill Boss</label>
+                    </div>
+                    <div class="strategy-checkbox-row">
+                        <input type="checkbox" id="obj-find-treasure">
+                        <label for="obj-find-treasure">Find All Treasure</label>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="strategy-section">
+                    <div class="strategy-section-title">Navigation</div>
+                    <div class="strategy-slider-row">
+                        <label>Exploration</label>
+                        <input type="range" id="nav-exploration" min="0" max="100" value="50">
+                        <span class="slider-value" id="nav-exploration-val">50%</span>
+                    </div>
+                    <div class="strategy-slider-row">
+                        <label>Danger Avoid</label>
+                        <input type="range" id="nav-danger" min="0" max="100" value="50">
+                        <span class="slider-value" id="nav-danger-val">50%</span>
+                    </div>
+                    <div class="strategy-slider-row">
+                        <label>Exit Priority</label>
+                        <input type="range" id="nav-exit" min="0" max="100" value="50">
+                        <span class="slider-value" id="nav-exit-val">50%</span>
+                    </div>
+                </div>
+
+                <!-- Combat -->
+                <div class="strategy-section">
+                    <div class="strategy-section-title">Combat</div>
+                    <div class="strategy-select-row">
+                        <label>Target:</label>
+                        <select id="combat-target">
+                            <option value="closest">Closest</option>
+                            <option value="weakest">Weakest</option>
+                            <option value="strongest">Strongest</option>
+                            <option value="elite_first">Elite First</option>
+                            <option value="boss_first">Boss First</option>
+                        </select>
+                    </div>
+                    <div class="strategy-slider-row">
+                        <label>Kite HP %</label>
+                        <input type="range" id="combat-kite" min="0" max="100" value="40">
+                        <span class="slider-value" id="combat-kite-val">40%</span>
+                    </div>
+                    <div class="strategy-slider-row">
+                        <label>Retreat HP %</label>
+                        <input type="range" id="combat-retreat" min="0" max="100" value="10">
+                        <span class="slider-value" id="combat-retreat-val">10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <h3>LEGEND</h3>
+        <div class="legend-grid">
+            <div class="legend-item"><span class="legend-char" style="color:#0f0">@</span> Player</div>
+            <div class="legend-item"><span class="legend-char" style="color:#f44">e</span> Mob</div>
+            <div class="legend-item"><span class="legend-char" style="color:#f80">E</span> Elite</div>
+            <div class="legend-item"><span class="legend-char" style="color:#f0f">B</span> Boss</div>
+            <div class="legend-item"><span class="legend-char" style="color:#ff0">$</span> Treasure</div>
+            <div class="legend-item"><span class="legend-char" style="color:#fff">*</span> Projectile</div>
+            <div class="legend-item"><span class="legend-char" style="color:#666">#</span> Wall</div>
+            <div class="legend-item"><span class="legend-char" style="color:#444">.</span> Floor</div>
+            <div class="legend-item"><span class="legend-char" style="color:#333">░</span> Fog of War</div>
+            <div class="legend-item"><span class="legend-char" style="color:#ff0">~</span> Hazard</div>
+            <div class="legend-item"><span class="legend-char" style="color:#f44">☠</span> DoT active</div>
+            <div class="legend-item"><span class="legend-char" style="color:#88f">◎</span> Slowed</div>
+        </div>
+        <div class="keyboard-hints">
+            Keyboard: <b>Space</b> = Play/Pause | <b>→</b> = Step | <b>+/-</b> = Speed | <b>R</b> = Reset | <b>N</b> =
+            New Seed | <b>1/2/3</b> = Class (Warrior/Ranger/Mage)
+        </div>
+        <div class="features">
+            <b>Features:</b>
+            <span>✓</span> Player Classes |
+            <span>✓</span> Damage Variance |
+            <span>✓</span> Crits |
+            <span>✓</span> Projectiles |
+            <span>✓</span> Status Effects |
+            <span>✓</span> Kiting AI |
+            <span>✓</span> Aggro Chaining
+        </div>
+    </div>
+
+</body>
+
+</html>
