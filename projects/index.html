@@ -17,6 +17,20 @@ pagination:
 .project-title:hover {
     text-decoration: underline;
 }
+.project-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+.project-header h2 {
+    margin-bottom: 0;
+}
+.project-date {
+    color: #93a1a1;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
 .related-posts {
     margin-top: 1rem;
     padding-left: 0;
@@ -51,14 +65,14 @@ pagination:
 
 {% for project in paginator.documents %}
 <section style="margin-bottom: 3rem;">
-    <h2><a href="{{ project.url }}" class="project-title">{{ project.title }}</a></h2>
-    <div class="meta">
-        {% if project.date %}{{ project.date | date: "%b %Y" }}{% endif %}
+    <div class="project-header">
+        <h2><a href="{{ project.url }}" class="project-title">{{ project.title }}</a></h2>
+        {% if project.date %}<span class="project-date">{{ project.date | date: "%b %Y" }}</span>{% endif %}
     </div>
     <p>{{ project.summary }}</p>
 
     {% assign project_slug = project.url | split: "/" | last %}
-    {% assign related = site.posts | where: "project", project_slug | sort: "date" | reverse | slice: 0, 3 %}
+    {% assign related = site.posts | where: "project", project_slug | sort: "date" | reverse %}
 
     {% if related.size > 0 %}
     <div style="margin-top: 1rem; font-size: 0.9rem;">
@@ -73,8 +87,6 @@ pagination:
         </ul>
     </div>
     {% endif %}
-
-    <p><a href="{{ project.url }}">Read more →</a></p>
 </section>
 {% endfor %}
 
