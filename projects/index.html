@@ -63,7 +63,12 @@ pagination:
 
 <h1>Projects</h1>
 
-{% for project in paginator.documents %}
+<!-- Debug: paginator exists? {{ paginator }} -->
+<!-- Debug: documents count: {{ paginator.documents | size }} -->
+<!-- Debug: site.projects count: {{ site.projects | size }} -->
+
+{% assign sorted_projects = site.projects | sort: "date" | reverse %}
+{% for project in sorted_projects %}
 <section style="margin-bottom: 3rem;">
     <div class="project-header">
         <h2><a href="{{ project.url }}" class="project-title">{{ project.title }}</a></h2>
