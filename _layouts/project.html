@@ -2,21 +2,69 @@
 layout: default
 ---
 
+<style>
+.project-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.project-header h1 {
+    margin-bottom: 0;
+}
+.project-date {
+    color: #93a1a1;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+.discussions {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee8d5;
+}
+.discussions h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: #93a1a1;
+}
+.discussions ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.discussions li {
+    margin: 0;
+}
+</style>
+
 <article>
-    <h1>{{ page.title }}</h1>
-    <div class="meta">
-        {% if page.status %}{{ page.status }}{% endif %}
-        {% if page.date %} • {{ page.date | date: "%b %Y" }}{% endif %}
+    <div class="project-header">
+        <h1>{{ page.title }}</h1>
+        {% if page.date %}<span class="project-date">{{ page.date | date: "%b %Y" }}</span>{% endif %}
     </div>
 
     {{ content }}
 
     {% if page.github %}
-    <p><a href="{{ page.github }}">View on GitHub →</a></p>
+    <p><a href="{{ page.github }}" target="_blank" rel="noopener noreferrer">View on GitHub →</a></p>
     {% endif %}
 
     {% if page.demo %}
-    <p><a href="{{ page.demo }}">View Demo →</a></p>
+    <p><a href="{{ page.demo }}" target="_blank" rel="noopener noreferrer">View Demo →</a></p>
+    {% endif %}
+
+    {% if page.discussions %}
+    <div class="discussions">
+        <h3>Discuss:</h3>
+        <ul>
+        {% for discussion in page.discussions %}
+            <li><a href="{{ discussion.url }}" target="_blank" rel="noopener noreferrer">{{ discussion.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
     {% endif %}
 
     <hr style="margin: 3rem 0; border: 0; border-top: 1px solid #eee8d5;">

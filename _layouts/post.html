@@ -2,6 +2,30 @@
 layout: default
 ---
 
+<style>
+.discussions {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee8d5;
+}
+.discussions h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: #93a1a1;
+}
+.discussions ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.discussions li {
+    margin: 0;
+}
+</style>
+
 <article>
     <h1>{{ page.title }}</h1>
     <div class="meta">
@@ -15,4 +39,15 @@ layout: default
     </div>
 
     {{ content }}
+
+    {% if page.discussions %}
+    <div class="discussions">
+        <h3>Discuss:</h3>
+        <ul>
+        {% for discussion in page.discussions %}
+            <li><a href="{{ discussion.url }}" target="_blank" rel="noopener noreferrer">{{ discussion.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 </article>

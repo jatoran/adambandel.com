@@ -4,6 +4,11 @@ summary: Real-time multi-agent LLM simulation with FastAPI + PixiJS, streaming s
 status: Active
 date: 2025-09-29
 github: https://github.com/jatoran/agent-thunderdome
+discussions:
+  - name: "Hacker News"
+    url: "https://news.ycombinator.com/item?id=12345678"
+  - name: "r/programming"
+    url: "https://reddit.com/r/programming/comments/example"
 ---
 
 ## Overview

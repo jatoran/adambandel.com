@@ -2,6 +2,11 @@
 title: Building Agent Systems That Don't Collapse
 date: 2026-02-01
 project: agent-thunderdome
+discussions:
+  - name: "Lobsters"
+    url: "https://lobste.rs/s/example"
+  - name: "Hacker News"
+    url: "https://news.ycombinator.com/item?id=87654321"
 ---
 
 Lessons learned from building Agent Thunderdome: separating concerns, making state observable, and why testing LLM behavior is harder than it should be.
