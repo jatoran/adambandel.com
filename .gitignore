@@ -1,6 +1,9 @@
 node_modules
 *.code-workspace
 
+# Documentation
+docs/
+
 # Jekyll
 _site/
 .sass-cache/
