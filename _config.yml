@@ -1,0 +1,33 @@
+title: Adam Bandel
+description: Software engineer working on AI systems, developer tools, and web infrastructure
+url: https://adambandel.com
+baseurl: ""
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+  posts:
+    output: true
+    permalink: /posts/:year/:month/:day/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .vscode
+  - README.md

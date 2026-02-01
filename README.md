@@ -1,5 +1,5 @@
 # adambandel.com
 
-Web Development Portfolio Website
+Project and Devlog/Blog Portfolio Website
 
 www.adambandel.com

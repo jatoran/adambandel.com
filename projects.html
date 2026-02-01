@@ -1,0 +1,20 @@
+---
+layout: default
+title: Projects
+---
+
+<h1>Projects</h1>
+
+{% assign sorted_projects = site.projects | sort: "date" | reverse %}
+
+{% for project in sorted_projects %}
+<section style="margin-bottom: 3rem;">
+    <h2><a href="{{ project.url }}" style="color: #073642; text-decoration: none;">{{ project.title }}</a></h2>
+    <div class="meta">
+        {% if project.status %}{{ project.status }}{% endif %}
+        {% if project.date %} • {{ project.date | date: "%b %Y" }}{% endif %}
+    </div>
+    <p>{{ project.summary }}</p>
+    <p><a href="{{ project.url }}">Read more →</a></p>
+</section>
+{% endfor %}

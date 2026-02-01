@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adam Bandel</title>
+    <title>{% if page.title %}{{ page.title }} - {% endif %}Adam Bandel</title>
     <style>
         * {
             margin: 0;
@@ -54,7 +54,7 @@
             margin: 2rem 0 3rem 0;
         }
 
-        section {
+        main {
             margin-bottom: 4rem;
         }
 
@@ -65,18 +65,26 @@
             color: #073642;
         }
 
-        .intro {
-            margin-bottom: 2rem;
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            color: #073642;
+        }
+
+        p {
+            margin-bottom: 1rem;
             line-height: 1.7;
             color: #657b83;
         }
 
-        .intro a {
+        a {
             color: #268bd2;
             text-decoration: none;
         }
 
-        .intro a:hover {
+        a:hover {
             color: #2aa198;
             text-decoration: underline;
         }
@@ -114,6 +122,12 @@
             font-size: 0.85rem;
         }
 
+        .meta {
+            color: #93a1a1;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 2rem 1rem;
@@ -143,63 +157,9 @@
 
     <hr class="separator">
 
-    <section id="about">
-        <p class="intro">
-            I'm a software engineer working on AI systems, developer tools, and web infrastructure.
-            Currently focused on building agentic systems and exploring the intersection of LLMs and software architecture.
-        </p>
-        <p class="intro">
-            Find me on <a href="https://github.com/jatoran">GitHub</a> and <a href="https://www.linkedin.com/in/adam-bandel/">LinkedIn</a>.
-        </p>
-    </section>
-
-    <section id="projects">
-        <h2>Recent Projects</h2>
-        <ul class="list">
-            <li>
-                <span class="date">Sep 2025</span>
-                <a href="/projects/agent-thunderdome/">Agent Thunderdome</a>
-            </li>
-            <li>
-                <span class="date">Aug 2025</span>
-                <a href="/projects/code-context-builder/">Code Context Builder</a>
-            </li>
-            <li>
-                <span class="date">Nov 2024</span>
-                <a href="/projects/habit-ledger/">Habit Ledger</a>
-            </li>
-            <li>
-                <span class="date">—</span>
-                <a href="/projects">View all projects →</a>
-            </li>
-        </ul>
-    </section>
-
-    <section id="posts">
-        <h2>Recent Posts</h2>
-        <ul class="list">
-            <li>
-                <span class="date">Feb 01, 2026</span>
-                <a href="/posts/2026/02/01/building-agent-systems/">Building Agent Systems That Don't Collapse</a>
-            </li>
-            <li>
-                <span class="date">Feb 01, 2026</span>
-                <a href="/posts/2026/02/01/rebuilding-portfolio/">Why I'm Rebuilding My Portfolio (Again)</a>
-            </li>
-            <li>
-                <span class="date">Jan 22, 2026</span>
-                <a href="/posts/2026/01/22/developer-tools-for-ai/">Lessons from Building Developer Tools for AI</a>
-            </li>
-            <li>
-                <span class="date">Jan 15, 2026</span>
-                <a href="/posts/2026/01/15/making-llm-battles-deterministic/">Making LLM Battles Deterministic</a>
-            </li>
-            <li>
-                <span class="date">—</span>
-                <a href="/posts">View all posts →</a>
-            </li>
-        </ul>
-    </section>
+    <main>
+        {{ content }}
+    </main>
 
     <footer>
         © 2026 Adam Bandel
