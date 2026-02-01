@@ -1,6 +1,12 @@
 ---
 layout: default
 title: Projects
+pagination:
+  enabled: true
+  collection: projects
+  per_page: 10
+  sort_field: date
+  sort_reverse: true
 ---
 
 <style>
@@ -18,13 +24,32 @@ title: Projects
 .related-posts li {
     margin-bottom: 0.5rem;
 }
+.pagination-nav {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee8d5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pagination-nav a {
+    color: #657b83;
+    text-decoration: none;
+    border-bottom: 1px dotted #93a1a1;
+}
+.pagination-nav a:hover {
+    color: #268bd2;
+    border-bottom: 1px solid #268bd2;
+}
+.page-info {
+    color: #93a1a1;
+    font-size: 0.9rem;
+}
 </style>
 
 <h1>Projects</h1>
 
-{% assign sorted_projects = site.projects | sort: "date" | reverse %}
-
-{% for project in sorted_projects %}
+{% for project in paginator.documents %}
 <section style="margin-bottom: 3rem;">
     <h2><a href="{{ project.url }}" class="project-title">{{ project.title }}</a></h2>
     <div class="meta">
@@ -52,3 +77,27 @@ title: Projects
     <p><a href="{{ project.url }}">Read more →</a></p>
 </section>
 {% endfor %}
+
+{% if paginator.total_pages > 1 %}
+<nav class="pagination-nav">
+    <div>
+        {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path }}">← Newer Projects</a>
+        {% else %}
+            <span style="visibility: hidden;">← Newer Projects</span>
+        {% endif %}
+    </div>
+
+    <div class="page-info">
+        Page {{ paginator.page }} of {{ paginator.total_pages }}
+    </div>
+
+    <div>
+        {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path }}">Older Projects →</a>
+        {% else %}
+            <span style="visibility: hidden;">Older Projects →</span>
+        {% endif %}
+    </div>
+</nav>
+{% endif %}

@@ -1,15 +1,69 @@
 ---
 layout: default
 title: Posts
+pagination:
+  enabled: true
+  collection: posts
+  per_page: 50
+  sort_field: date
+  sort_reverse: true
 ---
+
+<style>
+.pagination-nav {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee8d5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pagination-nav a {
+    color: #657b83;
+    text-decoration: none;
+    border-bottom: 1px dotted #93a1a1;
+}
+.pagination-nav a:hover {
+    color: #268bd2;
+    border-bottom: 1px solid #268bd2;
+}
+.page-info {
+    color: #93a1a1;
+    font-size: 0.9rem;
+}
+</style>
 
 <h1>Posts</h1>
 
 <ul class="list">
-{% for post in site.posts %}
+{% for post in paginator.documents %}
     <li>
         <span class="date">{{ post.date | date: "%b %d, %Y" }}</span>
         <a href="{{ post.url }}">{{ post.title }}</a>
     </li>
 {% endfor %}
 </ul>
+
+{% if paginator.total_pages > 1 %}
+<nav class="pagination-nav">
+    <div>
+        {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path }}">← Newer Posts</a>
+        {% else %}
+            <span style="visibility: hidden;">← Newer Posts</span>
+        {% endif %}
+    </div>
+
+    <div class="page-info">
+        Page {{ paginator.page }} of {{ paginator.total_pages }}
+    </div>
+
+    <div>
+        {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path }}">Older Posts →</a>
+        {% else %}
+            <span style="visibility: hidden;">Older Posts →</span>
+        {% endif %}
+    </div>
+</nav>
+{% endif %}
