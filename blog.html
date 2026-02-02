@@ -2,13 +2,6 @@
 layout: default
 title: Posts
 permalink: /posts/
-pagination:
-  enabled: true
-  collection: posts
-  per_page: 50
-  sort_field: date
-  sort_reverse: true
-  permalink: '/posts/page/:num/'
 ---
 
 <style>
@@ -36,37 +29,12 @@ pagination:
 </style>
 
 <h1>Posts</h1>
-<!-- VERIFICATION: This is the POSTS page, built at 2026-02-01 -->
 
 <ul class="list">
-{% for post in paginator.posts %}
+{% for post in site.posts %}
     <li>
         <span class="date">{{ post.date | date: "%b %d, %Y" }}</span>
         <a href="{{ post.url }}">{{ post.title }}</a>
     </li>
 {% endfor %}
 </ul>
-
-{% if paginator.total_pages > 1 %}
-<nav class="pagination-nav">
-    <div>
-        {% if paginator.previous_page %}
-            <a href="{{ paginator.previous_page_path }}">← Newer Posts</a>
-        {% else %}
-            <span style="visibility: hidden;">← Newer Posts</span>
-        {% endif %}
-    </div>
-
-    <div class="page-info">
-        Page {{ paginator.page }} of {{ paginator.total_pages }}
-    </div>
-
-    <div>
-        {% if paginator.next_page %}
-            <a href="{{ paginator.next_page_path }}">Older Posts →</a>
-        {% else %}
-            <span style="visibility: hidden;">Older Posts →</span>
-        {% endif %}
-    </div>
-</nav>
-{% endif %}
