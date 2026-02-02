@@ -1,104 +1,143 @@
 ---
 title: Generative Gateway
-summary: A provider-agnostic API gateway for LLMs with usage tracking, budget enforcement, and unified reasoning APIs
-date: 2026-01-04
+summary: Provider-agnostic HTTP gateway for LLM APIs with unified schemas, usage tracking, and cost management
+started: 2025-11-07
+updated: 2026-01-04
+type: api
+stack:
+  - Python
+  - FastAPI
+  - TypeScript
+  - Next.js
+  - SQLite
+  - OpenTelemetry
+tags:
+  - ai
+  - developer-tools
+  - api
+loc: 7716
+files: 49
+architecture:
+  auth: API key
+  database: SQLite
+  api: REST
+  realtime: SSE
+  background: none
+  cache: in-memory
+  search: none
 ---
 
 ## Overview
 
-Generative Gateway is a production-ready API gateway that abstracts the complexity of working with multiple AI providers behind a single, OpenAI-compatible interface. It solves the common pain points of building AI-powered applications: provider lock-in, unpredictable costs, fragmented APIs, and lack of observability.
+Generative Gateway is a provider-agnostic HTTP gateway that sits between client applications and multiple LLM providers (currently OpenRouter). It provides a unified API for chat completions, embeddings, and multi-modal interactions while adding enterprise-grade features like per-request cost tracking, session persistence, real-time streaming, and comprehensive observability.
 
-The gateway acts as a smart middleware layer, routing requests to upstream providers while adding enterprise features like per-project budgets, detailed cost tracking, session persistence, and unified support for advanced capabilities like reasoning models and multi-modal inputs.
+The gateway abstracts away the complexity of different provider APIs, allowing applications to switch models or providers without code changes. It tracks every request with token counts, latency, and USD cost estimates, enabling teams to monitor and control their AI spending.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main dashboard showing usage metrics, recent requests, and cost breakdown charts -->
-![Dashboard Overview](/images/projects/generative-gateway/screenshot-1.png)
+<!-- SCREENSHOT: Main chat interface showing multi-turn conversation with streaming response, model selector dropdown, and system prompt field -->
+![Chat Interface](/images/projects/generative-gateway/screenshot-1.png)
 
-<!-- SCREENSHOT: Chat interface demonstrating streaming response with reasoning/thinking output visible -->
-![Chat Interface with Reasoning](/images/projects/generative-gateway/screenshot-2.png)
+<!-- SCREENSHOT: Models catalog page with searchable/sortable table showing model names, pricing per million tokens, context windows, and capability badges -->
+![Model Catalog](/images/projects/generative-gateway/screenshot-2.png)
 
-<!-- SCREENSHOT: Models catalog page showing available models with capability badges (vision, PDF, reasoning) -->
-![Model Catalog](/images/projects/generative-gateway/screenshot-3.png)
-
-<!-- SCREENSHOT: Admin panel showing project configuration with budget limits and API key management -->
-![Admin Project Settings](/images/projects/generative-gateway/screenshot-4.png)
+<!-- SCREENSHOT: Usage dashboard with charts showing daily token consumption, cost breakdown by model, and request counts over time -->
+![Usage Dashboard](/images/projects/generative-gateway/screenshot-3.png)
 
 ## Problem
 
-Building applications on top of LLMs presents several challenges that compound as projects scale:
+Modern AI applications often need to:
+- Use multiple LLM providers or switch between them based on cost, performance, or availability
+- Track usage and costs at a granular level for billing and budgeting
+- Maintain conversation history across sessions
+- Handle streaming responses, tool calling, and multi-modal inputs (images, PDFs, audio)
+- Support "thinking" models with extended reasoning capabilities
 
-**Cost blindness** - Without detailed usage tracking, AI costs can spiral unexpectedly. A single runaway loop or inefficient prompt can burn through budgets overnight.
-
-**Provider fragmentation** - Each AI provider has different APIs, authentication methods, and feature sets. Switching providers or using multiple models requires significant code changes.
-
-**Reasoning API chaos** - DeepSeek uses `:thinking` suffixes, Claude uses `thinking.budget_tokens`, Gemini uses `reasoning.effort`, and OpenAI's o-series has its own approach. Every model family invented their own way to expose chain-of-thought reasoning.
-
-**Session management burden** - Managing conversation history client-side adds complexity and makes it harder to debug issues or analyze usage patterns.
+Building these features from scratch for each application is time-consuming and error-prone. Existing solutions either lock you into a single provider or lack the observability needed for production workloads.
 
 ## Approach
 
-The gateway takes a unified abstraction approach, presenting a single OpenAI-compatible API while handling provider-specific translations internally.
+The gateway implements a layered architecture that cleanly separates concerns while maintaining flexibility.
 
 ### Stack
 
-- **FastAPI** - Async Python framework for high-performance request handling with automatic OpenAPI documentation
-- **Next.js 16** - React 19 frontend with TanStack Query for real-time dashboard updates
-- **SQLite/PostgreSQL** - Flexible storage layer for usage logs, sessions, and model catalog
-- **OpenTelemetry** - Distributed tracing and Prometheus metrics for production observability
-- **Pydantic v2** - Schema validation ensuring type safety across the API boundary
+- **FastAPI** - Async Python framework chosen for its native async support, automatic OpenAPI documentation, and Pydantic integration for request validation
+- **Next.js 16 + React 19** - Modern frontend stack with React Query for data fetching and server components for optimal performance
+- **SQLite** - Embedded database for zero-config deployment; schema supports easy migration to PostgreSQL for scaling
+- **OpenTelemetry** - Distributed tracing and metrics collection, exportable to any observability backend
+- **httpx** - Async HTTP client for provider requests with streaming support
+- **Server-Sent Events** - Real-time streaming of token deltas, reasoning output, and generated images
 
 ### Challenges
 
-- **Unified reasoning interface** - Built an adapter layer that translates a single `thinking` parameter into provider-specific formats. The gateway automatically appends `:thinking` suffixes for DeepSeek, sets `thinking.budget_tokens` for Claude, and configures `reasoning.effort` for Gemini—all from one consistent API.
+- **Unified Thinking Interface** - Different providers implement extended reasoning differently (DeepSeek uses `:thinking` suffix, Claude uses `budget_tokens`, Gemini uses `effort` levels). Solved by mapping a single `thinking` configuration to provider-specific implementations at the adapter layer.
 
-- **Accurate cost tracking** - Token counting varies by provider and content type (text, audio, cached tokens). Implemented detailed breakdown tracking that captures input/output/reasoning tokens separately for precise cost attribution.
+- **Multi-Modal Message Handling** - Supporting text, images (base64/URL), PDFs, and audio in a single message format required careful schema design. Implemented a `ContentPart` union type that validates content based on message type and model capabilities.
 
-- **SSE streaming complexity** - Streaming responses require careful event ordering: reasoning chunks must arrive before content, tool calls need proper delta formatting, and image generation results arrive asynchronously. Built a streaming layer that handles all edge cases while maintaining a simple client interface.
+- **Session Persistence with Images** - Storing generated images in conversation history for context continuity. Images are persisted as base64 in the session store and properly decoded when loading history for subsequent requests.
 
-- **Multi-modal content handling** - Supporting images, PDFs, and audio alongside text required a flexible content parts system. The gateway accepts mixed content arrays and routes them appropriately based on model capabilities.
+- **Real-Time Cost Tracking** - Computing accurate USD costs requires knowing per-model token pricing, which changes frequently. Implemented a pricing refresh system that pulls current rates from OpenRouter and caches them locally, with manual refresh endpoint for immediate updates.
 
 ## Outcomes
 
-The gateway handles the full spectrum of LLM interactions through a single, consistent API:
+The gateway successfully provides:
 
-```python
-# Same endpoint works for any provider
-response = client.chat.completions.create(
-    model="anthropic/claude-sonnet-4",  # or deepseek/deepseek-r1, google/gemini-2.0-flash-thinking
-    messages=[{"role": "user", "content": "Analyze this data..."}],
-    thinking={"enabled": True, "budget_tokens": 10000},  # Unified reasoning API
-    session_id="user-123-session"  # Server-side conversation persistence
-)
-```
+- **Provider Abstraction** - Single API works across 100+ models from different providers
+- **Cost Visibility** - Every request logged with input/output tokens and USD cost
+- **Session Management** - Automatic conversation history with lazy loading
+- **Resilience** - Retry with exponential backoff, hedged requests for latency-sensitive calls
+- **Observability** - Prometheus metrics, OpenTelemetry traces, structured JSON logging
 
-Key capabilities working in production:
-- Real-time cost tracking with configurable daily budget caps
-- Session persistence eliminating client-side history management  
-- Streaming support with proper SSE event formatting for reasoning output
-- Model catalog with capability detection (vision, PDF, audio, tool calling)
-- Dry-run mode for cost estimation before execution
+Key learning: The adapter pattern works well for provider abstraction, but the real complexity lives in normalizing response formats. Provider APIs return reasoning, tool calls, and multi-modal content in wildly different structures.
 
 ## Implementation Notes
 
-The adapter pattern is central to the architecture. Each provider adapter translates the unified request format into provider-specific calls:
+### Streaming Architecture
+
+The gateway uses Server-Sent Events with typed event payloads:
 
 ```python
-# Simplified adapter interface
-class ProviderAdapter:
-    async def complete(self, request: ChatRequest) -> ChatResponse:
-        # Transform request to provider format
-        provider_request = self._transform_request(request)
-        
-        # Handle reasoning parameter translation
-        if request.thinking and request.thinking.enabled:
-            provider_request = self._apply_reasoning_config(provider_request)
-        
-        # Execute and normalize response
-        raw_response = await self._call_provider(provider_request)
-        return self._normalize_response(raw_response)
+# Event types for structured streaming
+class SSEEvent:
+    META = "meta"        # Session ID, model info
+    TOKEN = "token"      # Text delta
+    REASONING = "reasoning"  # Thinking output
+    TOOL_CALLS = "tool_calls"  # Function calls
+    IMAGES = "images"    # Generated image data
+    DONE = "done"        # Final usage stats
 ```
 
-The session system stores conversation turns server-side, keyed by `session_id`. This enables features like conversation branching, replay for debugging, and cross-device continuity without requiring clients to manage message history.
+### Model Resolution
 
-Budget enforcement runs as middleware, checking accumulated daily spend before each request. When a project approaches its limit, requests are rejected with a clear error rather than incurring overage charges.
+Fuzzy matching with rapidfuzz allows users to reference models by partial names:
+
+```python
+# User can request "claude-3.5" instead of full ID
+model = resolve_model("claude-3.5")
+# Returns: "anthropic/claude-3.5-sonnet"
+```
+
+### Cost Calculation
+
+Every request calculates cost using cached pricing:
+
+```python
+cost_usd = (
+    (input_tokens / 1_000_000) * pricing.input_per_million +
+    (output_tokens / 1_000_000) * pricing.output_per_million +
+    (web_searches * 0.01)  # If web search enabled
+)
+```
+
+### Rate Limiting
+
+Token bucket algorithm with per-project-per-minute buckets:
+
+```python
+@dataclass
+class TokenBucket:
+    tokens: float
+    last_refill: float
+    capacity: int
+    refill_rate: float  # tokens per second
+```

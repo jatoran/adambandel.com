@@ -1,96 +1,80 @@
 ---
 title: YTDB - YouTube Database
-summary: A community-driven platform for discovering, rating, and curating YouTube content beyond the algorithm
-date: 2024-08-12
+summary: A community-driven platform for discovering, rating, and reviewing YouTube videos with trust-weighted scoring
+started: 2024-08-09
+updated: 2024-08-19
+type: web-app
 github: https://github.com/jatoran/ytdb
+stack:
+  - JavaScript
+  - React
+  - Node.js
+  - Express
+  - MongoDB
+  - YouTube Data API
+tags:
+  - data
+  - developer-tools
+  - automation
+loc: 12000
+files: 131
+architecture:
+  auth: JWT
+  database: MongoDB
+  api: REST
+  realtime: none
+  background: node-cron
+  cache: in-memory
+  search: none
 ---
 
 ## Overview
 
-YTDB (YouTube Database) is a full-stack web application that serves as a community-driven alternative to YouTube's algorithmic recommendations. Users can discover, rate, review, and curate YouTube videos into custom lists, breaking free from the platform's echo chamber effect.
+YTDB (YouTube Database) is a full-stack web application that transforms how users discover and evaluate YouTube content. Instead of relying solely on YouTube's algorithm-driven recommendations, YTDB provides a community-curated database where users can rate, review, and organize videos by categories and tags.
 
-The application features a sophisticated trust-based rating system where user ratings are weighted by their trust score, calculated from their engagement history. This creates a meritocratic system where established, active contributors have more influence on video rankings than new or passive users.
+The platform features a trust-weighted rating system that gives more influence to established contributors, ensuring that video ratings reflect the opinions of engaged community members rather than drive-by ratings.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Homepage showing the hero section with "Discover, Rate, Curate" tagline and carousels of trending/top-rated videos -->
-![YTDB Homepage](/images/projects/ytdb/screenshot-1.png)
+<!-- SCREENSHOT: Main homepage showing featured video carousels organized by category with rating overlays -->
+![Homepage](/images/projects/ytdb/screenshot-1.png)
 
-<!-- SCREENSHOT: Video detail page showing embedded player, weighted rating display, review submission form, and related videos carousel -->
-![Video Detail Page](/images/projects/ytdb/screenshot-2.png)
+<!-- SCREENSHOT: Video detail page displaying embedded YouTube player, trust-weighted rating, and user reviews -->
+![Video Page](/images/projects/ytdb/screenshot-2.png)
 
-<!-- SCREENSHOT: Advanced search page with filter sidebar showing category, rating, duration, and tag filters -->
-![Advanced Search](/images/projects/ytdb/screenshot-3.png)
-
-<!-- SCREENSHOT: Admin panel showing the trust score ranking or API statistics dashboard -->
-![Admin Dashboard](/images/projects/ytdb/screenshot-4.png)
+<!-- SCREENSHOT: Advanced search interface with filters for duration, rating, view count, and tags -->
+![Search Interface](/images/projects/ytdb/screenshot-3.png)
 
 ## Problem
 
-YouTube's recommendation algorithm optimizes for engagement metrics, often promoting clickbait and keeping users in content bubbles. Finding high-quality, in-depth content on specific topics requires significant manual effort. There's no community-driven curation layer that surfaces genuinely valuable videos based on user expertise rather than algorithmic predictions.
+YouTube's native search and recommendation systems prioritize engagement metrics (watch time, clicks) over content quality. Users seeking high-quality educational content, tutorials, or niche topics often struggle to filter through low-quality or clickbait videos. Additionally, YouTube's rating system (likes/dislikes) provides limited granularity and no weighted credibility.
 
-Additionally, there's no reliable way to track watched content, create shareable curated lists, or discover videos through trusted community recommendations rather than platform-driven suggestions.
+YTDB addresses this by creating a parallel curation layer where:
+- Videos are organized into meaningful categories and tagged with descriptive metadata
+- Ratings use a 1-10 scale weighted by reviewer trust scores
+- Users can build and share curated lists
+- Advanced filtering enables precise content discovery
 
 ## Approach
 
-Built a full-stack application with a React frontend and Node.js/Express backend, using MongoDB for flexible document storage. The architecture emphasizes community trust and video discovery.
-
 ### Stack
 
-- **Frontend** - React 18 with React Router for SPA navigation, lazy loading for performance optimization
-- **Backend** - Node.js/Express with comprehensive middleware (rate limiting, sanitization, helmet security)
-- **Database** - MongoDB with Mongoose ODM, featuring optimized compound indexes for search queries
-- **YouTube Integration** - Google APIs for fetching video metadata, thumbnails, and channel information
-- **Authentication** - JWT-based auth with refresh token rotation and bcrypt password hashing
-- **Scheduling** - node-cron for automated jobs (rating recalculation, video info updates, database backups)
+- **Frontend (React 18)** - SPA with lazy-loaded routes for performance, context-based state management for user sessions, lists, and watched videos
+- **Backend (Express.js)** - RESTful API with rate limiting, input validation, and security middleware (Helmet, XSS protection, MongoDB sanitization)
+- **Database (MongoDB)** - Document-based storage with Mongoose ODM, optimized with compound indexes for common query patterns
+- **YouTube Integration** - Google APIs for fetching video metadata, thumbnail, and channel information when users submit new videos
+- **Scheduled Jobs (node-cron)** - Background tasks for updating video statistics, recalculating weighted ratings, and running backups
 
 ### Challenges
 
-- **Trust-weighted ratings** - Implemented a trust score system where user contributions (reviews, list curation, community engagement) accumulate into a score that weights their ratings. This required careful balance of action weights to prevent gaming while rewarding genuine participation.
+- **Trust Score Gaming** - Implemented a multi-factor trust calculation that considers account age, review quality (length/likes received), and contribution history to prevent score manipulation. Scores are capped at 1000 and require diverse activity types.
 
-- **Related video discovery** - Built a multi-factor similarity scoring algorithm using Levenshtein distance for title matching, category/tag overlap, temporal proximity, and view count similarity to surface genuinely related content.
+- **Related Video Discovery** - Built a TF-IDF similarity engine using the `natural` library to recommend related videos based on title, tags, and category similarity with stop-word filtering and cosine similarity scoring.
 
-- **Advanced search performance** - Created compound MongoDB indexes and optimized query building to handle complex filter combinations (category, tags, duration range, rating range, date range) without performance degradation.
-
-- **Rate limiting strategy** - Implemented tiered rate limiting with different thresholds for authentication, search, and video submission endpoints to prevent abuse while maintaining good UX for legitimate users.
-
-## Outcomes
-
-The application successfully provides an alternative discovery mechanism for YouTube content. Key features that work well:
-
-- **Weighted rating system** prevents rating manipulation by tying influence to community contribution
-- **Custom list creation** enables thematic curation that can be shared publicly or kept private
-- **Watch later and watched tracking** persists across sessions with automatic list management
-- **Admin panel** provides comprehensive content moderation, user management, and API analytics
-- **Cron job automation** keeps video metadata fresh and recalculates ratings hourly
-
-Learned significant lessons about building trust systems, preventing rating manipulation, and designing search interfaces that balance power with usability.
-
-## Implementation Notes
-
-### Trust Score Calculation
-
-The trust scoring system weighs different actions to build user reputation:
+- **Weighted Ratings** - Created a system where video ratings are weighted by reviewer trust scores, making established contributors' opinions more influential while still allowing new users to participate.
 
 ```javascript
-const WEIGHTS = {
-  SUBMIT_RATING: 1,
-  SUBMIT_REVIEW_TEXT: 2,
-  REVIEW_LENGTH_BONUS: 0.01, // per character up to 100
-  ADD_VIDEO: 3,
-  WATCH_VIDEO: 0.5,
-  RECEIVE_REVIEW_LIKE: 0.5,
-  RECEIVE_LIST_LIKE: 0.3,
-  ACCOUNT_AGE_DAYS: 0.05,
-  // ... more weights
-};
-```
-
-### Weighted Rating Algorithm
-
-Video ratings are weighted by reviewer trust scores, recalculated hourly:
-
-```javascript
+// Trust-weighted rating calculation
 for (const review of reviews) {
   const weight = review.userId.trustScore;
   weightedSum += review.rating * weight;
@@ -99,28 +83,55 @@ for (const review of reviews) {
 const weightedRating = weightSum > 0 ? weightedSum / weightSum : 0;
 ```
 
-### Related Video Similarity Scoring
+- **Metadata Suggestions** - When users add new videos, the system analyzes similarity against existing videos to suggest appropriate categories and tags, reducing friction and improving consistency.
 
-Multi-factor approach combining categorical and content-based signals:
+## Outcomes
+
+The application successfully demonstrates a production-ready content curation platform with:
+
+- **Comprehensive Video Management** - CRUD operations with category/tag relationships, video history tracking, and trending score calculations
+- **User Engagement Features** - Watch later lists, watched tracking, custom lists with ordering, review system with likes
+- **Admin Dashboard** - API statistics, user management, and content moderation tools with Recharts visualizations
+- **Security Hardening** - Rate limiting (general, auth, search), JWT refresh tokens, input sanitization, and CSP headers
+
+Key learnings included the complexity of building fair reputation systems, the importance of database indexing for video discovery queries, and effective patterns for optional authentication middleware.
+
+## Implementation Notes
+
+### Database Schema Design
+
+The schema uses MongoDB's document model with strategic denormalization:
 
 ```javascript
-function calculateSimilarityScore(video1, video2) {
-  let score = 0;
-  // Category match: +30 points
-  // Tag matches: +10 points per common tag
-  // Title similarity (Levenshtein): up to +20 points
-  // Publish date proximity: up to +10 points
-  // View count similarity: up to +10 points
-  return score;
-}
+// Video model with comprehensive metadata
+const videoSchema = new mongoose.Schema({
+  youtubeId: { type: String, required: true, unique: true },
+  weightedRating: { type: Number, default: 0 },
+  trendingScore: { type: Number, default: 0 },
+  viewCountGrowth24h: { type: Number, default: 0 },
+  // Compound indexes for common queries
+});
+videoSchema.index({ category: 1, weightedRating: -1 });
+videoSchema.index({ tags: 1, publishedAt: -1 });
 ```
 
-### MongoDB Index Strategy
+### Trust Score System
 
-Compound indexes optimized for common query patterns:
+The trust scoring uses weighted actions to reward quality contributions:
 
-```javascript
-videoSchema.index({ category: 1, weightedRating: -1 }); // Top-rated in category
-videoSchema.index({ tags: 1, publishedAt: -1 });        // Newest with tag
-videoSchema.index({ weightedRating: -1, publishedAt: -1 }); // Global rankings
-```
+| Action | Weight |
+|--------|--------|
+| Add Video | +3 |
+| Submit Review Text | +2 |
+| Receive Review Like | +0.5 |
+| Account Age (per day) | +0.05 |
+| Delete Own Review | -2 |
+
+### API Architecture
+
+Routes are modularized with consistent patterns:
+- `/api/videos` - Video CRUD with category filtering
+- `/api/search` - Advanced multi-parameter search
+- `/api/reviews` - User reviews with like functionality
+- `/api/lists` - User-created and system lists
+- `/api/suggestions` - TF-IDF metadata suggestions

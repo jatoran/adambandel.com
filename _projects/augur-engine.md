@@ -1,128 +1,169 @@
 ---
 title: Augur Engine
-summary: Dagster-based financial data platform with 88 ClickHouse tables, 32 data providers, and LLM-powered autonomous trading agents
-date: 2025-12-02
+summary: Dagster-based financial data platform with 180+ assets, 30+ data providers, and LLM trading simulation
+started: 2025-12-02
+updated: 2026-01-30
+type: data-pipeline
+stack:
+  - Python
+  - Dagster
+  - ClickHouse
+  - PostgreSQL
+  - FastAPI
+  - Polars
+tags:
+  - finance
+  - data
+  - ai
+  - developer-tools
+loc: 126529
+files: 482
+architecture:
+  auth: none
+  database: ClickHouse + PostgreSQL
+  api: REST
+  realtime: none
+  background: Dagster
+  cache: Parquet files
+  search: none
 ---
 
 ## Overview
 
-Augur Engine is a production-grade financial data platform that ingests, transforms, and serves comprehensive market data for quantitative analysis. Built on Dagster's asset-centric orchestration, it implements a Medallion Architecture (Bronze/Silver/Gold) to progressively refine raw data into actionable analytics across 88 ClickHouse tables.
+Augur Engine is a production-grade financial data platform that ingests, transforms, and serves market data for quantitative analysis. Built on Dagster's orchestration framework, it implements a Medallion Architecture (Bronze/Silver/Gold tiers) to progressively refine raw data from 32 external providers into analytics-ready datasets stored in ClickHouse.
 
-The platform powers an LLM-based trading simulator where autonomous AI "firms" make investment decisions using the underlying data infrastructure. Agents maintain persistent memory across trading days, execute structured research queries, and manage portfolios with engine-enforced risk controls.
+The platform's vision extends beyond data pipelines: it provides an API surface that enables LLM-powered trading agents to test theories, run backtests, and execute paper trading simulations. The broad data coverage (SEC filings, Congressional bills, lobbying records, GDELT geopolitical events, macro indicators) supports analyst agents that surface alpha signals across structured data, documents, and alternative datasets.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Dagster UI showing the asset dependency graph with Bronze, Silver, and Gold layers visible, highlighting the data flow from raw ingestion to analytics -->
-![Asset Dependency Graph](/images/projects/augur-engine/screenshot-1.png)
+<!-- SCREENSHOT: Dagster UI showing the asset graph with Bronze/Silver/Gold tier groups and their dependency relationships -->
+![Asset Graph](/images/projects/augur-engine/screenshot-1.png)
 
-<!-- SCREENSHOT: Dashboard showing the market overview panel with candlestick charts, sector heatmap, and institutional flow indicators -->
+<!-- SCREENSHOT: Frontend dashboard Market Overview page showing market pulse indicators (S&P 500, VIX, Treasury yields) and sector performance -->
 ![Market Dashboard](/images/projects/augur-engine/screenshot-2.png)
 
-<!-- SCREENSHOT: LLM trading simulation output showing agent reasoning, trade execution, and portfolio state after a simulated trading day -->
-![Trading Simulation](/images/projects/augur-engine/screenshot-3.png)
-
-<!-- SCREENSHOT: ClickHouse query interface or Dagster materialization logs showing data quality checks passing on a Gold layer asset -->
-![Data Quality Checks](/images/projects/augur-engine/screenshot-4.png)
+<!-- SCREENSHOT: Query Explorer interface with a sample SQL query and results table -->
+![Query Explorer](/images/projects/augur-engine/screenshot-3.png)
 
 ## Problem
 
-Building a quantitative research platform requires solving three interconnected challenges: reliable data ingestion from dozens of rate-limited APIs, transformation pipelines that maintain data quality at scale, and an analytics layer that serves both human analysts and AI agents. Traditional approaches scatter these concerns across cron jobs, ad-hoc scripts, and disconnected databases, creating maintenance nightmares and data drift.
+Building quantitative trading strategies requires access to diverse, high-quality financial data. Most retail and small institutional traders face fragmented data sources, inconsistent schemas, stale data, and no infrastructure to combine market prices with alternative data like SEC filings, Congressional voting records, or institutional fund flows.
 
-The secondary challenge was exploring how LLMs could function as autonomous trading agents. Rather than simple chatbot interfaces, I wanted agents with persistent memory, structured tool use, and the ability to reason over multi-domain data (market, macro, government, alternative) to surface non-obvious insights.
+This project consolidates 30+ data sources into a unified, query-ready platform with:
+- Automated ingestion with rate limiting and incremental processing
+- Schema-driven data quality checks (238+ asset checks)
+- A simulation environment for testing LLM trading agents without look-ahead bias
 
 ## Approach
 
-The architecture centers on **Dagster's asset-based orchestration**, where each dataset is a first-class citizen with explicit dependencies, freshness policies, and data quality checks. This declarative approach replaced imperative scripts with a self-documenting dependency graph.
-
 ### Stack
 
-- **Orchestration** - Dagster for asset dependency management, scheduling, and 238+ auto-generated data quality checks
-- **Analytics Database** - ClickHouse for columnar OLAP queries across 88 tables with sub-second response times
-- **Metadata Store** - PostgreSQL for relational data (instruments, universes, distributed rate limiting via advisory locks)
-- **Data Processing** - Polars for high-performance DataFrame operations; Pandas for market calendar compatibility
-- **API Layer** - FastAPI serving REST endpoints with query passthrough to ClickHouse
-- **Frontend** - Vanilla JavaScript SPA with LightweightCharts for candlesticks and Chart.js for composites
-- **AI Integration** - Anthropic Claude with Generative Gateway for guaranteed structured JSON output
+- **Orchestration (Dagster)** - Manages 182 assets with declarative dependencies, materialization sensors, and built-in observability. Asset checks validate data quality at each tier.
+
+- **OLAP Database (ClickHouse)** - Columnar storage optimized for analytical queries across 88 tables. ReplacingMergeTree handles upserts; partitioning by date enables efficient time-series queries.
+
+- **Relational Database (PostgreSQL)** - Source of truth for reference data: instruments, universes, organizations, and persons. Powers the symbol resolver used across all assets.
+
+- **Data Processing (Polars)** - Lazy evaluation and streaming for memory-efficient transformations. Schema validation against `ClickHouseTableSchema` definitions.
+
+- **API Layer (FastAPI)** - REST endpoints for dynamic SQL queries with safety guardrails (mutation blocking, row limits, timeouts). Serves the vanilla JS frontend for data exploration.
+
+- **LLM Trading Simulation (augur_firm)** - Multi-agent trading simulation framework. Agents receive structured market briefings, execute tool-calling for research, and submit orders through a paper trading engine.
 
 ### Challenges
 
-- **Schema drift between code and database** - Solved with declarative `ClickHouseTableSchema` that auto-generates DDL, Polars schemas, IO configs, and check definitions from a single source of truth
-- **Rate limit coordination across workers** - Implemented distributed rate limiting using PostgreSQL advisory locks, enabling multi-worker Dagster runs without API bans
-- **LLM output reliability** - Integrated a Generative Gateway that enforces JSON schema at generation time, eliminating parsing failures and hallucinated field names
-- **Incremental processing at scale** - Built watermark-based incrementalism with freshness checking, reducing redundant API calls and enabling efficient re-runs
+- **Rate limiting across 30+ APIs** - Built a distributed rate limiter using PostgreSQL advisory locks. Tokens are stored in `rate_limit_tokens` table; cross-worker coordination prevents API bans during parallel Dagster runs.
+
+- **ClickHouse deduplication edge cases** - SEC 13F data showed 100x undercounts for large managers like BlackRock. Root cause: `ORDER BY` keys weren't unique when filings contained multiple sub-managers per CUSIP. Fixed by adding a hash-based row identifier.
+
+- **LLM tool-calling reliability** - Agents hallucinated tool names (`get_technicals_quality_stocks` instead of `get_quality_stocks`). Implemented fuzzy matching with `_normalize_tool_name()` and switched from markdown to JSON tool definitions.
+
+- **Mixed intent responses** - When LLMs returned both trades and research queries in one response, trades were silently dropped. Solution: preserve first-response trades before research phase and merge with subsequent responses.
 
 ## Outcomes
 
-The platform reliably processes data from 32 providers (FRED, SEC, Treasury, Congress, GDELT, yFinance, and more) into a unified analytics layer. The Medallion Architecture creates clear separation between raw ingestion, cleaned/adjusted data, and derived signals.
+The platform successfully ingests data from 32 providers into 88 ClickHouse tables, with 182 Dagster assets and 238+ automated quality checks. Key achievements:
 
-Key learnings:
-- **Asset-centric orchestration** fundamentally changes how you reason about data pipelines. Dependencies become explicit, testing becomes tractable, and the codebase documents itself.
-- **Declarative schemas** eliminate entire categories of bugs. When table definitions, DataFrame types, and quality checks derive from the same source, drift becomes impossible.
-- **LLM agents benefit from constraints**. Engine-enforced risk controls (stop-losses, position limits) and structured output schemas produce more reliable behavior than prompt-only guardrails.
+- **Zero-API bootstrap**: Fresh installations can load from Parquet cache without API calls using `full_bootstrap_job`
+- **Incremental processing**: Watermark-based loading processes only new data, reducing daily runs to minutes
+- **Full Docker deployment**: All services (Dagster, FastAPI, ClickHouse, PostgreSQL) run in containers with proper dependency ordering
+- **LLM simulation framework**: Trading agents can execute multi-day backtests with persistent memory, watchlists, and engine-enforced stop-losses
+
+Lessons learned:
+- Schema-as-code (`ClickHouseTableSchema`) eliminates drift between code and database
+- Dagster's asset checks catch data quality issues before they propagate downstream
+- Rate limiting needs distributed coordination in production; in-memory buckets fail with multiple workers
 
 ## Implementation Notes
 
-The schema system demonstrates how a single declaration propagates through the entire stack:
+### Schema-Driven Architecture
+
+All table definitions live in Python dataclasses, generating DDL, IO manager configs, and asset checks:
 
 ```python
-class ClickHouseTableSchema:
-    """Single source of truth for table definitions."""
-    name: str
-    columns: dict[str, pl.DataType]
-    primary_key: tuple[str, ...]
-    order_by: tuple[str, ...]
-    check_config: CheckConfig | None = None
-
-    def to_ddl(self) -> str:
-        """Generate CREATE TABLE statement."""
-        ...
-
-    def to_polars_schema(self) -> dict[str, pl.DataType]:
-        """Generate Polars DataFrame schema for validation."""
-        ...
-
-    def to_io_config(self) -> dict:
-        """Generate Dagster IO manager configuration."""
-        ...
+RAW_OHLCV_DAILY = ClickHouseTableSchema(
+    name="raw_ohlcv_daily",
+    tier="bronze",
+    description="Daily OHLCV from Stooq/yFinance/Massive",
+    engine="ReplacingMergeTree",
+    order_by=("symbol", "date", "source"),
+    partition_by="toYYYYMM(date)",
+    columns={
+        "symbol": pl.Utf8,
+        "date": pl.Date,
+        "open": pl.Float64,
+        "high": pl.Float64,
+        "low": pl.Float64,
+        "close": pl.Float64,
+        "volume": pl.UInt64,
+        "source": pl.Utf8,
+    },
+    watermark_column="date",
+    check_config=CheckConfig(
+        min_row_count=1000,
+        min_instrument_count=500,
+        value_bounds={"open": (0, 1_000_000), "volume": (0, 1e12)},
+    ),
+)
 ```
 
-The two-phase ingestion pattern separates API concerns from database concerns:
+### LLM Trading Agent Response Schema
 
-```
-fetch_api_fred     Load Cache
-      |                 |
-      v                 v
-  (Parquet)  --->  load_cache_fred
-                        |
-                        v
-                   (ClickHouse)
-```
-
-This enables zero API calls on re-runs, watermark-based incrementalism, and resilience to database failures. Each phase can be retried independently without re-fetching data.
-
-The LLM trading simulator enforces structured output through schema constraints:
+Agents return structured JSON with trades, research queries, and memory updates:
 
 ```python
 AGENT_RESPONSE_SCHEMA = {
     "type": "object",
     "properties": {
         "reasoning": {"type": "string"},
+        "research_queries": {
+            "type": "array",
+            "items": {
+                "properties": {"tool": {"type": "string"}, "args": {"type": "object"}}
+            }
+        },
         "trades": {
             "type": "array",
             "items": {
-                "type": "object",
                 "properties": {
+                    "action": {"enum": ["BUY", "SELL", "CLOSE"]},
                     "symbol": {"type": "string"},
-                    "side": {"enum": ["buy", "sell", "close"]},
-                    "quantity": {"type": "integer"},
-                    "rationale": {"type": "string"}
+                    "quantity": {"type": "number"}
                 }
             }
         },
-        "research_queries": {"type": "array"}
-    },
-    "required": ["reasoning", "trades"]
+        "memories_to_record": {"type": "object"},
+        "watchlist_updates": {"type": "object"}
+    }
 }
 ```
 
-Agents maintain three tiers of persistent memory (portfolio, strategy, symbol-level) that carry context across simulated trading days, enabling learning and thesis tracking without fine-tuning.
+### Data Provider Coverage
+
+| Category | Providers |
+|----------|-----------|
+| Market Data | Stooq, yFinance, Polygon (Massive), CBOE |
+| SEC Filings | 13F holdings, Form 4 insider, N-PORT funds, FTD |
+| Macro | FRED, Treasury, BLS, EIA, World Bank |
+| Alternative | GDELT, Congress.gov, LobbyView, Senate LDA |
+| Reference | GLEIF (LEI), Fama-French factors, FINRA |

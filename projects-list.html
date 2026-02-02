@@ -58,12 +58,12 @@ permalink: /projects/
 
 <h1>Projects</h1>
 
-{% assign sorted_projects = site.projects | sort: "date" | reverse %}
+{% assign sorted_projects = site.projects | sort: "updated" | reverse %}
 {% for project in sorted_projects %}
 <section style="margin-bottom: 3rem;">
     <div class="project-header">
         <h2><a href="{{ project.url }}" class="project-title">{{ project.title }}</a></h2>
-        {% if project.date %}<span class="project-date">{{ project.date | date: "%b %Y" }}</span>{% endif %}
+        {% if project.updated %}<span class="project-date">{{ project.updated | date: "%b %Y" }}</span>{% endif %}
     </div>
     <p>{{ project.summary }}</p>
 

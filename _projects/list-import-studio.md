@@ -1,107 +1,167 @@
 ---
 title: List Import Studio
-summary: Desktop ETL tool for reconciling contact lists—visual data pipelines with fuzzy matching and human-in-the-loop review
-date: 2025-10-03
+summary: Desktop app for visual data transformation pipelines with fuzzy matching, validation, and multi-dataset workflows
+started: 2025-10-03
+updated: 2025-10-15
+type: desktop
+stack:
+  - TypeScript
+  - React 19
+  - Tauri 2
+  - Python
+  - Polars
+  - SQLite
+tags:
+  - data
+  - developer-tools
+  - automation
+loc: 48000
+files: 269
+architecture:
+  auth: none
+  database: SQLite
+  api: JSON-RPC
+  realtime: none
+  background: Python sidecar
+  cache: Parquet + in-memory
+  search: none
 ---
 
 ## Overview
 
-List Import Studio is a native Windows desktop application that transforms messy spreadsheet data into clean, deduplicated, and enriched datasets. It provides a visual pipeline builder where users construct directed acyclic graphs (DAGs) of data operations—transformations, filtering, fuzzy matching, deduplication, and relationship modeling—without writing code.
+List Import Studio is a desktop application for importing, transforming, and enriching tabular data through visual pipelines. Users load CSV/XLSX files, map columns to reference schemas, build transformation graphs with filtering, branching, and derivation nodes, then execute workflows that handle deduplication, fuzzy record matching, and human-in-the-loop review gates.
 
-The tool bridges the gap between enterprise ETL platforms (Talend, Informatica) and manual Excel workflows, targeting power users who need sophisticated data reconciliation but lack IT department resources. A core differentiator is the human-in-the-loop review system that pauses execution for ambiguous matches, ensuring data quality on high-stakes integrations.
+The application combines a React/TypeScript frontend running in Tauri with a Python sidecar that handles heavy data processing via Polars. Communication happens through JSON-RPC over stdio, avoiding HTTP overhead while enabling rich bidirectional command dispatch.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Plan canvas showing a multi-node DAG with dataset ingestion, transform, deduplicate, and match nodes connected by routes -->
+<!-- SCREENSHOT: Main plan canvas with connected nodes showing a dataset flowing through transform, filter, and export nodes -->
 ![Plan Canvas](/images/projects/list-import-studio/screenshot-1.png)
 
-<!-- SCREENSHOT: Match node editor displaying weighted ensemble configuration, blocking rules, and score histogram telemetry -->
-![Match Configuration](/images/projects/list-import-studio/screenshot-2.png)
+<!-- SCREENSHOT: Dataset mapping editor showing source columns mapped to reference schema fields with type indicators -->
+![Dataset Mapping](/images/projects/list-import-studio/screenshot-2.png)
 
-<!-- SCREENSHOT: Review queue interface with candidate pair comparison, explain snippets showing token alignment, and bulk action buttons -->
-![Review Queue](/images/projects/list-import-studio/screenshot-3.png)
-
-<!-- SCREENSHOT: Dataset mapping editor with field type inference, validation warnings, and sample data preview -->
-![Dataset Mapping](/images/projects/list-import-studio/screenshot-4.png)
+<!-- SCREENSHOT: Transform node editor with phone normalization suite selected and preview table showing before/after values -->
+![Transform Editor](/images/projects/list-import-studio/screenshot-3.png)
 
 ## Problem
 
-Organizations frequently need to merge contact lists from multiple sources—CRM exports, event registrations, partner data feeds—but face common obstacles:
+Data imports from external sources are messy. Phone numbers come in inconsistent formats, emails need validation, company names require standardization, and duplicate records need detection. Traditional ETL tools are either too complex for one-off imports or too limited for sophisticated matching logic.
 
-- **Schema inconsistency**: Different column names, date formats, phone number styles across sources
-- **Duplicate records**: Same person appearing multiple times with slight variations
-- **Matching ambiguity**: Fuzzy matching algorithms produce false positives that require human judgment
-- **Audit requirements**: Stakeholders need to understand why records were matched or rejected
-- **Technical barriers**: Existing ETL tools require SQL knowledge or programming skills
-
-The project was built to provide a self-contained solution that non-technical users can operate while maintaining the sophistication needed for enterprise-grade data quality.
+The goal was to build a tool that makes it easy to:
+- Visually design transformation pipelines without writing code
+- Apply fuzzy matching with configurable blocking rules and scoring ensembles
+- Pause execution at review gates for human verification of edge cases
+- Track data lineage to explain how any output row was derived
 
 ## Approach
 
-The architecture prioritizes separation of concerns across three distinct runtime layers, each optimized for its role.
-
 ### Stack
 
-- **Frontend (React 19 + TypeScript)** - Renders the visual plan builder, dataset previews, and review interfaces; Zod validates every RPC payload at runtime
-- **Shell (Tauri v2 + Rust)** - Provides the native window, file dialogs, and process management with minimal overhead (no Chromium bundle)
-- **Data Engine (Python Sidecar)** - Handles all data processing via Pandas/Polars, persists to Parquet columnar format, manages SQLite workspace state
-- **IPC Protocol (JSON-RPC over stdio)** - Enables clean request/response semantics with timeout handling and schema validation on both ends
+- **Tauri 2** - Desktop shell providing native file dialogs, process spawning, and cross-platform distribution without Electron's overhead
+- **React 19 + TypeScript** - Frontend with feature-based architecture; hooks manage workflow state while Zod validates RPC contracts
+- **Python Sidecar** - Polars-based data engine spawned as a subprocess; handles all heavy computation
+- **JSON-RPC over stdio** - Custom protocol avoiding HTTP; parent process writes JSON requests to stdin, child responds via stdout
+- **SQLite + Parquet** - Workspace metadata in SQLite; cached pipeline stages in columnar Parquet for efficient resumption
 
 ### Challenges
 
-- **Multi-process reliability** - Coordinating React → Rust → Python required careful IPC design; solved with line-delimited JSON-RPC, unique request IDs, and matched Pydantic/Zod schemas ensuring type safety across language boundaries
+- **Row identity across transforms** - After filtering, standardizing, and deduplicating, tracking which output rows correspond to which inputs requires persistent identifiers. Solution: each row gets a `row_ref` string that propagates through the pipeline, enabling the explain/review features to fetch original values.
 
-- **Deterministic cache invalidation** - DAG nodes needed consistent cache hits across restarts; implemented stable hashing of node configs, input data, and upstream cache keys with version pinning to automatically invalidate when algorithms change
+- **Multi-dataset lineage** - Match and Relate nodes combine two datasets, complicating schema propagation. Solution: routes track `source_dataset_ids`, and the frontend builds field selectors that label origins as "From Dataset: X" or "From Node: Transform".
 
-- **Human-in-the-loop at scale** - 100k-row datasets might produce thousands of ambiguous matches; built a queue persistence system that halts execution at configurable thresholds, surfaces score histograms for threshold tuning, and supports bulk accept/reject operations
+- **Pause/resume execution** - Full runs on large datasets can take significant time; users need to pause at review nodes and resume later. Solution: cache checkpoints after each node with stable keys derived from input data + config hashes. Resume rehydrates from the last checkpoint without re-running earlier stages.
 
-- **Schema lineage tracking** - After matching records from multiple datasets, downstream nodes must know field provenance; every field carries `datasetId` and `sourceNodeId` metadata, with UI grouping showing origins clearly
+- **Quick-fix suggestions** - When validation detects issues (e.g., invalid phone formats), the UI should suggest fixes. Solution: validator registry maps issue codes to transform suggestions; clicking "Apply fix" inserts the appropriate Transform node with pre-configured normalization.
 
 ## Outcomes
 
-The application successfully processes datasets of 100k+ rows with sub-second preview feedback via sampling and intelligent caching. The modular architecture enabled aggressive refactoring (1,200-line components reduced to ~300 LOC) while maintaining 80%+ Python test coverage.
+The visual pipeline approach proves effective for complex data workflows. Key wins:
 
-Key learnings:
-- Sidecar patterns excel when desktop apps need heavy computation—keeps the UI responsive while Python handles data
-- Parquet's columnar format dramatically accelerates column-wise operations compared to row-based CSV processing
-- Visual DAG builders require careful state management—every node change must propagate cache invalidation upstream and downstream
-- Review queue UX makes or breaks adoption—score histograms and explain snippets reduced review time significantly in testing
+- **Iterative refinement** - Preview at any node shows exactly what data looks like mid-pipeline; adjust transform config and immediately see results
+- **Caching efficiency** - Re-running after config changes only recomputes affected nodes; unchanged upstream stages load from Parquet cache
+- **Review workflow** - Match scoring produces histograms; users set thresholds and manually review borderline cases before export
+- **Lineage transparency** - Clicking any output row shows its derivation path through the pipeline with intermediate values
 
 ## Implementation Notes
 
-The plan engine uses stable hashing for reproducible cache keys:
+### JSON-RPC Protocol
 
-```python
-cache_key = make_cache_key(
-    node_id=node.id,
-    config=stable_hash_config(node.config),
-    data=stable_hash_rows(input_data),
-    upstream_keys=[parent_cache_key],
-    version=PLAN_ENGINE_VERSION
-)
-```
-
-Match scoring supports weighted ensembles with configurable tie-breaking:
-
-```python
-ensemble_config = EnsembleConfig(
-    comparisons=[
-        Comparison(field="email", algorithm="exact", weight=1.0),
-        Comparison(field="name", algorithm="jaro_winkler", weight=0.6),
-        Comparison(field="company", algorithm="levenshtein", weight=0.4),
-    ],
-    margin=0.15,  # Minimum score gap to declare winner
-    tie_policy="potential",  # Route ties to review queue
-    fallback_outcome="no_match"
-)
-```
-
-The review queue persists pending items to SQLite, enabling pause/resume across application restarts:
+Frontend and sidecar communicate via JSON-RPC 2.0 over stdio:
 
 ```typescript
-// Frontend hook monitors queue state
-const { queueItems, pending, handleBulkAction } = useReviewQueue(nodeId);
+// Frontend: src/services/sidecar/client.ts
+export async function callRpc<T>(method: string, params: unknown): Promise<T> {
+  const response = await Command.create('sidecar', ['--rpc'])
+    .execute(JSON.stringify({ jsonrpc: '2.0', method, params, id: generateId() }));
+  return JSON.parse(response.stdout).result;
+}
+```
 
-// Bulk operations update queue and trigger re-execution
-await handleBulkAction("accept", selectedIds);
+```python
+# Sidecar: sidecar/rpc/dispatcher.py
+def dispatch(request: dict) -> dict:
+    handler = REGISTRY.get(request['method'])
+    result = handler(**request.get('params', {}))
+    return {'jsonrpc': '2.0', 'result': result, 'id': request['id']}
+```
+
+### Plan Execution Engine
+
+The plan engine traverses the node graph, caching results at each stage:
+
+```python
+# sidecar/plan_engine.py
+def execute_node(node: PlanNode, context: PlanContext) -> DataFrame:
+    cache_key = compute_stable_key(node, context.upstream_data)
+
+    if cached := context.cache.get(cache_key):
+        return cached
+
+    match node.type:
+        case 'transform':
+            result = apply_standardizers(context.upstream_data, node.config.operations)
+        case 'filter':
+            result = apply_filter_conditions(context.upstream_data, node.config.conditions)
+        case 'branch':
+            # Returns dict of outcome -> DataFrame
+            result = route_by_conditions(context.upstream_data, node.config.branches)
+        case 'match':
+            result = score_candidates(context.upstream_data, node.config.ensemble)
+
+    context.cache.set(cache_key, result)
+    return result
+```
+
+### Blocking Rules for Matching
+
+Fuzzy matching at scale requires blocking to avoid O(n*m) comparisons:
+
+```python
+# sidecar/match/blocking.py
+def build_blocking_index(records: DataFrame, rules: list[BlockingRule]) -> dict:
+    """Group records by blocking keys for efficient candidate generation."""
+    index = defaultdict(list)
+    for row in records.iter_rows(named=True):
+        for rule in rules:
+            key = normalize_blocking_key(row, rule)
+            index[key].append(row['_row_ref'])
+    return index
+```
+
+### State Persistence
+
+Workspace state auto-saves to SQLite on navigation, enabling seamless resume:
+
+```typescript
+// Frontend: src/features/workspace/hooks/useProjectPersistence.ts
+const saveState = useCallback(async () => {
+  const snapshot = {
+    plan: planState,
+    datasets: datasetState,
+    mapping: mappingState,
+    settings: settingsState,
+  };
+  await rpc.project.saveState(projectId, snapshot);
+}, [projectId, planState, datasetState, mappingState, settingsState]);
 ```

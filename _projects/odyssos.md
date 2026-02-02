@@ -1,96 +1,125 @@
 ---
 title: Odyssos
-summary: A deep incremental game with multi-realm training, exploration, and a priority-based modifier system.
-date: 2023-04-01
+summary: Incremental idle game with training, exploration, and multi-tier rebirth mechanics
+type: web-app
+stack:
+  - JavaScript (ES6 modules)
+  - HTML5/CSS3
+  - Parcel
+  - break_eternity.js
+  - lz-string
+tags:
+  - game
+  - idle-game
+  - incremental
+loc: 20000
+files: 97
 ---
 
 ## Overview
 
-Odyssos is a web-based incremental (idle) game that combines training, exploration, and strategy mechanics. Players progress through multiple realms of power—Force, Wisdom, Energy, and Divine—while conquering zones across an expansive universe, battling in tournaments, and unlocking artifacts that provide powerful bonuses.
+Odyssos is a feature-rich incremental idle game that blends training progression, world exploration, tournament combat, and artifact collection into a cohesive gameplay loop. Players grind through multiple realms (Force, Wisdom, Energy, Divine), conquer zones across expansive worlds, and strategically invest in upgrades to increase their Power Level.
 
-The game features a sophisticated modifier system, multi-layered rebirth mechanics, and offline progression. Built entirely in vanilla JavaScript with ES6 modules, it demonstrates complex game state management and data-driven architecture without relying on frameworks.
+The game features a sophisticated multi-tier rebirth system where players sacrifice progress for permanent bonuses, deep automation options that reward long-term investment, and an interconnected modifier system where upgrades can affect entire categories of game features. Built entirely with vanilla JavaScript and ES6 modules, the architecture prioritizes modularity and data-driven content creation.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main training tab showing Force realm with multiple training exercises, level buttons, and current income display -->
+<!-- SCREENSHOT: Main training tab showing Force realm trainings with levels, production rates, and upgrade costs -->
 ![Training Tab](/images/projects/odyssos/screenshot-1.png)
 
-<!-- SCREENSHOT: Odyssey exploration map with regions and zone connections visible, showing conquest progress -->
+<!-- SCREENSHOT: Exploration map view with conquered zones, region progress, and zone conquest timer -->
 ![Exploration Map](/images/projects/odyssos/screenshot-2.png)
 
-<!-- SCREENSHOT: Skill tree interface showing unlocked skills and branching paths -->
+<!-- SCREENSHOT: Skill tree or Essence upgrade tree showing unlocked nodes and available paths -->
 ![Skill Tree](/images/projects/odyssos/screenshot-3.png)
-
-<!-- SCREENSHOT: Essence tab after rebirth showing persistent upgrade tree -->
-![Essence Upgrades](/images/projects/odyssos/screenshot-4.png)
 
 ## Problem
 
-Most incremental games plateau quickly or become tedious number-watching experiences. I wanted to create a game with genuine strategic depth—one where progression systems interconnect meaningfully, where player choices matter, and where the satisfaction of optimization keeps players engaged across multiple prestige layers.
+Incremental games often suffer from shallow mechanics that become repetitive after initial engagement. Many lack the interconnected systems that create emergent gameplay and strategic depth. Additionally, browser-based idle games need robust offline progress calculation and efficient save state management to provide seamless player experience across sessions.
 
 ## Approach
 
-The solution was building a data-driven architecture where game content is defined in JSON and processed by a flexible modifier system that allows any upgrade to affect any other game element.
-
 ### Stack
 
-- **JavaScript (ES6 Modules)** - Vanilla JS for maximum control over game loop timing and memory management
-- **Parcel** - Zero-config bundling for development and production builds
-- **break_eternity.js** - Arbitrary precision math for numbers that exceed JavaScript's limits (1e308+)
-- **lz-string** - Save data compression to stay within localStorage limits
-- **CSS** - Custom dark theme UI with inset shadows and visual feedback
+- **JavaScript ES6 Modules** - Chosen for native browser module support without framework overhead, enabling clean separation of concerns across 95+ component files
+- **break_eternity.js** - Handles numbers up to 10^^1e308, essential for incremental games where values grow exponentially beyond JavaScript's native limits
+- **lz-string** - Compresses save data before localStorage persistence, critical for games with hundreds of stateful objects
+- **Parcel** - Zero-config bundling with hot reload for rapid development iteration
 
 ### Challenges
 
-- **Priority-Based Modifier System** - Built a tree-based calculation system where modifiers stack in priority order. Additive bonuses calculate before multiplicative ones, and global modifiers cascade correctly through all affected features. Solved by creating `ModTree` nodes that rebuild dynamically when modifiers activate.
-
-- **Offline Progression Accuracy** - Rather than approximating gains with formulas, the `OfflineManager` simulates game ticks in chunks. This ensures autobuyers, unlocks, and synergy bonuses all trigger correctly during offline time, matching what would have happened if the player was active.
-
-- **State Serialization at Scale** - With 10,000+ game objects, save/load needed to be modular and efficient. Created a state module pattern where each feature type handles its own serialization, with `Decimal` objects converted to strings and compressed before storage.
-
-- **Memory Leaks on Reset** - Rebirth mechanics that reinitialize the game caused memory buildup. Solved by implementing a full `window.reload` bypass with state type stored in localStorage, ensuring clean reinitialization.
-
-## Outcomes
-
-The architecture scales well—adding new training types, zones, or upgrade paths requires only JSON changes and optional unlock conditions. The modifier system handles edge cases like self-referential cost reductions and cross-realm synergies without special-case code.
-
-Key learnings:
-- Data-driven design pays off exponentially as content grows
-- Event-driven architecture keeps managers decoupled and testable
-- Simulating time (vs. calculating) for offline gains is more accurate and surprisingly performant
-
-## Implementation Notes
-
-The core of the game is the modifier system. Every bonus in the game is a `Mod` with a source, target, and calculation type:
+- **Priority-Based Modifier System** - Upgrades needed to affect multiple targets (specific trainings, entire realms, or all features) with correct calculation order. Solved with a ModTree linked-list structure where each node has a priority determining evaluation order, supporting add, multiply, exponent, and tetration operations
 
 ```javascript
-export default class Mod extends Observable {
-  constructor(eventManager, id, name, type, priority, 
-              sourceID, sourceCalcType, targetType, targetID, 
-              runningCalcType, baseValue, value, active) {
-    this.priority = priority; // Lower = calculated first
-    this.runningCalcType = runningCalcType; // 'add', 'mult', 'pow'
-    this.modTreeReferences = []; // Nodes in target's calculation tree
-  }
+// ModTree calculates final values by traversing priority-sorted nodes
+performCalculation(type, val1, val2) {
+  const CALCULATION_TYPES = {
+    'add': (v1, v2) => v1.plus(v2),
+    'mult': (v1, v2) => v1.times(v2),
+    'exp': (v1, v2) => v2.pow(v1),
+    'tetra': (v1, v2) => v2.tetrate(v1)
+  };
+  return CALCULATION_TYPES[type](val1, val2);
 }
 ```
 
-Modifiers can target specific objects or entire categories (e.g., `allTrain` affects all training exercises). The `ModTree` rebuilds whenever a modifier activates, inserting nodes in priority order:
+- **Offline Progress Simulation** - Needed accurate idle gains that account for autobuying, unlocks, and compounding production. Implemented asynchronous chunk-based simulation that processes the game loop in 10-second intervals using setTimeout, preventing UI freeze while maintaining calculation accuracy
 
-```javascript
-// Priority assignment based on mod type
-// Base values: priority 1
-// Additive bonuses: priority 10
-// Multiplicative: priority 20
-// Exponential: priority 30
+- **Modular State Persistence** - With 20+ distinct feature types (trainings, zones, artifacts, skills, etc.), save/load needed clean separation. Created dedicated state handler classes for each feature type, with a central StateManager orchestrating serialization, lz-string compression, and rebirth-aware selective resets
+
+## Outcomes
+
+The modifier system successfully handles hundreds of active modifiers with type-targeting (e.g., `allTrain`, `forceTrain`) and priority-based calculation without circular dependencies. Offline processing accurately simulates extended idle periods while displaying a progress modal for longer calculations.
+
+Key architectural learnings:
+- Observer pattern via EventManager enables loose coupling between UI and game logic
+- Data-driven content (16 JSON files define all game features) allows rapid iteration without code changes
+- Separating "what to save" from "how to save" in state management simplified adding new features
+
+The game successfully implements multiple prestige layers, with Rebirth 1 (Essence) fully functional and architecture prepared for Rebirth 2 (Godhood) and Rebirth 3 (Transcendence) tiers.
+
+## Implementation Notes
+
+### Architecture Pattern
+
+The codebase follows a Mediator pattern with the Game class as central coordinator:
+
+```
+Game (Mediator)
+├── GameManager (Logic)
+│   ├── GameContent (All objects)
+│   ├── UnlockManager (Progression gates)
+│   └── AutomationManager (Autobuy)
+├── StateManager (Persistence)
+│   └── 20+ State modules
+├── EventManager (Observer pattern)
+└── GameUI (Presentation)
 ```
 
-The game loop runs at 100ms intervals, processing income updates, unlock checks, and UI refreshes:
+### Data-Driven Design
 
-```javascript
-this.incomeUpdateInterval = 100; // ms
-this.uiUpdateInterval = 100; // ms  
-this.unlockCheckInterval = 200;
+All game content is defined in JSON, making it easy to add new trainings, zones, or artifacts:
+
+```json
+// trainingData.json example
+{
+  "id": 1001,
+  "realmID": 10,
+  "name": "Running",
+  "costType": "force",
+  "costBase": 10,
+  "costGrowthRate": 1.15,
+  "prodType": "force",
+  "prodBase": 1,
+  "evolutions": [...]
+}
 ```
 
-Zone conquest uses a time-based system where the player's power level logarithmically reduces conquest duration, creating satisfying momentum as power grows.
+### ID Range System
+
+Organized ID allocation prevents collisions across feature types:
+- Realms: 10-40
+- Trainings: 1001-2201
+- Skills: 40001+
+- Zones: 90001+
+- Essence Upgrades: 100001+

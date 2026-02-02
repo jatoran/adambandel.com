@@ -1,115 +1,159 @@
 ---
 title: Search Gateway
-summary: Unified API layer aggregating 27+ search and extraction providers with intelligent routing, caching, and cost tracking
-date: 2025-01-15
-github: https://github.com/anomalyco/search-gateway
+summary: Unified REST API aggregating 27+ search and content extraction providers with fallbacks, caching, and cost tracking
+started: 2025-11-07
+updated: 2025-12-15
+type: api
+stack:
+  - Python
+  - FastAPI
+  - SQLite
+  - Redis
+  - Playwright
+  - Prometheus
+tags:
+  - developer-tools
+  - ai
+  - data
+  - automation
+loc: 19941
+files: 107
+architecture:
+  auth: API key
+  database: SQLite
+  api: REST
+  realtime: none
+  background: none
+  cache: SQLite + Redis
+  search: none
 ---
 
 ## Overview
 
-Search Gateway is a production-ready API aggregation layer that unifies access to 27+ search and content extraction providers behind a single, consistent interface. Instead of integrating with Brave, Tavily, DuckDuckGo, arXiv, GitHub, and dozens of other APIs individually, applications make one call to Search Gateway and let it handle provider selection, rate limiting, caching, fallbacks, and cost tracking.
+Search Gateway is a unified REST API that aggregates 27+ search and content extraction providers behind a single endpoint. It enables applications to query Brave, Tavily, DuckDuckGo, arXiv, GitHub, Reddit, YouTube, Wikipedia, and many more through consistent request/response schemas, with automatic fallback chains when providers fail.
 
-The system solves a common problem in AI and data applications: needing reliable, cost-effective access to multiple external APIs without building redundant infrastructure for each. It provides automatic failover when providers are down, transparent caching to reduce costs, and granular usage tracking across all providers.
+The gateway handles the complexity of managing multiple API keys, rate limits, cost tracking, and caching so consumers can focus on their search logic rather than provider integration. It is designed for AI agents, developer tools, and any application requiring reliable, cost-controlled access to diverse web search and content sources.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main dashboard Overview tab showing cache statistics (hit rate, entries), usage chart with provider breakdown, and recent requests table -->
-![Dashboard Overview](/images/projects/search-gateway/screenshot-1.png)
+<!-- SCREENSHOT: Swagger UI documentation page showing the /v1/search endpoint with request/response schemas -->
+![API Documentation](/images/projects/search-gateway/screenshot-1.png)
 
-<!-- SCREENSHOT: Providers tab showing grid of provider cards with status indicators, quota usage bars, and per-provider metrics -->
-![Provider Status Grid](/images/projects/search-gateway/screenshot-2.png)
-
-<!-- SCREENSHOT: Testing tab with operation selector dropdown, provider chooser, parameter form, and JSON response viewer showing search results -->
-![API Testing Interface](/images/projects/search-gateway/screenshot-3.png)
+<!-- SCREENSHOT: Prometheus metrics dashboard showing request rates, latencies, and cache hit ratios per provider -->
+![Metrics Dashboard](/images/projects/search-gateway/screenshot-2.png)
 
 ## Problem
 
-Modern applications often need data from multiple external APIs: web search for research, news feeds for monitoring, academic papers for citations, social media for sentiment analysis. Each provider has its own API design, authentication, rate limits, pricing model, and failure modes. Managing this complexity leads to:
+Modern applications often need to search the web, fetch articles, query academic papers, or extract content from URLs. Each provider (Brave, Tavily, DuckDuckGo, etc.) has different APIs, rate limits, pricing models, and capabilities. Managing 10+ provider integrations creates significant maintenance burden:
 
-- **Scattered integration code** duplicated across services
-- **No unified rate limiting** causing accidental overages
-- **Expensive cache misses** when the same query hits multiple providers
-- **No fallback** when a provider has an outage
-- **Opaque costs** spread across many billing dashboards
+- Different authentication mechanisms and API schemas
+- Varying rate limits requiring per-provider throttling
+- No unified fallback when a provider fails or rate-limits
+- Difficulty tracking costs across pay-per-use services
+- Redundant caching logic in each integration
 
-Search Gateway centralizes all of this into one deployable service.
+Search Gateway solves this by providing one API to rule them all, with intelligent routing, automatic retries, and comprehensive observability.
 
 ## Approach
 
-The gateway implements a layered architecture where each request flows through authentication, budget checks, rate limiting, cache lookup, provider selection, and finally the adapter layer.
-
 ### Stack
 
-- **API Framework** - FastAPI (Python 3.11+) for async request handling with automatic OpenAPI documentation
-- **Database** - SQLite for zero-config deployment with tables for cache, usage events, budgets, and idempotency keys
-- **Provider Adapters** - 27+ adapter classes inheriting from BaseAdapter with standardized retry logic and error handling
-- **Rate Limiting** - Token bucket algorithm for smooth traffic shaping with per-client, per-provider limits
-- **Reliability** - Circuit breaker pattern to prevent cascading failures when providers degrade
-- **Frontend** - Next.js dashboard with Recharts for usage visualization and interactive API testing
-- **Observability** - Prometheus metrics, OpenTelemetry tracing, structured JSON logging
+- **FastAPI** - High-performance async Python framework handling concurrent provider calls efficiently
+- **SQLite** - Lightweight persistence for response caching, usage tracking, and idempotency without external dependencies
+- **Redis** (optional) - Multi-replica rate limit coordination for horizontal scaling
+- **Playwright** - Headless browser extraction for JavaScript-heavy pages that block traditional crawlers
+- **Prometheus + OpenTelemetry** - Full observability with metrics export and distributed tracing
 
 ### Challenges
 
-- **Heterogeneous provider APIs** - Each provider returns different response formats. Solved by normalizing all responses to a unified schema (`SearchResult`, `ExtractResult`) while preserving provider-specific metadata in `provider_meta` fields.
+- **Provider abstraction** - Each of the 27+ providers has unique quirks. Created a `BaseAdapter` class with standardized retry logic, exponential backoff, and capability declarations. Adapters implement a consistent interface while handling provider-specific transformations internally.
 
-- **Intelligent provider selection** - Need to pick the best provider based on operation type, availability, cost, and rate limits. Implemented `ProviderSelector` that consults the catalog, circuit breaker state, and rate limiter before routing requests.
+- **Intelligent fallback routing** - Not all providers support all operations. Built a `ProviderSelector` that maps operations (search:web, search:news, extract:web, search:academic) to capable providers, respecting priority order and circuit breaker states.
 
-- **Cache key design** - Same logical query through different providers should share cache where semantically equivalent. Designed composite cache keys that factor in query, operation type, and relevant parameters while ignoring provider-specific options.
+- **Cost tracking accuracy** - Providers use different pricing models (per-request, per-credit, tiered plans). Implemented a cost estimation engine that reads provider catalog YAML and calculates real-time spend with tier awareness.
 
-- **Cost estimation before execution** - Budget enforcement requires knowing cost upfront, but some providers charge based on response size. Added pre-flight cost estimation with conservative defaults, then record actual cost post-execution.
+- **Stale-while-revalidate caching** - For high-availability, implemented cache modes that can serve stale data immediately while refreshing in the background, reducing perceived latency for non-critical freshness requirements.
 
 ## Outcomes
 
-The gateway handles production workloads with sub-10ms cache hits and configurable fallback chains that have successfully routed around provider outages. The provider catalog YAML format makes it easy to add new providers without code changes to the routing logic.
+The gateway successfully abstracts provider complexity, reducing integration effort from weeks to hours for new applications. Key achievements:
 
-Key technical wins:
-- **78%+ cache hit rate** for typical research workloads, dramatically reducing API costs
-- **Zero-downtime provider additions** via hot-reload of YAML configuration
-- **Unified cost dashboard** showing actual spend vs cached savings across all providers
-- **Idempotency support** preventing duplicate charges on network retries
+- **27+ providers** integrated with consistent schemas
+- **Sub-second** average response times with aggressive caching
+- **Zero-config fallbacks** that automatically route around failures
+- **Accurate cost tracking** enabling budget controls per client
+
+Learned the importance of defensive coding when dealing with third-party APIs - providers change schemas, rate limits, and behaviors without notice. The circuit breaker pattern proved essential for graceful degradation.
 
 ## Implementation Notes
 
-The adapter pattern provides clean separation between routing logic and provider specifics:
+### Provider Adapter Pattern
+
+Each provider extends `BaseAdapter` with standardized retry logic:
 
 ```python
-class BaseAdapter(ABC):
-    """All adapters inherit retry logic and error handling."""
+class BraveAdapter(BaseAdapter):
+    name = "brave"
+    base_url = "https://api.search.brave.com/res/v1"
     
-    async def _request_with_retry(
-        self,
-        method: str,
-        url: str,
-        *,
-        max_retries: int = 2,
-        non_retryable_codes: tuple = (400, 401, 403, 404),
-    ) -> httpx.Response:
-        # Exponential backoff with jitter
-        # Automatic 429 handling with Retry-After
-        # Circuit breaker integration
-        ...
+    def capabilities(self) -> Dict[str, Any]:
+        return {
+            "ops": ["search:web", "search:news", "ai:grounding"],
+            "filters_supported": ["include_domains", "freshness_days"],
+            "options_supported": ["max_results", "safesearch"],
+        }
+    
+    async def search(self, req: SearchRequestModel) -> List[SearchResult]:
+        response = await self._request_with_retry(
+            "GET", f"{self.base_url}/web/search",
+            params={"q": req.query, "count": req.options.max_results}
+        )
+        return self._transform_results(response.json())
 ```
 
-Provider configuration is declarative YAML:
+### Operation-Based Routing
+
+The selector routes by operation category, not just provider name:
+
+```python
+selection = selector.select(
+    operation="search:academic",  # Routes to arXiv, Semantic Scholar, OpenAlex
+    client_id=x_client_id,
+    fallback=True,
+)
+# Returns prioritized list: ["arxiv", "semantic_scholar", "openalex"]
+```
+
+### Rate Limiting with Token Bucket
+
+Per-client, per-provider rate limiting with burst allowance:
+
+```python
+class TokenBucket:
+    def allow(self) -> bool:
+        now = time.monotonic()
+        self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
+        if self.tokens >= 1:
+            self.tokens -= 1
+            return True
+        return False
+```
+
+### Provider Catalog Configuration
+
+All provider metadata lives in `provider-catalog.yaml`:
 
 ```yaml
 providers:
   brave:
-    ops: [search:web, search:news, ai:grounding, suggest]
+    ops: ["search:web", "search:news", "ai:grounding"]
     limits: { rps: 1, monthly_cap: 2000 }
     pricing_usd:
-      search:web: 0.003
-      ai:grounding:query: 0.004
+      "search:web": 0.003
     plans:
-      free: { limits: { monthly_cap: 2000 } }
-      base_ai: { limits: { monthly_cap: 20000000 } }
-```
-
-The fallback system supports automatic rerouting on various failure conditions:
-
-```yaml
-fallbacks:
-  search:web:
-    brave: { order: [tavily], on: [429, timeout, 5xx, circuit_open] }
-    tavily: { order: [brave], on: [429, timeout, 5xx, circuit_open] }
+      free:
+        limits: { rps: 1, monthly_cap: 2000 }
+      pro_ai:
+        limits: { rps: 50 }
+        pricing_usd: { "search:web": 0.009 }
 ```

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(git remote set-url:*)",
       "WebSearch",
-      "Bash(ren:*)"
+      "Bash(ren:*)",
+      "Bash(done)"
     ]
   }
 }

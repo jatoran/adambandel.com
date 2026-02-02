@@ -1,0 +1,344 @@
+---
+layout: default
+title: Metrics
+permalink: /metrics/
+---
+
+<style>
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.metric-card {
+    background: #eee8d5;
+    padding: 1.25rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #073642;
+    line-height: 1.2;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #93a1a1;
+    margin-top: 0.25rem;
+}
+
+.chart-container {
+    margin-bottom: 3rem;
+}
+
+.chart-container canvas {
+    max-height: 300px;
+}
+
+.breakdown-section {
+    margin-bottom: 3rem;
+}
+
+.breakdown-list {
+    list-style: none;
+    padding: 0;
+}
+
+.breakdown-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee8d5;
+}
+
+.breakdown-list li:last-child {
+    border-bottom: none;
+}
+
+.breakdown-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.breakdown-name {
+    min-width: 140px;
+    color: #073642;
+}
+
+.breakdown-fill {
+    height: 8px;
+    background: #268bd2;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.breakdown-count {
+    color: #93a1a1;
+    font-size: 0.9rem;
+    min-width: 30px;
+    text-align: right;
+}
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 600px) {
+    .two-col {
+        grid-template-columns: 1fr;
+    }
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.timeline-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee8d5;
+}
+
+.timeline-year {
+    font-weight: 600;
+    color: #073642;
+    min-width: 50px;
+}
+
+.timeline-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.timeline-fill {
+    height: 20px;
+    background: linear-gradient(90deg, #268bd2, #2aa198);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.5rem;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 30px;
+}
+</style>
+
+{% comment %} Calculate all metrics {% endcomment %}
+{% assign total_loc = 0 %}
+{% assign total_files = 0 %}
+{% assign project_count = site.projects | size %}
+
+{% for project in site.projects %}
+    {% if project.loc %}{% assign total_loc = total_loc | plus: project.loc %}{% endif %}
+    {% if project.files %}{% assign total_files = total_files | plus: project.files %}{% endif %}
+{% endfor %}
+
+{% comment %} Get date range {% endcomment %}
+{% assign sorted_by_start = site.projects | sort: "started" %}
+{% assign earliest = sorted_by_start | first %}
+{% assign sorted_by_update = site.projects | sort: "updated" | reverse %}
+{% assign latest = sorted_by_update | first %}
+
+{% comment %} Count types {% endcomment %}
+{% assign types = "web-app,cli,api,data-pipeline,desktop,browser-extension,library,game" | split: "," %}
+
+{% comment %} Collect all stack items {% endcomment %}
+{% assign all_stack = "" %}
+{% for project in site.projects %}
+    {% for tech in project.stack %}
+        {% assign all_stack = all_stack | append: tech | append: "," %}
+    {% endfor %}
+{% endfor %}
+
+{% comment %} Collect all tags {% endcomment %}
+{% assign all_tags = "" %}
+{% for project in site.projects %}
+    {% for tag in project.tags %}
+        {% assign all_tags = all_tags | append: tag | append: "," %}
+    {% endfor %}
+{% endfor %}
+
+<h1>Metrics</h1>
+
+<p style="margin-bottom: 2rem; color: #93a1a1;">Aggregate statistics across all portfolio projects.</p>
+
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-value">{{ total_loc | divided_by: 1000 }}k</div>
+        <div class="metric-label">Lines of Code</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{{ total_files }}</div>
+        <div class="metric-label">Source Files</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{{ project_count }}</div>
+        <div class="metric-label">Projects</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">{% if total_loc > 0 and project_count > 0 %}{{ total_loc | divided_by: project_count | divided_by: 1000 }}k{% else %}—{% endif %}</div>
+        <div class="metric-label">Avg LOC/Project</div>
+    </div>
+</div>
+
+<div class="two-col">
+    <div class="breakdown-section">
+        <h2>By Type</h2>
+        <ul class="breakdown-list">
+            {% for type in types %}
+                {% assign type_count = site.projects | where: "type", type | size %}
+                {% if type_count > 0 %}
+                    {% assign percentage = type_count | times: 100 | divided_by: project_count %}
+                    <li>
+                        <div class="breakdown-bar">
+                            <span class="breakdown-name">{{ type }}</span>
+                            <div class="breakdown-fill" style="width: {{ percentage }}%;"></div>
+                        </div>
+                        <span class="breakdown-count">{{ type_count }}</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="breakdown-section">
+        <h2>By Domain</h2>
+        <ul class="breakdown-list" id="tags-list">
+            {% comment %} This will be populated by JavaScript for accurate counting {% endcomment %}
+        </ul>
+    </div>
+</div>
+
+<div class="breakdown-section">
+    <h2>Technology Stack</h2>
+    <ul class="breakdown-list" id="stack-list">
+        {% comment %} This will be populated by JavaScript for accurate counting {% endcomment %}
+    </ul>
+</div>
+
+<div class="breakdown-section">
+    <h2>Projects by Year</h2>
+    <div id="timeline">
+        {% comment %} Group projects by year {% endcomment %}
+    </div>
+</div>
+
+<div class="breakdown-section">
+    <h2>Architecture Patterns</h2>
+    <div class="two-col">
+        <div>
+            <h3 style="margin-top: 0;">Databases</h3>
+            <ul class="breakdown-list" id="db-list"></ul>
+        </div>
+        <div>
+            <h3 style="margin-top: 0;">API Styles</h3>
+            <ul class="breakdown-list" id="api-list"></ul>
+        </div>
+    </div>
+</div>
+
+<script>
+// Project data from Jekyll
+const projects = [
+    {% for project in site.projects %}
+    {
+        title: {{ project.title | jsonify }},
+        started: {{ project.started | jsonify }},
+        updated: {{ project.updated | jsonify }},
+        type: {{ project.type | jsonify }},
+        loc: {{ project.loc | default: 0 }},
+        files: {{ project.files | default: 0 }},
+        stack: {{ project.stack | jsonify | default: "[]" }},
+        tags: {{ project.tags | jsonify | default: "[]" }},
+        architecture: {{ project.architecture | jsonify | default: "{}" }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+];
+
+const projectCount = projects.length;
+
+// Count occurrences in array
+function countItems(items) {
+    const counts = {};
+    items.forEach(item => {
+        if (item && item !== 'none') {
+            counts[item] = (counts[item] || 0) + 1;
+        }
+    });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+}
+
+// Render breakdown list
+function renderBreakdown(elementId, data, maxItems = 10) {
+    const list = document.getElementById(elementId);
+    const topItems = data.slice(0, maxItems);
+    const maxCount = topItems.length > 0 ? topItems[0][1] : 1;
+
+    list.innerHTML = topItems.map(([name, count]) => {
+        const percentage = (count / maxCount) * 100;
+        return `
+            <li>
+                <div class="breakdown-bar">
+                    <span class="breakdown-name">${name}</span>
+                    <div class="breakdown-fill" style="width: ${percentage}%;"></div>
+                </div>
+                <span class="breakdown-count">${count}</span>
+            </li>
+        `;
+    }).join('');
+}
+
+// Stack breakdown
+const allStack = projects.flatMap(p => p.stack || []);
+renderBreakdown('stack-list', countItems(allStack), 12);
+
+// Tags breakdown
+const allTags = projects.flatMap(p => p.tags || []);
+renderBreakdown('tags-list', countItems(allTags), 8);
+
+// Database breakdown
+const allDbs = projects.map(p => p.architecture?.database).filter(Boolean);
+renderBreakdown('db-list', countItems(allDbs), 8);
+
+// API breakdown
+const allApis = projects.map(p => p.architecture?.api).filter(Boolean);
+renderBreakdown('api-list', countItems(allApis), 8);
+
+// Timeline by year
+const yearCounts = {};
+projects.forEach(p => {
+    if (p.started) {
+        const year = p.started.substring(0, 4);
+        yearCounts[year] = (yearCounts[year] || 0) + 1;
+    }
+});
+
+const years = Object.entries(yearCounts).sort((a, b) => a[0] - b[0]);
+const maxYearCount = Math.max(...years.map(y => y[1]));
+
+document.getElementById('timeline').innerHTML = years.map(([year, count]) => {
+    const percentage = (count / maxYearCount) * 100;
+    return `
+        <div class="timeline-item">
+            <span class="timeline-year">${year}</span>
+            <div class="timeline-bar">
+                <div class="timeline-fill" style="width: ${percentage}%;">${count}</div>
+            </div>
+        </div>
+    `;
+}).join('');
+</script>

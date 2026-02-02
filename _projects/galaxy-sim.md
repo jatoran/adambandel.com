@@ -1,130 +1,128 @@
 ---
 title: Galaxy Sim
-summary: A 4X space strategy simulation featuring 10 AI factions with distinct personalities competing for galactic dominance through combat, diplomacy, and expansion.
-date: 2025-05-19
+summary: 4X space strategy simulation with multi-layer AI factions competing for galactic dominance
+started: 2025-05-19
+updated: 2026-01-05
+type: game
 github: https://github.com/jatoran/galaxy-sim
+stack:
+  - Python
+  - Pygame
+  - Custom ECS
+tags:
+  - ai
+  - game-dev
+  - simulation
+loc: 8672
+files: 50
 ---
 
 ## Overview
 
-Galaxy Sim is an autonomous 4X space strategy simulation where multiple AI-controlled factions compete for control of a procedurally generated galaxy. Unlike traditional strategy games, there is no human player - the entire simulation runs autonomously, showcasing emergent gameplay as AI empires expand, form alliances, wage wars, and adapt their strategies based on the evolving galactic situation.
+Galaxy Sim is a 4X (eXplore, eXpand, eXploit, eXterminate) space strategy simulation where 10 AI-controlled factions compete for galactic dominance. Each faction operates autonomously through a sophisticated multi-layer AI system, managing colonization, fleet movements, combat, diplomacy, research, and economic development across a procedurally generated spiral galaxy.
 
-The project serves as both a sandbox for AI decision-making experimentation and a visualization of complex multi-agent systems. Each faction operates with a unique personality that influences whether they prefer aggressive expansion, defensive fortification, or economic development.
+The simulation runs in real-time with a Pygame visualization layer, rendering the galaxy map with faction territories, fleet movements, and combat encounters. What makes this project unique is its focus on emergent gameplay through complex AI decision-making rather than player input—it's essentially a galaxy-scale civilization simulation that runs itself.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main galaxy view showing the spiral arm layout with colored star systems representing faction territories, fleet triangles in motion, and the side panel displaying faction rankings -->
-![Galaxy overview](/images/projects/galaxy-sim/screenshot-1.png)
+<!-- SCREENSHOT: Galaxy overview showing spiral arm distribution with multiple colored faction territories, fleet icons in transit, and the sidebar UI panel -->
+![Galaxy Overview](/images/projects/galaxy-sim/screenshot-1.png)
 
-<!-- SCREENSHOT: Side panel expanded for a faction showing diplomatic relations, AI plan status, fleet counts, and system details with build queues -->
-![Faction details panel](/images/projects/galaxy-sim/screenshot-2.png)
+<!-- SCREENSHOT: Close-up of a contested border region showing fleet combat, system ownership changes, and defense structure icons -->
+![Combat and Expansion](/images/projects/galaxy-sim/screenshot-2.png)
 
-<!-- SCREENSHOT: Combat in progress - multiple fleet triangles converging on a contested star system with visible ownership change -->
-![Fleet combat](/images/projects/galaxy-sim/screenshot-3.png)
+<!-- SCREENSHOT: Late-game state showing dominant faction expansion with eliminated factions and remaining contested territories -->
+![Late-Game Dominance](/images/projects/galaxy-sim/screenshot-3.png)
 
 ## Problem
 
-Most 4X game AI implementations are reactive and predictable - they follow scripted behaviors that players quickly learn to exploit. Real strategic depth requires AI that can:
-
-- Assess threats dynamically and prioritize targets intelligently
-- Form and break alliances based on shifting power dynamics
-- Balance economic development against military expansion
-- Recognize when they're dominant and press advantages, or when they're weak and need to consolidate
-
-This project explores building AI systems that exhibit these emergent strategic behaviors without hardcoded decision trees.
+Traditional 4X strategy games rely on scripted AI behaviors that become predictable after a few playthroughs. I wanted to explore whether decomposing AI decision-making into specialized subsystems—each with its own domain expertise—could produce more emergent and interesting faction behaviors. The goal was to create a simulation where watching AI factions compete would be genuinely unpredictable and engaging.
 
 ## Approach
 
-The simulation uses a layered architecture that separates concerns cleanly while allowing complex emergent behavior.
+The core architectural decision was separating strategic concerns into independent AI modules that communicate through a central orchestrator, rather than building a monolithic decision engine.
 
 ### Stack
 
-- **Python 3.12** - Modern Python with type hints for cleaner AI logic and dataclasses
-- **Pygame** - Real-time visualization of the galaxy, fleets, and faction territories
-- **Entity Component System** - Custom ECS with spatial indexing for efficient queries across hundreds of entities
-- **Event-driven Architecture** - Decoupled systems communicate via an event bus for fleet arrivals, combat resolution, and system captures
+- **Python 3.12** - Primary language, chosen for rapid prototyping and dataclass support
+- **Pygame** - Real-time visualization of galaxy state, fleet movements, and combat
+- **Custom ECS** - Entity Component System architecture optimized for spatial queries and cache efficiency
+- **JSON Configuration** - Data-driven design for ships, structures, technologies, and faction definitions
 
 ### Architecture
 
-The AI operates through a multi-layer decision system:
+The game uses an **Entity Component System** pattern where:
+- Entities are integer IDs representing star systems and fleets
+- Components are dataclasses (Position, Fleet, Owner, StarSystem) stored in contiguous arrays
+- Systems operate on entities with specific component combinations each frame/turn
+
+The AI architecture splits decision-making across five specialized modules:
 
 ```
-AIOrchestrator
-    |
-    +-- EmpireAI (strategic planning)
-    +-- MilitaryAI (fleet operations) 
-    +-- EconomicAI (production/resources)
-    +-- DiplomacyAI (alliances/threats)
+┌─────────────────────────────────────────────────┐
+│              AI Orchestrator                     │
+│  (Merges proposals, applies resource constraints)│
+└─────────────────────────────────────────────────┘
+         ▲           ▲           ▲           ▲
+         │           │           │           │
+    ┌────┴────┐ ┌────┴────┐ ┌────┴────┐ ┌────┴────┐
+    │ Empire  │ │Military │ │Economic │ │Research │
+    │   AI    │ │   AI    │ │   AI    │ │   AI    │
+    └─────────┘ └─────────┘ └─────────┘ └─────────┘
 ```
 
-Each layer proposes actions that the orchestrator merges, prioritizes by strategic context, and filters for resource feasibility.
+Each sub-AI proposes actions within its domain. The orchestrator filters by affordability, resolves conflicts, and prioritizes execution.
 
 ### Challenges
 
-- **Action Prioritization** - Solved by dynamic priority scoring based on the empire's current strategic plan. A faction in "expand" mode weights colony ship movements at 94 priority vs 80 for combat fleets, while an "invade_neighbor" faction inverts these.
+- **AI Coordination** - Initially, sub-AIs would propose conflicting actions (e.g., EconomicAI wants to build farms while MilitaryAI needs ships). Solved by implementing a priority queue in the orchestrator with resource reservation, letting higher-priority actions claim resources first.
 
-- **Dominance Recognition** - Early versions had dominant factions stall because they saw no threats. Added strategic intelligence gathering that detects power ratios and triggers "overwhelming" or "dominant" modes with appropriately aggressive strategies.
+- **Combat Balance** - Early combat was deterministic and boring. Added synergy mechanics (scouts boost destroyer damage), force ratio multipliers (overwhelming force deals bonus damage), and siege-style multi-round attrition to create more dynamic engagements.
 
-- **Combat Balance** - Initial combat was too attritional, leading to endless stalemates. Implemented force ratio modifiers where 3:1 advantages grant 1.5x damage dealt and 0.5x damage received, making decisive victories possible.
+- **Performance at Scale** - O(n²) distance checks between fleets and systems caused stuttering with 40+ systems. Implemented sector-based spatial indexing in `SpatialManager` for O(1) proximity lookups.
 
-- **Spatial Efficiency** - Naively iterating all entities for proximity checks scaled poorly. Implemented sector-based spatial bucketing that reduces fleet-to-system distance calculations from O(n*m) to O(bucket_size).
+- **Faction Differentiation** - Making 10 factions feel distinct required more than just different colors. Each faction has personality traits (aggressiveness 0-1.0, defensiveness, expansion_desire), economic modifiers (extraction multiplier, population growth), and preferred research paths that meaningfully affect their behavior.
 
 ## Outcomes
 
-The simulation successfully produces emergent strategic behavior:
+The multi-layer AI architecture produces genuinely emergent behavior. Factions form opportunistic alliances against dominant powers, recognize when they have overwhelming advantage and switch to aggressive elimination strategies, and adapt their expansion patterns based on border threats. The simulation rarely plays out the same way twice.
 
-- Factions form temporary alliances against dominant powers, then betray allies once the threat is eliminated
-- Aggressive personalities like the "Imperium of Dominion" (aggressiveness: 1.0) consistently attempt military expansion while defensive factions like "Orion Confederacy" (defensiveness: 0.8) turtle and fortify
-- Economic pressure from fleet maintenance forces factions to make strategic choices rather than building infinite armies
-- Combat outcomes feel decisive - overwhelming force crushes defenders quickly, while evenly matched battles attrit both sides
-
-The ECS architecture with spatial indexing handles 40+ star systems and 50+ fleets at 60 FPS without performance issues.
+Key technical insights:
+- **Decomposition pays off** - Specialized AI modules are easier to tune and debug than monolithic decision trees
+- **Event-driven communication** - Using an event bus for inter-system messaging (e.g., fleet arrival triggers combat check) kept systems decoupled and testable
+- **Data-driven design** - Defining ships, structures, and factions in JSON made balancing iterations much faster
 
 ## Implementation Notes
 
-### Strategic Intelligence Gathering
-
-Each faction gathers comprehensive intelligence before making decisions:
+The ECS uses array-based storage for frequently accessed components to maximize cache efficiency:
 
 ```python
-@dataclass
-class IntelReport:
-    our_strength: float = 0.0
-    enemies: List[Tuple[str, float, int]] = field(default_factory=list)
-    power_rank: int = 1  # 1 = strongest
-    threatened_systems: List[int] = field(default_factory=list)
-    weakly_defended_targets: List[Tuple[int, float, str]] = field(default_factory=list)
+class ECSManager:
+    def __init__(self):
+        self._positions: list[PositionComponent | None] = []
+        self._fleets: list[FleetComponent | None] = []
+        self._movements: list[MovementComponent | None] = []
+        self._live_fleets: set[int] = set()  # O(n) iteration without scanning
 ```
 
-This enables nuanced decisions like "I'm rank 2 but my nearest enemy is weak - attack them before they ally with rank 1."
-
-### Force Ratio Combat
-
-Combat applies multipliers based on relative strength:
+Combat calculates damage through synergy bonuses and force ratio multipliers:
 
 ```python
-def calculate_force_ratio_modifiers(attacker_strength, defender_strength):
-    ratio = attacker_strength / max(1, defender_strength)
-    if ratio > 3.0:
-        return {"attacker_damage_mult": 1.5, "defender_damage_mult": 0.5}
-    elif ratio > 2.0:
-        return {"attacker_damage_mult": 1.3, "defender_damage_mult": 0.7}
-    # ... graduated scale
+def calculate_synergy_bonus(attacker_fleet: dict) -> float:
+    scouts = attacker_fleet.get("scout", 0)
+    destroyers = attacker_fleet.get("destroyer", 0)
+    if scouts > 0 and destroyers > 0:
+        return 1.0 + min(scouts / destroyers, 0.3)  # Up to 30% bonus
+    return 1.0
 ```
 
-### Faction Personality System
+The galaxy is procedurally generated using spiral arm distribution:
 
-Ten factions with distinct strategic profiles defined in JSON:
-
-```json
-{
-  "id": "imperium_of_dominion",
-  "personality": {
-    "aggressiveness": 1.0,
-    "defensiveness": 0.2,
-    "expansion_desire": 0.6
-  }
-}
+```python
+for i in range(num_systems):
+    arm_index = random.randint(0, spiral_arms - 1)
+    base_angle = (2 * math.pi / spiral_arms) * arm_index
+    t = random.random()
+    radius = (t ** 0.8) * max_radius  # Denser toward center
+    theta = base_angle + arm_spread * t * 2 * math.pi
 ```
-
-These values directly influence AI decision weights, creating genuinely different playstyles across factions.

@@ -1,90 +1,108 @@
 ---
 title: Gallery of Conceptual Lenses
-summary: A perspective engineering tool that selects maximally diverse analytical frameworks for complex problems using embedding-space geometry.
-date: 2025-01-15
+summary: Diversity-maximizing engine that selects orthogonal analytical frameworks for multi-perspective problem analysis
+started: 2025-05-18
+updated: 2025-11-26
+type: web-app
+stack:
+  - Python
+  - Streamlit
+  - OpenAI Embeddings
+  - sentence-transformers
+  - NumPy
+  - scikit-learn
+  - UMAP
+  - Plotly
+tags:
+  - ai
+  - developer-tools
+  - data
+loc: 2338
+files: 3
+architecture:
+  auth: API key
+  database: none
+  api: REST
+  realtime: none
+  background: none
+  cache: file
+  search: none
 ---
 
 ## Overview
 
-Gallery of Conceptual Lenses is a "perspective engineering" engine that inverts the typical semantic search paradigm. Rather than finding concepts *similar* to a problem, it finds concepts that are *relevantly different* - constructing a maximum-entropy bounding box of analytical frameworks around any complex question.
+Gallery of Conceptual Lenses is a perspective engineering engine that goes beyond traditional semantic search to construct a "maximum entropy bounding box" of diverse analytical frameworks around any problem statement. Rather than finding similar concepts, it optimizes for *diversity within relevance*—forcing users to examine issues through distinct, non-obvious theoretical lenses from disciplines, philosophies, and cognitive frameworks they might never have considered.
 
-The tool addresses a fundamental limitation of LLM reasoning: the tendency toward premature convergence on familiar solutions. By forcing analysis through deliberately orthogonal lenses (e.g., "Quantum Metrology x Afro-Futurism x Red-Teaming"), it expands the cognitive search space before synthesis occurs.
+The system maintains a curated taxonomy of 1000+ concepts across eight dimensions (disciplines, epistemic schools, rhetorical styles, value frameworks, formal structures, cognitive bias probes, temporal horizons, and scale granularities), then applies MaxMin greedy optimization to select a set of lenses that are both relevant to the problem and maximally distant from each other in semantic space.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Streamlit UI showing the Lens Discovery tab with a problem statement entered, knob selection panel visible, and the 2D PCA/UMAP visualization displaying chosen lenses (green circles) spread around the centered problem point (pink star) -->
+<!-- SCREENSHOT: Streamlit UI showing the main "Lens Discovery" tab with a problem statement entered and the diversity-relevance parameter sliders visible -->
 ![Lens Discovery Interface](/images/projects/gallery-of-conceptual-lenses/screenshot-1.png)
 
-<!-- SCREENSHOT: The pairwise cosine similarity heatmap showing low correlation (dark colors) between selected lenses, demonstrating the MaxMin diversity algorithm's effectiveness -->
-![Diversity Heatmap](/images/projects/gallery-of-conceptual-lenses/screenshot-2.png)
+<!-- SCREENSHOT: UMAP 2D visualization showing the problem (pink), selected lenses (green), and candidate pool (blue/gray) with clear separation between chosen lenses -->
+![UMAP Diversity Visualization](/images/projects/gallery-of-conceptual-lenses/screenshot-2.png)
 
-<!-- SCREENSHOT: The Synapse Orchestrator tab showing Phase 1 parallel lens analyses expanded, with multiple lens perspectives displayed side-by-side -->
-![SynapseFlow Orchestrator](/images/projects/gallery-of-conceptual-lenses/screenshot-3.png)
+<!-- SCREENSHOT: Pairwise similarity heatmap of the final selected lenses demonstrating low inter-lens correlation -->
+![Lens Diversity Heatmap](/images/projects/gallery-of-conceptual-lenses/screenshot-3.png)
 
 ## Problem
 
-Complex problems require multiple perspectives, but humans and LLMs naturally gravitate toward familiar frameworks. Traditional semantic search exacerbates this by returning *similar* concepts when what's needed are *different-but-relevant* ones.
+When analyzing complex problems, humans default to familiar frameworks—an economist sees market failures, an engineer sees systems to optimize, a philosopher sees ethical dilemmas. This tunnel vision limits solution quality. Existing tools like semantic search only exacerbate this by returning *similar* content, reinforcing existing biases rather than challenging them.
 
-The challenge: How do you systematically discover analytical lenses that are semantically grounded in a problem while being maximally different from each other?
+The goal was to build a system that could systematically inject intellectual diversity into any analysis, surfacing perspectives from quantum physics, indigenous knowledge systems, game theory, deep ecology, or chaos mathematics—whichever combination maximizes the analytical coverage of the problem space.
 
 ## Approach
 
-The system treats perspective selection as a geometric optimization problem in embedding space.
-
 ### Stack
 
-- **Embeddings** - OpenAI `text-embedding-3-large` (1536-dim) or local `sentence-transformers` for converting concepts and problems into vector space
-- **Taxonomy Engine** - 11-category knowledge taxonomy (2000+ concepts across disciplines, epistemic schools, reasoning modes, cultural roots, etc.) stored in `lenses_config.py`
-- **Diversity Algorithm** - Custom MaxMin greedy selection that maximizes the minimum distance between chosen lenses
-- **Visualization** - Plotly for interactive 2D projections (PCA centered on problem), Seaborn for similarity heatmaps
-- **Interface** - Streamlit for interactive exploration, argparse CLI for batch processing
-- **Orchestration** - SynapseFlow multi-agent system for parallel LLM analysis through selected lenses
+- **Streamlit** - Interactive UI for real-time parameter tuning and visualization; same codebase supports CLI for batch processing
+- **OpenAI text-embedding-3-large** - High-dimensional (1536d) semantic representations for taxonomy concepts and problem statements
+- **sentence-transformers** - Local fallback embeddings for offline development and cost reduction
+- **scikit-learn** - Cosine similarity calculations and candidate filtering
+- **UMAP** - Dimensionality reduction for intuitive 2D visualization of the lens selection process
+- **NumPy** - Vector operations including the composite lens averaging strategy
 
 ### Challenges
 
-- **Combinatorial Explosion** - With 11 taxonomy categories and multi-part lens combinations (e.g., Discipline x Epistemic School x Reasoning Mode), the candidate space reaches billions. Solved with Monte Carlo sampling that generates up to 10,000 random candidates while maintaining uniform probability across the space.
+- **Combinatorial explosion** - With 8 taxonomy dimensions and hundreds of values each, full enumeration is intractable. Solved via Monte Carlo reservoir sampling that caps candidate pools at ~10,000 while maintaining statistical representativeness.
 
-- **Noise in Composite Lenses** - Multi-part lenses like "Quantum Optics x Afro-Pessimism x Haiku Sequence" can produce semantically incoherent embeddings. Addressed with dynamic relevance thresholds that increase proportionally with lens complexity (+0.025 per additional part).
+- **Composite lens semantics** - Multi-part lenses like "Game Theory × Deep Ecology" don't exist in embedding space. Implemented on-the-fly vector averaging with dynamic threshold adjustment (+0.025 per part beyond 2) to prevent noisy combinations from appearing falsely relevant.
 
-- **Visualization of High-Dimensional Geometry** - Standard UMAP/t-SNE distorts the actual distance relationships we're optimizing for. Solved by centering PCA on the problem vector and fitting axes only on chosen lenses, making the selection geometry interpretable.
+- **Diversity vs relevance tension** - Pure diversity optimization ignores problem context; pure relevance optimization returns similar lenses. The MaxMin greedy algorithm with minimum separation constraints (0.15 cosine distance) achieves the optimal trade-off.
 
 ## Outcomes
 
-The system reliably produces lens sets with low pairwise similarity (typically 0.2-0.4 cosine) while maintaining semantic relevance to the input problem. The SynapseFlow Orchestrator demonstrates that parallel, lens-segregated LLM analysis followed by friction-aware synthesis produces richer insights than single-pass reasoning.
+The system successfully generates lens sets where every pair has low semantic overlap, verified visually via the pairwise heatmap. In practice, a problem like "impact of AI on employment" might yield lenses spanning behavioral economics, philosophy of mind, labor history, systems dynamics, and speculative fiction—none of which an unaided human would likely combine.
 
-Key learnings: Embedding space geometry is surprisingly effective for "diversity optimization" problems. The MaxMin algorithm, despite its simplicity, consistently outperforms random sampling for perspective coverage.
+The architecture demonstrates that diversity optimization is a tractable alternative to similarity search for certain creative and analytical applications. The embedding cache strategy reduces API costs by 95%+ after initial taxonomy pre-computation.
 
 ## Implementation Notes
 
-The core selection algorithm is a greedy MaxMin approach:
+The core diversity selection uses a MaxMin greedy algorithm that anchors on the most relevant lens, then iteratively selects whichever remaining candidate maximizes the minimum distance to all already-selected lenses:
 
 ```python
-# Anchor: highest relevance to problem
-first_lens = argmax(similarity_to_problem)
+def step4_pick_far_apart_lenses(relevant_lenses, n_lenses, min_separation):
+    # Anchor: highest similarity to problem
+    chosen = [max(relevant_lenses, key=lambda x: x.similarity)]
 
-# Iterative: maximize minimum distance to already-selected set  
-while len(selected) < max_lenses:
-    next_lens = argmax(
-        min(1 - cosine_sim(candidate, selected_lens) 
-            for selected_lens in selected)
-        for candidate in remaining_candidates
-    )
-    if min_distance < separation_threshold:
-        break
-    selected.append(next_lens)
+    while len(chosen) < n_lenses:
+        best_candidate = None
+        best_min_dist = -1
+
+        for candidate in remaining:
+            # MaxMin criterion: maximize the minimum distance
+            min_dist = min(cosine_distance(candidate, c) for c in chosen)
+            if min_dist > best_min_dist and min_dist >= min_separation:
+                best_min_dist = min_dist
+                best_candidate = candidate
+
+        if best_candidate:
+            chosen.append(best_candidate)
+        else:
+            break  # No candidates meet separation threshold
+
+    return chosen
 ```
 
-The taxonomy spans 11 knowledge categories:
-- `discipline` - 150+ scientific/technical fields
-- `epistemic_school` - 160+ philosophical frameworks  
-- `reasoning_mode` - 140+ analytical techniques
-- `framework_or_theory` - 140+ formal theories
-- `rhetoric_style` - 95+ output formats
-- `cultural_root` - 90+ mythological/folkloric traditions
-- `perspective_role` - 70+ stakeholder viewpoints
-- `temporal_lens` - 90+ historical/future periods
-- `scale_granularity` - 80+ measurement scales
-- `value_framework` - 100+ ethical/value metrics
-- `cognitive_bias_probe` - 65+ bias checks
-
-Composite lenses are computed as the mean of constituent embeddings, enabling arbitrary cross-category combinations without additional API calls.
+The dual CLI/Streamlit architecture detects runtime environment via `sys.streamlit_is_running`, enabling the same `main.py` to serve both headless batch processing and interactive exploration without code duplication.

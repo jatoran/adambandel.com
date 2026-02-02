@@ -1,67 +1,93 @@
 ---
 title: Task Windows
-summary: A rolling 3-day window task manager with drag-and-drop scheduling and capacity planning
-date: 2024-12-01
+summary: A time-boxing task manager with 3-day windows, drag-and-drop scheduling, and capacity tracking
+started: 2025-11-20
+updated: 2025-11-30
+type: web-app
+stack:
+  - TypeScript
+  - Next.js 16
+  - React 19
+  - Zustand
+  - TailwindCSS
+  - dnd-kit
+tags:
+  - productivity
+  - developer-tools
+loc: 8036
+files: 33
+architecture:
+  auth: none
+  database: none
+  api: REST
+  realtime: none
+  background: none
+  cache: in-memory
+  search: none
 ---
 
 ## Overview
 
-Task Windows is a desktop-first personal task manager built around a unique "rolling window" paradigm. Instead of infinite backlogs or rigid daily lists, tasks are scheduled into overlapping 3-day windows that naturally handle deadline pressure while maintaining flexibility.
+Task Windows is a novel approach to task management that organizes work into rolling 3-day time windows rather than traditional single-day calendars. Each window represents a contiguous block of time where tasks can be scheduled, with built-in capacity tracking to prevent overcommitment. The application features a polished drag-and-drop interface with modifier-key workflows for rapid task organization.
 
-The application provides real-time capacity planning, multi-day task spans with ghost card visualization, and a modifier-key enhanced drag-and-drop system for rapid task organization. It's designed for knowledge workers who need to balance deep work with responsive scheduling.
+The system treats time as a sliding window: today's window covers the next 3 days, and tasks can span multiple windows to represent longer-duration work. This approach acknowledges that many tasks don't fit neatly into a single day while maintaining focus on what's actionable now.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main dashboard showing multiple rolling windows with tasks, the capacity bars, and the sidebar with backlog visible -->
-![Dashboard Overview](/images/projects/task-windows/screenshot-1.png)
+<!-- SCREENSHOT: Main dashboard showing multiple window columns with tasks, the capacity bars, and the current window highlighted -->
+![Main Dashboard](/images/projects/task-windows/screenshot-1.png)
 
-<!-- SCREENSHOT: Drag-and-drop in action with Shift key held, showing the point assignment overlay zones -->
-![Quick Point Assignment](/images/projects/task-windows/screenshot-2.png)
+<!-- SCREENSHOT: Drag-and-drop in action with the Shift modifier overlay showing point assignment zones -->
+![Point Assignment Overlay](/images/projects/task-windows/screenshot-2.png)
 
-<!-- SCREENSHOT: Calendar heatmap in sidebar showing task load distribution across days -->
-![Calendar Heatmap](/images/projects/task-windows/screenshot-3.png)
-
-<!-- SCREENSHOT: Dark mode view with expanded window showing task details and context labels -->
-![Dark Mode Detail View](/images/projects/task-windows/screenshot-4.png)
+<!-- SCREENSHOT: Sidebar panel open showing the inbox/backlog, heatmap calendar, and project hierarchy -->
+![Sidebar with Heatmap](/images/projects/task-windows/screenshot-3.png)
 
 ## Problem
 
-Traditional task managers force users into one of two extremes: rigid daily planning that breaks when priorities shift, or endless backlogs that obscure what actually needs attention. Neither approach handles the reality of knowledge work where tasks have varying urgency, some work spans multiple days, and capacity limits are real but soft.
+Traditional calendar-based task managers force users to assign tasks to specific days, which creates friction when tasks don't fit neatly into 24-hour blocks. This leads to constant rescheduling as tasks slip from one day to the next. Additionally, most tools lack capacity awareness, making it easy to overcommit without realizing it until burnout sets in.
 
-The goal was to create a system that makes "what should I work on in the next few days?" immediately visible while providing enough structure to prevent overcommitment.
+The goal was to create a task manager that:
+- Treats time as flexible 3-day windows rather than rigid days
+- Tracks capacity with a point-based system to prevent overcommitment
+- Supports multi-day tasks that "ghost" across their span
+- Enables rapid reorganization through keyboard-modified drag operations
 
 ## Approach
 
-The core innovation is the **rolling window model**: each window represents 3 consecutive days, and windows overlap. A task scheduled for Monday's window remains visible (as a ghost) through Wednesday, naturally handling the common pattern of work that slips or spans sessions.
+The solution centers on a custom "engine" that generates the visible window state from a flat list of tasks. Each task has a home window index and a span, and the engine projects these into the appropriate windows, creating ghost instances where tasks extend beyond their home.
 
 ### Stack
 
-- **Framework** - Next.js 16 with App Router for hybrid rendering and API routes
-- **State Management** - Zustand for performant, subscription-based reactive state
-- **Drag & Drop** - dnd-kit for accessible, flexible drag interactions with custom collision detection
-- **Styling** - Tailwind CSS with dark mode support via next-themes
-- **Data Layer** - JSON file persistence for zero-dependency portability
-- **Rich Text** - TipTap for note editing within project/context slide-overs
+- **Frontend Framework** - Next.js 16 with React 19 for the app router and server components
+- **State Management** - Zustand for global state with optimistic updates and API sync
+- **Drag and Drop** - dnd-kit for accessible, performant drag operations with custom collision detection
+- **Styling** - TailwindCSS with dark mode support via next-themes
+- **Data Persistence** - JSON file-based storage for cross-platform portability (see AGENTS.md for rationale)
+- **Date Handling** - date-fns with timezone support for the 4 AM day boundary logic
 
 ### Challenges
 
-- **Cross-platform portability** - Initially used better-sqlite3, but native module compilation failed when moving between Linux dev environments and Windows production. Solved by implementing a JSON file adapter with the same interface, ensuring the architecture can swap back to a real database later.
+- **Multi-window task visualization** - Tasks spanning multiple windows needed to appear as "ghosts" in non-home windows without duplicating the underlying data. Solved by generating display instances at render time based on home index and span.
 
-- **Modifier-key DnD zones** - Standard drag-and-drop doesn't account for keyboard modifiers changing the drop target semantics. Built a custom collision detection system that dynamically prioritizes point zones (Shift), context zones (Ctrl), or project zones (Alt) based on held keys.
+- **Capacity calculation** - Both per-window and 3-window cluster capacity needed tracking. Cluster capacity (adjacent windows) helps identify fatigue and overload patterns that single-window metrics miss.
 
-- **Ghost card consistency** - Tasks spanning multiple windows appear as "ghosts" in non-home windows. Maintaining sort order, selection state, and capacity calculations across these virtual instances required careful instance ID tracking (`taskId::window-index`).
+- **Modifier-key workflows** - Implemented custom collision detection in dnd-kit that prioritizes different drop zones based on held modifiers (Shift for points, Ctrl for contexts, Alt for projects). This enables power-user workflows without cluttering the UI.
 
-- **Capacity truth** - The engine calculates both window capacity (single window load) and cluster capacity (3-window rolling sum) to surface overcommitment. These metrics inform but don't block scheduling, respecting user autonomy.
+- **Mobile responsiveness** - Desktop uses button-based navigation between windows while mobile switches to native horizontal scroll with snap points. A ResizeObserver detects the breakpoint and adjusts the column count dynamically.
 
 ## Outcomes
 
-The rolling window model effectively surfaces near-term priorities without losing sight of backlogged work. The modifier-key shortcuts significantly reduce the clicks needed for common operations like adjusting task effort or moving work between contexts.
+The time-window mental model proves effective for managing flexible workloads. The capacity visualization catches overcommitment before it becomes a problem, and the ghost-task rendering provides visibility into upcoming work without manual date management.
 
-Key learnings from this project include designing state that supports multiple "views" of the same entity (anchor vs. ghost), building custom DnD behaviors on top of dnd-kit's flexible API, and the importance of portable data layers in personal tools.
+Key technical wins:
+- The engine pattern cleanly separates task storage from view computation
+- Optimistic updates with rollback provide a snappy user experience
+- The modifier-key overlay system scales to additional workflows without UI bloat
 
 ## Implementation Notes
 
-The engine (`src/lib/engine.ts`) is pure functional - it takes all tasks, the current date, and settings, then produces the complete application state including window contents, overdue items, and capacity metrics:
+The core engine generates window data from tasks:
 
 ```typescript
 export function generateEngineState(
@@ -69,48 +95,42 @@ export function generateEngineState(
     now: Date = new Date(), 
     viewOffset: number = 0,
     settings: Settings,
-    contexts: Context[],
-    projects: Project[],
+    contexts: Context[] = [],
+    projects: Project[] = [],
     visibleColumns: number = 4,
     dragSourceWindowIndex?: number | null
 ): AppState {
-    // Calculate logical date (4 AM CST boundary)
-    const currentLogicalDate = getLogicalDate(now);
-    const currentWindowIndex = getDayIndex(currentLogicalDate);
-    
-    // Generate visible windows with task distribution
-    // Ghost tasks appear in [home, home + span - 1] windows
-    // ...
+    // Tasks are distributed to windows based on home_window_index and span_windows
+    // Ghost instances created for i !== home where i is in [home, home + span - 1]
+    // Capacity calculated per-window and for 3-window clusters
 }
 ```
 
-Custom collision detection enables the modifier-key behavior:
+The modifier-key collision detection enables different drop behaviors:
 
 ```typescript
 const customCollisionDetection: CollisionDetection = useCallback((args) => {
     const pointerCollisions = pointerWithin(args);
     const { isShiftHeld, isCtrlHeld, isAltHeld } = useTaskStore.getState();
     
-    // Shift: prioritize point assignment zones
-    if (isShiftHeld && pointerCollisions.length > 0) {
-        const pointZone = pointerCollisions.find(c => 
-            c.id.toString().includes('-pts-')
-        );
+    // Shift: prioritize point-assignment zones
+    if (isShiftHeld && !isCtrlHeld && !isAltHeld) {
+        const pointZone = pointerCollisions.find(c => c.id.toString().includes('-pts-'));
         if (pointZone) return [pointZone];
     }
+    
     // Ctrl: prioritize context zones
     // Alt: prioritize project zones
     // ...
 }, []);
 ```
 
-The data layer abstracts storage behind a simple interface, making it trivial to swap between JSON files and a proper database:
+The 4 AM day boundary handles late-night work gracefully:
 
 ```typescript
-export const db = {
-    getTasks: () => { /* ... */ },
-    addTask: (task: Task) => { /* ... */ },
-    updateTask: (id: string, updates: Partial<Task>) => { /* ... */ },
-    // Same interface regardless of backend
-};
+export function getLogicalDate(now: Date = new Date()): string {
+    const zoned = toZonedTime(now, 'America/Chicago');
+    const shifted = subHours(zoned, 4); // Work before 4 AM counts as previous day
+    return format(shifted, 'yyyy-MM-dd');
+}
 ```

@@ -1,120 +1,159 @@
 ---
 title: InstaNote
-summary: Android widget app for instant note capture with one-tap email delivery via Gmail API
-date: 2024-05-14
+summary: Android note-taking app with home screen widget and one-tap Gmail integration
+type: desktop
+stack:
+  - Kotlin
+  - Android SDK
+  - Jetpack Compose
+  - Gmail API
+  - Google Sign-In
+tags:
+  - mobile
+  - productivity
+  - android
+loc: 984
+files: 31
+architecture:
+  auth: OAuth
+  database: none
+  api: REST
+  realtime: none
+  background: none
+  cache: none
+  search: none
 ---
 
 ## Overview
 
-InstaNote is a native Android app designed for frictionless note capture. It features a home screen widget that bypasses the standard app launch flow, presenting a minimal overlay where users can type a note and instantly email it to themselves with a single tap.
+InstaNote is a lightweight Android application designed for capturing thoughts instantly. The app features a home screen widget that opens a note entry dialog with a single tap, allowing users to quickly jot down ideas without navigating through multiple screens. Notes can be sent directly to your Gmail inbox with one tap, making it easy to transfer quick captures to a more permanent location.
 
-The app integrates directly with the Gmail API using OAuth2, eliminating the need to open an email client or configure SMTP settings. This makes it ideal for quickly logging thoughts, saving links, or forwarding content from other apps.
+The app integrates with Google Sign-In for authentication and uses the Gmail API to send notes (with optional file attachments) directly to the user's own email address, effectively turning your inbox into a note repository.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Home screen widget showing the "Add Note" button on Android launcher -->
-![Widget on home screen](/images/projects/instanote/screenshot-1.png)
+<!-- SCREENSHOT: Main screen showing the notes list with toolbar and floating action button -->
+![Notes List](/images/projects/instanote/screenshot-1.png)
 
-<!-- SCREENSHOT: Note entry overlay with text input and action buttons (discard, share, attach, send) -->
-![Note entry interface](/images/projects/instanote/screenshot-2.png)
+<!-- SCREENSHOT: Note entry dialog showing the text input and action buttons (discard, share, attach, email) -->
+![Note Entry](/images/projects/instanote/screenshot-2.png)
 
-<!-- SCREENSHOT: Main app showing list of saved notes with delete buttons -->
-![Notes list view](/images/projects/instanote/screenshot-3.png)
-
-<!-- SCREENSHOT: Settings screen with Google Sign-In status and version info -->
-![Settings with Google account](/images/projects/instanote/screenshot-4.png)
+<!-- SCREENSHOT: Home screen widget placed on the Android launcher -->
+![Home Screen Widget](/images/projects/instanote/screenshot-3.png)
 
 ## Problem
 
-Traditional note-taking apps require multiple taps to open, create a new note, and then share or email it. When capturing fleeting thoughts or saving content from another app, this friction often means the moment passes before the note is recorded.
+Traditional note-taking apps require multiple steps: unlock phone, find app, wait for load, tap new note, then finally start typing. This friction means fleeting thoughts are often lost before they can be captured.
 
-Existing solutions either require manual email configuration, open a separate email client (adding more steps), or don't support direct content sharing from other apps.
+Additionally, quick notes often need to reach a more permanent destination—email inboxes, where they can be processed alongside other tasks. The standard Android share flow adds unnecessary steps when you just want to email yourself.
 
 ## Approach
 
-InstaNote reduces capture friction to near-zero by combining three techniques:
-
-1. **Widget-First Design** - A home screen widget launches directly into a transparent note-entry overlay, skipping the app entirely
-2. **Gmail API Integration** - Notes are sent directly through the user's Gmail account without opening an email client
-3. **Share Intent Receiver** - Content shared from any app is automatically emailed without UI interruption
+Built a minimal-friction capture flow with two key features:
 
 ### Stack
 
-- **Kotlin** - Modern Android development with coroutines for async email operations
-- **Gmail API** - Direct email sending with OAuth2 authentication, eliminating SMTP configuration
-- **AppWidgetProvider** - Native home screen widget implementation for quick access
-- **Google Sign-In** - Seamless OAuth2 flow with gmail.send scope for secure API access
-- **ViewBinding** - Type-safe view access without findViewById boilerplate
-- **SharedPreferences + Gson** - Lightweight local storage for note persistence
-- **JavaMail API** - MIME message construction for email content and attachments
+- **Kotlin** - Modern Android language with coroutines for async operations
+- **Android SDK 34** - Targets latest Android while supporting devices back to API 24 (Android 7.0)
+- **Jetpack Compose + View Binding** - Hybrid UI approach using ViewBinding for traditional layouts
+- **Gmail API** - Direct integration for sending emails without opening another app
+- **Google Sign-In** - OAuth2 authentication for Gmail API access
+- **SharedPreferences** - Local note storage using JSON serialization via Gson
 
 ### Challenges
 
-- **Transparent Overlay Activity** - Creating a note entry screen that floats above the home screen required careful window attribute configuration with `TransparentActivity` theme, `singleInstance` launch mode, and `excludeFromRecents` flag to prevent it appearing in the recents screen
+- **Gmail API Integration** - Constructing MIME messages with attachments required working with JavaMail on Android, including proper Base64 encoding for the raw email content. Used `MimeMultipart` to handle text bodies alongside file attachments.
 
-- **Share Intent Handling** - Receiving shared content from other apps and immediately sending it via email without showing UI required handling both `ACTION_SEND` and `ACTION_SEND_MULTIPLE` intents with early returns before inflating the layout
+- **Widget-to-Activity Communication** - The home screen widget needed to launch directly into the note entry screen. Solved by passing an `isFromWidget` flag via PendingIntent, allowing the activity to adjust its behavior accordingly.
 
-- **OAuth2 Scope Management** - The Gmail API requires the `gmail.send` scope which triggers additional Google security verification. Implemented proper credential management with `GoogleAccountCredential` and `GoogleSignIn.getLastSignedInAccount()` to persist authentication state
+- **Delete Confirmation UX** - Implemented a 2-second confirmation window for deletions without a modal dialog. First tap changes the delete button to "CONFIRM" with red background, auto-reverts after 2 seconds if not confirmed. Uses `Handler.postDelayed()` for timing.
 
-- **File Attachments** - Supporting arbitrary file types from share intents required building multipart MIME messages with `MimeMultipart` and `ByteArrayDataSource` for content resolution from URIs
+- **Share Intent Handling** - The app receives both `ACTION_SEND` (single item) and `ACTION_SEND_MULTIPLE` (multiple files) intents, automatically emailing shared content to the user without showing UI.
 
 ## Outcomes
 
-The app achieves its goal of minimal-friction note capture. From widget tap to email sent takes approximately 3 seconds - type and tap send. The share intent integration makes it particularly useful as a "send to self" utility that works from any app.
+The app achieves its core goal of minimal-friction note capture. The widget provides one-tap access, and the email integration means notes automatically arrive in Gmail for later processing.
 
-Key learnings from this project:
-- Android widgets are powerful for quick-action use cases but have strict RemoteViews limitations
-- Gmail API is more reliable than SMTP for personal use, but requires Google Cloud Console setup
-- Transparent activities with keyboard auto-focus require careful window manager configuration
-- Handling share intents gracefully means sometimes processing data without ever showing UI
+Key technical learnings:
+- Gmail API authentication flow on Android using `GoogleAccountCredential`
+- MIME message construction with `javax.mail` on Android
+- RecyclerView patterns with custom deletion confirmation
+- AppWidget development with PendingIntent for activity launching
 
 ## Implementation Notes
 
-The note entry activity uses a transparent theme and positions itself at the bottom of the screen:
+### Email with Attachments
+
+The core email sending logic handles both plain text and multipart messages:
 
 ```kotlin
-val params = window.attributes
-params.width = WindowManager.LayoutParams.MATCH_PARENT
-params.gravity = Gravity.BOTTOM
-window.attributes = params
+private fun createEmailWithAttachments(
+    to: String, from: String, subject: String,
+    uris: List<Uri>, bodyText: String
+): MimeMessage {
+    val email = MimeMessage(session)
+    email.setFrom(InternetAddress(from))
+    email.addRecipient(Message.RecipientType.TO, InternetAddress(to))
+    email.subject = subject
+
+    val multipart = MimeMultipart()
+
+    // Text body
+    val textPart = MimeBodyPart()
+    textPart.setText(bodyText)
+    multipart.addBodyPart(textPart)
+
+    // Attachments
+    for (uri in uris) {
+        val attachmentPart = MimeBodyPart()
+        val inputStream = contentResolver.openInputStream(uri)
+        val dataSource = ByteArrayDataSource(inputStream, contentResolver.getType(uri))
+        attachmentPart.dataHandler = DataHandler(dataSource)
+        attachmentPart.fileName = getFileName(uri)
+        multipart.addBodyPart(attachmentPart)
+    }
+
+    email.setContent(multipart)
+    return email
+}
 ```
 
-Share intents are processed immediately without inflating the UI:
+### Delete Confirmation Pattern
+
+The adapter implements a timed confirmation without dialogs:
 
 ```kotlin
-when (intent?.action) {
-    Intent.ACTION_SEND -> {
-        handleShareIntent(intent)
-        return  // Prevents UI creation
+holder.binding.deleteButton.setOnClickListener {
+    if (isPendingDeletion) {
+        onDelete(adapterPos)
+        pendingDeletionPosition = null
+    } else {
+        pendingDeletionPosition = adapterPos
+        notifyDataSetChanged()
+
+        handler.postDelayed({
+            if (pendingDeletionPosition == adapterPos) {
+                pendingDeletionPosition = null
+                notifyDataSetChanged()
+            }
+        }, 2000)
     }
 }
 ```
 
-Email sending runs on a background dispatcher with proper exception handling:
+### Project Structure
 
-```kotlin
-lifecycleScope.launch(Dispatchers.IO) {
-    try {
-        val gmailService = setupGmailService()
-        gmailService.users().messages().send("me", email).execute()
-        withContext(Dispatchers.Main) {
-            Toast.makeText(this@NoteEntryActivity, "Email sent", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-    } catch (e: Exception) {
-        // Handle error on main thread
-    }
-}
 ```
-
-The widget provider uses a `PendingIntent` to launch the note entry directly:
-
-```kotlin
-val intent = Intent(context, NoteEntryActivity::class.java)
-intent.putExtra("isFromWidget", true)
-val pendingIntent = PendingIntent.getActivity(
-    context, 0, intent, 
-    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-)
-views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
+InstaNote/
+├── app/src/main/
+│   ├── java/com/instanote/
+│   │   ├── MainActivity.kt        # Note list management
+│   │   ├── NoteEntryActivity.kt   # Note creation/editing + Gmail
+│   │   ├── NoteAdapter.kt         # RecyclerView with delete confirm
+│   │   ├── SettingsActivity.kt    # Google auth management
+│   │   └── NoteWidgetProvider.kt  # Home screen widget
+│   └── res/
+│       ├── layout/                # 5 layout files
+│       └── xml/note_widget_info.xml
+└── build.gradle.kts               # Dependencies + SDK config
 ```

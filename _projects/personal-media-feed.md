@@ -1,106 +1,134 @@
 ---
 title: Personal Media Feed
-summary: Self-hosted media library with AI-powered enrichment, semantic search, and 15+ resolver integrations for organizing content across the web.
-date: 2025-04-15
+summary: AI-powered content aggregator that enriches, organizes, and surfaces media from 15+ sources
+started: 2025-04-15
+updated: 2026-01-15
+type: web-app
+stack:
+  - Python
+  - FastAPI
+  - React
+  - TypeScript
+  - SQLite
+  - ChromaDB
+  - OpenAI
+  - TailwindCSS
+tags:
+  - ai
+  - data
+  - automation
+  - developer-tools
+loc: 47000
+files: 253
+architecture:
+  auth: none
+  database: SQLite
+  api: REST
+  realtime: SSE
+  background: in-memory
+  cache: none
+  search: ChromaDB
 ---
 
 ## Overview
 
-Personal Media Feed (PMF) is a self-hosted, single-user media library aggregator that transforms raw URLs and links into a searchable, enriched personal knowledge base. It handles everything from YouTube videos and academic papers to podcasts, books, manga, and more—automatically extracting metadata, generating summaries, and organizing content with AI assistance.
+Personal Media Feed (PMF) is a sophisticated content aggregation and management system that pulls media from diverse sources—YouTube channels, podcasts, RSS feeds, books, TV shows, games, manga, comics, and more—then enriches each item with AI-generated metadata. The system uses LLMs to extract summaries, keywords, sentiment, and named entities, while ChromaDB provides semantic search across the entire library.
 
-The application takes a collections-first approach where channels, authors, and series are first-class entities that can be polled for new content. A sophisticated bulk import system with preview-commit workflow, platform-aware URL normalization, and content class routing makes it practical for managing hundreds of items at once while keeping sensitive content appropriately isolated.
+What sets PMF apart is its resolver orchestrator: a unified abstraction over 15+ external APIs (TMDB, IGDB, AniList, MangaDex, iTunes, PodcastIndex, etc.) that automatically identifies content and fetches rich metadata. Combined with smart views, content classification, and Sonarr/Radarr integration, it creates a personalized media dashboard that grows smarter over time.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main feed view showing media item cards with thumbnails, enrichment status badges, and filter sidebar visible -->
-![Main Feed View](/images/projects/personal-media-feed/screenshot-1.png)
+<!-- SCREENSHOT: Main feed view showing media cards with thumbnails, AI-generated summaries, and facet filters in the left sidebar -->
+![Feed View](/images/projects/personal-media-feed/screenshot-1.png)
 
-<!-- SCREENSHOT: Item detail panel showing AI-generated summary, extracted metadata, tags, and facets for a YouTube video -->
-![Item Detail Panel](/images/projects/personal-media-feed/screenshot-2.png)
+<!-- SCREENSHOT: Collection detail page showing a YouTube channel or podcast with episode entries and consumption tracking -->
+![Collection Detail](/images/projects/personal-media-feed/screenshot-2.png)
 
-<!-- SCREENSHOT: Bulk add interface in preview mode showing URL parsing, platform detection, and resolver candidates -->
-![Bulk Import Preview](/images/projects/personal-media-feed/screenshot-3.png)
-
-<!-- SCREENSHOT: Collections page showing YouTube channels, podcast feeds, or author collections with entry counts and polling status -->
-![Collections Browser](/images/projects/personal-media-feed/screenshot-4.png)
+<!-- SCREENSHOT: Bulk import interface with preview mode showing URL resolution and metadata matching -->
+![Bulk Import](/images/projects/personal-media-feed/screenshot-3.png)
 
 ## Problem
 
-Saving interesting content from the web typically means scattered bookmarks, forgotten browser tabs, or notes in various apps. These solutions lack enrichment—you save a URL but lose the context of why it mattered. Finding that article about a specific topic weeks later becomes impossible without proper metadata, search, and organization.
+Modern content consumption is fragmented across dozens of platforms—YouTube, Spotify, Goodreads, Steam, Crunchyroll—each with its own interface, recommendations, and tracking. There's no unified view of "what should I consume next?" that respects personal context and history.
 
-I wanted a personal library that could ingest content from anywhere, automatically enrich it with summaries and structured metadata, provide both keyword and semantic search, and organize everything into collections that mirror how I actually think about content (by creator, series, or topic).
+Existing solutions either focus on a single medium (Plex for video, Calibre for books) or require manual curation. I wanted a system that could ingest a URL, automatically identify what it is, fetch rich metadata, and organize it alongside everything else I'm tracking.
 
 ## Approach
 
-The system uses a two-phase architecture: ingestion and enrichment. Content enters through a bulk import system that parses URLs, normalizes platform-specific quirks (AMP pages, tracking parameters, mobile variants), and routes items to appropriate resolvers for metadata hydration.
+The architecture separates concerns into a modular backend with specialized domains, connected to a React frontend via REST and Server-Sent Events.
 
 ### Stack
 
-- **Backend** - FastAPI with async/await throughout. SQLModel ORM with SQLite for persistence, ChromaDB for vector embeddings. Chosen for rapid development and self-hosting simplicity.
-- **Frontend** - React 19 + TypeScript with Zustand for state management, TanStack Query for data fetching, and shadcn/ui components. Vite for fast development cycles.
-- **LLM Integration** - OpenAI API (GPT-4o-mini) via OpenRouter for metadata extraction, summarization, and keyword generation. text-embedding-3-small for semantic search embeddings.
-- **Search** - Dual-mode system with SQLite FTS5 for lexical search and ChromaDB k-NN for semantic search, user-toggleable per query.
-- **Resolvers** - 15+ provider integrations (TMDB, MusicBrainz, OpenLibrary, AniList, PodcastIndex, IGDB, ArXiv, etc.) with parallel queries and token-bucket rate limiting.
+- **FastAPI + Python** - Async-first backend with SQLModel ORM for clean data modeling; enables parallel resolver calls and streaming enrichment updates
+- **React 19 + TypeScript** - Modern frontend with Zustand for state management and TanStack Query for server state synchronization
+- **ChromaDB** - Vector embeddings enable semantic search ("find me something like that documentary about space")
+- **OpenAI/OpenRouter** - LLM interface for extracting titles, summaries, keywords, mood, complexity, and named entities from raw content
+- **SQLite** - Simple, portable database with FTS5 for full-text search; separate dev/prod databases prevent accidents
 
 ### Challenges
 
-- **URL normalization at scale** - Hundreds of platforms have different URL schemes, mobile variants, and tracking parameters. Built a heuristic-based normalizer that handles 30+ platforms with pattern matching and ID extraction, falling back to LLM classification for unknown formats.
+- **Resolver orchestration** - Coordinating 15+ external APIs with different rate limits, authentication schemes, and response formats required building a token-bucket rate limiter and unified type system. Each resolver implements a common interface, and the orchestrator routes requests based on content type hints.
 
-- **Content class visibility routing** - Needed to isolate NSFW or sensitive content without deleting it. Implemented a pattern-based classification system where `content_class = NULL` means visible in main feed, while non-null classes require explicit opt-in. Patterns support both glob wildcards and regex, stored in database for runtime configuration.
+- **Enrichment pipeline** - Processing YouTube transcripts, PDF content, and HTML articles through LLMs needed careful prompt engineering and cost tracking. The system extracts content via Trafilatura/BeautifulSoup, chunks it appropriately, and sends structured prompts that return consistent JSON schemas.
 
-- **Semantic search at personal scale** - ChromaDB works well locally but embedding generation is expensive. Solved by creating composite embeddings from title + summary + tags + facets + transcript snippets, generated once after enrichment completes rather than on every update.
-
-- **Real-time updates without polling** - Used Server-Sent Events (SSE) for pushing `item_update` and `collection_update` events to the frontend, eliminating the need for constant API polling during enrichment.
+- **Filter synchronization** - Keeping filter state consistent across sidebar, filter panel, URL parameters, and smart views required a centralized Zustand store with careful attention to which component owns what. Smart views store filter criteria as JSON that maps directly to store keys.
 
 ## Outcomes
 
-The system now manages thousands of items across dozens of collections with sub-second search. The bulk import flow handles hundreds of URLs at once with intelligent routing and deduplication. Smart Views provide instant context-switching between different content focuses (research papers, entertainment, reading list).
+The system now tracks 1000+ media items across all categories with minimal manual input. Adding a URL triggers automatic identification, metadata resolution, and AI enrichment—typically completing in under 10 seconds for known sources.
 
-Key technical learnings include designing for async-first from the start (retrofitting is painful), the value of configurable heuristics stored in database rather than hardcoded, and how hybrid search (lexical + semantic) covers more use cases than either alone.
+Key learnings:
+- **Resolver abstraction pays off** - Adding new sources (MangaDex, ComicVine) takes hours, not days, because the orchestrator pattern is established
+- **Semantic search changes discovery** - Finding "that video about distributed systems with the funny presenter" actually works via ChromaDB embeddings
+- **Smart views reduce friction** - Pre-defined filters like "Unwatched Tech Videos" or "Books Added This Month" make the feed immediately useful
 
 ## Implementation Notes
 
-The bulk add system uses a preview-commit pattern that's worth highlighting:
+### Resolver Orchestrator
+
+The system routes metadata requests through a unified orchestrator that selects appropriate providers based on content type:
 
 ```python
-# URL parsing extracts platform hints using pattern matching
-def _infer_platform_kind_from_url(url: str) -> dict:
-    # Detects 30+ platforms (ArXiv, GitHub, Reddit, Steam, etc.)
-    # Extracts IDs (TMDB, IMDB, ArXiv paper IDs)
-    # Returns medium classification (video/text/audio/interactive)
-    ...
-
-# Routing runs through candidates from multiple resolvers in parallel
-async def generate_candidates(urls: list[str]) -> list[Candidate]:
-    tasks = [resolver.query(url) for url in urls]
-    return await asyncio.gather(*tasks)
-```
-
-Content class patterns use a dual-strategy matcher:
-
-```python
-def match_content_class(url: str, patterns: dict) -> str | None:
-    for class_name, pattern_config in sorted(patterns.items(), key=lambda x: x[1].priority):
-        if has_regex_tokens(pattern_config.pattern):
-            if re.match(pattern_config.pattern, url):
-                return class_name
-        else:
-            if fnmatch.fnmatch(url, pattern_config.pattern):
-                return class_name
-    return None  # Visible in main feed
-```
-
-The collection polling system uses APScheduler with per-collection intervals and daily caps:
-
-```python
-class CollectionPoller:
-    async def poll(self, collection: Collection):
-        if collection.promoted_today_count >= collection.caps_per_day:
-            return  # Daily limit reached
+class ResolverOrchestrator:
+    async def resolve(self, url: str, hints: ResolveHints) -> ResolvedMetadata:
+        # Identity resolver determines content type from URL patterns
+        identity = await self.identity_resolver.identify(url)
         
-        entries = await self.fetch_new_entries(collection, limit=collection.caps_per_poll)
-        for entry in entries:
-            await self.create_or_update_entry(entry)
+        # Route to appropriate providers based on type
+        providers = self.routing_config.get_providers(identity.content_type)
+        
+        # Fan out requests with rate limiting
+        results = await asyncio.gather(*[
+            self.rate_limiters[p].execute(p.fetch, url)
+            for p in providers
+        ])
+        
+        # Adjudicator selects best metadata from multiple sources
+        return self.adjudicator.merge(results)
 ```
 
-YouTube channel integration optimizes API quota by using uploads playlists (`UC...` prefix becomes `UU...`) which costs 1 quota unit per page versus 100 for channel search—critical when monitoring many channels.
+### Collection Population
+
+YouTube channels use an efficient upload playlist conversion for pagination:
+
+```python
+# Convert channel ID to uploads playlist for efficient fetching
+# UC... (channel) -> UU... (uploads playlist)
+uploads_playlist_id = "UU" + channel_id[2:]
+```
+
+### SSE Enrichment Updates
+
+Real-time progress updates stream to the frontend during enrichment:
+
+```python
+@router.get("/stream")
+async def event_stream():
+    async def generate():
+        async for event in sse_service.subscribe():
+            yield {
+                "event": event.type,
+                "data": json.dumps(event.payload)
+            }
+    return EventSourceResponse(generate())
+```

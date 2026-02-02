@@ -1,130 +1,167 @@
 ---
 title: Personal Metrics Dashboard
-summary: Self-hosted ETL pipeline aggregating health, productivity, and lifestyle data from 10+ sources into a unified DuckDB analytics warehouse.
-date: 2024-09-01
+summary: Self-hosted ETL pipeline aggregating Fitbit, app usage, mood, and location data into DuckDB for correlation analysis
+started: 2025-11-30
+updated: 2025-11-30
+type: data-pipeline
+stack:
+  - Python
+  - DuckDB
+  - Streamlit
+  - Pandas
+  - Altair
+tags:
+  - data
+  - quantified-self
+  - analytics
+loc: 12652
+files: 97
+architecture:
+  auth: none
+  database: DuckDB
+  api: none
+  realtime: none
+  background: none
+  cache: none
+  search: none
 ---
 
 ## Overview
 
-Personal Metrics Dashboard is a modular data platform that consolidates years of personal quantified-self data into a single, queryable analytics database. It ingests data exports from Fitbit, RescueTime, ActivityWatch, Daylio, KeepTrack, Google Location History, and custom CSVs—normalizing, deduplicating, and unifying them into daily aggregate tables optimized for correlation analysis and trend discovery.
+A comprehensive personal data analytics platform that ingests, unifies, and correlates health and productivity metrics from over 15 different data sources. The system implements a bronze/silver/gold data lake architecture using DuckDB as the analytical database, transforming raw exports from Fitbit, ActivityWatch, RescueTime, Daylio, and other apps into a unified daily metrics table optimized for correlation analysis.
 
-The system follows a medallion architecture (Bronze/Silver/Gold layers) where 25+ specialized parsers handle raw ingestion, unification logic resolves overlapping data sources with priority rules, and aggregators produce daily summaries. The final output is a wide-format "one row per day" table spanning 150+ metrics across sleep, productivity, mood, fitness, and location.
+The pipeline processes years of personal data (spanning 2017-2025) including sleep stages, heart rate variability, SpO2, steps, app usage patterns, mood tracking, weight measurements, and location history. A Streamlit-based dashboard provides interactive visualizations, lagged correlation analysis, and a pipeline status monitor.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main Streamlit dashboard showing daily_wide_metrics table with date selector and multi-metric chart visualization -->
-![Daily metrics overview](/images/projects/metrics_dashboard/screenshot-1.png)
+<!-- SCREENSHOT: Pipeline Status Dashboard showing ingestion status with processed files count and source availability matrix -->
+![Pipeline Status](/images/projects/metrics_dashboard/screenshot-1.png)
 
-<!-- SCREENSHOT: DuckDB CLI or database inspector output showing the schema of unified_sleep_daily_agg table with sample rows -->
-![Sleep aggregation data](/images/projects/metrics_dashboard/screenshot-2.png)
+<!-- SCREENSHOT: Daily Wide Metrics Viewer showing multi-metric time series chart with date filtering and aggregation controls -->
+![Metrics Visualization](/images/projects/metrics_dashboard/screenshot-2.png)
 
-<!-- SCREENSHOT: Terminal output during parser execution showing progress, file processing counts, and deduplication stats -->
-![ETL pipeline in action](/images/projects/metrics_dashboard/screenshot-3.png)
+<!-- SCREENSHOT: Correlation heatmap showing pairwise relationships between metrics like sleep, heart rate, and productivity -->
+![Correlation Analysis](/images/projects/metrics_dashboard/screenshot-3.png)
 
 ## Problem
 
-Quantified-self enthusiasts accumulate data across dozens of apps and devices, but the data lives in silos. Fitbit exports JSON, RescueTime exports CSV, ActivityWatch uses its own format, and manual trackers like Daylio and KeepTrack add more fragmentation. Answering questions like "Does my caffeine intake affect sleep quality?" or "How does screen time correlate with mood?" requires painful manual joins across incompatible schemas.
+Personal health and productivity data is fragmented across dozens of apps and devices, each with proprietary export formats. Manually analyzing relationships between sleep quality and next-day productivity, or tracking how exercise affects mood over time, requires tedious data wrangling and loses the temporal context needed for meaningful insights.
 
-Commercial solutions either lock you into their ecosystem, lack the granularity needed for serious analysis, or charge subscription fees for your own data. This project provides a self-hosted, fully-owned data warehouse where all personal metrics live in a single DuckDB file ready for SQL analysis, Jupyter notebooks, or dashboard visualization.
+This project solves the data unification problem by creating a single source of truth where metrics from different sources can be joined, compared, and analyzed together. It handles the complexity of overlapping data sources (e.g., multiple sleep trackers), timezone-aware daily boundaries, and the challenge of correlating metrics with different sampling frequencies.
 
 ## Approach
 
-The architecture prioritizes incremental processing, source-aware deduplication, and schema stability over performance optimization—since personal data volumes are modest but consistency is critical.
+The architecture follows a medallion (bronze/silver/gold) data lake pattern:
 
 ### Stack
 
-- **DuckDB** - Embedded columnar database chosen for its analytical query performance, single-file simplicity, and native Python integration. No server setup required.
-- **Python 3.12** - Core language for all parsers, aggregators, and utilities. Type hints throughout.
-- **Pandas** - Data transformation layer for complex reshaping operations that are clearer in DataFrame operations than SQL.
-- **ijson** - Streaming JSON parser for handling multi-gigabyte ActivityWatch exports without memory exhaustion.
-- **Streamlit** - Planned visualization layer for exploring the unified data through interactive dashboards.
-
-### Challenges
-
-- **Overlapping data sources** - Multiple apps track the same metrics (e.g., ActivityWatch, RescueTime, and AppUsage all track screen time). Solved with a per-device-per-day priority system: ActivityWatch > RescueTime > AppUsage. If higher-priority data exists for a device/day combination, lower-priority sources are excluded from that day's aggregation.
-
-- **Cross-midnight sessions** - Sleep sessions that start at 11 PM and end at 7 AM span two calendar dates. Rather than splitting them, sessions are attributed to their end date, matching how humans think about "last night's sleep." A configurable `DAY_TERMINATION_HOUR` (default: 5 AM) defines day boundaries for aggregation.
-
-- **Schema evolution** - Source apps change their export formats over time. Parsers use defensive column access and backfill missing columns with ALTER TABLE when aggregator tables already exist with older schemas.
-
-- **Deduplication at scale** - Re-running parsers shouldn't create duplicates. Each parser tracks processed files via MD5 hash + file size in a `processed_files` table, and post-parse DISTINCT operations catch any duplicates from overlapping date ranges in source files.
-
-## Outcomes
-
-The pipeline successfully ingests 7+ years of historical data across all configured sources:
-
-- **Sleep:** 2,500+ nights from Fitbit with minute-level sleep stage data, plus non-Fitbit historical logs
-- **Usage:** 500,000+ session records from three tracking apps, unified into device-aware daily summaries
-- **Fitness:** 2 million+ heart rate samples, daily step/distance totals, HRV, SpO2
-- **Mood/Habits:** Daily Daylio entries with custom energy/stress/pain scales, KeepTrack events for caffeine/meditation/exercise
-
-The `daily_wide_metrics` table provides immediate answers to correlation questions via simple SQL. Running the full pipeline from raw exports takes ~2 minutes; incremental runs complete in seconds by skipping unchanged files.
-
-## Implementation Notes
+- **DuckDB** - Embedded analytical database chosen for columnar storage, fast aggregations, and single-file deployment. Supports complex window functions for rolling averages and lag analysis.
+- **Pandas** - DataFrame manipulation for parsing heterogeneous source formats and data transformation.
+- **Streamlit** - Rapid prototyping of interactive dashboards with minimal frontend code. Enables date range filtering, metric selection, and real-time chart updates.
+- **Altair** - Declarative visualization library for creating faceted heatmaps, time series, and correlation matrices.
+- **ijson** - Streaming JSON parser for handling large ActivityWatch exports without loading entire files into memory.
 
 ### Data Flow
 
 ```
-Source Files (JSON/CSV)
-    ↓
-[Parsers] → raw_data.duckdb (Bronze)
-    ↓
-[Unifiers] → unified_usage, unified_sleep (Silver)
-    ↓
-[Aggregators] → *_daily_agg tables (Silver)
-    ↓
-[Wide Builder] → daily_wide_metrics (Gold)
+Source Files (CSV/JSON)
+        │
+        ▼
+  ┌─────────────┐
+  │   Parsers   │  → raw_data.duckdb (Bronze)
+  │  (26 files) │     fb_sleep_logs, aw_events, etc.
+  └─────────────┘
+        │
+        ▼
+  ┌─────────────┐
+  │   Unify     │  → unified_sleep, unified_usage
+  │  (Overlap   │     Source priority: AW > RT > AppUsage
+  │  Resolution)│
+  └─────────────┘
+        │
+        ▼
+  ┌─────────────┐
+  │ Aggregators │  → aggregates.duckdb (Silver)
+  │ (12 files)  │     sleep_daily_agg, usage_daily_agg, etc.
+  └─────────────┘
+        │
+        ▼
+  ┌─────────────┐
+  │  Wide Join  │  → daily_wide_metrics (Gold)
+  │             │     One row per day, 150+ columns
+  └─────────────┘
 ```
 
-### Parser Pattern
+### Challenges
 
-Each parser follows a consistent pattern for idempotent ingestion:
+- **Offset daily boundaries** - Personal sleep cycles don't align with midnight. Implemented a configurable `DAY_TERMINATION_HOUR` (default 5 AM) so a sleep session ending at 2 AM is credited to the previous day's metrics.
 
-```python
-def parse_source_folder():
-    # 1. Check for new/modified files via hash comparison
-    if file_already_processed(con, PARSER_NAME, path, hash, size):
-        return
-    
-    # 2. Parse and transform
-    df = pd.DataFrame(...)
-    
-    # 3. Atomic insert with transaction
-    con.execute("BEGIN")
-    con.execute("INSERT INTO table BY NAME SELECT * FROM df")
-    mark_file_as_processed(con, PARSER_NAME, path, hash, size)
-    con.execute("COMMIT")
-    
-    # 4. Post-parse deduplication
-    con.execute("CREATE TABLE temp AS SELECT DISTINCT * FROM table")
-```
+- **Source overlap resolution** - When multiple apps track the same activity (e.g., ActivityWatch and RescueTime both tracking computer usage), the system applies per-device-per-day priority rules. A day with any ActivityWatch data for "desktop" ignores RescueTime's desktop data, but still uses RescueTime's mobile data if AW didn't capture it.
 
-### Wide Table Join Strategy
+- **Incremental processing** - With 8+ years of data and frequent exports, full reprocessing is expensive. Each parser tracks file hashes in a `processed_files` table, skipping unchanged files on subsequent runs.
 
-The `daily_wide_metrics` builder uses a cascading FULL OUTER JOIN across 14 aggregator tables, with COALESCE to handle sparse data (not every day has every metric type):
+- **Schema evolution** - As new metrics become available (e.g., Fitbit adding new HRV fields), parsers use `ALTER TABLE ADD COLUMN` to backfill missing columns without dropping existing data.
+
+## Outcomes
+
+The unified daily metrics table enables analyses that were previously impossible:
+
+- **Lag correlation scanning** - Automated search across 30-day windows finds that calorie intake correlates strongest with weight change 14 days later
+- **Cross-domain insights** - Sleep quality (deep sleep %) shows 0.3+ correlation with next-day app productivity categories
+- **Habit tracking validation** - KeepTrack entries (caffeine, exercise, meditation) can be correlated against biometric outcomes
+
+The modular parser architecture makes adding new data sources straightforward - each parser is a self-contained ~200 line script following the same pattern.
+
+## Implementation Notes
+
+### Daily Wide Table Join Strategy
+
+The `daily_wide_metrics.py` aggregator uses a chain of `FULL OUTER JOIN` operations to preserve all dates present in any source table:
 
 ```sql
 SELECT 
-    COALESCE(usage.date, sleep.date, steps.date, ...) AS daily_date,
-    usage.total_minutes,
+    COALESCE(
+        base_usage.daily_date,
+        sleep.agg_date,
+        steps.agg_date,
+        ...
+    ) AS daily_date,
+    usage.total_usage_minutes,
     sleep.daily_total_sleep,
     steps.daily_step_total,
     ...
-FROM usage_daily_agg usage
-FULL OUTER JOIN unified_sleep_daily_agg sleep 
-    ON usage.date = sleep.agg_date
-FULL OUTER JOIN fb_steps_daily_agg steps 
-    ON COALESCE(usage.date, sleep.agg_date) = steps.agg_date
--- ... continues for all aggregator tables
+FROM usage_daily_agg AS base_usage
+FULL OUTER JOIN unified_sleep_daily_agg AS sleep
+    ON base_usage.daily_date = sleep.agg_date
+FULL OUTER JOIN fb_steps_daily_agg AS steps
+    ON COALESCE(base_usage.daily_date, sleep.agg_date) = steps.agg_date
+...
 ```
 
-### Configuration
+### File Processing Pattern
 
-Environment variables control paths and aggregation behavior:
+Every parser follows this incremental processing pattern:
 
-```env
-SOURCE_FILES_DIR=./source_files
-DB_RAW_DATA_FILE=./database/raw_data.duckdb
-DB_AGGREGATES_FILE=./database/aggregates.duckdb
-DAY_TERMINATION_HOUR=5  # Days end at 5 AM, not midnight
+```python
+for file_path in source_files:
+    file_hash = compute_file_hash(str(file_path))
+    file_size = file_path.stat().st_size
+    
+    if file_already_processed(con, PARSER_NAME, str(file_path), file_hash, file_size):
+        continue  # Skip unchanged files
+    
+    # Parse and insert...
+    
+    mark_file_as_processed(con, PARSER_NAME, str(file_path), file_hash, file_size)
 ```
+
+### Data Classifications
+
+The system handles multiple temporal data patterns:
+
+| Type | Examples | Aggregation Strategy |
+|------|----------|---------------------|
+| Continuous time series | Heart rate, steps | Sum/avg within daily boundary |
+| Interval/session data | Sleep logs, app usage | Split across boundaries, sum durations |
+| Point events | Weight, mood entries | Last value or average per day |
+| Categorical | App categories, mood labels | Count/mode per day |

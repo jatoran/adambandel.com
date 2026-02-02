@@ -1,136 +1,135 @@
 ---
 title: LLM Data Curation Pipeline
-summary: Production-grade 22-stage data curation system for training a 1B-parameter Transformer from scratch on 40B tokens
-date: 2025-06-11
-github: https://github.com/jatoran/transformer-learning
+summary: Production-grade 22-stage pipeline for curating 40B tokens to train a 1B-parameter language model
+started: 2025-06-11
+updated: 2025-10-28
+type: data-pipeline
+stack:
+  - Python
+  - DuckDB
+  - PyTorch
+  - Apache Parquet
+  - Hugging Face Transformers
+  - MosaicML Streaming
+tags:
+  - ai
+  - data
+  - machine-learning
+loc: 25312
+files: 188
+architecture:
+  auth: none
+  database: DuckDB
+  api: none
+  realtime: none
+  background: none
+  cache: none
+  search: none
 ---
 
 ## Overview
 
-A comprehensive, manifest-driven data curation pipeline designed to transform raw, heterogeneous text corpora into training-ready datasets for a custom 1B-parameter English-only Transformer. The system processes 40 billion tokens across 20+ datasets (RedPajama, StarCoder, MegaMath, HelpSteer, etc.) through 22 sequential stages—from raw validation through PII redaction, deduplication, quality filtering, and final tokenization into MosaicML's StreamingDataset format.
+A comprehensive, production-grade data curation system designed to transform 20+ heterogeneous datasets into a training-optimized 40-billion-token corpus for pre-training a 1B-parameter language model. The pipeline implements a declarative, manifest-driven architecture where a central DuckDB database serves as an immutable ledger tracking every document through 22 distinct processing stages—from raw ingestion to tokenized MDS shards ready for distributed training.
 
-The architecture follows three core principles: **declarative control** via version-controlled YAML configurations, an **immutable ledger** using DuckDB for auditable state management, and **type-driven polymorphism** that dynamically prunes the processing DAG based on content type (prose, code, math) and schema (text-only, instruction-response, preference-pair).
+The project represents a complete, hands-on learning system for modern LLM engineering, demonstrating techniques from data curation through alignment. The target model persona is a "Clinical Assistant"—direct, precise, and truthful with calibrated uncertainty, using a special `[REFUSE]` token to admit ignorance rather than hallucinate.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Terminal output showing pipeline execution with progress bars for multiple datasets, displaying stage completion status -->
-![Pipeline Execution](/images/projects/llm-data-curation/screenshot-1.png)
+<!-- SCREENSHOT: Streamlit curation dashboard showing the pipeline funnel view with filter rates per stage -->
+![Pipeline Funnel Dashboard](/images/projects/llm-curation-pipeline/screenshot-1.png)
 
-<!-- SCREENSHOT: DuckDB query results showing the manifest schema with document counts, quality signals, and filter statistics per dataset -->
-![Manifest Database](/images/projects/llm-data-curation/screenshot-2.png)
+<!-- SCREENSHOT: DuckDB manifest query showing document metadata with quality signals and validity flags -->
+![Manifest Database Query](/images/projects/llm-curation-pipeline/screenshot-2.png)
 
-<!-- SCREENSHOT: Streamlit dashboard showing quality signal distributions and filter impact visualization -->
-![Curation Dashboard](/images/projects/llm-data-curation/screenshot-3.png)
+<!-- SCREENSHOT: Sample of final MDS shard inspection showing tokenized ChatML-formatted training data -->
+![MDS Shard Inspector](/images/projects/llm-curation-pipeline/screenshot-3.png)
 
 ## Problem
 
-Training a high-quality language model requires far more than just collecting text. Raw datasets contain duplicate content, PII, benchmark contamination, non-English text, toxic content, and vast amounts of low-quality noise. Without rigorous curation, models memorize duplicates, leak private data, achieve artificially inflated benchmark scores, and learn from harmful or nonsensical content.
+Training a high-quality language model requires more than raw data volume—it demands a carefully curated corpus with consistent quality, appropriate diversity, and proper deduplication. Public datasets arrive in heterogeneous formats with varying quality levels, duplicate content, PII, benchmark contamination, and other issues that can degrade model performance. Traditional ad-hoc filtering scripts lack reproducibility, auditability, and the ability to iterate on curation decisions without re-processing entire datasets.
 
 The challenge was building a system that could:
-- Process 40B+ tokens across diverse sources (web crawls, code repos, academic papers, Q&A forums)
-- Apply content-type-aware processing (HTML cleaning for web, whitespace preservation for code)
-- Maintain complete auditability for every filtering decision
-- Support both exact and fuzzy deduplication at scale
-- Prepare data for a sophisticated training curriculum with macro/micro-level optimization
+- Process 20+ datasets with different schemas into a unified format
+- Apply 30+ quality signals and filters while maintaining full traceability
+- Support curriculum learning with physical data organization by content type
+- Enable rapid iteration on filtering decisions without expensive re-runs
+- Guarantee reproducibility through declarative configuration
 
 ## Approach
 
-The solution is a DAG-based pipeline where each stage reads from a DuckDB manifest, applies transformations or filters, and writes results back—creating an immutable chain of custody for every document.
+The solution is a declarative, manifest-driven pipeline where all curation logic is defined in YAML configuration files and executed as a directed acyclic graph of processing stages.
 
 ### Stack
 
-- **DuckDB** - Central manifest database storing metadata, quality signals, and filter decisions for millions of documents. Chosen for its blazing-fast analytical queries and zero-dependency deployment
-- **Apache Parquet** - Columnar storage format for efficient random-access reads during multi-pass processing
-- **FastText** - Language identification with >0.9 confidence threshold for English filtering
-- **MinHash LSH (datasketch)** - Memory-efficient near-duplicate detection via locality-sensitive hashing on token n-grams
-- **Presidio** - Microsoft's PII detection and redaction engine for emails, phone numbers, and named entities
-- **SentencePiece** - BPE tokenizer training with byte-fallback and 28 reserved control tokens
-- **MosaicML StreamingDataset** - Final output format enabling efficient distributed training with built-in shuffling
-- **Rich + Streamlit** - CLI progress visualization and interactive dashboard for pipeline monitoring
+- **DuckDB** - Embedded OLAP database serving as the central manifest/ledger. Each pipeline stage reads from the previous state and writes to the next, creating an unbroken chain of custody for every document. The ~48GB manifest enables zero-cost state inspection without re-running stages.
+
+- **Apache Parquet** - Columnar storage format for document content with zstd compression. Provides efficient random access for the manifest-driven architecture while keeping storage costs low.
+
+- **PyTorch + Transformers** - Powers ML-based quality signals including perplexity scoring (GPT-Neo, Phi-2), toxicity classification, and language detection (fastText).
+
+- **MosaicML Streaming** - Final output format (MDS shards) organized by content type and category for curriculum-based training with efficient distributed loading.
+
+- **Presidio** - Microsoft's PII detection framework for identifying and redacting personal information before training.
+
+- **datasketch** - MinHash LSH implementation for scalable near-deduplication across billions of document pairs.
 
 ### Challenges
 
-- **Content-Type Polymorphism** - Different content types require different processing. HTML documents need structured cleaning and boilerplate removal; code must preserve significant whitespace and indentation. Solved via a `content_type` field that drives conditional stage activation through the DAG
+- **Heterogeneous data schemas** - Solved with a canonical schema (150+ columns) and per-dataset field mapping in `datasets_manifest.yml`. Each dataset declares how its raw fields map to canonical fields, with SQL filter clauses for custom filtering logic.
 
-- **Deduplication at Scale** - Exact deduplication uses SHA256 content hashes, but near-duplicates (paraphrased content, template variations) required MinHash LSH on 5-gram shingles. The on-disk approach processes millions of documents without memory exhaustion
+- **Reproducibility across runs** - Achieved through deterministic UUIDv5 document IDs based on content hashes, declarative YAML configuration for all parameters, and an immutable ledger pattern where modifications are recorded as new state rather than mutations.
 
-- **Benchmark Decontamination** - Training data that overlaps with evaluation benchmarks (MMLU, GSM8K, HumanEval) causes artificially inflated scores. Pre-computed Bloom filters detect and remove contaminated documents
+- **Balancing quality vs. quantity** - Implemented multi-tier quality signals rather than a single score: surface-level metrics (token counts, readability), linguistic metrics (perplexity), topical scores (promotional density, academic indicators), and behavioral annotations. The final filter uses a weighted combination tuned per content type.
 
-- **Refusal Token Strategy** - Teaching the model when to refuse answering required special `[REFUSE]` and `[RESPOND]` tokens, integrated into both SFT and DPO data to train graceful "I don't know" responses
+- **Curriculum learning support** - Data is physically packaged by `content_type` (prose, code, math) enabling macro-curriculum staged exposure during training. Micro-curriculum (in-batch loss reweighting) is supported through difficulty annotations.
 
 ## Outcomes
 
-The pipeline successfully:
-- Processes 20+ datasets across pretrain, SFT, and DPO categories
-- Computes 50+ quality signals per document (perplexity, toxicity, lexical richness, compression ratio, etc.)
-- Achieves deterministic, reproducible runs with full audit trails
-- Reduces corpus size by 30-60% through quality filtering while maintaining diversity
-- Outputs training-ready MDS shards organized by content type for macro-curriculum training
+The pipeline successfully processes 20+ public datasets through all 22 stages, producing:
 
-The modular architecture enables rapid iteration—new datasets are added via YAML configuration, and the orchestrator automatically determines which stages apply based on content type and schema.
+- **Unified corpus** with consistent schema and quality guarantees across diverse sources (RedPajama, StarCoder, MegaMath, Open Orca, HelpSteer2, etc.)
+
+- **Full traceability** where every document's journey from raw input to final shard is queryable in the manifest, including which filter removed it and why
+
+- **Rapid iteration** capability—changing a filter threshold requires editing YAML and re-running only affected stages, not the entire pipeline
+
+- **Curriculum-ready output** organized into MDS shards by category (pretrain/sft/dpo) and content type for staged training exposure
+
+Key learnings: the immutable ledger pattern dramatically simplifies debugging and enables "what-if" analysis on filtering decisions. Separating metadata (DuckDB) from content (Parquet) provides the right tradeoff between query flexibility and storage efficiency.
 
 ## Implementation Notes
 
-### Pipeline Architecture
-
-The orchestrator uses `graphlib.TopologicalSorter` to build execution order from declared dependencies:
-
-```python
-class PipelineOrchestrator:
-    def __init__(self):
-        self.stages, self.stage_map = self._load_and_validate_global_config()
-        self.execution_order = self._get_execution_order()
-
-    def _get_execution_order(self) -> List[str]:
-        ts = TopologicalSorter()
-        for stage in self.stages:
-            ts.add(stage['name'], *stage.get('depends_on', []))
-        return list(ts.static_order())
-```
-
-### Quality Signal Computation
-
-Over 50 quality signals are computed, from simple counts to complex heuristics:
-
-```python
-# Example signals computed in s09_compute_quality_signals
-signals = {
-    'quality_token_count': len(tokenizer.encode(text)),
-    'quality_lexical_richness_ttr': len(set(words)) / len(words),
-    'quality_flesch_kincaid': 0.39 * (words/sentences) + 11.8 * (syllables/words) - 15.59,
-    'quality_compression_ratio': len(gzip.compress(text.encode())) / len(text.encode()),
-    'gzip_compression_ratio': compressed_size / original_size,
-}
-```
-
-### Manifest-Driven Filtering
-
-Each dataset defines SQL filter clauses that execute against the enriched manifest:
-
-```yaml
-# datasets_manifest.yml
-- name: redpajama_v2_pretrain
-  content_type: prose
-  sql_filter_clause: |
-    source_specific_source_partition = 'head_middle'
-    AND (quality_readability_flesch_kincaid > 5.0 
-         OR quality_lexical_richness_ttr > 0.6)
-```
-
-### Training Curriculum Integration
-
-The finalization stage organizes outputs for a two-level curriculum:
+The pipeline follows a strict ordering from cheapest to most expensive operations:
 
 ```
-output/
-  run_20251028/
-    pretrain/
-      prose/       # Stage 1: foundational language
-      web_html/    # Stage 1: filtered web content
-      source_code/ # Stage 2: programming knowledge
-      math/        # Stage 2: mathematical reasoning
-    sft/
-      dialogue/    # Instruction-following pairs
-    dpo/
-      preference/  # Chosen/rejected pairs for alignment
+s00 Validation       → s01 Parquet Conversion → s02 HTML Cleaning
+s03 Text Normalize   → s04 Heuristic Clean    → s04a PII Redaction
+s05 Build Manifest   → s06 Assign Splits      → s07 Exact Dedup
+s08 Language Filter  → s09 Quality Signals    → s09a Code Detection
+s10 Metadata Filter  → s11 Decontamination    → s13 Heuristic Scoring
+s14 Coarse Filter    → s15 Near Dedup (LSH)   → s16 PPL Tagging
+s17 Toxicity Tag     → s18 Final Quality      → s19 Axis Tagging
+s20 Control Tokens   → s21 Finalization (MDS)
 ```
+
+Document validity is tracked via `is_valid` and `filter_reason` columns. Each stage only marks documents as filtered—nothing is deleted—enabling full audit trails:
+
+```sql
+-- Find documents filtered by specific stage
+SELECT source_dataset, filter_reason, COUNT(*)
+FROM documents
+WHERE NOT is_valid
+GROUP BY source_dataset, filter_reason;
+```
+
+The refusal token strategy uses `[REFUSE]` and `[RESPOND]` prefixes to teach calibrated uncertainty:
+
+```
+<|im_start|>assistant
+[RESPOND] The capital of France is Paris.<|im_end|>
+
+<|im_start|>assistant
+[REFUSE] I cannot provide real-time stock prices.<|im_end|>
+```
+
+These tokens are embedded in the tokenizer vocabulary from day one, enabling consistent training from SFT through DPO alignment where refusal is explicitly preferred over hallucination.

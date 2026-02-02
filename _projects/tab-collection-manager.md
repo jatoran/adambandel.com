@@ -1,155 +1,132 @@
 ---
-title: TCM - Tab Collection Manager
-summary: Chrome extension replacing the New Tab page with a hierarchical tab organization system using drag-and-drop collections
-date: 2026-01-15
+title: Tab Collection Manager
+summary: Chrome extension that replaces New Tab with a powerful session manager for saving, organizing, and restoring tab groups
+started: 2025-04-01
+updated: 2025-04-12
+type: browser-extension
+stack:
+  - JavaScript
+  - Chrome Extension APIs
+  - IndexedDB
+  - SortableJS
+tags:
+  - developer-tools
+  - productivity
+  - automation
+loc: 6400
+files: 30
+architecture:
+  auth: none
+  database: IndexedDB
+  api: none
+  realtime: none
+  background: none
+  cache: in-memory
+  search: none
 ---
 
 ## Overview
 
-TCM (Tab Collection Manager) is a Chrome extension that transforms the browser's New Tab page into a powerful tab organization workspace. It provides a hierarchical system for saving, categorizing, and restoring groups of browser tabs through an intuitive three-panel interface with drag-and-drop functionality.
+Tab Collection Manager (TCM) is a Chrome/Edge browser extension that transforms the new tab page into a comprehensive session management system. It enables users to save groups of browser tabs as "collections" organized within hierarchical "libraries," making it easy to preserve research sessions, project contexts, or frequently-used tab groups for later restoration.
 
-The extension addresses the common problem of browser tab overload by letting users preserve their browsing sessions without keeping hundreds of tabs open. Unlike Chrome's built-in tab groups, TCM persists collections permanently with IndexedDB storage, supports nested organization through libraries, and syncs state across all open New Tab instances in real-time.
+Built with vanilla JavaScript and modern Manifest V3 architecture, TCM prioritizes performance and simplicity. The extension uses IndexedDB for scalable local storage and implements a message-passing architecture between the service worker and UI components for data consistency across all open new tab instances.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main interface showing the three-panel layout - left sidebar with library list, center with collection cards containing tab thumbnails, right sidebar with active browser windows -->
+<!-- SCREENSHOT: New Tab page showing the main interface with left sidebar (libraries), center grid (collections with tabs), and right sidebar (active browser windows) -->
 ![Main Interface](/images/projects/tab-collection-manager/screenshot-1.png)
 
-<!-- SCREENSHOT: Drag-and-drop in action - dragging a tab card from an active window in the right sidebar into a collection in the center panel -->
+<!-- SCREENSHOT: Drag-and-drop action - dragging a tab from the active windows sidebar into a collection card -->
 ![Drag and Drop](/images/projects/tab-collection-manager/screenshot-2.png)
 
-<!-- SCREENSHOT: Popup interface showing quick-save options with library selector dropdown and collection list -->
+<!-- SCREENSHOT: Browser action popup showing quick-save options for current tab or all window tabs -->
 ![Popup Quick Actions](/images/projects/tab-collection-manager/screenshot-3.png)
 
 ## Problem
 
-Modern web browsing often leads to "tab hoarding" - keeping dozens of tabs open as reminders or for later reading. This creates performance issues, cluttered browser interfaces, and anxiety about losing important pages. Chrome's native solutions (bookmarks, tab groups, reading lists) each have limitations:
+Modern browsing often involves dozens of open tabs representing different research sessions, projects, or contexts. Browsers offer basic bookmarking but lack intuitive ways to save and restore entire tab sessions. Users either lose important tab groups when closing windows or resort to keeping windows perpetually open, consuming memory and creating clutter.
 
-- **Bookmarks** lack visual organization and require manual folder management
-- **Tab groups** disappear when the browser closes
-- **Reading lists** are flat and don't support categorization
-
-TCM solves these problems by providing:
-- Persistent storage that survives browser restarts
-- Visual card-based interface for quick scanning
-- Hierarchical organization (Libraries > Collections > Tabs)
-- One-click saving of entire browser windows
-- Drag-and-drop reorganization between collections
+Existing session managers often feel clunky, require too many clicks, or don't integrate naturally with the browsing workflow. There was a need for a solution that makes saving tabs as effortless as drag-and-drop while providing quick visual access to all saved sessions.
 
 ## Approach
 
 ### Stack
 
-- **Chrome Extension APIs (MV3)** - Built on Manifest V3 architecture with ES modules, using service workers for background processing and `chrome_url_overrides` for NTP replacement
-- **IndexedDB** - Primary data store for scalable, structured storage with `unlimitedStorage` permission, featuring indexed queries for efficient retrieval
-- **SortableJS** - Handles all drag-and-drop interactions with support for cross-list transfers and ghost element previews
-- **Vanilla JavaScript** - No framework dependencies; uses a modular architecture with clear separation between UI components, data management, and interaction handlers
-- **CSS Custom Properties** - Full light/dark theme support through CSS variables with smooth transitions
-
-### Architecture
-
-```
-service-worker/
-  background.js       # Message router and event broker
-  dataActions.js      # CRUD operations handler
-  importExport.js     # JSON data serialization
-
-newtab/
-  newtab.js           # Main orchestrator
-  data/
-    dataLoader.js     # Data fetching with caching
-    state.js          # UI state management (collapse, expansion)
-  ui/
-    sidebar.js        # Library navigation panel
-    libraryView.js    # Main collection grid
-    activeWindowsSidebar.js  # Live browser tabs panel
-  interaction/
-    dragDrop.js       # SortableJS configuration
-    searchFilter.js   # Real-time tab filtering
-
-lib/
-  storageManager.js   # Facade over IndexedDB
-  indexedDbManager.js # Low-level DB operations
-```
+- **Vanilla JavaScript (ES6 Modules)** - No framework overhead; native module system keeps code organized while maintaining fast load times for the new tab page
+- **IndexedDB** - Scalable client-side storage with relational indexing, essential for handling potentially thousands of saved tabs without hitting chrome.storage quotas
+- **Chrome Extension APIs** - Manifest V3 service worker pattern for modern extension architecture with proper tab/window lifecycle management
+- **SortableJS** - Battle-tested drag-and-drop library enabling intuitive reordering and cross-list tab movement
 
 ### Challenges
 
-- **Real-time sync across NTP instances** - Multiple New Tab pages need to reflect the same data. Solved by having each NTP register its tab ID with the service worker, which broadcasts `dataUpdated` messages to all registered instances. The NTP message listener then triggers selective or full UI refreshes based on the change type.
+- **Real-time synchronization across tabs** - When users have multiple new tab pages open, data changes must reflect everywhere. Solved with a tab registration pattern where the service worker maintains a Set of active new tab IDs and broadcasts `dataUpdated` messages after every data mutation.
 
-- **Drag-and-drop between different sources** - Tabs can be dragged from saved collections OR from the live browser windows sidebar. SortableJS's `onAdd` handler distinguishes sources by checking `data-source` attributes, applying different logic for cloning active tabs versus moving saved ones.
+- **Manifest V3 service worker constraints** - Unlike MV2's persistent background pages, service workers are stateless and can terminate at any time. Solved by using IndexedDB as the single source of truth and keeping the service worker purely event-driven, avoiding any reliance on in-memory state.
 
-- **IndexedDB cascading deletes** - Deleting a library must remove all its collections and tabs. The `storageManager` implements cascading delete logic that maintains referential integrity by cleaning up order arrays in parent objects.
-
-- **State persistence granularity** - Different state needs different sync strategies. Collection collapse state uses `chrome.storage.sync` for cross-device consistency, while the active library uses `chrome.storage.local` since it's session-specific.
+- **Drag-and-drop from active browser tabs** - Enabling users to drag tabs from the active windows sidebar into collections required careful coordination between SortableJS groups. Implemented using `pull: 'clone'` for the source group and custom `onAdd` handlers that create new tab entries and optionally close the original browser tabs.
 
 ## Outcomes
 
-The extension successfully replaces the default New Tab page with a functional tab management workspace. Key achievements:
+The extension successfully provides a frictionless way to manage browser sessions. Key achievements include:
 
-- **Zero-dependency UI** - The entire interface is built with vanilla JavaScript, keeping the extension lightweight (under 100KB unpacked)
-- **Instant load times** - Aggressive caching in `dataLoader.js` ensures the NTP renders in under 100ms on repeat visits
-- **Keyboard accessibility** - Full keyboard navigation with visible focus states for power users
-- **Robust data model** - The `*Order` arrays pattern (e.g., `collectionOrder`, `tabOrder`) ensures user-defined sequences survive all CRUD operations
+- **Zero-config new tab replacement** that loads instantly with cached data
+- **Three-pane interface** giving users simultaneous visibility of saved collections and active browser windows
+- **Hierarchical organization** with libraries containing collections containing tabs
+- **Full import/export** capability for data portability and backup
+- **Smooth animations** for tab additions/removals creating a polished user experience
+
+The project demonstrated that modern browser extensions can be built effectively without build tools or frameworks, leveraging native ES6 modules and Chrome's extension APIs directly.
 
 ## Implementation Notes
 
-### Message-Based Architecture
+### Data Model
 
-The extension uses a decoupled message-passing architecture where UI components never access storage directly:
+The hierarchical structure uses order arrays for user-defined sequencing:
 
 ```javascript
-// UI component sends action to service worker
-chrome.runtime.sendMessage({
-  action: 'moveTab',
-  payload: {
-    movedTabId,
-    fromCollectionId,
-    toCollectionId,
-    newToOrder
-  }
-}, (response) => {
-  if (!response?.success) {
-    // Handle error, revert optimistic UI
+Library {
+  id, name, color, createdAt,
+  collectionOrder: [collectionId, ...]  // User-defined order
+}
+
+Collection {
+  id, libraryId, name, color, createdAt, lastModifiedAt,
+  tabOrder: [tabId, ...]  // User-defined order
+}
+
+Tab {
+  id, collectionId, title, url, faviconUrl, createdAt
+}
+```
+
+### Message-Passing Architecture
+
+All data mutations flow through the service worker to ensure consistency:
+
+```javascript
+// UI sends action request
+chrome.runtime.sendMessage({ 
+  action: 'addTabToCollection', 
+  collectionId, tab 
+});
+
+// Service Worker processes and broadcasts
+export const activeNewTabIds = new Set();
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Process action...
+  // Then notify all active new tab pages
+  for (const tabId of activeNewTabIds) {
+    chrome.tabs.sendMessage(tabId, { action: 'dataUpdated' });
   }
 });
 ```
 
-### Hierarchical Data Model
+### Dual Update Strategy
 
-```javascript
-// Library -> Collections -> Tabs with order arrays
-{
-  id: 'lib-uuid',
-  name: 'Work Research',
-  collectionOrder: ['coll-1', 'coll-2'], // Maintains display order
-  createdAt: 1706234567890
-}
+For performance, the UI uses targeted updates when possible:
 
-{
-  id: 'coll-1',
-  libraryId: 'lib-uuid',
-  name: 'API Documentation',
-  tabOrder: ['tab-a', 'tab-b', 'tab-c'],
-  lastModifiedAt: 1706234567890
-}
-```
+- **Collection collapse state** - Direct DOM manipulation, persisted to sync storage
+- **Data changes** - Full cache clear and re-render to ensure consistency
 
-### Storage Facade Pattern
-
-All storage operations go through `storageManager.js`, which enforces business rules:
-
-```javascript
-export async function deleteCollection(collectionId) {
-  // 1. Find parent library for order array update
-  const collection = await IDB.getCollection(collectionId);
-  const libraryId = collection.libraryId;
-  
-  // 2. Cascading delete in IndexedDB
-  await IDB.deleteCollectionAndContents(collectionId);
-  
-  // 3. Remove from library's collectionOrder
-  const lib = await IDB.getLibrary(libraryId);
-  lib.collectionOrder = lib.collectionOrder.filter(id => id !== collectionId);
-  await IDB.putLibrary(lib);
-}
-```
+This balances responsiveness for frequent UI interactions with correctness for data mutations.
