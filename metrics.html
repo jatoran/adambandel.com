@@ -262,9 +262,9 @@ const projects = [
         type: {{ project.type | jsonify }},
         loc: {{ project.loc | default: 0 }},
         files: {{ project.files | default: 0 }},
-        stack: {{ project.stack | jsonify | default: "[]" }},
-        tags: {{ project.tags | jsonify | default: "[]" }},
-        architecture: {{ project.architecture | jsonify | default: "{}" }}
+        stack: {% if project.stack %}{{ project.stack | jsonify }}{% else %}[]{% endif %},
+        tags: {% if project.tags %}{{ project.tags | jsonify }}{% else %}[]{% endif %},
+        architecture: {% if project.architecture %}{{ project.architecture | jsonify }}{% else %}{}{% endif %}
     }{% unless forloop.last %},{% endunless %}
     {% endfor %}
 ];

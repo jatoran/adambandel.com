@@ -7,7 +7,7 @@ layout: default
     display: flex;
     align-items: baseline;
     gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 .project-header h1 {
     margin-bottom: 0;
@@ -16,6 +16,53 @@ layout: default
     color: #93a1a1;
     font-size: 0.9rem;
     font-weight: normal;
+}
+.project-meta {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #eee8d5;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+.meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.meta-row:last-child {
+    margin-bottom: 0;
+}
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.meta-label {
+    color: #93a1a1;
+}
+.meta-value {
+    color: #073642;
+}
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+.tag {
+    background: #fdf6e3;
+    color: #657b83;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+.tag.tech {
+    background: #268bd2;
+    color: white;
+}
+.tag.domain {
+    background: #2aa198;
+    color: white;
 }
 .discussions {
     margin-top: 3rem;
@@ -43,7 +90,36 @@ layout: default
 <article>
     <div class="project-header">
         <h1>{{ page.title }}</h1>
-        {% if page.date %}<span class="project-date">{{ page.date | date: "%b %Y" }}</span>{% endif %}
+        {% if page.updated %}<span class="project-date">{{ page.updated | date: "%b %Y" }}</span>{% elsif page.date %}<span class="project-date">{{ page.date | date: "%b %Y" }}</span>{% endif %}
+    </div>
+
+    <div class="project-meta">
+        <div class="meta-row">
+            {% if page.type %}<div class="meta-item"><span class="meta-label">Type:</span> <span class="meta-value">{{ page.type }}</span></div>{% endif %}
+            {% if page.loc %}<div class="meta-item"><span class="meta-label">Code:</span> <span class="meta-value">{{ page.loc | divided_by: 1000 }}k lines</span></div>{% endif %}
+            {% if page.files %}<div class="meta-item"><span class="meta-label">Files:</span> <span class="meta-value">{{ page.files }}</span></div>{% endif %}
+            {% if page.started and page.updated %}<div class="meta-item"><span class="meta-label">Active:</span> <span class="meta-value">{{ page.started | date: "%b %Y" }} — {{ page.updated | date: "%b %Y" }}</span></div>{% endif %}
+        </div>
+        {% if page.stack %}
+        <div class="meta-row">
+            <div class="meta-item">
+                <span class="meta-label">Stack:</span>
+                <div class="tag-list">
+                    {% for tech in page.stack %}<span class="tag tech">{{ tech }}</span>{% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if page.tags %}
+        <div class="meta-row">
+            <div class="meta-item">
+                <span class="meta-label">Tags:</span>
+                <div class="tag-list">
+                    {% for tag in page.tags %}<span class="tag domain">{{ tag }}</span>{% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
     {{ content }}
