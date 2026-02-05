@@ -3,14 +3,13 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Not found</title>
 </head>
 
 <body>
     <script>
-        // If request was under /valadezfamily, redirect to new domain (preserve remainder)
-        if (location.pathname.startsWith("/valadezfamily")) {
-            const rest = location.pathname.replace(/^\/valadezfamily/, "") || "/";
+        const prefix = "/valadezfamily";
+        if (location.pathname === prefix || location.pathname.startsWith(prefix + "/")) {
+            const rest = location.pathname.slice(prefix.length) || "/";
             location.replace("https://valadezvalor.com" + rest + location.search + location.hash);
         }
     </script>
