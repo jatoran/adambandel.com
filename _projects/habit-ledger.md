@@ -1,6 +1,8 @@
 ---
 title: Habit Ledger
 summary: Privacy-first Android app for tracking habits, health metrics, and activities with home screen widgets
+started: 2026-02-04
+updated: 2026-02-04
 type: android
 stack:
   - Kotlin
