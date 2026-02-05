@@ -1,6 +1,6 @@
 ---
 title: "Habit Ledger Devlog: Building a Quantified Self Tracking App"
-date: 2026-02-04
+date: 2025-08-28
 project: habit-ledger
 ---
 
