@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Oregon &amp; Washington Coast — Trip Plan, July 22–26</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root {
+    --wed: #7e22ce;
+    --thu: #2563eb;
+    --fri: #16a34a;
+    --sat: #f97316;
+    --sun: #dc2626;
+    --ink: #1c2230;
+    --muted: #5b6577;
+    --paper: #f6f7f9;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 8vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #fff;
+    background: #222 center/cover no-repeat;
+    background-image:
+      linear-gradient(180deg, rgba(10,12,20,.25) 0%, rgba(10,12,20,.30) 45%, rgba(10,12,20,.85) 100%),
+      url("images/multnomah-falls-04.jpg");
+  }
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 28px 64px;
+  }
+  .hero .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: .9;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 7vw, 76px);
+    line-height: 1.02;
+    margin: 0 0 16px;
+    font-weight: 800;
+    text-shadow: 0 2px 30px rgba(0,0,0,.45);
+  }
+  .hero p.sub {
+    font-size: clamp(16px, 2.4vw, 21px);
+    max-width: 640px;
+    margin: 0 0 26px;
+    opacity: .95;
+  }
+  .facts { display: flex; flex-wrap: wrap; gap: 10px; }
+  .fact {
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.28);
+    backdrop-filter: blur(6px);
+    border-radius: 999px;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .fact b { font-weight: 700; }
+  .scroll-cue {
+    position: absolute;
+    bottom: 18px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+    opacity: .85; animation: bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{transform:translate(-50%,0)} 50%{transform:translate(-50%,7px)} }
+
+  /* ---------- Sticky day nav ---------- */
+  .daynav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(246,247,249,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e4e7ec;
+  }
+  .daynav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; gap: 8px; padding: 11px 18px; overflow-x: auto;
+  }
+  .daynav a {
+    flex: 0 0 auto;
+    text-decoration: none;
+    font-size: 13px; font-weight: 600;
+    color: var(--muted);
+    padding: 7px 13px; border-radius: 999px;
+    border: 1.5px solid transparent;
+    white-space: nowrap;
+    transition: all .15s ease;
+  }
+  .daynav a .dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    margin-right: 7px; vertical-align: 1px; background: var(--c);
+  }
+  .daynav a:hover { color: var(--ink); background: #eceef2; }
+  .daynav a.active {
+    color: var(--ink); border-color: var(--c);
+    background: #fff;
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 18px 80px; }
+
+  .day {
+    --c: var(--wed);
+    padding-top: 30px;
+  }
+  .day-head {
+    position: relative;
+    margin: 34px 0 8px;
+    padding: 26px 26px 22px;
+    border-radius: 18px;
+    color: #fff;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--c), color-mix(in srgb, var(--c) 70%, #000 30%));
+    box-shadow: 0 14px 34px -16px var(--c);
+  }
+  .day-head .dow {
+    font-size: 13px; letter-spacing: .18em; text-transform: uppercase;
+    font-weight: 700; opacity: .9;
+  }
+  .day-head h2 { margin: 4px 0 6px; font-size: clamp(24px,4vw,34px); font-weight: 800; }
+  .day-head .theme { margin: 0; font-size: 15px; opacity: .95; font-style: italic; }
+
+  /* timeline */
+  .timeline {
+    position: relative;
+    margin-left: 13px;
+    border-left: 2px solid color-mix(in srgb, var(--c) 35%, #d7dbe2 65%);
+    padding: 12px 0 6px;
+  }
+  .item { position: relative; padding: 0 0 26px 30px; }
+  .item::before {
+    content: attr(data-n);
+    position: absolute; left: -15px; top: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--c); color: var(--c);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .item.place::before { background: var(--c); color: #fff; }
+
+  /* reveal */
+  .reveal { opacity: 1; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* step row */
+  .step {
+    display: flex; align-items: baseline; gap: 9px;
+    color: var(--muted); font-size: 15.5px;
+    padding-top: 2px;
+  }
+  .step .ic { font-size: 16px; }
+  .step b { color: var(--ink); font-weight: 650; }
+
+  /* place card */
+  .card {
+    background: var(--card);
+    border: 1px solid #e7eaef;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px -28px rgba(20,30,60,.5);
+  }
+  .gallery {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 12px; background: #0d1220;
+    scroll-snap-type: x mandatory; scrollbar-width: thin;
+    scrollbar-color: #475067 #0d1220;
+  }
+  .gallery img {
+    height: 150px; width: auto; flex: 0 0 auto; object-fit: cover;
+    border-radius: 10px; cursor: zoom-in; scroll-snap-align: center;
+    background: #182033; transition: filter .2s ease;
+  }
+  .gallery img:hover { filter: brightness(1.07); }
+  .gallery-empty { padding: 26px; text-align: center; color: var(--muted); background: #f0f2f5; }
+  .swipe-hint { font-size: 12.5px; color: var(--muted); padding: 9px 20px 2px; }
+  .swipe-hint b { color: var(--ink); font-weight: 650; }
+  .card-body { padding: 14px 20px 19px; }
+  @media (max-width: 620px) { .gallery img { height: 220px; } }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    color: var(--c); background: color-mix(in srgb, var(--c) 12%, #fff 88%);
+    border: 1px solid color-mix(in srgb, var(--c) 30%, #fff 70%);
+    padding: 3px 9px; border-radius: 999px; margin-bottom: 9px;
+  }
+  .card-body h3 { margin: 0 0 7px; font-size: 21px; font-weight: 750; }
+  .card-body p { margin: 0; color: #39404e; font-size: 15.5px; }
+  .flag {
+    margin-top: 11px; font-size: 14px;
+    background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412;
+    padding: 9px 12px; border-radius: 10px;
+  }
+  .flag.optional { background: #f1f5f9; border-color: #cbd5e1; color: #334155; }
+
+  .daynote {
+    margin: 4px 0 0 30px; font-size: 14px; color: var(--muted);
+    border-left: 3px solid color-mix(in srgb, var(--c) 50%, #fff 50%);
+    padding: 6px 0 6px 12px;
+  }
+
+  /* ---------- ideas / alternatives ---------- */
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  .chev { display: inline-block; transition: transform .2s ease; font-size: 12px; }
+  details[open] > summary .chev { transform: rotate(90deg); }
+
+  .ideas { margin: 10px 0 4px 30px; }
+  .ideas > summary {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 13.5px; font-weight: 700; color: var(--ink);
+    background: #fff;
+    border: 1.5px dashed color-mix(in srgb, var(--c) 55%, #c2c8d2 45%);
+    padding: 8px 15px; border-radius: 999px;
+  }
+  .ideas > summary:hover { background: #fbfcfe; }
+  .ideas-lead {
+    margin: 12px 0 10px; font-size: 13px; color: var(--muted);
+    font-style: italic;
+  }
+  .idea-grid { display: grid; gap: 11px; }
+  .idea {
+    background: #fbfcfd;
+    border: 1.5px dashed #cbd2dd;
+    border-left: 4px solid var(--c);
+    border-radius: 12px; padding: 12px 15px;
+  }
+  .idea-gallery {
+    display: flex; gap: 6px; overflow-x: auto; margin: 0 0 11px;
+    padding-bottom: 4px; scroll-snap-type: x mandatory; scrollbar-width: thin;
+    border-radius: 9px;
+  }
+  .idea-gallery img {
+    height: 150px; width: auto; flex: 0 0 auto; object-fit: cover;
+    border-radius: 8px; cursor: zoom-in; scroll-snap-align: start;
+    background: #e7eaef; transition: filter .15s ease;
+  }
+  .idea-gallery img:hover { filter: brightness(1.06); }
+  .idea h4 { display: inline; margin: 0; font-size: 16px; font-weight: 750; }
+  .itag {
+    display: inline-block; font-size: 10px; font-weight: 800;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 999px; margin-right: 9px; vertical-align: 2px;
+  }
+  .itag.add { background: #dcfce7; color: #15803d; }
+  .itag.swap { background: #dbeafe; color: #1d4ed8; }
+  .itag.optional { background: #ede9fe; color: #6d28d9; }
+  .itag.eat { background: #ffedd5; color: #c2410c; }
+  .itag.skip { background: #fee2e2; color: #b91c1c; }
+  .itag.note { background: #e2e8f0; color: #334155; }
+  .idea .what { margin: 7px 0 0; font-size: 14px; color: #39404e; }
+  .idea .meta { margin-top: 9px; display: flex; flex-direction: column; gap: 4px; }
+  .idea .dogline { font-size: 13px; color: #3f6212; }
+  .idea .routeline { font-size: 13px; color: #344054; font-weight: 650; }
+
+  /* ---------- weather ---------- */
+  .weatherbar { max-width: 900px; margin: 24px auto 0; padding: 0 18px; }
+  .wx-card {
+    background: #fff; border: 1px solid #e7eaef; border-radius: 16px;
+    padding: 15px 17px; box-shadow: 0 18px 40px -30px rgba(20,30,60,.5);
+  }
+  .wx-title { font-weight: 800; font-size: 16px; margin-bottom: 12px; }
+  .wx-title span { color: var(--muted); font-weight: 600; font-size: 14px; }
+  .wx-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
+  .wx-day {
+    border: 1px solid #eef1f5; border-top: 3px solid var(--c);
+    border-radius: 12px; padding: 11px 8px 10px; text-align: center; background: #fcfdfe;
+  }
+  .wx-dow { font-weight: 800; font-size: 12.5px; letter-spacing: .03em; }
+  .wx-date { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .wx-icon { font-size: 28px; line-height: 1; margin: 7px 0 5px; }
+  .wx-temp { font-weight: 800; font-size: 15.5px; }
+  .wx-temp span { color: var(--muted); font-weight: 600; font-size: 13px; }
+  .wx-sum { font-size: 11px; color: #51596b; margin-top: 4px; line-height: 1.25; }
+  .wx-note { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.45; }
+  .day-weather {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+    background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.30);
+    padding: 5px 13px; border-radius: 999px; font-size: 13.5px; color: #fff;
+  }
+  .day-weather b { font-weight: 800; }
+  .day-weather .wx-i { font-size: 16px; }
+  @media (max-width: 620px) {
+    .wx-strip { grid-template-columns: repeat(5, minmax(82px, 1fr)); overflow-x: auto; }
+  }
+
+  /* ---------- before-you-go notes panel ---------- */
+  .notes-wrap { max-width: 900px; margin: 22px auto 0; padding: 0 18px; }
+  .notes { }
+  .notes > summary {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 15px; font-weight: 800; color: var(--ink);
+    padding: 4px 0 12px;
+  }
+  .notes-card {
+    background: #fff; border: 1px solid #e7eaef; border-radius: 16px;
+    padding: 6px 20px 10px; box-shadow: 0 18px 40px -30px rgba(20,30,60,.5);
+  }
+  .note-row { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid #eef1f5; font-size: 14.5px; }
+  .note-row:first-child { border-top: none; }
+  .note-row .k { font-weight: 750; min-width: 132px; }
+  .note-row .v { color: #39404e; }
+  @media (max-width: 620px) {
+    .note-row { flex-direction: column; gap: 2px; }
+    .note-row .k { min-width: 0; }
+    .ideas, .daynote { margin-left: 24px; }
+  }
+
+  /* footer */
+  footer {
+    max-width: 900px; margin: 0 auto; padding: 28px 18px 70px;
+    color: var(--muted); font-size: 14px; text-align: center;
+  }
+  footer a { color: var(--thu); font-weight: 600; }
+  .closing {
+    background: #fff; border: 1px solid #e7eaef; border-radius: 16px;
+    padding: 22px 24px; margin: 10px auto 26px; max-width: 640px;
+    box-shadow: 0 18px 40px -30px rgba(20,30,60,.5);
+  }
+  .closing b { color: var(--ink); }
+
+  /* lightbox */
+  #lightbox {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(8,10,16,.9); align-items: center; justify-content: center; padding: 32px;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img { max-width: 94vw; max-height: 86vh; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 60px rgba(0,0,0,.6); }
+  #lightbox .x { position: absolute; top: 16px; right: 24px; color: #fff; font-size: 36px; cursor: pointer; font-weight: 700; line-height: 1; }
+  #lightbox .cap { position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; color: #dfe3ea; font-size: 13px; padding: 0 20px; }
+
+  @media (max-width: 620px) {
+    .gallery img { height: 190px; }
+    .item { padding-left: 24px; }
+    .timeline { margin-left: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Road Trip · July 22–26, 2026</div>
+    <h1>Oregon &amp; the<br />Washington Coast</h1>
+    <p class="sub">Five days from Portland's waterfalls to Mt. Hood to the wild north coast — scroll down to walk the whole thing, day by day.</p>
+    <div class="facts">
+      <span class="fact">✈️ <b>Arrive</b> Wed 7/22 · PDX 9:25a</span>
+      <span class="fact">✈️ <b>Depart</b> Sun 7/26 · PDX 5:39p</span>
+      <span class="fact">🛏️ <b>Portland</b> Wed–Thu</span>
+      <span class="fact">🛏️ <b>Cannon Beach</b> Fri–Sat</span>
+      <span class="fact">🚗 Rental car the whole way</span>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll ↓</div>
+</header>
+
+<nav class="daynav">
+  <div class="daynav-inner" id="daynav"></div>
+</nav>
+
+<section class="weatherbar" id="weatherbar"></section>
+
+<section class="notes-wrap" id="tripnotes"></section>
+
+<main class="wrap" id="trip"></main>
+
+<footer>
+  <div class="closing">
+    <p style="margin:0 0 6px"><b>If Sunday feels tight:</b> skip Cape Disappointment and just do Cannon Beach → Astoria → PDX. Protect that 2:45–3:00 p.m. rental return.</p>
+  </div>
+  Photos: Wikimedia Commons, saved locally in <code>/images</code>. ·
+  <a href="oregon_trip_actual_route_with_large_images.html">Open the route map →</a>
+</footer>
+
+<div id="lightbox"><span class="x">&times;</span><img src="" alt="" /><div class="cap"></div></div>
+
+<script>
+  const COLORS = { Wed: 'var(--wed)', Thu: 'var(--thu)', Fri: 'var(--fri)', Sat: 'var(--sat)', Sun: 'var(--sun)' };
+
+  /* IMAGES_DATA_START — generated by apply_images.py from images_manifest.json; do not hand-edit */
+    const STOP_IMAGES = {"PDX / Portland Airport":[{"f":"images/pdx-portland-airport-01.jpg","t":"PDX Portland 2985.jpg"},{"f":"images/pdx-portland-airport-02.jpg","t":"PDX Portland 1569.jpg"},{"f":"images/pdx-portland-airport-03.jpg","t":"PDX drop off canopy wide.jpg"},{"f":"images/pdx-portland-airport-04.jpg","t":"PDX Cargo Center at Portland International Airport (2015).jpg"},{"f":"images/pdx-portland-airport-05.jpg","t":"PDX from Rocky Butte.JPG"},{"f":"images/pdx-portland-airport-06.jpg","t":"Portland International Airport PDX check in counters (Quintin Soloviev).jpg"}],"Downtown Portland":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Pittock Mansion viewpoint":[{"f":"images/pittock-mansion-viewpoint-01.jpg","t":"Portland Oregon ~ Pittock Mansion ~ Historic Mansion ~ My Vintage Photo"},{"f":"images/pittock-mansion-viewpoint-02.jpg","t":"Portland and Mt Hood"},{"f":"images/pittock-mansion-viewpoint-03.jpg","t":"Portland, OR"},{"f":"images/pittock-mansion-viewpoint-04.jpg","t":"Foggy Morning at the Pittock Mansion in Black and White"},{"f":"images/pittock-mansion-viewpoint-05.jpg","t":"The Pittock Mansion 1914"},{"f":"images/pittock-mansion-viewpoint-06.jpg","t":"Pittock Mansion stairway"},{"f":"images/pittock-mansion-viewpoint-07.jpg","t":"View over Portland and Mt. Hood from Pittock Mansion"},{"f":"images/pittock-mansion-viewpoint-08.jpg","t":"Pittock Mansion View"}],"International Rose Test Garden":[{"f":"images/international-rose-test-garden-01.jpg","t":"International Rose Test Garden (Portland, Oregon)"},{"f":"images/international-rose-test-garden-02.jpg","t":"International Rose Test Garden - Portland Or."},{"f":"images/international-rose-test-garden-03.jpg","t":"Yours truly at International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-04.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-05.jpg","t":"International Rose Test Garden, Portland, Oregon (2022) - 020"},{"f":"images/international-rose-test-garden-06.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-07.jpg","t":"International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-08.jpg","t":"Yours truly at International Rose Test Garden, Portland"}],"Portland hotel area":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Vista House / Crown Point":[{"f":"images/vista-house-crown-point-01.jpg","t":"Crown Point Vista House (HDR)"},{"f":"images/vista-house-crown-point-02.jpg","t":"Vista House, Crown Point, Oregon.jpeg - Historic Columbia River Highway - Multnomah County"},{"f":"images/vista-house-crown-point-03.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-04.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-05.jpg","t":"Crown Point Clouds"},{"f":"images/vista-house-crown-point-06.jpg","t":"Vista House ~Oregon State ~ Columbia Gorge ~ My Old Photo"},{"f":"images/vista-house-crown-point-07.jpg","t":"Vista House"},{"f":"images/vista-house-crown-point-08.jpg","t":"Crown Point 3440 H"}],"Latourell Falls":[{"f":"images/latourell-falls-01.jpg","t":"Latourelle Falls, Oregon, in autumn."},{"f":"images/latourell-falls-02.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-03.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-04.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-05.jpg","t":"Vintage Postcard - Latourell Falls, Oregon"},{"f":"images/latourell-falls-06.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-07.jpg","t":"Latourell Falls, Oregon"},{"f":"images/latourell-falls-08.jpg","t":"Lower Latourell Falls (Oregon, USA)"}],"Bridal Veil Falls":[{"f":"images/bridal-veil-falls-01.jpg","t":"A view of bridal veil falls, Oregon 01.jpg"},{"f":"images/bridal-veil-falls-02.jpg","t":"A view of bridal veil falls trail.jpg"},{"f":"images/bridal-veil-falls-03.jpg","t":"A view of bridal veil falls stairs.jpg"},{"f":"images/bridal-veil-falls-04.jpg","t":"Bridal Veil Falls kayaker.jpg"},{"f":"images/bridal-veil-falls-05.jpg","t":"Green cascade in Bridal Veil Falls (Unsplash).jpg"},{"f":"images/bridal-veil-falls-06.jpg","t":"Bridal Veil Falls (Oregon), 2017-05-28.jpg"}],"Wahkeena Falls":[{"f":"images/wahkeena-falls-01.jpg","t":"Wahkeena Falls - Oregon"},{"f":"images/wahkeena-falls-02.jpg","t":"Moss on Lava, Wahkeena Falls, Oregon 9-06"},{"f":"images/wahkeena-falls-03.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-04.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-05.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-06.jpg","t":"bridge at Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-07.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-08.jpg","t":"Wahkeena Falls, Oregon, Columbia River"}],"Multnomah Falls":[{"f":"images/multnomah-falls-01.jpg","t":"Multnomah Falls, Oregon, c1916"},{"f":"images/multnomah-falls-02.jpg","t":"Multnomah Falls ~ Oregon"},{"f":"images/multnomah-falls-03.jpg","t":"Multnomah Falls, Oregon, in the autumn."},{"f":"images/multnomah-falls-04.jpg","t":"Multnomah Falls ~ Oregon ~ Northwestern United States"},{"f":"images/multnomah-falls-05.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"},{"f":"images/multnomah-falls-06.jpg","t":"Multnomah Falls ~ Oregon ~ Landmark"},{"f":"images/multnomah-falls-07.jpg","t":"Multnomah Falls, Oregon"},{"f":"images/multnomah-falls-08.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"}],"Horsetail Falls":[{"f":"images/horsetail-falls-01.jpg","t":"Horsetail Falls, Columbia Gorge - Oregon"},{"f":"images/horsetail-falls-02.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-03.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-04.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-05.jpg","t":"Upper Horsetail Falls in Oregon by Michael Matti"},{"f":"images/horsetail-falls-06.jpg","t":"Misty Crossroads"},{"f":"images/horsetail-falls-07.jpg","t":"Ponytail Falls"},{"f":"images/horsetail-falls-08.jpg","t":"Horsetail Falls, Oregon, in autumn"}],"Timberline Lodge / Mt. Hood":[{"f":"images/timberline-lodge-mt-hood-01.jpg","t":"Timberline Lodge (WPA-built, 1937)"},{"f":"images/timberline-lodge-mt-hood-02.jpg","t":"Timberline Lodge, Mount Hood"},{"f":"images/timberline-lodge-mt-hood-03.jpg","t":"Mount Hood"},{"f":"images/timberline-lodge-mt-hood-04.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-05.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-06.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-07.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-08.jpg","t":"White River & White Falls"}],"Trillium Lake":[{"f":"images/trillium-lake-01.jpg","t":"Creating a Memory"},{"f":"images/trillium-lake-02.jpg","t":"Trillium Lake, Oregon"},{"f":"images/trillium-lake-03.jpg","t":"Late Evening at Mount Hood"},{"f":"images/trillium-lake-04.jpg","t":"Mount Hood and Trillium Lake"},{"f":"images/trillium-lake-05.jpg","t":"0134_Trillium_Lake_Swart_ODFW.jpg"},{"f":"images/trillium-lake-06.jpg","t":"Mt. Hood from Trillium Lake"},{"f":"images/trillium-lake-07.jpg","t":"Duck eye view of Mount Hood"},{"f":"images/trillium-lake-08.jpg","t":"Mount Hood from Trillium Lake"}],"Cannon Beach hotel area":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Wayfarer Restaurant / Haystack Rock":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Ecola State Park":[{"f":"images/ecola-state-park-01.jpg","t":"Ecola State Park - Oregon Coast"},{"f":"images/ecola-state-park-02.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/ecola-state-park-03.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-04.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-05.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-06.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-07.jpg","t":"Ecola State Park, Oregon Coast, Cannon Beach"},{"f":"images/ecola-state-park-08.jpg","t":"Ecola State Park, Oregon Coast"}],"Indian Beach":[{"f":"images/indian-beach-01.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-02.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-03.jpg","t":"Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-04.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/indian-beach-05.jpg","t":"Indian Beach, Ecola State Park, Oregon Coast"},{"f":"images/indian-beach-06.jpg","t":"Arch from Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-07.jpg","t":"Surf's Up"},{"f":"images/indian-beach-08.jpg","t":"Indian Beach Native"}],"Oswald West / Short Sand Beach":[{"f":"images/oswald-west-short-sand-beach-01.jpg","t":"Short Sand gray (3)"},{"f":"images/oswald-west-short-sand-beach-02.jpg","t":"Neahkahnie meets the water"},{"f":"images/oswald-west-short-sand-beach-03.jpg","t":"Short Sand gray (5)"},{"f":"images/oswald-west-short-sand-beach-04.jpg","t":"Oswald West State Park"},{"f":"images/oswald-west-short-sand-beach-05.jpg","t":"Neahkahnie over Short Sand Beach"},{"f":"images/oswald-west-short-sand-beach-06.jpg","t":"Short Sand gray (1)"},{"f":"images/oswald-west-short-sand-beach-07.jpg","t":"Short Sand gray (4)"},{"f":"images/oswald-west-short-sand-beach-08.jpg","t":"Short Sand gray (2)"}],"Neahkahnie Viewpoint":[{"f":"images/neahkahnie-viewpoint-01.jpg","t":"Whale watching from Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-02.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-03.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-04.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-05.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-06.jpg","t":"Viewpoint looking south, Neahkahnie Mountain, Oregon coast"},{"f":"images/neahkahnie-viewpoint-07.jpg","t":"Neahkahnie Mountain Trail, Oregon"},{"f":"images/neahkahnie-viewpoint-08.jpg","t":"Oregon coast - looking south from Neahkahnie Mountain"}],"Astoria":[{"f":"images/astoria-01.jpg","t":"The Astoria Bridge"},{"f":"images/astoria-02.jpg","t":"Astoria By Night"},{"f":"images/astoria-03.jpg","t":"A Relic of the Gilded Age (1893)"},{"f":"images/astoria-04.jpg","t":"Astoria Waterfront"},{"f":"images/astoria-05.jpg","t":"Astoria"},{"f":"images/astoria-06.jpg","t":"Columbia River"},{"f":"images/astoria-07.jpg","t":"Crossing the Columbia River"},{"f":"images/astoria-08.jpg","t":"20071007TRD004934"}],"Fort Stevens / Peter Iredale":[{"f":"images/fort-stevens-peter-iredale-01.jpg","t":"Between Sand and Sea"},{"f":"images/fort-stevens-peter-iredale-02.jpg","t":"Wreck of the Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-03.jpg","t":"Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-04.jpg","t":"Peter Iredale shipwreck, Fort Stevens State Park, Oregon"},{"f":"images/fort-stevens-peter-iredale-05.jpg","t":"Peter Iredale shipwreck Fort Stevens Oregon"},{"f":"images/fort-stevens-peter-iredale-06.jpg","t":"Wreck of the Peter Iredale at Fort Stevens by Rod S"},{"f":"images/fort-stevens-peter-iredale-07.jpg","t":"Barnacles"},{"f":"images/fort-stevens-peter-iredale-08.jpg","t":"Peter Iredale"}],"Cape Disappointment":[{"f":"images/cape-disappointment-01.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-02.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-03.jpg","t":"Cape Disappointment State Park - Ilwaco, Washington"},{"f":"images/cape-disappointment-04.jpg","t":"North Head Lighthouse at Twilight, SW Coast, Washington"},{"f":"images/cape-disappointment-05.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-06.jpg","t":"Cape Disappointment Lighthouse (Cape Disappointment State Park, Ilwaco, Washington) - October 30th, 2018"},{"f":"images/cape-disappointment-07.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-08.jpg","t":"Cape Disappointment Lighthouse"}]};
+  /* IMAGES_DATA_END */
+
+  /* IDEA_DATA_START — generated by apply_images.py from idea_images_manifest.json; do not hand-edit */
+    const IDEA_IMAGES = {"forest-park":[{"f":"images/idea-forest-park-01.jpg","t":"Forest Park, Portland, Oregon (24012149446).jpg"},{"f":"images/idea-forest-park-02.jpg","t":"Oregon Grape, Lower Macleay Park Trail, Forest Park, Portland - DPLA - 17cb87c7cc1a7c47318c6df817132b0f.jpg"},{"f":"images/idea-forest-park-03.jpg","t":"Oregon Grape, Lower Macleay Park Trail, Forest Park, Portland - DPLA - 5775057ebbb60b6cb7ca4fb624b993cb.jpg"},{"f":"images/idea-forest-park-04.jpg","t":"Balch Creek from Wildwood Trail, Portland, Oregon.jpg"},{"f":"images/idea-forest-park-05.jpg","t":"Lower Macleay Park Trail, Forest Park, Portland - DPLA - 1340b827a45e2f9597ea2568a7b1b15a.jpg"}],"food-carts":[{"f":"images/idea-food-carts-01.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2022.jpg"},{"f":"images/idea-food-carts-02.jpg","t":"Food cart pod at 3rd and Washington - Portland, Oregon.JPG"},{"f":"images/idea-food-carts-03.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2025 - 01.jpg"},{"f":"images/idea-food-carts-04.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2025 - 10.jpg"},{"f":"images/idea-food-carts-05.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2025 - 05.jpg"}],"bonneville-hatchery":[{"f":"images/idea-bonneville-hatchery-01.jpg","t":"Bonneville Fish Hatchery sturgeon - Oregon.JPG"},{"f":"images/idea-bonneville-hatchery-02.jpg","t":"Bonneville Fish Hatchery sturgeon 2 - Oregon.JPG"},{"f":"images/idea-bonneville-hatchery-03.jpg","t":"Bonneville Fish Hatchery - sturgeon viewing window - April 2015.JPG"},{"f":"images/idea-bonneville-hatchery-04.jpg","t":"2017-11-11 Bonneville Fish Hatchery 08.jpg"},{"f":"images/idea-bonneville-hatchery-05.jpg","t":"2017-11-11 Bonneville Fish Hatchery 04.jpg"}],"bridge-of-the-gods":[{"f":"images/idea-bridge-of-the-gods-01.jpg","t":"Bridge of the Gods, Columbia River, Cascade Locks - DPLA - 6aac954e5da8a4ceddd1b15051cb1a2d.jpg"},{"f":"images/idea-bridge-of-the-gods-02.jpg","t":"CASCADE LOCKS ON THE COLUMBIA RIVER, WITH BRIDGE OF THE GODS IN BACKGROUND. LEAVING POLES PROPPED OVER WATER IS... - NARA - 548141.jpg"},{"f":"images/idea-bridge-of-the-gods-03.jpg","t":"Bridge of the Gods, Cascade Locks - DPLA - ca566a4f91118862b928b22d3666d91c.jpg"},{"f":"images/idea-bridge-of-the-gods-04.jpg","t":"Bridge of the Gods, Cascade Locks - DPLA - 8d541635cedf4dcf2ed4d7e7108a2dba.jpg"},{"f":"images/idea-bridge-of-the-gods-05.jpg","t":"Bridge of the Gods, Cascade Locks - DPLA - 5b52e1beeca0311d1e70e4cec374f5ad.jpg"}],"sandy-river-delta":[{"f":"images/idea-sandy-river-delta-01.jpg","t":"MAYA LIN BIRD BLIND AT SANDY DELTA-COLUMBIA RIVER GORGE (24757922619).jpg"},{"f":"images/idea-sandy-river-delta-02.jpg","t":"Amanita muscaria (fly agaric mushroom) (near the Sandy River Delta, Oregon, USA) 2.jpg"},{"f":"images/idea-sandy-river-delta-03.jpg","t":"Amanita muscaria (fly agaric mushroom) (near the Sandy River Delta, Oregon, USA) 1.jpg"},{"f":"images/idea-sandy-river-delta-04.jpg","t":"Sandy River (northwestern Oregon, USA) 3.jpg"}],"hood-river":[{"f":"images/idea-hood-river-01.jpg","t":"Hood River OR - aerial.jpg"},{"f":"images/idea-hood-river-02.jpg","t":"Hood River from Washington.jpg"},{"f":"images/idea-hood-river-03.jpg","t":"Hood River, Oregon, 2026 - 20.jpg"},{"f":"images/idea-hood-river-04.jpg","t":"Hood River, Oregon, 2026 - 09.jpg"},{"f":"images/idea-hood-river-05.jpg","t":"Hood River, Oregon, 2026 - 12.jpg"}],"rowena-crest":[{"f":"images/idea-rowena-crest-01.jpg","t":"Rowena Crest 2352.jpg"},{"f":"images/idea-rowena-crest-02.jpg","t":"Columbia River from Rowena Crest Viewpoint looking east.jpg"},{"f":"images/idea-rowena-crest-03.jpg","t":"Rowena Crest at Columbia River Gorge in Oregon 2.jpg"},{"f":"images/idea-rowena-crest-04.jpg","t":"Rowena Crest at Columbia River Gorge in Oregon 1.jpg"},{"f":"images/idea-rowena-crest-05.jpg","t":"Lyle, Washington seen across the Columbia River from Rowena Crest, Oregon 01.jpg"}],"little-zigzag-falls":[{"f":"images/idea-little-zigzag-falls-01.jpg","t":"Mt Hood National Forest, Little Zigzag Falls (37193404145).jpg"}],"salmon-river-trail":[{"f":"images/idea-salmon-river-trail-01.jpg","t":"Oregon Salmon River Clackamas County from bridge looking west P1651.jpeg"},{"f":"images/idea-salmon-river-trail-02.jpg","t":"Salmon River and Forest-Mt Hood (23307561343).jpg"}],"government-camp":[{"f":"images/idea-government-camp-01.jpg","t":"Skibowl Ratskeller Government Camp Oregon (45574771032).jpg"},{"f":"images/idea-government-camp-02.jpg","t":"Govt Camp, Mount Hood National Forest, Oregon - NARA - 299093.jpg"},{"f":"images/idea-government-camp-03.jpg","t":"Mt Hood 7887.jpg"},{"f":"images/idea-government-camp-04.jpg","t":"Mt Hood Skibowl Fireworks.jpg"},{"f":"images/idea-government-camp-05.jpg","t":"Mount Hood Hike.jpg"}],"tolovana-beach":[{"f":"images/idea-tolovana-beach-01.jpg","t":"Tolovana Beach State Park - Oregon Coast (2369802636).jpg"},{"f":"images/idea-tolovana-beach-02.jpg","t":"Tolovana Beach State Park - Oregon Coast (2369803384).jpg"},{"f":"images/idea-tolovana-beach-03.jpg","t":"Tolovana Beach State Park - Oregon Coast (2368966417).jpg"},{"f":"images/idea-tolovana-beach-04.jpg","t":"Tolovana Beach State Park - Oregon Coast (2368968717).jpg"},{"f":"images/idea-tolovana-beach-05.jpg","t":"Tolovana Beach.jpg"}],"manzanita":[{"f":"images/idea-manzanita-01.jpg","t":"Neahkahnie Mountain from beach - Manzanita, Oregon.jpg"},{"f":"images/idea-manzanita-02.jpg","t":"Manzanita Beach, Oregon.jpg"},{"f":"images/idea-manzanita-03.jpg","t":"Jellyfish on beach - Manzanita, Oregon.jpg"},{"f":"images/idea-manzanita-04.jpg","t":"Manzanita Beach - Oregon.jpg"},{"f":"images/idea-manzanita-05.jpg","t":"Closeup of waves - Manzanita, Oregon.jpg"}],"seaside-promenade":[{"f":"images/idea-seaside-promenade-01.jpg","t":"Seaside Oregon seawall and beach.JPG"},{"f":"images/idea-seaside-promenade-02.jpg","t":"Sand blowing at beach - Seaside, Oregon.JPG"},{"f":"images/idea-seaside-promenade-03.jpg","t":"Seaside - DPLA - d26be4b9c0c307baeb33185bd8a17ee0.jpg"}],"astoria-column":[{"f":"images/idea-astoria-column-01.jpg","t":"Astoria-Megler Bridge with Astoria Column in foreground.jpg"},{"f":"images/idea-astoria-column-02.jpg","t":"Astoria column up front.jpg"},{"f":"images/idea-astoria-column-03.jpg","t":"Astoria Column, base.jpg"},{"f":"images/idea-astoria-column-04.jpg","t":"Astoria Column, angled.jpg"},{"f":"images/idea-astoria-column-05.jpg","t":"Astoria Column after Dark Astoria Oregon.jpg"}],"astoria-riverwalk":[{"f":"images/idea-astoria-riverwalk-01.jpg","t":"Astoria Wharf & Warehouse Co. building in 2012.jpg"},{"f":"images/idea-astoria-riverwalk-02.jpg","t":"Astoria Riverfront Trolley - Old 300 at 12th Street.jpg"},{"f":"images/idea-astoria-riverwalk-03.jpg","t":"Astoria Riverfront Trolley - July 2013.jpg"},{"f":"images/idea-astoria-riverwalk-04.jpg","t":"Astoria Riverfront Trolley, 2006.jpg"},{"f":"images/idea-astoria-riverwalk-05.jpg","t":"Sheltered stop for Astoria Riverfront Trolley near Basin St.jpg"}],"fort-clatsop":[{"f":"images/idea-fort-clatsop-01.jpg","t":"Lewis and Clark National Historical Park (Fort Clatsop FOCL1574.jpg"},{"f":"images/idea-fort-clatsop-02.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (4).jpg"},{"f":"images/idea-fort-clatsop-03.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (2).jpg"},{"f":"images/idea-fort-clatsop-04.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (7).jpg"},{"f":"images/idea-fort-clatsop-05.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (5).jpg"}]};
+  /* IDEA_DATA_END */
+
+  /* WEATHER_DATA_START — generated by fetch_weather.py; do not hand-edit */
+  const WEATHER = {"meta":{"kind":"climatology","headline":"typical for these dates (2015–2025 averages)","note":"Shown as climate normals — the 2015–2025 average for each exact date and place — because the trip is still beyond the ~16-day live-forecast window. Re-run fetch_weather.py within about two weeks of the trip and these flip to the real forecast. Coastal days (Fri–Sun) usually open with morning marine-layer cloud that burns off by midday. Source: Open-Meteo."},"days":{"wed":{"high":81,"low":58,"icon":"☀️","short":"Sunny, warm","summary":"Warm and mostly sunny","rainyPct":0,"kind":"climatology","samples":11,"dow":"Wed","date":"Jul 22","loc":"Portland"},"thu":{"high":81,"low":58,"icon":"☀️","short":"Sunny, warm","summary":"Warm and mostly sunny","rainyPct":0,"kind":"climatology","samples":11,"dow":"Thu","date":"Jul 23","loc":"Columbia Gorge"},"fri":{"high":65,"low":56,"icon":"🌤️","short":"AM marine layer","summary":"Cool; morning marine layer, afternoon sun · Mt. Hood AM ~73°/49°","rainyPct":18,"kind":"climatology","samples":11,"dow":"Fri","date":"Jul 24","loc":"Cannon Beach"},"sat":{"high":65,"low":57,"icon":"🌤️","short":"AM marine layer","summary":"Cool; morning marine layer, afternoon sun","rainyPct":9,"kind":"climatology","samples":11,"dow":"Sat","date":"Jul 25","loc":"Cannon Beach"},"sun":{"high":68,"low":56,"icon":"🌤️","short":"AM marine layer","summary":"Cool; morning marine layer, afternoon sun","rainyPct":9,"kind":"climatology","samples":11,"dow":"Sun","date":"Jul 26","loc":"Astoria"}}};
+  /* WEATHER_DATA_END */
+
+  const trip = [
+    {
+      key: 'wed', dow: 'Wed', date: 'July 22', color: 'var(--wed)',
+      title: 'Portland First',
+      theme: 'Easy arrival day — light city stuff before the nature ruins cities for you.',
+      items: [
+        { kind: 'place', badge: 'Arrival', name: 'Land at PDX — 9:25 a.m.',
+          stop: "PDX / Portland Airport",
+          desc: 'Wheels down mid-morning. Portland International is small and easy to move through — grab the rental car and you can be downtown in about 20 minutes.' },
+        { kind: 'step', ic: '🚗', text: '<b>Pick up the rental car</b> at the airport.' },
+        { kind: 'step', ic: '🧳', text: '<b>Drop bags / early check-in</b> at the Portland hotel if the room is ready.' },
+        { kind: 'place', badge: 'City', name: 'Downtown Portland',
+          stop: "Downtown Portland",
+          desc: "Portland's compact, walkable core sits along the Willamette River — food carts on every other block, Powell's City of Books, and bridges in all directions. An easy first stop to stretch your legs and grab lunch before the week turns scenic." },
+        { kind: 'place', badge: 'Viewpoint', name: 'Pittock Mansion Viewpoint',
+          stop: "Pittock Mansion viewpoint",
+          desc: 'A 1914 French Renaissance estate perched 1,000 ft up in the West Hills. You come for the terrace view — the whole city laid out below with Mt. Hood floating behind it on a clear day. No need to tour the house; the lawn is the point.' },
+        { kind: 'place', badge: 'Garden', name: 'International Rose Test Garden',
+          stop: "International Rose Test Garden",
+          desc: 'The oldest continuously operating public rose test garden in the U.S., terraced above the city in Washington Park with 10,000+ bushes. Late July is peak bloom — it will be at its loudest, most fragrant, and it is free.' },
+        { kind: 'step', ic: '🍽️', text: '<b>Dinner in Portland</b> — your pick of the food-cart pods or a sit-down spot.' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Portland.</b>' },
+      ],
+    },
+    {
+      key: 'thu', dow: 'Thu', date: 'July 23', color: 'var(--thu)',
+      title: 'Waterfall Highway / Columbia River Gorge',
+      theme: 'The classic "waterfall highway" day trip out of Portland.',
+      items: [
+        { kind: 'step', ic: '🚗', text: '<b>Leave Portland</b> — about 30 minutes east into the Gorge.' },
+        { kind: 'place', badge: 'Viewpoint', name: 'Vista House / Crown Point',
+          stop: "Vista House / Crown Point",
+          desc: 'An octagonal stone observatory built in 1918, standing 733 ft above the Columbia on the edge of Crown Point. First big view of the day: the river bending away east through the Gorge below you.' },
+        { kind: 'place', badge: 'Waterfall', name: 'Latourell Falls',
+          stop: "Latourell Falls",
+          desc: 'A 249-ft single plunge dropping over a wall of bright yellow-green lichen on columnar basalt — one of the most distinctive falls in the Gorge. A short paved path from the lot gets you to the base.' },
+        { kind: 'place', badge: 'Waterfall', name: 'Bridal Veil Falls',
+          stop: "Bridal Veil Falls",
+          desc: 'A two-tiered falls reached by a short 0.5-mile round-trip trail. There is also an upper interpretive loop with overlooks of the Columbia if you want a few extra minutes.' },
+        { kind: 'place', badge: 'Waterfall', name: 'Wahkeena Falls',
+          stop: "Wahkeena Falls",
+          desc: 'A 242-ft cascade tumbling right beside the road — no real hike needed, though a trail links it to Multnomah if you are feeling ambitious.' },
+        { kind: 'place', badge: 'Waterfall', name: 'Multnomah Falls',
+          stop: "Multnomah Falls",
+          desc: "The icon: 620 ft over two tiers, the tallest waterfall in Oregon, with the Benson Footbridge crossing between them. Shoot it from the bridge, or hike the switchbacks to the top for the overlook.",
+          flag: '⚠️ A timed-use permit is required in summer — reserve before you go and plan the day around your window.' },
+        { kind: 'place', badge: 'Waterfall', name: 'Horsetail Falls',
+          stop: "Horsetail Falls",
+          desc: 'A 176-ft falls that drops right next to the highway — the easiest stop of the day and a good one to close out the waterfall run.' },
+        { kind: 'step', ic: '🍔', text: '<b>Optional lunch in Cascade Locks</b> — the little town by the Bridge of the Gods.' },
+        { kind: 'step', ic: '🚗', text: '<b>Return to Portland.</b>' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Portland.</b>' },
+      ],
+      note: 'Reserve and plan around the Multnomah Falls permit timing — it drives the whole day’s order.',
+    },
+    {
+      key: 'fri', dow: 'Fri', date: 'July 24', color: 'var(--fri)',
+      title: 'Mt. Hood to Cannon Beach',
+      theme: 'Mountain views in the morning, then move to the coast.',
+      items: [
+        { kind: 'step', ic: '🧳', text: '<b>Check out</b> of the Portland hotel.' },
+        { kind: 'step', ic: '🚗', text: '<b>Drive toward Mt. Hood</b> — roughly 1.5 hours southeast.' },
+        { kind: 'place', badge: 'Mountain', name: 'Timberline Lodge / Mt. Hood',
+          stop: "Timberline Lodge / Mt. Hood",
+          desc: "A massive WPA-built lodge from 1937 at 6,000 ft on Mt. Hood's south face — hand-hewn timber and stone, with skiers still on the glacier in July. Walk the grounds and get the peak up close." },
+        { kind: 'place', badge: 'Lake', name: 'Trillium Lake',
+          stop: "Trillium Lake",
+          desc: 'The postcard shot: Mt. Hood mirrored in a small, still lake with an easy flat loop around the shore. The reflection is best when the wind drops.' },
+        { kind: 'step', ic: '🚗', text: '<b>Drive to Cannon Beach</b> — about 2.5 hours across to the coast.' },
+        { kind: 'step', ic: '🧳', text: '<b>Check into the Cannon Beach hotel.</b>' },
+        { kind: 'place', badge: 'Coast', name: 'Haystack Rock / Cannon Beach Sunset',
+          stop: "Cannon Beach hotel area",
+          desc: 'A 235-ft sea stack rising straight off the sand, with tide pools at its base and tufted puffins nesting on it in summer. First evening on the coast — catch the sunset behind it.' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Cannon Beach.</b>' },
+      ],
+    },
+    {
+      key: 'sat', dow: 'Sat', date: 'July 25', color: 'var(--sat)',
+      title: 'Cannon Beach Coast Day',
+      theme: 'The best coastal views, with no major driving pressure.',
+      items: [
+        { kind: 'place', badge: 'Food', name: 'Wayfarer Restaurant — Breakfast',
+          stop: "Wayfarer Restaurant / Haystack Rock",
+          desc: 'Oceanfront breakfast with Haystack Rock framed in the windows. Fuel up here before a full day of coastline.' },
+        { kind: 'place', badge: 'Coast', name: 'Haystack Rock / Cannon Beach',
+          stop: "Cannon Beach hotel area",
+          desc: 'Back to the rock — at low tide the tide pools open up around its base with sea stars and anemones. Check the morning tide chart so you time it right.' },
+        { kind: 'place', badge: 'Park', name: 'Ecola State Park',
+          stop: "Ecola State Park",
+          desc: 'A forested headland just north of town with jaw-dropping viewpoints down the coastline and out to the abandoned Tillamook Rock Lighthouse offshore.' },
+        { kind: 'place', badge: 'Beach', name: 'Indian Beach',
+          stop: "Indian Beach",
+          desc: 'A rugged cove inside Ecola — surfers, tide pools, and trailheads into the rainforest. You may recognize it: it stood in for scenes in The Goonies and Twilight.' },
+        { kind: 'place', badge: 'Beach', name: 'Oswald West / Short Sand Beach',
+          stop: "Oswald West / Short Sand Beach",
+          desc: 'A 10–15 minute walk through old-growth rainforest drops you onto a protected cove that is a local surf favorite. Cooler, greener, and quieter than Cannon Beach.' },
+        { kind: 'place', badge: 'Viewpoint', name: 'Neahkahnie Viewpoint',
+          stop: "Neahkahnie Viewpoint",
+          desc: 'A high pull-out on Highway 101 on the shoulder of Neahkahnie Mountain — one of the biggest open-ocean views on the north coast and a perfect turnaround point.' },
+        { kind: 'step', ic: '🚗', text: '<b>Return to Cannon Beach.</b>' },
+        { kind: 'step', ic: '🌅', text: '<b>Sunset / beach walk</b> back at Haystack Rock.' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Cannon Beach.</b>' },
+      ],
+    },
+    {
+      key: 'sun', dow: 'Sun', date: 'July 26', color: 'var(--sun)',
+      title: 'North Coast / Washington → Fly Home',
+      theme: 'A scenic final day — but protect the airport timing.',
+      items: [
+        { kind: 'step', ic: '🧳', text: '<b>Check out</b> of the Cannon Beach hotel.' },
+        { kind: 'place', badge: 'Historic', name: 'Fort Stevens / Peter Iredale',
+          stop: "Fort Stevens / Peter Iredale",
+          desc: 'The rusted ribs of the Peter Iredale, a 1906 sailing ship wrecked at the mouth of the Columbia and still half-buried in the sand. The surrounding park was a military fort guarding the river mouth for decades.' },
+        { kind: 'place', badge: 'Town', name: 'Astoria',
+          stop: "Astoria",
+          desc: "Oregon's oldest city, stacked on hills above the Columbia where it meets the sea. The Astoria-Megler Bridge, the Goonies house, and the Astoria Column are all here if you have the time." },
+        { kind: 'place', badge: 'Optional · WA', name: 'Cape Disappointment, Washington',
+          stop: "Cape Disappointment",
+          desc: 'An optional hop across the river into Washington — sea cliffs, two lighthouses, and the spot where the Columbia pours into the Pacific. Lewis & Clark’s western finish line.',
+          flag: 'Optional. Only if the clock allows — this is the first thing to cut if Sunday runs late.', flagOptional: true },
+        { kind: 'step', ic: '🚗', text: '<b>Drive back to PDX.</b>' },
+        { kind: 'step', ic: '🔑', text: '<b>Return the rental car</b> around 2:45–3:00 p.m.' },
+        { kind: 'step', ic: '✈️', text: '<b>Depart PDX at 5:39 p.m.</b>' },
+      ],
+    },
+  ];
+
+  // ---------- ideas & alternatives (per day) ----------
+  // tag: add | swap | optional | eat | skip | note
+  const DAY_IDEAS = {
+    wed: [
+      { tag: 'add', name: 'Forest Park / Washington Park trails', img: 'forest-park',
+        what: 'The Wildwood Trail links Pittock Mansion to Washington Park — miles of leafy, leashed-dog trails right beside two stops you already have.',
+        dogs: 'Leashed OK throughout Forest Park, Hoyt Arboretum and the Rose Garden.',
+        route: '🚶 No detour — same West Hills hillside as Pittock & the Rose Garden. Budget 30–60 min.' },
+      { tag: 'eat', name: 'A dog-friendly food-cart pod', img: 'food-carts',
+        what: 'Cartopia (SE Hawthorne, covered), Hawthorne Asylum, or Cartlandia — dozens of carts and a beer garden.',
+        dogs: 'Leashed dogs welcome at the outdoor picnic seating.',
+        route: '🍽️ Slots in as your Portland lunch or dinner — no added driving.' },
+      { tag: 'eat', name: 'Brewpub patio + Salt & Straw',
+        what: 'Lucky Lab (the OG dog brewpub), Breakside or StormBreaker for a beer; Salt & Straw for ice cream at the window.',
+        dogs: 'Water-bowl dog patios; order at the window for ice cream and sit on the bench.',
+        route: '🍺 All in town, evening — no detour.' },
+      { tag: 'skip', name: 'Indoor-only spots (with dogs)',
+        what: 'Lan Su Chinese Garden, Powell’s interior, the Japanese Garden and the Zoo are service-animals-only.',
+        dogs: 'Tag-team: one person browses while the other walks the pups.',
+        route: '—' },
+    ],
+    thu: [
+      { tag: 'add', name: 'Bonneville Fish Hatchery — “Herman the Sturgeon”', img: 'bonneville-hatchery',
+        what: 'Free and genuinely fun: a 10-ft, 500-lb, 80-year-old sturgeon in a viewing pond, plus trout ponds.',
+        dogs: 'Leashed dogs welcome on the hatchery grounds.',
+        route: '🚗 ~5 min off I-84 (Exit 40), right between Multnomah Falls and Cascade Locks. ~30–45 min on site — fits the corridor with no real detour.' },
+      { tag: 'add', name: 'Thunder Island Brewing (Cascade Locks)', img: 'bridge-of-the-gods',
+        what: 'Riverfront patio under the Bridge of the Gods — the pick for the Cascade Locks lunch your plan already floats.',
+        dogs: 'Standout: a dog menu and water bowls on the patio.',
+        route: '🍺 On-route at the east end of the waterfall run — no detour.' },
+      { tag: 'add', name: 'Sandy River Delta (off-leash romp)', img: 'sandy-river-delta',
+        what: '1,400-acre off-leash area with meadow and river trails — let them actually run before the day of leashed waterfalls.',
+        dogs: 'Rare OFF-LEASH; leash only in the lot and near the Bird Blind trail. ⚠️ Verify parking/gate day-of (partial restoration closure).',
+        route: '🚗 Troutdale, the WEST end of the corridor (Exit 18) — 0–5 min off I-84 on your way in or out.' },
+      { tag: 'optional', name: 'Hood River detour', img: 'hood-river',
+        what: 'The most dog-friendly Gorge town: waterfront trail, pFriem / Ferment patios, and the Fruit Loop stands.',
+        dogs: 'Dog-friendly brewery patios; leashed waterfront walk.',
+        route: '⏱ Adds ~1.5–2 hrs round-trip east past the falls — only worth it on a longer day.' },
+      { tag: 'note', name: 'Rowena Crest viewpoint', img: 'rowena-crest',
+        what: 'A stunning horseshoe-bend overlook on the old highway further east.',
+        dogs: 'Dogs roadside only — they’re banned on the Tom McCall Preserve trails.',
+        route: '🚗 ~30 min east of the falls — pair it with Hood River, not a quick add.' },
+    ],
+    fri: [
+      { tag: 'add', name: 'Little Zigzag Falls', img: 'little-zigzag-falls',
+        what: 'A flat, shady 0.6-mi round-trip (~20 min) to a 40-ft falls — the best-value dog walk of the transition day.',
+        dogs: 'Leashed; cool and shaded on a hot July afternoon.',
+        route: '🚗 Right on US-26 east of Rhododendron — about +20 min, basically on the line. (Needs a Northwest Forest Pass.)' },
+      { tag: 'add', name: 'Old Salmon River Trail (alternative)', img: 'salmon-river-trail',
+        what: 'An easy old-growth riverside walk in Welches; go as far as you like and turn around.',
+        dogs: 'Leashed and dog-loved.',
+        route: '🚗 ~3 min off US-26 at Welches — swap for Little Zigzag if you’d rather walk the river.' },
+      { tag: 'eat', name: 'Government Camp lunch', img: 'government-camp',
+        what: 'Mt. Hood Brewing (seasonal dog deck + treats) or Glacier Public House (dog patio).',
+        dogs: 'Dog-friendly decks/patios.',
+        route: '🍺 On US-26 at Govy — your natural pivot before turning west. No detour.' },
+      { tag: 'skip', name: 'Lost Lake · Ramona Falls · Mirror Lake',
+        what: 'Beautiful but day-killers: Lost Lake and Ramona are 1.5–2 hrs off-route, Mirror Lake is a real 2.5-hr hike, and Ramona’s bridgeless log river-crossing is risky for small dogs.',
+        dogs: 'Ramona especially — skip with the pups.',
+        route: '⛔ Not on a transition day with ~4+ hrs of driving already.' },
+    ],
+    sat: [
+      { tag: 'note', name: 'Anchor the morning on low tide',
+        what: 'Time Haystack Rock tide-pooling to the morning low tide — arrive ~1–1.5 hrs before it for sea stars and anemones.',
+        dogs: 'Leashed at the rock (Marine Garden); off-leash elsewhere on the sand.',
+        route: '⏱ Pin the day around the tide window — ⚠️ get exact Jul 24–26 times from cannonbeach.org day-of.' },
+      { tag: 'swap', name: 'Hug Point → Tolovana + Arcadia Beach', img: 'tolovana-beach',
+        what: 'Hug Point is CLOSED (erosion, no reopen date). Tolovana (south end, full Haystack view) and Arcadia (quiet cove ~3 mi south) give the same pretty-beach access.',
+        dogs: 'Tolovana is off-leash city-beach; Arcadia is leashed (state park).',
+        route: '↔ Direct swap — Tolovana is ~5 min south of downtown, essentially no added time.' },
+      { tag: 'add', name: 'Manzanita (dog-town half-day)', img: 'manzanita',
+        what: 'Maybe the most dog-centric town on the coast: a 7-mi flat dog beach, water bowls everywhere, easy eats.',
+        dogs: 'Off-leash beach; lots of dog-friendly patios.',
+        route: '🚗 ~20 min south of Cannon Beach — plan a half-day. Best escape if downtown is mobbed Saturday.' },
+      { tag: 'add', name: 'Seaside Promenade (evening)', img: 'seaside-promenade',
+        what: 'A flat 1.5-mi oceanfront boardwalk — an easy golden-hour stroll.',
+        dogs: 'Leashed and very dog-friendly.',
+        route: '🚗 ~15 min north — tack it onto the evening.' },
+      { tag: 'eat', name: 'Cannon Beach dog patios',
+        what: 'Public Coast Brewing (the best — bowls + treats), Pelican Brewing, Bill’s Tavern; Suzy’s Scoops ice cream; coffee at Elk Creek or Bald Eagle.',
+        dogs: 'Patios welcome; order inside at Bill’s. (Sleepy Monk café is closed — skip it.)',
+        route: '🍺 All in town — no driving.' },
+      { tag: 'skip', name: 'Saddle Mountain',
+        what: 'A big summit hike, but the upper trail’s exposed wire-mesh matting catches paws.',
+        dogs: 'Not recommended for two small dogs.',
+        route: '⛔ Skip it with the pups.' },
+    ],
+    sun: [
+      { tag: 'note', name: 'Leave Astoria by ~12:15–12:30',
+        what: 'Astoria → PDX is ~2 hrs via US-30, so a ~9am–12:30 window means 2–3 stops, not six.',
+        dogs: '',
+        route: '⏱ This single deadline shapes the whole morning — protect the 5:39 flight.' },
+      { tag: 'add', name: 'Astoria Column (do it first)', img: 'astoria-column',
+        what: 'The best Columbia panorama from a 125-ft hilltop tower — one person climbs the 164 steps, one holds the dogs.',
+        dogs: 'Leashed on the grounds; not up inside the tower.',
+        route: '🚗 On the hill above town, ~10 min up — go first for light and low crowds. $10/yr parking pass.' },
+      { tag: 'add', name: 'Riverwalk + Bowpicker / Coffee Girl', img: 'astoria-riverwalk',
+        what: 'A flat waterfront stroll plus Bowpicker’s famous beer-battered tuna & chips (opens 11am Sun, expect a line) or Coffee Girl on the pier.',
+        dogs: 'Leashed; everything here is outdoor / walk-up.',
+        route: '🚶 In town, pairs with the Column. Bowpicker only if you’re leaving on the later side.' },
+      { tag: 'eat', name: 'Dog-OK breakfast',
+        what: 'Blue Scorcher Bakery (dog sidewalk seating, open Sun 7am) or Pig ’N Pancake takeout.',
+        dogs: 'Sidewalk seating / takeout.',
+        route: '🍽️ Fuel up early before the stops.' },
+      { tag: 'optional', name: 'Fort Clatsop (Lewis & Clark NHP)', img: 'fort-clatsop',
+        what: 'Flat forested leashed-dog trails and a replica 1805 fort, already on the PDX side of town.',
+        dogs: 'Leashed on the trails; not inside the fort rooms.',
+        route: '🚗 ~10 min south toward PDX — fits ONLY if you drop another stop.' },
+      { tag: 'skip', name: 'Cape Disappointment, WA',
+        what: 'Wrong direction from PDX, needs a separate Washington Discover Pass, and is partly closed for renovation through ~June 2026 — it eats the whole morning.',
+        dogs: 'Leashed-OK if you go, but the time math doesn’t work today.',
+        route: '⛔ Recommended skip to protect the flight. Save it for a trip where it’s your first stop.' },
+    ],
+  };
+
+  const TRIP_NOTES = [
+    { k: '🐾 Off-leash perk', v: 'Cannon Beach, Seaside and Manzanita allow dogs OFF-LEASH under voice control on the main sand. State parks (Ecola, Oswald West, Fort Stevens) and the Haystack Rock tide-pool zone are leashed-only.' },
+    { k: '🏠 Indoors = no dogs', v: 'Pittock Mansion, Timberline Lodge, the Astoria Column tower, Powell’s and the gardens/zoo are service-animals-only. Plan to tag-team those.' },
+    { k: '🎟️ Oregon State Parks', v: 'Buy the annual pass ($30): it covers the now-mandatory Fort Stevens day-use fee and Ecola’s $5.' },
+    { k: '🎟️ NW Forest Pass', v: 'Annual ($30) covers the Mt. Hood stops incl. Trillium Lake — a single-day pass does NOT cover Trillium.' },
+    { k: '🎟️ Multnomah Falls', v: 'A $2 timed-use permit is required 9am–6pm in summer — or just arrive before 9am and skip the permit entirely.' },
+    { k: '⚠️ Hug Point closed', v: 'Emergency erosion closure since Nov 2025, no reopen date as of mid-2026 — Saturday routes around it (see that day’s ideas).' },
+    { k: '⚠️ Re-confirm', v: 'Tide times, the Sandy River Delta gate, the Astoria trolley and seasonal patio hours can change — re-check the week before you go.' },
+  ];
+
+  // ---------- render ----------
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+  function ideasHtml(key) {
+    const list = DAY_IDEAS[key] || [];
+    if (!list.length) return '';
+    const cards = list.map(x => {
+      const photos = (x.img && IDEA_IMAGES[x.img]) || [];
+      const gal = photos.length
+        ? `<div class="idea-gallery">${photos.map(g =>
+            `<img src="${esc(g.f)}" alt="${esc(g.t)}" title="${esc(g.t)}" data-cap="${esc(x.name)}" loading="lazy">`).join('')}</div>`
+        : '';
+      return `
+      <div class="idea">
+        ${gal}
+        <span class="itag ${x.tag}">${esc(x.tag)}</span><h4>${esc(x.name)}</h4>
+        <p class="what">${esc(x.what)}</p>
+        <div class="meta">
+          ${x.dogs ? `<div class="dogline">🐾 ${esc(x.dogs)}</div>` : ''}
+          ${x.route ? `<div class="routeline">${esc(x.route)}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    return `<details class="ideas reveal">
+      <summary><span class="chev">▸</span>💡 Ideas &amp; alternatives for this day · ${list.length}</summary>
+      <p class="ideas-lead">Not booked — optional adds, swaps and skips, with the routing/time hit for each.</p>
+      <div class="idea-grid">${cards}</div>
+    </details>`;
+  }
+
+  function weatherHtml(key) {
+    const w = (WEATHER.days || {})[key];
+    if (!w) return '';
+    return `<div class="day-weather"><span class="wx-i">${w.icon}</span><b>${w.high}° / ${w.low}°</b> · ${esc(w.summary)}</div>`;
+  }
+
+  const nav = document.getElementById('daynav');
+  const main = document.getElementById('trip');
+
+  trip.forEach(day => {
+    const a = document.createElement('a');
+    a.href = '#' + day.key;
+    a.style.setProperty('--c', day.color);
+    a.innerHTML = `<span class="dot"></span>${day.dow}`;
+    a.dataset.key = day.key;
+    nav.appendChild(a);
+
+    const sec = document.createElement('section');
+    sec.className = 'day';
+    sec.id = day.key;
+    sec.style.setProperty('--c', day.color);
+
+    let items = '';
+    day.items.forEach((it, i) => {
+      const n = i + 1;
+      if (it.kind === 'step') {
+        items += `<div class="item reveal" data-n="${n}">
+          <div class="step"><span class="ic">${it.ic || '•'}</span><span>${it.text}</span></div>
+        </div>`;
+      } else {
+        const photos = STOP_IMAGES[it.stop] || [];
+        const imgs = photos.map(g =>
+          `<img src="${esc(g.f)}" alt="${esc(g.t)}" title="${esc(g.t)}" data-cap="${esc(it.name)}" loading="lazy">`
+        ).join('');
+        const gallery = imgs
+          ? `<div class="gallery">${imgs}</div>${photos.length > 1 ? `<div class="swipe-hint">← swipe through <b>${photos.length}</b> photos →</div>` : ''}`
+          : '<div class="gallery-empty">No photos for this stop.</div>';
+        const flag = it.flag
+          ? `<div class="flag${it.flagOptional ? ' optional' : ''}">${it.flag}</div>` : '';
+        items += `<div class="item place reveal" data-n="${n}">
+          <div class="card">
+            ${gallery}
+            <div class="card-body">
+              <span class="badge">${esc(it.badge)}</span>
+              <h3>${esc(it.name)}</h3>
+              <p>${it.desc}</p>
+              ${flag}
+            </div>
+          </div>
+        </div>`;
+      }
+    });
+
+    const note = day.note
+      ? `<div class="daynote reveal">📌 ${day.note}</div>` : '';
+
+    sec.innerHTML = `
+      <div class="day-head reveal">
+        <div class="dow">${day.dow} · ${day.date}</div>
+        <h2>${esc(day.title)}</h2>
+        <p class="theme">${esc(day.theme)}</p>
+        ${weatherHtml(day.key)}
+      </div>
+      <div class="timeline">${items}${note}</div>
+      ${ideasHtml(day.key)}`;
+    main.appendChild(sec);
+  });
+
+  // ---------- top weather strip ----------
+  (function () {
+    const days = WEATHER.days || {};
+    const colors = Object.fromEntries(trip.map(d => [d.key, d.color]));
+    const cells = trip.map(d => d.key).filter(k => days[k]).map(k => {
+      const w = days[k];
+      return `<div class="wx-day" style="--c:${colors[k]}">
+        <div class="wx-dow">${esc(w.dow)}</div>
+        <div class="wx-date">${esc(w.date)}</div>
+        <div class="wx-icon">${w.icon}</div>
+        <div class="wx-temp">${w.high}°<span> / ${w.low}°</span></div>
+        <div class="wx-sum">${esc(w.short || w.summary)}</div>
+      </div>`;
+    }).join('');
+    if (!cells) return;
+    const m = WEATHER.meta || {};
+    document.getElementById('weatherbar').innerHTML = `
+      <div class="wx-card">
+        <div class="wx-title">🌤️ Weather <span>— ${esc(m.headline || 'typical for these dates')}</span></div>
+        <div class="wx-strip">${cells}</div>
+        ${m.note ? `<div class="wx-note">${esc(m.note)}</div>` : ''}
+      </div>`;
+  })();
+
+  // ---------- before-you-go notes panel ----------
+  document.getElementById('tripnotes').innerHTML = `
+    <details class="notes" open>
+      <summary><span class="chev">▸</span>🧭 Before you go — passes, permits &amp; dog rules</summary>
+      <div class="notes-card">
+        ${TRIP_NOTES.map(n => `<div class="note-row"><span class="k">${esc(n.k)}</span><span class="v">${esc(n.v)}</span></div>`).join('')}
+      </div>
+    </details>`;
+
+  // ---------- scroll reveal ----------
+  const revObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  // ---------- scrollspy nav ----------
+  const links = Object.fromEntries([...nav.querySelectorAll('a')].map(a => [a.dataset.key, a]));
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+        links[e.target.id]?.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('.day').forEach(s => spy.observe(s));
+
+  // ---------- lightbox ----------
+  const lb = document.getElementById('lightbox');
+  const lbImg = lb.querySelector('img');
+  const lbCap = lb.querySelector('.cap');
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t.tagName === 'IMG' && t.closest('.gallery, .idea-gallery')) {
+      lbImg.src = t.src; lbImg.alt = t.alt;
+      lbCap.textContent = t.getAttribute('data-cap') || t.alt || '';
+      lb.classList.add('open');
+    } else if (t === lb || t.classList.contains('x')) {
+      lb.classList.remove('open'); lbImg.src = '';
+    }
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { lb.classList.remove('open'); lbImg.src = ''; } });
+</script>
+</body>
+</html>

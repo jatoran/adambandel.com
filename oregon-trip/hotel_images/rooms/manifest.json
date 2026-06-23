@@ -1,0 +1,714 @@
+[
+ {
+  "key": "pdx-riverplace",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-riverplace-r1.jpg",
+  "bytes": 399256,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-riverplace",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-riverplace-r2.jpg",
+  "bytes": 203416,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-riverplace",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-riverplace-r3.jpg",
+  "bytes": 245633,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-riverplace",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-riverplace-r4.jpg",
+  "bytes": 201510,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-riverplace",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-riverplace-r5.jpg",
+  "bytes": 378297,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-riverplace",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-riverplace-r6.jpg",
+  "bytes": 193716,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-woodlark",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-woodlark-r1.jpg",
+  "bytes": 379092,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-woodlark",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-woodlark-r2.jpg",
+  "bytes": 219493,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-woodlark",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-woodlark-r3.jpg",
+  "bytes": 299589,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-woodlark",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-woodlark-r4.jpg",
+  "bytes": 312688,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-woodlark",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-woodlark-r5.jpg",
+  "bytes": 370352,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-woodlark",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-woodlark-r6.jpg",
+  "bytes": 380294,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-nines",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-nines-r1.jpg",
+  "bytes": 49856,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-nines",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-nines-r2.jpg",
+  "bytes": 47207,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-nines",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-nines-r3.jpg",
+  "bytes": 47534,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-nines",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-nines-r4.jpg",
+  "bytes": 55676,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-nines",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-nines-r5.jpg",
+  "bytes": 68084,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-nines",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-nines-r6.jpg",
+  "bytes": 59322,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-dossier",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-dossier-r1.jpg",
+  "bytes": 43367,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-dossier",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-dossier-r2.jpg",
+  "bytes": 56162,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-dossier",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-dossier-r3.jpg",
+  "bytes": 64219,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-dossier",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-dossier-r4.jpg",
+  "bytes": 75889,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-dossier",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-dossier-r5.jpg",
+  "bytes": 60286,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-kimpton-vintage",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-kimpton-vintage-r1.jpg",
+  "bytes": 111811,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-kimpton-vintage",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-kimpton-vintage-r2.jpg",
+  "bytes": 150177,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-kimpton-vintage",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-kimpton-vintage-r3.jpg",
+  "bytes": 112475,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-kimpton-vintage",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-kimpton-vintage-r4.jpg",
+  "bytes": 120895,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-kimpton-vintage",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-kimpton-vintage-r5.jpg",
+  "bytes": 116797,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-kimpton-vintage",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-kimpton-vintage-r6.jpg",
+  "bytes": 137982,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-sentinel",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-sentinel-r1.jpg",
+  "bytes": 31071,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-sentinel",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-sentinel-r2.jpg",
+  "bytes": 30893,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-sentinel",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-sentinel-r3.jpg",
+  "bytes": 30627,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-sentinel",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-sentinel-r4.jpg",
+  "bytes": 50483,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-sentinel",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-sentinel-r5.jpg",
+  "bytes": 37891,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-sentinel",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-sentinel-r6.jpg",
+  "bytes": 39710,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r1.jpg",
+  "bytes": 79407,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r2.jpg",
+  "bytes": 84954,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r3.jpg",
+  "bytes": 105409,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r4.jpg",
+  "bytes": 106180,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r5.jpg",
+  "bytes": 97419,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r6.jpg",
+  "bytes": 115768,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 7,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r7.jpg",
+  "bytes": 104269,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 8,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r8.jpg",
+  "bytes": 108990,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 9,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r9.jpg",
+  "bytes": 89523,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "pdx-hilo",
+  "idx": 10,
+  "ok": true,
+  "path": "hotel_images/rooms/pdx-hilo-r10.jpg",
+  "bytes": 135687,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-landsend",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-landsend-r1.jpg",
+  "bytes": 94902,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-landsend",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-landsend-r3.jpg",
+  "bytes": 127792,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-landsend",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-landsend-r4.jpg",
+  "bytes": 103852,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-landsend",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-landsend-r5.jpg",
+  "bytes": 107737,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-landsend",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-landsend-r6.jpg",
+  "bytes": 108377,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-tolovana",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-tolovana-r1.jpg",
+  "bytes": 8563195,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-tolovana",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-tolovana-r2.jpg",
+  "bytes": 2087439,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-tolovana",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-tolovana-r3.jpg",
+  "bytes": 2448710,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-tolovana",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-tolovana-r4.jpg",
+  "bytes": 3128325,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-tolovana",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-tolovana-r5.jpg",
+  "bytes": 2811699,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-tolovana",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-tolovana-r6.jpg",
+  "bytes": 2833550,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-wayside",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-wayside-r1.jpg",
+  "bytes": 183950,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-wayside",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-wayside-r2.jpg",
+  "bytes": 209121,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-wayside",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-wayside-r3.jpg",
+  "bytes": 218086,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-wayside",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-wayside-r4.jpg",
+  "bytes": 224569,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-wayside",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-wayside-r5.jpg",
+  "bytes": 156558,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-wayside",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-wayside-r6.jpg",
+  "bytes": 183072,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-wayside",
+  "idx": 7,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-wayside-r7.jpg",
+  "bytes": 155307,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-inn",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-inn-r1.jpg",
+  "bytes": 63044,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-inn",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-inn-r2.jpg",
+  "bytes": 58244,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-inn",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-inn-r3.jpg",
+  "bytes": 55742,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-inn",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-inn-r4.jpg",
+  "bytes": 78159,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-mcbee",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-mcbee-r1.jpg",
+  "bytes": 119706,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-mcbee",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-mcbee-r2.jpg",
+  "bytes": 92234,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-mcbee",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-mcbee-r3.jpg",
+  "bytes": 124961,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-mcbee",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-mcbee-r4.jpg",
+  "bytes": 215074,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-hallmark",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-hallmark-r1.jpg",
+  "bytes": 143995,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-hallmark",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-hallmark-r2.jpg",
+  "bytes": 155706,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-hallmark",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-hallmark-r5.jpg",
+  "bytes": 168492,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-ocean-lodge",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-ocean-lodge-r1.jpg",
+  "bytes": 289199,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-ocean-lodge",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-ocean-lodge-r2.jpg",
+  "bytes": 99915,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-ocean-lodge",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-ocean-lodge-r3.jpg",
+  "bytes": 83286,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-ocean-lodge",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-ocean-lodge-r4.jpg",
+  "bytes": 134325,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-ocean-lodge",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-ocean-lodge-r5.jpg",
+  "bytes": 162790,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 1,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r1.jpg",
+  "bytes": 34810,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 2,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r2.jpg",
+  "bytes": 31627,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 3,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r3.jpg",
+  "bytes": 29146,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 4,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r4.jpg",
+  "bytes": 32538,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 5,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r5.jpg",
+  "bytes": 30641,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 6,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r6.jpg",
+  "bytes": 32374,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 7,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r7.jpg",
+  "bytes": 30332,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 8,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r8.jpg",
+  "bytes": 37060,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 9,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r9.jpg",
+  "bytes": 30421,
+  "ctype": "image/jpeg"
+ },
+ {
+  "key": "cb-surfsand",
+  "idx": 10,
+  "ok": true,
+  "path": "hotel_images/rooms/cb-surfsand-r10.jpg",
+  "bytes": 22465,
+  "ctype": "image/jpeg"
+ }
+]

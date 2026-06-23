@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Oregon / Washington route map with large stop photos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, sans-serif; }
+    #map { height: 100%; width: 100%; }
+
+    .legend {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 1000;
+      background: white;
+      padding: 12px 14px;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+      max-width: 390px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .legend-title { font-weight: 700; margin-bottom: 8px; }
+    .legend-row { margin: 5px 0; }
+    .swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      margin-right: 7px;
+      vertical-align: -2px;
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #444;
+    }
+    .leaflet-routing-container {
+      max-height: 32vh;
+      overflow: auto;
+      opacity: .96;
+      font-size: 12px;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 14px;
+    }
+    .leaflet-popup-content {
+      width: 820px !important;
+      max-width: 82vw !important;
+      margin: 15px 16px;
+    }
+    .stop-label {
+      background: white;
+      border: 1px solid #777;
+      border-radius: 10px;
+      padding: 2px 6px;
+      font-size: 11px;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,.25);
+    }
+    .popup-card {
+      width: 820px;
+      max-width: 82vw;
+    }
+    .popup-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .popup-subtitle {
+      color: #444;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .image-grid {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+    .image-grid img {
+      height: 260px;
+      width: auto;
+      flex: 0 0 auto;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: #f2f2f2;
+      cursor: zoom-in;
+      scroll-snap-align: start;
+      transition: filter .12s ease;
+    }
+    .image-grid img:hover { filter: brightness(1.05); }
+    .image-hint {
+      font-size: 11px; color: #888; margin-top: 2px;
+    }
+    .image-credit {
+      margin-top: 7px;
+      font-size: 11px;
+      color: #666;
+    }
+    .loading, .fallback-note {
+      grid-column: 1 / -1;
+      color: #555;
+      font-size: 13px;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.86);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+    }
+    #lightbox.open {
+      display: flex;
+    }
+    #lightbox img {
+      max-width: 94vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.7);
+      background: #111;
+    }
+    #lightbox .close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      color: white;
+      font-size: 34px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+    }
+    #lightbox .caption {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      right: 20px;
+      text-align: center;
+      color: #ddd;
+      font-size: 13px;
+    }
+    @media (max-width: 850px) {
+      .leaflet-popup-content {
+        width: 88vw !important;
+      }
+      .popup-card {
+        width: 88vw;
+      }
+      .image-grid {
+        grid-template-columns: 1fr;
+      }
+      .image-grid img {
+        height: 230px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <div class="legend">
+    <div class="legend-title">Oregon / Washington trip — road route + larger stop photos</div>
+    <div class="legend-row"><span class="swatch" style="background:#7e22ce"></span>Wed: Portland first</div>
+    <div class="legend-row"><span class="swatch" style="background:#2563eb"></span>Thu: Waterfall Highway / Gorge</div>
+    <div class="legend-row"><span class="swatch" style="background:#16a34a"></span>Fri: Mt. Hood → Cannon Beach</div>
+    <div class="legend-row"><span class="swatch" style="background:#f97316"></span>Sat: Cannon Beach coast day</div>
+    <div class="legend-row"><span class="swatch" style="background:#dc2626"></span>Sun: Astoria / Washington → PDX</div>
+    <div class="note">Click a numbered stop to see larger photos. Click any photo for full-screen view. Photos are saved locally in the <b>images</b> folder; the map tiles still need internet.</div>
+  </div>
+
+  <div id="lightbox">
+    <div class="close" title="Close">&times;</div>
+    <img src="" alt="">
+    <div class="caption"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+
+  <script>
+    const places = {"PDX / Portland Airport": {"lat": 45.5898, "lng": -122.5951, "query": "Portland International Airport Oregon exterior"}, "Downtown Portland": {"lat": 45.5152, "lng": -122.6784, "query": "Downtown Portland Oregon skyline"}, "Pittock Mansion viewpoint": {"lat": 45.5253, "lng": -122.7164, "query": "Pittock Mansion Portland Oregon view"}, "International Rose Test Garden": {"lat": 45.5189, "lng": -122.7053, "query": "International Rose Test Garden Portland Oregon"}, "Portland hotel area": {"lat": 45.5152, "lng": -122.6784, "query": "Downtown Portland Oregon skyline"}, "Vista House / Crown Point": {"lat": 45.5394, "lng": -122.2445, "query": "Vista House Crown Point Columbia River Gorge Oregon"}, "Latourell Falls": {"lat": 45.5388, "lng": -122.2186, "query": "Latourell Falls Oregon Columbia River Gorge"}, "Bridal Veil Falls": {"lat": 45.5535, "lng": -122.1815, "query": "Bridal Veil Falls Oregon Columbia River Gorge"}, "Wahkeena Falls": {"lat": 45.5751, "lng": -122.1288, "query": "Wahkeena Falls Oregon Columbia River Gorge"}, "Multnomah Falls": {"lat": 45.5762, "lng": -122.1158, "query": "Multnomah Falls Oregon"}, "Horsetail Falls": {"lat": 45.5901, "lng": -122.0696, "query": "Horsetail Falls Oregon Columbia River Gorge"}, "Timberline Lodge / Mt. Hood": {"lat": 45.3311, "lng": -121.7113, "query": "Timberline Lodge Mount Hood Oregon"}, "Trillium Lake": {"lat": 45.2707, "lng": -121.7381, "query": "Trillium Lake Mount Hood Oregon"}, "Cannon Beach hotel area": {"lat": 45.8918, "lng": -123.9615, "query": "Cannon Beach Oregon Haystack Rock"}, "Wayfarer Restaurant / Haystack Rock": {"lat": 45.8847, "lng": -123.9666, "query": "Haystack Rock Cannon Beach Oregon"}, "Ecola State Park": {"lat": 45.9197, "lng": -123.9743, "query": "Ecola State Park Oregon coast"}, "Indian Beach": {"lat": 45.9346, "lng": -123.9799, "query": "Indian Beach Ecola State Park Oregon"}, "Oswald West / Short Sand Beach": {"lat": 45.7524, "lng": -123.9632, "query": "Short Sand Beach Oswald West State Park Oregon"}, "Neahkahnie Viewpoint": {"lat": 45.747, "lng": -123.955, "query": "Neahkahnie Mountain viewpoint Oregon coast"}, "Astoria": {"lat": 46.1879, "lng": -123.8313, "query": "Astoria Oregon Columbia River"}, "Fort Stevens / Peter Iredale": {"lat": 46.1789, "lng": -123.9824, "query": "Peter Iredale shipwreck Fort Stevens Oregon"}, "Cape Disappointment": {"lat": 46.2811, "lng": -124.0529, "query": "Cape Disappointment State Park Washington lighthouse"}};
+    const routes = [{"day": "Wed 7/22", "color": "#7e22ce", "title": "Portland first", "stops": ["PDX / Portland Airport", "Downtown Portland", "Pittock Mansion viewpoint", "International Rose Test Garden", "Portland hotel area"]}, {"day": "Thu 7/23", "color": "#2563eb", "title": "Waterfall Highway / Columbia River Gorge", "stops": ["Portland hotel area", "Vista House / Crown Point", "Latourell Falls", "Bridal Veil Falls", "Wahkeena Falls", "Multnomah Falls", "Horsetail Falls", "Portland hotel area"]}, {"day": "Fri 7/24", "color": "#16a34a", "title": "Mt. Hood to Cannon Beach", "stops": ["Portland hotel area", "Timberline Lodge / Mt. Hood", "Trillium Lake", "Cannon Beach hotel area"]}, {"day": "Sat 7/25", "color": "#f97316", "title": "Cannon Beach coast day", "stops": ["Cannon Beach hotel area", "Wayfarer Restaurant / Haystack Rock", "Ecola State Park", "Indian Beach", "Oswald West / Short Sand Beach", "Neahkahnie Viewpoint", "Cannon Beach hotel area"]}, {"day": "Sun 7/26", "color": "#dc2626", "title": "North coast / Washington add-on to PDX", "stops": ["Cannon Beach hotel area", "Fort Stevens / Peter Iredale", "Astoria", "Cape Disappointment", "PDX / Portland Airport"]}];
+    /* IMAGES_DATA_START — generated by apply_images.py from images_manifest.json; do not hand-edit */
+    const STOP_IMAGES = {"PDX / Portland Airport":[{"f":"images/pdx-portland-airport-01.jpg","t":"PDX Portland 2985.jpg"},{"f":"images/pdx-portland-airport-02.jpg","t":"PDX Portland 1569.jpg"},{"f":"images/pdx-portland-airport-03.jpg","t":"PDX drop off canopy wide.jpg"},{"f":"images/pdx-portland-airport-04.jpg","t":"PDX Cargo Center at Portland International Airport (2015).jpg"},{"f":"images/pdx-portland-airport-05.jpg","t":"PDX from Rocky Butte.JPG"},{"f":"images/pdx-portland-airport-06.jpg","t":"Portland International Airport PDX check in counters (Quintin Soloviev).jpg"}],"Downtown Portland":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Pittock Mansion viewpoint":[{"f":"images/pittock-mansion-viewpoint-01.jpg","t":"Portland Oregon ~ Pittock Mansion ~ Historic Mansion ~ My Vintage Photo"},{"f":"images/pittock-mansion-viewpoint-02.jpg","t":"Portland and Mt Hood"},{"f":"images/pittock-mansion-viewpoint-03.jpg","t":"Portland, OR"},{"f":"images/pittock-mansion-viewpoint-04.jpg","t":"Foggy Morning at the Pittock Mansion in Black and White"},{"f":"images/pittock-mansion-viewpoint-05.jpg","t":"The Pittock Mansion 1914"},{"f":"images/pittock-mansion-viewpoint-06.jpg","t":"Pittock Mansion stairway"},{"f":"images/pittock-mansion-viewpoint-07.jpg","t":"View over Portland and Mt. Hood from Pittock Mansion"},{"f":"images/pittock-mansion-viewpoint-08.jpg","t":"Pittock Mansion View"}],"International Rose Test Garden":[{"f":"images/international-rose-test-garden-01.jpg","t":"International Rose Test Garden (Portland, Oregon)"},{"f":"images/international-rose-test-garden-02.jpg","t":"International Rose Test Garden - Portland Or."},{"f":"images/international-rose-test-garden-03.jpg","t":"Yours truly at International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-04.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-05.jpg","t":"International Rose Test Garden, Portland, Oregon (2022) - 020"},{"f":"images/international-rose-test-garden-06.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-07.jpg","t":"International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-08.jpg","t":"Yours truly at International Rose Test Garden, Portland"}],"Portland hotel area":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Vista House / Crown Point":[{"f":"images/vista-house-crown-point-01.jpg","t":"Crown Point Vista House (HDR)"},{"f":"images/vista-house-crown-point-02.jpg","t":"Vista House, Crown Point, Oregon.jpeg - Historic Columbia River Highway - Multnomah County"},{"f":"images/vista-house-crown-point-03.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-04.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-05.jpg","t":"Crown Point Clouds"},{"f":"images/vista-house-crown-point-06.jpg","t":"Vista House ~Oregon State ~ Columbia Gorge ~ My Old Photo"},{"f":"images/vista-house-crown-point-07.jpg","t":"Vista House"},{"f":"images/vista-house-crown-point-08.jpg","t":"Crown Point 3440 H"}],"Latourell Falls":[{"f":"images/latourell-falls-01.jpg","t":"Latourelle Falls, Oregon, in autumn."},{"f":"images/latourell-falls-02.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-03.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-04.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-05.jpg","t":"Vintage Postcard - Latourell Falls, Oregon"},{"f":"images/latourell-falls-06.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-07.jpg","t":"Latourell Falls, Oregon"},{"f":"images/latourell-falls-08.jpg","t":"Lower Latourell Falls (Oregon, USA)"}],"Bridal Veil Falls":[{"f":"images/bridal-veil-falls-01.jpg","t":"A view of bridal veil falls, Oregon 01.jpg"},{"f":"images/bridal-veil-falls-02.jpg","t":"A view of bridal veil falls trail.jpg"},{"f":"images/bridal-veil-falls-03.jpg","t":"A view of bridal veil falls stairs.jpg"},{"f":"images/bridal-veil-falls-04.jpg","t":"Bridal Veil Falls kayaker.jpg"},{"f":"images/bridal-veil-falls-05.jpg","t":"Green cascade in Bridal Veil Falls (Unsplash).jpg"},{"f":"images/bridal-veil-falls-06.jpg","t":"Bridal Veil Falls (Oregon), 2017-05-28.jpg"}],"Wahkeena Falls":[{"f":"images/wahkeena-falls-01.jpg","t":"Wahkeena Falls - Oregon"},{"f":"images/wahkeena-falls-02.jpg","t":"Moss on Lava, Wahkeena Falls, Oregon 9-06"},{"f":"images/wahkeena-falls-03.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-04.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-05.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-06.jpg","t":"bridge at Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-07.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-08.jpg","t":"Wahkeena Falls, Oregon, Columbia River"}],"Multnomah Falls":[{"f":"images/multnomah-falls-01.jpg","t":"Multnomah Falls, Oregon, c1916"},{"f":"images/multnomah-falls-02.jpg","t":"Multnomah Falls ~ Oregon"},{"f":"images/multnomah-falls-03.jpg","t":"Multnomah Falls, Oregon, in the autumn."},{"f":"images/multnomah-falls-04.jpg","t":"Multnomah Falls ~ Oregon ~ Northwestern United States"},{"f":"images/multnomah-falls-05.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"},{"f":"images/multnomah-falls-06.jpg","t":"Multnomah Falls ~ Oregon ~ Landmark"},{"f":"images/multnomah-falls-07.jpg","t":"Multnomah Falls, Oregon"},{"f":"images/multnomah-falls-08.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"}],"Horsetail Falls":[{"f":"images/horsetail-falls-01.jpg","t":"Horsetail Falls, Columbia Gorge - Oregon"},{"f":"images/horsetail-falls-02.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-03.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-04.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-05.jpg","t":"Upper Horsetail Falls in Oregon by Michael Matti"},{"f":"images/horsetail-falls-06.jpg","t":"Misty Crossroads"},{"f":"images/horsetail-falls-07.jpg","t":"Ponytail Falls"},{"f":"images/horsetail-falls-08.jpg","t":"Horsetail Falls, Oregon, in autumn"}],"Timberline Lodge / Mt. Hood":[{"f":"images/timberline-lodge-mt-hood-01.jpg","t":"Timberline Lodge (WPA-built, 1937)"},{"f":"images/timberline-lodge-mt-hood-02.jpg","t":"Timberline Lodge, Mount Hood"},{"f":"images/timberline-lodge-mt-hood-03.jpg","t":"Mount Hood"},{"f":"images/timberline-lodge-mt-hood-04.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-05.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-06.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-07.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-08.jpg","t":"White River & White Falls"}],"Trillium Lake":[{"f":"images/trillium-lake-01.jpg","t":"Creating a Memory"},{"f":"images/trillium-lake-02.jpg","t":"Trillium Lake, Oregon"},{"f":"images/trillium-lake-03.jpg","t":"Late Evening at Mount Hood"},{"f":"images/trillium-lake-04.jpg","t":"Mount Hood and Trillium Lake"},{"f":"images/trillium-lake-05.jpg","t":"0134_Trillium_Lake_Swart_ODFW.jpg"},{"f":"images/trillium-lake-06.jpg","t":"Mt. Hood from Trillium Lake"},{"f":"images/trillium-lake-07.jpg","t":"Duck eye view of Mount Hood"},{"f":"images/trillium-lake-08.jpg","t":"Mount Hood from Trillium Lake"}],"Cannon Beach hotel area":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Wayfarer Restaurant / Haystack Rock":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Ecola State Park":[{"f":"images/ecola-state-park-01.jpg","t":"Ecola State Park - Oregon Coast"},{"f":"images/ecola-state-park-02.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/ecola-state-park-03.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-04.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-05.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-06.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-07.jpg","t":"Ecola State Park, Oregon Coast, Cannon Beach"},{"f":"images/ecola-state-park-08.jpg","t":"Ecola State Park, Oregon Coast"}],"Indian Beach":[{"f":"images/indian-beach-01.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-02.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-03.jpg","t":"Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-04.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/indian-beach-05.jpg","t":"Indian Beach, Ecola State Park, Oregon Coast"},{"f":"images/indian-beach-06.jpg","t":"Arch from Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-07.jpg","t":"Surf's Up"},{"f":"images/indian-beach-08.jpg","t":"Indian Beach Native"}],"Oswald West / Short Sand Beach":[{"f":"images/oswald-west-short-sand-beach-01.jpg","t":"Short Sand gray (3)"},{"f":"images/oswald-west-short-sand-beach-02.jpg","t":"Neahkahnie meets the water"},{"f":"images/oswald-west-short-sand-beach-03.jpg","t":"Short Sand gray (5)"},{"f":"images/oswald-west-short-sand-beach-04.jpg","t":"Oswald West State Park"},{"f":"images/oswald-west-short-sand-beach-05.jpg","t":"Neahkahnie over Short Sand Beach"},{"f":"images/oswald-west-short-sand-beach-06.jpg","t":"Short Sand gray (1)"},{"f":"images/oswald-west-short-sand-beach-07.jpg","t":"Short Sand gray (4)"},{"f":"images/oswald-west-short-sand-beach-08.jpg","t":"Short Sand gray (2)"}],"Neahkahnie Viewpoint":[{"f":"images/neahkahnie-viewpoint-01.jpg","t":"Whale watching from Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-02.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-03.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-04.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-05.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-06.jpg","t":"Viewpoint looking south, Neahkahnie Mountain, Oregon coast"},{"f":"images/neahkahnie-viewpoint-07.jpg","t":"Neahkahnie Mountain Trail, Oregon"},{"f":"images/neahkahnie-viewpoint-08.jpg","t":"Oregon coast - looking south from Neahkahnie Mountain"}],"Astoria":[{"f":"images/astoria-01.jpg","t":"The Astoria Bridge"},{"f":"images/astoria-02.jpg","t":"Astoria By Night"},{"f":"images/astoria-03.jpg","t":"A Relic of the Gilded Age (1893)"},{"f":"images/astoria-04.jpg","t":"Astoria Waterfront"},{"f":"images/astoria-05.jpg","t":"Astoria"},{"f":"images/astoria-06.jpg","t":"Columbia River"},{"f":"images/astoria-07.jpg","t":"Crossing the Columbia River"},{"f":"images/astoria-08.jpg","t":"20071007TRD004934"}],"Fort Stevens / Peter Iredale":[{"f":"images/fort-stevens-peter-iredale-01.jpg","t":"Between Sand and Sea"},{"f":"images/fort-stevens-peter-iredale-02.jpg","t":"Wreck of the Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-03.jpg","t":"Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-04.jpg","t":"Peter Iredale shipwreck, Fort Stevens State Park, Oregon"},{"f":"images/fort-stevens-peter-iredale-05.jpg","t":"Peter Iredale shipwreck Fort Stevens Oregon"},{"f":"images/fort-stevens-peter-iredale-06.jpg","t":"Wreck of the Peter Iredale at Fort Stevens by Rod S"},{"f":"images/fort-stevens-peter-iredale-07.jpg","t":"Barnacles"},{"f":"images/fort-stevens-peter-iredale-08.jpg","t":"Peter Iredale"}],"Cape Disappointment":[{"f":"images/cape-disappointment-01.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-02.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-03.jpg","t":"Cape Disappointment State Park - Ilwaco, Washington"},{"f":"images/cape-disappointment-04.jpg","t":"North Head Lighthouse at Twilight, SW Coast, Washington"},{"f":"images/cape-disappointment-05.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-06.jpg","t":"Cape Disappointment Lighthouse (Cape Disappointment State Park, Ilwaco, Washington) - October 30th, 2018"},{"f":"images/cape-disappointment-07.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-08.jpg","t":"Cape Disappointment Lighthouse"}]};
+    /* IMAGES_DATA_END */
+
+    const map = L.map('map').setView([45.73, -123.05], 8);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxCaption = lightbox.querySelector('.caption');
+    const bounds = [];
+
+    function openLightbox(src, caption) {
+      lightboxImg.src = src;
+      lightboxImg.alt = caption || '';
+      lightboxCaption.textContent = caption || '';
+      lightbox.classList.add('open');
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightboxImg.src = '';
+    }
+
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox || e.target.classList.contains('close')) closeLightbox();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+    document.addEventListener('click', function(e) {
+      const t = e.target;
+      if (t && t.classList && t.classList.contains('popup-photo')) {
+        openLightbox(t.getAttribute('data-full') || t.src, t.getAttribute('title') || t.alt);
+      }
+    });
+
+    function makeIcon(color, num) {
+      return L.divIcon({
+        html: `<div style="
+          background:${color};
+          color:white;
+          border:2px solid white;
+          box-shadow:0 1px 5px rgba(0,0,0,.45);
+          width:24px;
+          height:24px;
+          border-radius:50%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-weight:700;
+          font-size:12px;">${num}</div>`,
+        className: '',
+        iconSize: [24,24],
+        iconAnchor: [12,12]
+      });
+    }
+
+    function escAttr(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    }
+
+    function popupHtml(route, stop, index) {
+      const imgs = STOP_IMAGES[stop] || [];
+      const grid = imgs.length
+        ? imgs.map(img =>
+            `<img class="popup-photo" src="${escAttr(img.f)}" alt="${escAttr(img.t)}" title="${escAttr(img.t)}" data-full="${escAttr(img.f)}">`
+          ).join('')
+        : '<div class="fallback-note">No local photo saved for this stop.</div>';
+      const hint = imgs.length > 2 ? `<div class="image-hint">← scroll for ${imgs.length} photos →</div>` : '';
+      return `
+        <div class="popup-card">
+          <div class="popup-title">${index + 1}. ${escAttr(stop)}</div>
+          <div class="popup-subtitle"><b>${route.day}</b> — ${route.title}</div>
+          <div class="image-grid">${grid}</div>
+          ${hint}
+          <div class="image-credit">Photos from Flickr (Creative Commons) &amp; Wikimedia Commons, saved locally. Click a photo to enlarge.</div>
+        </div>
+      `;
+    }
+
+    routes.forEach((route, routeIdx) => {
+      const waypoints = route.stops.map(stop => {
+        const p = places[stop];
+        bounds.push([p.lat, p.lng]);
+        return L.latLng(p.lat, p.lng);
+      });
+
+      route.stops.forEach((stop, i) => {
+        const p = places[stop];
+        const marker = L.marker([p.lat, p.lng], {
+          icon: makeIcon(route.color, i + 1),
+          title: `${route.day} — ${stop}`
+        }).addTo(map);
+
+        marker.bindPopup(popupHtml(route, stop, i), {
+          maxWidth: 900,
+          minWidth: 760,
+          autoPan: true,
+          autoPanPadding: [28, 28]
+        });
+
+        if (i === 0 || i === route.stops.length - 1 || route.stops.length <= 4) {
+          L.marker([p.lat, p.lng], {
+            icon: L.divIcon({
+              html: `<span class="stop-label">${route.day}: ${stop}</span>`,
+              className: '',
+              iconSize: null
+            }),
+            interactive: false
+          }).addTo(map);
+        }
+      });
+
+      try {
+        if (window.L && L.Routing) {
+          L.Routing.control({
+            waypoints: waypoints,
+            router: L.Routing.osrmv1({
+              serviceUrl: 'https://router.project-osrm.org/route/v1'
+            }),
+            routeWhileDragging: false,
+            addWaypoints: false,
+            draggableWaypoints: false,
+            fitSelectedRoutes: false,
+            show: routeIdx === 1,
+            collapsible: true,
+            lineOptions: {
+              styles: [
+                { color: 'white', opacity: 0.9, weight: 8 },
+                { color: route.color, opacity: 0.9, weight: 5 }
+              ]
+            },
+            createMarker: function() { return null; }
+          }).addTo(map);
+        }
+      } catch (err) {
+        console.warn('Routing failed for', route.day, '- markers and photos still work.', err);
+      }
+    });
+
+    map.fitBounds(bounds, { padding: [40, 40] });
+  </script>
+</body>
+</html>
