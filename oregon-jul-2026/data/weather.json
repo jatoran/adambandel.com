@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "kind": "forecast",
+    "headline": "live forecast (Open-Meteo)",
+    "note": "Live 16-day forecast from Open-Meteo — re-run fetch_weather.py to refresh."
+  },
+  "days": {
+    "wed": {
+      "high": 94,
+      "low": 71,
+      "icon": "🌧️",
+      "short": "Light rain",
+      "summary": "Light rain · 9% precip",
+      "rainyPct": 9,
+      "kind": "forecast",
+      "dow": "Wed",
+      "date": "Jul 22",
+      "loc": "Portland"
+    },
+    "thu": {
+      "high": 85,
+      "low": 64,
+      "icon": "☁️",
+      "short": "Overcast",
+      "summary": "Overcast · 22% precip",
+      "rainyPct": 22,
+      "kind": "forecast",
+      "dow": "Thu",
+      "date": "Jul 23",
+      "loc": "Columbia Gorge"
+    },
+    "fri": {
+      "high": 66,
+      "low": 54,
+      "icon": "🌫️",
+      "short": "Fog",
+      "summary": "Fog · 1% precip · Mt. Hood AM ~73°/49°",
+      "rainyPct": 1,
+      "kind": "forecast",
+      "dow": "Fri",
+      "date": "Jul 24",
+      "loc": "Mt. Hood → Cannon Beach"
+    },
+    "sat": {
+      "high": 61,
+      "low": 57,
+      "icon": "🌦️",
+      "short": "Drizzle",
+      "summary": "Drizzle · 12% precip",
+      "rainyPct": 12,
+      "kind": "forecast",
+      "dow": "Sat",
+      "date": "Jul 25",
+      "loc": "Cannon Beach"
+    },
+    "sun": {
+      "high": 62,
+      "low": 56,
+      "icon": "🌦️",
+      "short": "Light drizzle",
+      "summary": "Light drizzle · 18% precip",
+      "rainyPct": 18,
+      "kind": "forecast",
+      "dow": "Sun",
+      "date": "Jul 26",
+      "loc": "Astoria"
+    }
+  }
+}

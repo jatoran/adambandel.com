@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oregon & Washington Coast — Trip Planner (Jul 22–26, 2026)</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#0d1220;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .tabbar{flex:0 0 auto;display:flex;align-items:center;gap:4px;height:54px;padding:0 12px;
+    background:linear-gradient(100deg,#14361f 0%,#15803d 50%,#0e3a45 100%);
+    border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 2px 14px rgba(0,0,0,.35);
+    overflow-x:auto;scrollbar-width:thin}
+  .brand{color:#fff;font-weight:800;font-size:14.5px;margin-right:14px;white-space:nowrap;letter-spacing:.01em;
+    display:inline-flex;align-items:center;gap:7px}
+  .brand small{color:#e7c9b3;font-weight:600;font-size:12px}
+  .tab{appearance:none;border:0;background:transparent;color:#e9d9cf;font:inherit;font-size:13.5px;font-weight:650;
+    padding:8px 14px;border-radius:9px;cursor:pointer;white-space:nowrap;line-height:1;transition:background .15s,color .15s}
+  .tab:hover{background:rgba(255,255,255,.14);color:#fff}
+  .tab.active{background:#fff;color:#15171f;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .content{flex:1 1 auto;position:relative;background:#f6f7f9}
+  .frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:#f6f7f9}
+  .frame.active{display:block}
+  .spinner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#8a93a3;font-size:14px;font-weight:600;pointer-events:none}
+</style>
+</head>
+<body>
+  <header class="tabbar">
+    <span class="brand">🌲 Oregon & Washington Coast <small>· A July road trip, 2026</small></span>
+    <button class="tab active" data-tab="plan">📋 Plan</button>
+    <button class="tab" data-tab="reservations">🎫 Reservations</button>
+    <button class="tab" data-tab="map">🗺️ Route map</button>
+    <button class="tab" data-tab="hotels">🏨 Hotels</button>
+    <button class="tab" data-tab="car">🚗 Cars</button>
+  </header>
+  <main class="content">
+    <div class="spinner" id="spinner">Loading…</div>
+    <iframe class="frame active" data-tab="plan" title="📋 Plan"></iframe>
+    <iframe class="frame" data-tab="reservations" title="🎫 Reservations"></iframe>
+    <iframe class="frame" data-tab="map" title="🗺️ Route map"></iframe>
+    <iframe class="frame" data-tab="hotels" title="🏨 Hotels"></iframe>
+    <iframe class="frame" data-tab="car" title="🚗 Cars"></iframe>
+  </main>
+
+  <script type="text/html" id="tpl-plan">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Oregon &amp; Washington Coast — Trip Plan, July 22–26</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root {
+    --wed: #7e22ce;
+    --thu: #2563eb;
+    --fri: #16a34a;
+    --sat: #f97316;
+    --sun: #dc2626;
+    --ink: #1c2230;
+    --muted: #5b6577;
+    --paper: #f6f7f9;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #fff;
+    background: #222 center/cover no-repeat;
+    background-image:
+      linear-gradient(180deg, rgba(10,12,20,.25) 0%, rgba(10,12,20,.30) 45%, rgba(10,12,20,.85) 100%),
+      url("images/multnomah-falls-04.jpg");
+  }
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 28px 64px;
+  }
+  .hero .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: .9;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 7vw, 76px);
+    line-height: 1.02;
+    margin: 0 0 16px;
+    font-weight: 800;
+    text-shadow: 0 2px 30px rgba(0,0,0,.45);
+  }
+  .hero p.sub {
+    font-size: clamp(16px, 2.4vw, 21px);
+    max-width: 640px;
+    margin: 0 0 26px;
+    opacity: .95;
+  }
+  .facts { display: flex; flex-wrap: wrap; gap: 10px; }
+  .fact {
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.28);
+    backdrop-filter: blur(6px);
+    border-radius: 999px;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .fact b { font-weight: 700; }
+  .scroll-cue {
+    position: absolute;
+    bottom: 18px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+    opacity: .85; animation: bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{transform:translate(-50%,0)} 50%{transform:translate(-50%,7px)} }
+
+  /* ---------- Sticky day nav ---------- */
+  .daynav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(246,247,249,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e4e7ec;
+  }
+  .daynav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; gap: 8px; padding: 11px 18px; overflow-x: auto;
+  }
+  .daynav a {
+    flex: 0 0 auto;
+    text-decoration: none;
+    font-size: 13px; font-weight: 600;
+    color: var(--muted);
+    padding: 7px 13px; border-radius: 999px;
+    border: 1.5px solid transparent;
+    white-space: nowrap;
+    transition: all .15s ease;
+  }
+  .daynav a .dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    margin-right: 7px; vertical-align: 1px; background: var(--c);
+  }
+  .daynav a:hover { color: var(--ink); background: #eceef2; }
+  .daynav a.active {
+    color: var(--ink); border-color: var(--c);
+    background: #fff;
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 18px 80px; }
+
+  .day {
+    --c: var(--wed);
+    padding-top: 30px;
+  }
+  .day-head {
+    position: relative;
+    margin: 34px 0 8px;
+    padding: 26px 26px 22px;
+    border-radius: 18px;
+    color: #fff;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--c), color-mix(in srgb, var(--c) 70%, #000 30%));
+    box-shadow: 0 14px 34px -16px var(--c);
+  }
+  .day-head .dow {
+    font-size: 13px; letter-spacing: .18em; text-transform: uppercase;
+    font-weight: 700; opacity: .9;
+  }
+  .day-head h2 { margin: 4px 0 6px; font-size: clamp(24px,4vw,34px); font-weight: 800; }
+  .day-head .theme { margin: 0; font-size: 15px; opacity: .95; font-style: italic; }
+
+  /* timeline */
+  .timeline {
+    position: relative;
+    margin-left: 13px;
+    border-left: 2px solid color-mix(in srgb, var(--c) 35%, #d7dbe2 65%);
+    padding: 12px 0 6px;
+  }
+  .item { position: relative; padding: 0 0 26px 30px; }
+  .item::before {
+    content: attr(data-n);
+    position: absolute; left: -15px; top: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--c); color: var(--c);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .item.place::before { background: var(--c); color: #fff; }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* step row */
+  .step {
+    display: flex; align-items: baseline; gap: 9px;
+    color: var(--muted); font-size: 15.5px;
+    padding-top: 2px;
+  }
+  .step .ic { font-size: 16px; }
+  .step b { color: var(--ink); font-weight: 650; }
+
+  /* place card */
+  .card {
+    background: var(--card);
+    border: 1px solid #e7eaef;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px -28px rgba(20,30,60,.5);
+  }
+  .gallery {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 12px; background: #0d1220;
+    scroll-snap-type: x mandatory; scrollbar-width: thin;
+    scrollbar-color: #475067 #0d1220;
+  }
+  .gallery img {
+    height: 320px; width: auto; flex: 0 0 auto; object-fit: cover;
+    border-radius: 10px; cursor: zoom-in; scroll-snap-align: center;
+    background: #182033; transition: filter .2s ease;
+  }
+  .gallery img:hover { filter: brightness(1.07); }
+  .gallery-empty { padding: 26px; text-align: center; color: var(--muted); background: #f0f2f5; }
+  .swipe-hint { font-size: 12.5px; color: var(--muted); padding: 9px 20px 2px; }
+  .swipe-hint b { color: var(--ink); font-weight: 650; }
+  .card-body { padding: 14px 20px 19px; }
+  @media (max-width: 620px) { .gallery img { height: 220px; } }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    color: var(--c); background: color-mix(in srgb, var(--c) 12%, #fff 88%);
+    border: 1px solid color-mix(in srgb, var(--c) 30%, #fff 70%);
+    padding: 3px 9px; border-radius: 999px; margin-bottom: 9px;
+  }
+  .card-body h3 { margin: 0 0 7px; font-size: 21px; font-weight: 750; }
+  .card-body p { margin: 0; color: #39404e; font-size: 15.5px; }
+  .flag {
+    margin-top: 11px; font-size: 14px;
+    background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412;
+    padding: 9px 12px; border-radius: 10px;
+  }
+  .flag.optional { background: #f1f5f9; border-color: #cbd5e1; color: #334155; }
+  .walk {
+    margin-top: 9px; font-size: 14px; font-weight: 600;
+    background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534;
+    padding: 8px 12px; border-radius: 10px; line-height: 1.4;
+  }
+  .walk.hike { background: #fef9c3; border-color: #fde047; color: #854d0e; }
+
+  .daynote {
+    margin: 4px 0 0 30px; font-size: 14px; color: var(--muted);
+    border-left: 3px solid color-mix(in srgb, var(--c) 50%, #fff 50%);
+    padding: 6px 0 6px 12px;
+  }
+
+  /* ---------- ideas / alternatives ---------- */
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  .chev { display: inline-block; transition: transform .2s ease; font-size: 12px; }
+  details[open] > summary .chev { transform: rotate(90deg); }
+
+  .ideas { margin: 10px 0 4px 30px; }
+  .ideas > summary {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 13.5px; font-weight: 700; color: var(--ink);
+    background: #fff;
+    border: 1.5px dashed color-mix(in srgb, var(--c) 55%, #c2c8d2 45%);
+    padding: 8px 15px; border-radius: 999px;
+  }
+  .ideas > summary:hover { background: #fbfcfe; }
+  .ideas-lead {
+    margin: 12px 0 10px; font-size: 13px; color: var(--muted);
+    font-style: italic;
+  }
+  .idea-grid { display: grid; gap: 11px; }
+  .idea {
+    background: #fbfcfd;
+    border: 1.5px dashed #cbd2dd;
+    border-left: 4px solid var(--c);
+    border-radius: 12px; padding: 12px 15px;
+  }
+  .idea-gallery {
+    display: flex; gap: 6px; overflow-x: auto; margin: 0 0 11px;
+    padding-bottom: 4px; scroll-snap-type: x mandatory; scrollbar-width: thin;
+    border-radius: 9px;
+  }
+  .idea-gallery img {
+    height: 150px; width: auto; flex: 0 0 auto; object-fit: cover;
+    border-radius: 8px; cursor: zoom-in; scroll-snap-align: start;
+    background: #e7eaef; transition: filter .15s ease;
+  }
+  .idea-gallery img:hover { filter: brightness(1.06); }
+  .idea h4 { display: inline; margin: 0; font-size: 16px; font-weight: 750; }
+  .itag {
+    display: inline-block; font-size: 10px; font-weight: 800;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 999px; margin-right: 9px; vertical-align: 2px;
+  }
+  .itag.add { background: #dcfce7; color: #15803d; }
+  .itag.swap { background: #dbeafe; color: #1d4ed8; }
+  .itag.optional { background: #ede9fe; color: #6d28d9; }
+  .itag.eat { background: #ffedd5; color: #c2410c; }
+  .itag.skip { background: #fee2e2; color: #b91c1c; }
+  .itag.note { background: #e2e8f0; color: #334155; }
+  .idea .what { margin: 7px 0 0; font-size: 14px; color: #39404e; }
+  .idea .meta { margin-top: 9px; display: flex; flex-direction: column; gap: 4px; }
+  .idea .dogline { font-size: 13px; color: #3f6212; }
+  .idea .routeline { font-size: 13px; color: #344054; font-weight: 650; }
+
+  /* ---------- weather ---------- */
+  .weatherbar { max-width: 900px; margin: 24px auto 0; padding: 0 18px; }
+  .wx-card {
+    background: #fff; border: 1px solid #e7eaef; border-radius: 16px;
+    padding: 15px 17px; box-shadow: 0 18px 40px -30px rgba(20,30,60,.5);
+  }
+  .wx-title { font-weight: 800; font-size: 16px; margin-bottom: 12px; }
+  .wx-title span { color: var(--muted); font-weight: 600; font-size: 14px; }
+  .wx-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
+  .wx-day {
+    border: 1px solid #eef1f5; border-top: 3px solid var(--c);
+    border-radius: 12px; padding: 11px 8px 10px; text-align: center; background: #fcfdfe;
+  }
+  .wx-dow { font-weight: 800; font-size: 12.5px; letter-spacing: .03em; }
+  .wx-date { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .wx-icon { font-size: 28px; line-height: 1; margin: 7px 0 5px; }
+  .wx-temp { font-weight: 800; font-size: 15.5px; }
+  .wx-temp span { color: var(--muted); font-weight: 600; font-size: 13px; }
+  .wx-sum { font-size: 11px; color: #51596b; margin-top: 4px; line-height: 1.25; }
+  .wx-loc { font-size: 10.5px; font-weight: 700; color: var(--c, #51596b); margin-top: 5px; line-height: 1.2; letter-spacing: .01em; }
+  .wx-note { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.45; }
+  .day-weather {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+    background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.30);
+    padding: 5px 13px; border-radius: 999px; font-size: 13.5px; color: #fff;
+  }
+  .day-weather b { font-weight: 800; }
+  .day-weather .wx-i { font-size: 16px; }
+  @media (max-width: 620px) {
+    .wx-strip { grid-template-columns: repeat(5, minmax(82px, 1fr)); overflow-x: auto; }
+  }
+
+  /* ---------- before-you-go notes panel ---------- */
+  .notes-wrap { max-width: 900px; margin: 22px auto 0; padding: 0 18px; }
+  .notes { }
+  .notes > summary {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 15px; font-weight: 800; color: var(--ink);
+    padding: 4px 0 12px;
+  }
+  .notes-card {
+    background: #fff; border: 1px solid #e7eaef; border-radius: 16px;
+    padding: 6px 20px 10px; box-shadow: 0 18px 40px -30px rgba(20,30,60,.5);
+  }
+  .note-row { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid #eef1f5; font-size: 14.5px; }
+  .note-row:first-child { border-top: none; }
+  .note-row .k { font-weight: 750; min-width: 132px; }
+  .note-row .v { color: #39404e; }
+  @media (max-width: 620px) {
+    .note-row { flex-direction: column; gap: 2px; }
+    .note-row .k { min-width: 0; }
+    .ideas, .daynote { margin-left: 24px; }
+  }
+
+  /* footer */
+  footer {
+    max-width: 900px; margin: 0 auto; padding: 28px 18px 70px;
+    color: var(--muted); font-size: 14px; text-align: center;
+  }
+  footer a { color: var(--thu); font-weight: 600; }
+  .closing {
+    background: #fff; border: 1px solid #e7eaef; border-radius: 16px;
+    padding: 22px 24px; margin: 10px auto 26px; max-width: 640px;
+    box-shadow: 0 18px 40px -30px rgba(20,30,60,.5);
+  }
+  .closing b { color: var(--ink); }
+
+  /* lightbox */
+  #lightbox {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(8,10,16,.9); align-items: center; justify-content: center; padding: 32px;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img { max-width: 94vw; max-height: 86vh; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 60px rgba(0,0,0,.6); }
+  #lightbox .x { position: absolute; top: 16px; right: 24px; color: #fff; font-size: 36px; cursor: pointer; font-weight: 700; line-height: 1; }
+  #lightbox .cap { position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; color: #dfe3ea; font-size: 13px; padding: 0 20px; }
+
+  @media (max-width: 620px) {
+    .gallery img { height: 190px; }
+    .item { padding-left: 24px; }
+    .timeline { margin-left: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Road Trip · July 22–26, 2026</div>
+    <h1>Oregon &amp; the<br />Washington Coast</h1>
+    <p class="sub">Five days from Portland's waterfalls to Mt. Hood to the wild north coast — scroll down to walk the whole thing, day by day.</p>
+    <div class="facts">
+      <span class="fact">✈️ <b>Arrive</b> Wed 7/22 · PDX 9:25a</span>
+      <span class="fact">✈️ <b>Depart</b> Sun 7/26 · PDX 5:39p</span>
+      <span class="fact">🛏️ <b>Portland</b> Wed–Thu</span>
+      <span class="fact">🛏️ <b>Cannon Beach</b> Fri–Sat</span>
+      <span class="fact">🚗 Rental car the whole way</span>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll ↓</div>
+</header>
+
+<nav class="daynav">
+  <div class="daynav-inner" id="daynav"></div>
+</nav>
+
+<section class="weatherbar" id="weatherbar"></section>
+
+<section class="notes-wrap" id="tripnotes"></section>
+
+<main class="wrap" id="trip"></main>
+
+<footer>
+  <div class="closing">
+    <p style="margin:0 0 6px"><b>If Sunday feels tight:</b> skip Cape Disappointment and just do Cannon Beach → Astoria → PDX. Protect that 2:45–3:00 p.m. rental return.</p>
+  </div>
+  Photos: Wikimedia Commons, saved locally in <code>/images</code>. ·
+  <a href="#map" target="_parent">Open the route map →</a>
+</footer>
+
+<div id="lightbox"><span class="x">&times;</span><img src="" alt="" /><div class="cap"></div></div>
+
+<script>
+  const COLORS = { Wed: 'var(--wed)', Thu: 'var(--thu)', Fri: 'var(--fri)', Sat: 'var(--sat)', Sun: 'var(--sun)' };
+
+  /* IMAGES_DATA_START — generated by apply_images.py from images_manifest.json; do not hand-edit */
+    const STOP_IMAGES = {"PDX / Portland Airport":[{"f":"images/pdx-portland-airport-01.jpg","t":"PDX Portland 2985.jpg"},{"f":"images/pdx-portland-airport-02.jpg","t":"PDX Portland 1569.jpg"},{"f":"images/pdx-portland-airport-03.jpg","t":"PDX drop off canopy wide.jpg"},{"f":"images/pdx-portland-airport-04.jpg","t":"PDX Cargo Center at Portland International Airport (2015).jpg"},{"f":"images/pdx-portland-airport-05.jpg","t":"PDX from Rocky Butte.JPG"},{"f":"images/pdx-portland-airport-06.jpg","t":"Portland International Airport PDX check in counters (Quintin Soloviev).jpg"}],"Downtown Portland":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Pittock Mansion viewpoint":[{"f":"images/pittock-mansion-viewpoint-01.jpg","t":"Portland Oregon ~ Pittock Mansion ~ Historic Mansion ~ My Vintage Photo"},{"f":"images/pittock-mansion-viewpoint-02.jpg","t":"Portland and Mt Hood"},{"f":"images/pittock-mansion-viewpoint-03.jpg","t":"Portland, OR"},{"f":"images/pittock-mansion-viewpoint-04.jpg","t":"Foggy Morning at the Pittock Mansion in Black and White"},{"f":"images/pittock-mansion-viewpoint-05.jpg","t":"The Pittock Mansion 1914"},{"f":"images/pittock-mansion-viewpoint-06.jpg","t":"Pittock Mansion stairway"},{"f":"images/pittock-mansion-viewpoint-07.jpg","t":"View over Portland and Mt. Hood from Pittock Mansion"},{"f":"images/pittock-mansion-viewpoint-08.jpg","t":"Pittock Mansion View"}],"International Rose Test Garden":[{"f":"images/international-rose-test-garden-01.jpg","t":"International Rose Test Garden (Portland, Oregon)"},{"f":"images/international-rose-test-garden-02.jpg","t":"International Rose Test Garden - Portland Or."},{"f":"images/international-rose-test-garden-03.jpg","t":"Yours truly at International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-04.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-05.jpg","t":"International Rose Test Garden, Portland, Oregon (2022) - 020"},{"f":"images/international-rose-test-garden-06.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-07.jpg","t":"International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-08.jpg","t":"Yours truly at International Rose Test Garden, Portland"}],"Portland hotel area":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Vista House / Crown Point":[{"f":"images/vista-house-crown-point-01.jpg","t":"Crown Point Vista House (HDR)"},{"f":"images/vista-house-crown-point-02.jpg","t":"Vista House, Crown Point, Oregon.jpeg - Historic Columbia River Highway - Multnomah County"},{"f":"images/vista-house-crown-point-03.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-04.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-05.jpg","t":"Crown Point Clouds"},{"f":"images/vista-house-crown-point-06.jpg","t":"Vista House ~Oregon State ~ Columbia Gorge ~ My Old Photo"},{"f":"images/vista-house-crown-point-07.jpg","t":"Vista House"},{"f":"images/vista-house-crown-point-08.jpg","t":"Crown Point 3440 H"}],"Latourell Falls":[{"f":"images/latourell-falls-01.jpg","t":"Latourelle Falls, Oregon, in autumn."},{"f":"images/latourell-falls-02.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-03.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-04.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-05.jpg","t":"Vintage Postcard - Latourell Falls, Oregon"},{"f":"images/latourell-falls-06.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-07.jpg","t":"Latourell Falls, Oregon"},{"f":"images/latourell-falls-08.jpg","t":"Lower Latourell Falls (Oregon, USA)"}],"Bridal Veil Falls":[{"f":"images/bridal-veil-falls-01.jpg","t":"A view of bridal veil falls, Oregon 01.jpg"},{"f":"images/bridal-veil-falls-02.jpg","t":"A view of bridal veil falls trail.jpg"},{"f":"images/bridal-veil-falls-03.jpg","t":"A view of bridal veil falls stairs.jpg"},{"f":"images/bridal-veil-falls-04.jpg","t":"Bridal Veil Falls kayaker.jpg"},{"f":"images/bridal-veil-falls-05.jpg","t":"Green cascade in Bridal Veil Falls (Unsplash).jpg"},{"f":"images/bridal-veil-falls-06.jpg","t":"Bridal Veil Falls (Oregon), 2017-05-28.jpg"}],"Wahkeena Falls":[{"f":"images/wahkeena-falls-01.jpg","t":"Wahkeena Falls - Oregon"},{"f":"images/wahkeena-falls-02.jpg","t":"Moss on Lava, Wahkeena Falls, Oregon 9-06"},{"f":"images/wahkeena-falls-03.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-04.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-05.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-06.jpg","t":"bridge at Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-07.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-08.jpg","t":"Wahkeena Falls, Oregon, Columbia River"}],"Multnomah Falls":[{"f":"images/multnomah-falls-01.jpg","t":"Multnomah Falls, Oregon, c1916"},{"f":"images/multnomah-falls-02.jpg","t":"Multnomah Falls ~ Oregon"},{"f":"images/multnomah-falls-03.jpg","t":"Multnomah Falls, Oregon, in the autumn."},{"f":"images/multnomah-falls-04.jpg","t":"Multnomah Falls ~ Oregon ~ Northwestern United States"},{"f":"images/multnomah-falls-05.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"},{"f":"images/multnomah-falls-06.jpg","t":"Multnomah Falls ~ Oregon ~ Landmark"},{"f":"images/multnomah-falls-07.jpg","t":"Multnomah Falls, Oregon"},{"f":"images/multnomah-falls-08.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"}],"Horsetail Falls":[{"f":"images/horsetail-falls-01.jpg","t":"Horsetail Falls, Columbia Gorge - Oregon"},{"f":"images/horsetail-falls-02.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-03.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-04.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-05.jpg","t":"Upper Horsetail Falls in Oregon by Michael Matti"},{"f":"images/horsetail-falls-06.jpg","t":"Misty Crossroads"},{"f":"images/horsetail-falls-07.jpg","t":"Ponytail Falls"},{"f":"images/horsetail-falls-08.jpg","t":"Horsetail Falls, Oregon, in autumn"}],"Timberline Lodge / Mt. Hood":[{"f":"images/timberline-lodge-mt-hood-01.jpg","t":"Timberline Lodge (WPA-built, 1937)"},{"f":"images/timberline-lodge-mt-hood-02.jpg","t":"Timberline Lodge, Mount Hood"},{"f":"images/timberline-lodge-mt-hood-03.jpg","t":"Mount Hood"},{"f":"images/timberline-lodge-mt-hood-04.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-05.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-06.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-07.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-08.jpg","t":"White River & White Falls"}],"Trillium Lake":[{"f":"images/trillium-lake-01.jpg","t":"Creating a Memory"},{"f":"images/trillium-lake-02.jpg","t":"Trillium Lake, Oregon"},{"f":"images/trillium-lake-03.jpg","t":"Late Evening at Mount Hood"},{"f":"images/trillium-lake-04.jpg","t":"Mount Hood and Trillium Lake"},{"f":"images/trillium-lake-05.jpg","t":"0134_Trillium_Lake_Swart_ODFW.jpg"},{"f":"images/trillium-lake-06.jpg","t":"Mt. Hood from Trillium Lake"},{"f":"images/trillium-lake-07.jpg","t":"Duck eye view of Mount Hood"},{"f":"images/trillium-lake-08.jpg","t":"Mount Hood from Trillium Lake"}],"Cannon Beach hotel area":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Wayfarer Restaurant / Haystack Rock":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Ecola State Park":[{"f":"images/ecola-state-park-01.jpg","t":"Ecola State Park - Oregon Coast"},{"f":"images/ecola-state-park-02.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/ecola-state-park-03.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-04.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-05.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-06.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-07.jpg","t":"Ecola State Park, Oregon Coast, Cannon Beach"},{"f":"images/ecola-state-park-08.jpg","t":"Ecola State Park, Oregon Coast"}],"Indian Beach":[{"f":"images/indian-beach-01.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-02.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-03.jpg","t":"Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-04.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/indian-beach-05.jpg","t":"Indian Beach, Ecola State Park, Oregon Coast"},{"f":"images/indian-beach-06.jpg","t":"Arch from Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-07.jpg","t":"Surf's Up"},{"f":"images/indian-beach-08.jpg","t":"Indian Beach Native"}],"Oswald West / Short Sand Beach":[{"f":"images/oswald-west-short-sand-beach-01.jpg","t":"Short Sand gray (3)"},{"f":"images/oswald-west-short-sand-beach-02.jpg","t":"Neahkahnie meets the water"},{"f":"images/oswald-west-short-sand-beach-03.jpg","t":"Short Sand gray (5)"},{"f":"images/oswald-west-short-sand-beach-04.jpg","t":"Oswald West State Park"},{"f":"images/oswald-west-short-sand-beach-05.jpg","t":"Neahkahnie over Short Sand Beach"},{"f":"images/oswald-west-short-sand-beach-06.jpg","t":"Short Sand gray (1)"},{"f":"images/oswald-west-short-sand-beach-07.jpg","t":"Short Sand gray (4)"},{"f":"images/oswald-west-short-sand-beach-08.jpg","t":"Short Sand gray (2)"}],"Neahkahnie Viewpoint":[{"f":"images/neahkahnie-viewpoint-01.jpg","t":"Whale watching from Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-02.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-03.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-04.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-05.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-06.jpg","t":"Viewpoint looking south, Neahkahnie Mountain, Oregon coast"},{"f":"images/neahkahnie-viewpoint-07.jpg","t":"Neahkahnie Mountain Trail, Oregon"},{"f":"images/neahkahnie-viewpoint-08.jpg","t":"Oregon coast - looking south from Neahkahnie Mountain"}],"Astoria":[{"f":"images/astoria-01.jpg","t":"The Astoria Bridge"},{"f":"images/astoria-02.jpg","t":"Astoria By Night"},{"f":"images/astoria-03.jpg","t":"A Relic of the Gilded Age (1893)"},{"f":"images/astoria-04.jpg","t":"Astoria Waterfront"},{"f":"images/astoria-05.jpg","t":"Astoria"},{"f":"images/astoria-06.jpg","t":"Columbia River"},{"f":"images/astoria-07.jpg","t":"Crossing the Columbia River"},{"f":"images/astoria-08.jpg","t":"20071007TRD004934"}],"Fort Stevens / Peter Iredale":[{"f":"images/fort-stevens-peter-iredale-01.jpg","t":"Between Sand and Sea"},{"f":"images/fort-stevens-peter-iredale-02.jpg","t":"Wreck of the Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-03.jpg","t":"Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-04.jpg","t":"Peter Iredale shipwreck, Fort Stevens State Park, Oregon"},{"f":"images/fort-stevens-peter-iredale-05.jpg","t":"Peter Iredale shipwreck Fort Stevens Oregon"},{"f":"images/fort-stevens-peter-iredale-06.jpg","t":"Wreck of the Peter Iredale at Fort Stevens by Rod S"},{"f":"images/fort-stevens-peter-iredale-07.jpg","t":"Barnacles"},{"f":"images/fort-stevens-peter-iredale-08.jpg","t":"Peter Iredale"}],"Cape Disappointment":[{"f":"images/cape-disappointment-01.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-02.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-03.jpg","t":"Cape Disappointment State Park - Ilwaco, Washington"},{"f":"images/cape-disappointment-04.jpg","t":"North Head Lighthouse at Twilight, SW Coast, Washington"},{"f":"images/cape-disappointment-05.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-06.jpg","t":"Cape Disappointment Lighthouse (Cape Disappointment State Park, Ilwaco, Washington) - October 30th, 2018"},{"f":"images/cape-disappointment-07.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-08.jpg","t":"Cape Disappointment Lighthouse"}]};
+  /* IMAGES_DATA_END */
+
+  /* IDEA_DATA_START — generated by apply_images.py from idea_images_manifest.json; do not hand-edit */
+    const IDEA_IMAGES = {"forest-park":[{"f":"images/idea-forest-park-01.jpg","t":"Forest Park, Portland, Oregon (24012149446).jpg"},{"f":"images/idea-forest-park-02.jpg","t":"Oregon Grape, Lower Macleay Park Trail, Forest Park, Portland - DPLA - 17cb87c7cc1a7c47318c6df817132b0f.jpg"},{"f":"images/idea-forest-park-03.jpg","t":"Oregon Grape, Lower Macleay Park Trail, Forest Park, Portland - DPLA - 5775057ebbb60b6cb7ca4fb624b993cb.jpg"},{"f":"images/idea-forest-park-04.jpg","t":"Balch Creek from Wildwood Trail, Portland, Oregon.jpg"},{"f":"images/idea-forest-park-05.jpg","t":"Lower Macleay Park Trail, Forest Park, Portland - DPLA - 1340b827a45e2f9597ea2568a7b1b15a.jpg"}],"food-carts":[{"f":"images/idea-food-carts-01.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2022.jpg"},{"f":"images/idea-food-carts-02.jpg","t":"Food cart pod at 3rd and Washington - Portland, Oregon.JPG"},{"f":"images/idea-food-carts-03.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2025 - 01.jpg"},{"f":"images/idea-food-carts-04.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2025 - 10.jpg"},{"f":"images/idea-food-carts-05.jpg","t":"Nob Hill Food Carts, Portland, Oregon, 2025 - 05.jpg"}],"bonneville-hatchery":[{"f":"images/idea-bonneville-hatchery-01.jpg","t":"Bonneville Fish Hatchery sturgeon - Oregon.JPG"},{"f":"images/idea-bonneville-hatchery-02.jpg","t":"Bonneville Fish Hatchery sturgeon 2 - Oregon.JPG"},{"f":"images/idea-bonneville-hatchery-03.jpg","t":"Bonneville Fish Hatchery - sturgeon viewing window - April 2015.JPG"},{"f":"images/idea-bonneville-hatchery-04.jpg","t":"2017-11-11 Bonneville Fish Hatchery 08.jpg"},{"f":"images/idea-bonneville-hatchery-05.jpg","t":"2017-11-11 Bonneville Fish Hatchery 04.jpg"}],"bridge-of-the-gods":[{"f":"images/idea-bridge-of-the-gods-01.jpg","t":"Bridge of the Gods, Columbia River, Cascade Locks - DPLA - 6aac954e5da8a4ceddd1b15051cb1a2d.jpg"},{"f":"images/idea-bridge-of-the-gods-02.jpg","t":"CASCADE LOCKS ON THE COLUMBIA RIVER, WITH BRIDGE OF THE GODS IN BACKGROUND. LEAVING POLES PROPPED OVER WATER IS... - NARA - 548141.jpg"},{"f":"images/idea-bridge-of-the-gods-03.jpg","t":"Bridge of the Gods, Cascade Locks - DPLA - ca566a4f91118862b928b22d3666d91c.jpg"},{"f":"images/idea-bridge-of-the-gods-04.jpg","t":"Bridge of the Gods, Cascade Locks - DPLA - 8d541635cedf4dcf2ed4d7e7108a2dba.jpg"},{"f":"images/idea-bridge-of-the-gods-05.jpg","t":"Bridge of the Gods, Cascade Locks - DPLA - 5b52e1beeca0311d1e70e4cec374f5ad.jpg"}],"sandy-river-delta":[{"f":"images/idea-sandy-river-delta-01.jpg","t":"MAYA LIN BIRD BLIND AT SANDY DELTA-COLUMBIA RIVER GORGE (24757922619).jpg"},{"f":"images/idea-sandy-river-delta-02.jpg","t":"Amanita muscaria (fly agaric mushroom) (near the Sandy River Delta, Oregon, USA) 2.jpg"},{"f":"images/idea-sandy-river-delta-03.jpg","t":"Amanita muscaria (fly agaric mushroom) (near the Sandy River Delta, Oregon, USA) 1.jpg"},{"f":"images/idea-sandy-river-delta-04.jpg","t":"Sandy River (northwestern Oregon, USA) 3.jpg"}],"hood-river":[{"f":"images/idea-hood-river-01.jpg","t":"Hood River OR - aerial.jpg"},{"f":"images/idea-hood-river-02.jpg","t":"Hood River from Washington.jpg"},{"f":"images/idea-hood-river-03.jpg","t":"Hood River, Oregon, 2026 - 20.jpg"},{"f":"images/idea-hood-river-04.jpg","t":"Hood River, Oregon, 2026 - 09.jpg"},{"f":"images/idea-hood-river-05.jpg","t":"Hood River, Oregon, 2026 - 12.jpg"}],"rowena-crest":[{"f":"images/idea-rowena-crest-01.jpg","t":"Rowena Crest 2352.jpg"},{"f":"images/idea-rowena-crest-02.jpg","t":"Columbia River from Rowena Crest Viewpoint looking east.jpg"},{"f":"images/idea-rowena-crest-03.jpg","t":"Rowena Crest at Columbia River Gorge in Oregon 2.jpg"},{"f":"images/idea-rowena-crest-04.jpg","t":"Rowena Crest at Columbia River Gorge in Oregon 1.jpg"},{"f":"images/idea-rowena-crest-05.jpg","t":"Lyle, Washington seen across the Columbia River from Rowena Crest, Oregon 01.jpg"}],"little-zigzag-falls":[{"f":"images/idea-little-zigzag-falls-01.jpg","t":"Mt Hood National Forest, Little Zigzag Falls (37193404145).jpg"}],"salmon-river-trail":[{"f":"images/idea-salmon-river-trail-01.jpg","t":"Oregon Salmon River Clackamas County from bridge looking west P1651.jpeg"},{"f":"images/idea-salmon-river-trail-02.jpg","t":"Salmon River and Forest-Mt Hood (23307561343).jpg"}],"government-camp":[{"f":"images/idea-government-camp-01.jpg","t":"Skibowl Ratskeller Government Camp Oregon (45574771032).jpg"},{"f":"images/idea-government-camp-02.jpg","t":"Govt Camp, Mount Hood National Forest, Oregon - NARA - 299093.jpg"},{"f":"images/idea-government-camp-03.jpg","t":"Mt Hood 7887.jpg"},{"f":"images/idea-government-camp-04.jpg","t":"Mt Hood Skibowl Fireworks.jpg"},{"f":"images/idea-government-camp-05.jpg","t":"Mount Hood Hike.jpg"}],"tolovana-beach":[{"f":"images/idea-tolovana-beach-01.jpg","t":"Tolovana Beach State Park - Oregon Coast (2369802636).jpg"},{"f":"images/idea-tolovana-beach-02.jpg","t":"Tolovana Beach State Park - Oregon Coast (2369803384).jpg"},{"f":"images/idea-tolovana-beach-03.jpg","t":"Tolovana Beach State Park - Oregon Coast (2368966417).jpg"},{"f":"images/idea-tolovana-beach-04.jpg","t":"Tolovana Beach State Park - Oregon Coast (2368968717).jpg"},{"f":"images/idea-tolovana-beach-05.jpg","t":"Tolovana Beach.jpg"}],"manzanita":[{"f":"images/idea-manzanita-01.jpg","t":"Neahkahnie Mountain from beach - Manzanita, Oregon.jpg"},{"f":"images/idea-manzanita-02.jpg","t":"Manzanita Beach, Oregon.jpg"},{"f":"images/idea-manzanita-03.jpg","t":"Jellyfish on beach - Manzanita, Oregon.jpg"},{"f":"images/idea-manzanita-04.jpg","t":"Manzanita Beach - Oregon.jpg"},{"f":"images/idea-manzanita-05.jpg","t":"Closeup of waves - Manzanita, Oregon.jpg"}],"seaside-promenade":[{"f":"images/idea-seaside-promenade-01.jpg","t":"Seaside Oregon seawall and beach.JPG"},{"f":"images/idea-seaside-promenade-02.jpg","t":"Sand blowing at beach - Seaside, Oregon.JPG"},{"f":"images/idea-seaside-promenade-03.jpg","t":"Seaside - DPLA - d26be4b9c0c307baeb33185bd8a17ee0.jpg"}],"astoria-column":[{"f":"images/idea-astoria-column-01.jpg","t":"Astoria-Megler Bridge with Astoria Column in foreground.jpg"},{"f":"images/idea-astoria-column-02.jpg","t":"Astoria column up front.jpg"},{"f":"images/idea-astoria-column-03.jpg","t":"Astoria Column, base.jpg"},{"f":"images/idea-astoria-column-04.jpg","t":"Astoria Column, angled.jpg"},{"f":"images/idea-astoria-column-05.jpg","t":"Astoria Column after Dark Astoria Oregon.jpg"}],"astoria-riverwalk":[{"f":"images/idea-astoria-riverwalk-01.jpg","t":"Astoria Wharf & Warehouse Co. building in 2012.jpg"},{"f":"images/idea-astoria-riverwalk-02.jpg","t":"Astoria Riverfront Trolley - Old 300 at 12th Street.jpg"},{"f":"images/idea-astoria-riverwalk-03.jpg","t":"Astoria Riverfront Trolley - July 2013.jpg"},{"f":"images/idea-astoria-riverwalk-04.jpg","t":"Astoria Riverfront Trolley, 2006.jpg"},{"f":"images/idea-astoria-riverwalk-05.jpg","t":"Sheltered stop for Astoria Riverfront Trolley near Basin St.jpg"}],"fort-clatsop":[{"f":"images/idea-fort-clatsop-01.jpg","t":"Lewis and Clark National Historical Park (Fort Clatsop FOCL1574.jpg"},{"f":"images/idea-fort-clatsop-02.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (4).jpg"},{"f":"images/idea-fort-clatsop-03.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (2).jpg"},{"f":"images/idea-fort-clatsop-04.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (7).jpg"},{"f":"images/idea-fort-clatsop-05.jpg","t":"Fort Clatsop - Lewis and Clark Natl Historic Site (5).jpg"}]};
+  /* IDEA_DATA_END */
+
+  /* WEATHER_DATA_START — generated by fetch_weather.py; do not hand-edit */
+  const WEATHER = {"meta":{"kind":"forecast","headline":"live forecast (Open-Meteo)","note":"Live 16-day forecast from Open-Meteo — re-run fetch_weather.py to refresh."},"days":{"wed":{"high":94,"low":71,"icon":"🌧️","short":"Light rain","summary":"Light rain · 9% precip","rainyPct":9,"kind":"forecast","dow":"Wed","date":"Jul 22","loc":"Portland"},"thu":{"high":85,"low":64,"icon":"☁️","short":"Overcast","summary":"Overcast · 22% precip","rainyPct":22,"kind":"forecast","dow":"Thu","date":"Jul 23","loc":"Columbia Gorge"},"fri":{"high":66,"low":54,"icon":"🌫️","short":"Fog","summary":"Fog · 1% precip · Mt. Hood AM ~73°/49°","rainyPct":1,"kind":"forecast","dow":"Fri","date":"Jul 24","loc":"Mt. Hood → Cannon Beach"},"sat":{"high":61,"low":57,"icon":"🌦️","short":"Drizzle","summary":"Drizzle · 12% precip","rainyPct":12,"kind":"forecast","dow":"Sat","date":"Jul 25","loc":"Cannon Beach"},"sun":{"high":62,"low":56,"icon":"🌦️","short":"Light drizzle","summary":"Light drizzle · 18% precip","rainyPct":18,"kind":"forecast","dow":"Sun","date":"Jul 26","loc":"Astoria"}}};
+  /* WEATHER_DATA_END */
+
+  const trip = [
+    {
+      key: 'wed', dow: 'Wed', date: 'July 22', color: 'var(--wed)',
+      title: 'Portland First',
+      theme: 'Easy arrival day — light city stuff before the nature ruins cities for you.',
+      items: [
+        { kind: 'place', badge: 'Arrival', name: 'Land at PDX — 9:25 a.m.',
+          stop: "PDX / Portland Airport",
+          desc: 'Wheels down mid-morning. Portland International is small and easy to move through — grab the rental car and you can be downtown in about 20 minutes.' },
+        { kind: 'step', ic: '🚗', text: '<b>Pick up the rental car</b> at the airport.' },
+        { kind: 'step', ic: '🧳', text: '<b>Drop bags / early check-in</b> at the Portland hotel if the room is ready.' },
+        { kind: 'place', badge: 'City', name: 'Downtown Portland',
+          stop: "Downtown Portland",
+          desc: "Portland's compact, walkable core sits along the Willamette River — food carts on every other block, Powell's City of Books, and bridges in all directions. An easy first stop to stretch your legs and grab lunch before the week turns scenic." },
+        { kind: 'place', badge: 'Viewpoint', name: 'Pittock Mansion Viewpoint',
+          stop: "Pittock Mansion viewpoint",
+          desc: 'A 1914 French Renaissance estate perched 1,000 ft up in the West Hills. You come for the terrace view — the whole city laid out below with Mt. Hood floating behind it on a clear day. No need to tour the house; the lawn is the point.' },
+        { kind: 'place', badge: 'Garden', name: 'International Rose Test Garden',
+          stop: "International Rose Test Garden",
+          desc: 'The oldest continuously operating public rose test garden in the U.S., terraced above the city in Washington Park with 10,000+ bushes. Late July is peak bloom — it will be at its loudest, most fragrant, and it is free.' },
+        { kind: 'step', ic: '🍽️', text: '<b>Dinner in Portland</b> — your pick of the food-cart pods or a sit-down spot.' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Portland.</b>' },
+      ],
+    },
+    {
+      key: 'thu', dow: 'Thu', date: 'July 23', color: 'var(--thu)',
+      title: 'Waterfall Highway / Columbia River Gorge',
+      theme: 'The classic "waterfall highway" day trip out of Portland.',
+      items: [
+        { kind: 'step', ic: '🚗', text: '<b>Leave Portland</b> — about 30 minutes east into the Gorge.' },
+        { kind: 'place', badge: 'Viewpoint', name: 'Vista House / Crown Point',
+          stop: "Vista House / Crown Point",
+          desc: 'An octagonal stone observatory built in 1918, standing 733 ft above the Columbia on the edge of Crown Point. First big view of the day: the river bending away east through the Gorge below you.',
+          walk: 'Drive-up — park and walk ~50 ft to the rotunda. Views are all outside (leashed dogs + stroller fine; the interior is the only no-dog part).' },
+        { kind: 'place', badge: 'Waterfall', name: 'Latourell Falls',
+          stop: "Latourell Falls",
+          desc: 'A 249-ft single plunge dropping over a wall of bright yellow-green lichen on columnar basalt — one of the most distinctive falls in the Gorge. A short paved path from the lot gets you to the base.',
+          walk: 'Near drive-up — a paved ~150-yard path (5 min) to the base view. Stroller-OK. (Optional 2.3-mi upper loop if you want more.)' },
+        { kind: 'place', badge: 'Waterfall', name: 'Bridal Veil Falls',
+          stop: "Bridal Veil Falls",
+          desc: 'A two-tiered falls reached by a short 0.5-mile round-trip trail. There is also an upper interpretive loop with overlooks of the Columbia if you want a few extra minutes.',
+          walk: 'The one real short hike: ~0.5-mi round trip, unpaved, with stairs and ~100 ft down to the platform — NOT stroller-friendly. Carry the dogs, or skip it. (The separate paved Overlook Loop up top is stroller/wheelchair-OK but shows the river & wildflowers, not the falls.)', walkHike: true },
+        { kind: 'place', badge: 'Waterfall', name: 'Wahkeena Falls',
+          stop: "Wahkeena Falls",
+          desc: 'A 242-ft cascade tumbling right beside the road — no real hike needed, though a trail links it to Multnomah if you are feeling ambitious.',
+          walk: 'Drive-up — a paved path a couple hundred feet from the lot to the footbridge view. Stroller-OK.' },
+        { kind: 'place', badge: 'Waterfall', name: 'Multnomah Falls',
+          stop: "Multnomah Falls",
+          desc: "The icon: 620 ft over two tiers, the tallest waterfall in Oregon, with the Benson Footbridge crossing between them. Shoot it from the bridge, or hike the switchbacks to the top for the overlook.",
+          walk: 'Drive-up — paved plaza right by the lot for the classic shot; paved (inclined) ~0.2-mi path up to Benson Bridge is stroller-doable with some push. The top is a steep 1.2-mi switchback climb — skip it; the plaza + bridge give you the iconic view.',
+          flag: '⚠️ A timed-use permit is required in summer — reserve before you go and plan the day around your window.' },
+        { kind: 'place', badge: 'Waterfall', name: 'Horsetail Falls',
+          stop: "Horsetail Falls",
+          desc: 'A 176-ft falls that drops right next to the highway — the easiest stop of the day and a good one to close out the waterfall run.',
+          walk: 'Drive-up — drops right next to the highway; park and a few steps to the view. Stroller-OK.' },
+        { kind: 'step', ic: '🍔', text: '<b>Optional lunch in Cascade Locks</b> — the little town by the Bridge of the Gods.' },
+        { kind: 'step', ic: '🚗', text: '<b>Return to Portland.</b>' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Portland.</b>' },
+      ],
+      note: 'Reserve and plan around the Multnomah Falls permit timing — it drives the whole day’s order.',
+    },
+    {
+      key: 'fri', dow: 'Fri', date: 'July 24', color: 'var(--fri)',
+      title: 'Mt. Hood to Cannon Beach',
+      theme: 'Mountain views in the morning, then move to the coast.',
+      items: [
+        { kind: 'step', ic: '🧳', text: '<b>Check out</b> of the Portland hotel.' },
+        { kind: 'step', ic: '🚗', text: '<b>Drive toward Mt. Hood</b> — roughly 1.5 hours southeast.' },
+        { kind: 'place', badge: 'Mountain', name: 'Timberline Lodge / Mt. Hood',
+          stop: "Timberline Lodge / Mt. Hood",
+          desc: "A massive WPA-built lodge from 1937 at 6,000 ft on Mt. Hood's south face — hand-hewn timber and stone, with skiers still on the glacier in July. Walk the grounds and get the peak up close." },
+        { kind: 'place', badge: 'Lake', name: 'Trillium Lake',
+          stop: "Trillium Lake",
+          desc: 'The postcard shot: Mt. Hood mirrored in a small, still lake with an easy flat loop around the shore. The reflection is best when the wind drops.' },
+        { kind: 'step', ic: '🚗', text: '<b>Drive to Cannon Beach</b> — about 2.5 hours across to the coast.' },
+        { kind: 'step', ic: '🧳', text: '<b>Check into the Cannon Beach hotel.</b>' },
+        { kind: 'place', badge: 'Coast', name: 'Haystack Rock / Cannon Beach Sunset',
+          stop: "Cannon Beach hotel area",
+          desc: 'A 235-ft sea stack rising straight off the sand, with tide pools at its base and tufted puffins nesting on it in summer. First evening on the coast — catch the sunset behind it.' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Cannon Beach.</b>' },
+      ],
+    },
+    {
+      key: 'sat', dow: 'Sat', date: 'July 25', color: 'var(--sat)',
+      title: 'Cannon Beach Coast Day',
+      theme: 'The best coastal views, with no major driving pressure.',
+      items: [
+        { kind: 'place', badge: 'Food', name: 'Wayfarer Restaurant — Breakfast',
+          stop: "Wayfarer Restaurant / Haystack Rock",
+          desc: 'Oceanfront breakfast with Haystack Rock framed in the windows. Fuel up here before a full day of coastline.' },
+        { kind: 'place', badge: 'Coast', name: 'Haystack Rock / Cannon Beach',
+          stop: "Cannon Beach hotel area",
+          desc: 'Back to the rock — at low tide the tide pools open up around its base with sea stars and anemones. Check the morning tide chart so you time it right.' },
+        { kind: 'place', badge: 'Park', name: 'Ecola State Park',
+          stop: "Ecola State Park",
+          desc: 'A forested headland just north of town with jaw-dropping viewpoints down the coastline and out to the abandoned Tillamook Rock Lighthouse offshore.' },
+        { kind: 'place', badge: 'Beach', name: 'Indian Beach',
+          stop: "Indian Beach",
+          desc: 'A rugged cove inside Ecola — surfers, tide pools, and trailheads into the rainforest. You may recognize it: it stood in for scenes in The Goonies and Twilight.' },
+        { kind: 'place', badge: 'Beach', name: 'Oswald West / Short Sand Beach',
+          stop: "Oswald West / Short Sand Beach",
+          desc: 'A 10–15 minute walk through old-growth rainforest drops you onto a protected cove that is a local surf favorite. Cooler, greener, and quieter than Cannon Beach.' },
+        { kind: 'place', badge: 'Viewpoint', name: 'Neahkahnie Viewpoint',
+          stop: "Neahkahnie Viewpoint",
+          desc: 'A high pull-out on Highway 101 on the shoulder of Neahkahnie Mountain — one of the biggest open-ocean views on the north coast and a perfect turnaround point.' },
+        { kind: 'step', ic: '🚗', text: '<b>Return to Cannon Beach.</b>' },
+        { kind: 'step', ic: '🌅', text: '<b>Sunset / beach walk</b> back at Haystack Rock.' },
+        { kind: 'step', ic: '🛏️', text: '<b>Overnight in Cannon Beach.</b>' },
+      ],
+    },
+    {
+      key: 'sun', dow: 'Sun', date: 'July 26', color: 'var(--sun)',
+      title: 'North Coast → Fly Home',
+      theme: 'A scenic final day — but protect the airport timing.',
+      items: [
+        { kind: 'step', ic: '🧳', text: '<b>Check out</b> of the Cannon Beach hotel.' },
+        { kind: 'place', badge: 'Historic', name: 'Fort Stevens / Peter Iredale',
+          stop: "Fort Stevens / Peter Iredale",
+          desc: 'The rusted ribs of the Peter Iredale, a 1906 sailing ship wrecked at the mouth of the Columbia and still half-buried in the sand. The surrounding park was a military fort guarding the river mouth for decades.' },
+        { kind: 'place', badge: 'Town', name: 'Astoria',
+          stop: "Astoria",
+          desc: "Oregon's oldest city, stacked on hills above the Columbia where it meets the sea. The Astoria-Megler Bridge, the Goonies house, and the Astoria Column are all here if you have the time." },
+        { kind: 'step', ic: '🚗', text: '<b>Drive back to PDX</b> — Cannon Beach → Astoria → PDX (Cape Disappointment, WA is cut to protect the flight; see the ideas below).' },
+        { kind: 'step', ic: '🔑', text: '<b>Return the rental car</b> around 2:45–3:00 p.m.' },
+        { kind: 'step', ic: '✈️', text: '<b>Depart PDX at 5:39 p.m.</b>' },
+      ],
+    },
+  ];
+
+  // ---------- ideas & alternatives (per day) ----------
+  // tag: add | swap | optional | eat | skip | note
+  const DAY_IDEAS = {
+    wed: [
+      { tag: 'add', name: 'Forest Park / Washington Park trails', img: 'forest-park',
+        what: 'The Wildwood Trail links Pittock Mansion to Washington Park — miles of leafy, leashed-dog trails right beside two stops you already have.',
+        dogs: 'Leashed OK throughout Forest Park, Hoyt Arboretum and the Rose Garden.',
+        route: '🚶 No detour — same West Hills hillside as Pittock & the Rose Garden. Budget 30–60 min.' },
+      { tag: 'eat', name: 'A dog-friendly food-cart pod', img: 'food-carts',
+        what: 'Cartopia (SE Hawthorne, covered), Hawthorne Asylum, or Cartlandia — dozens of carts and a beer garden.',
+        dogs: 'Leashed dogs welcome at the outdoor picnic seating.',
+        route: '🍽️ Slots in as your Portland lunch or dinner — no added driving.' },
+      { tag: 'eat', name: 'Brewpub patio + Salt & Straw',
+        what: 'Lucky Lab (the OG dog brewpub), Breakside or StormBreaker for a beer; Salt & Straw for ice cream at the window.',
+        dogs: 'Water-bowl dog patios; order at the window for ice cream and sit on the bench.',
+        route: '🍺 All in town, evening — no detour.' },
+      { tag: 'skip', name: 'Indoor-only spots (with dogs)',
+        what: 'Lan Su Chinese Garden, Powell’s interior, the Japanese Garden and the Zoo are service-animals-only.',
+        dogs: 'Tag-team: one person browses while the other walks the pups.',
+        route: '—' },
+    ],
+    thu: [
+      { tag: 'add', name: 'Bonneville Fish Hatchery — “Herman the Sturgeon”', img: 'bonneville-hatchery',
+        what: 'Free and genuinely fun: a 10-ft, 500-lb, 80-year-old sturgeon in a viewing pond, plus trout ponds.',
+        dogs: 'Leashed dogs welcome on the hatchery grounds.',
+        route: '🚗 ~5 min off I-84 (Exit 40), right between Multnomah Falls and Cascade Locks. ~30–45 min on site — fits the corridor with no real detour.' },
+      { tag: 'add', name: 'Thunder Island Brewing (Cascade Locks)', img: 'bridge-of-the-gods',
+        what: 'Riverfront patio under the Bridge of the Gods — the pick for the Cascade Locks lunch your plan already floats.',
+        dogs: 'Standout: a dog menu and water bowls on the patio.',
+        route: '🍺 On-route at the east end of the waterfall run — no detour.' },
+      { tag: 'add', name: 'Sandy River Delta (off-leash romp)', img: 'sandy-river-delta',
+        what: '1,400-acre off-leash area with meadow and river trails — let them actually run before the day of leashed waterfalls.',
+        dogs: 'Rare OFF-LEASH; leash only in the lot and near the Bird Blind trail. ⚠️ Verify parking/gate day-of (partial restoration closure).',
+        route: '🚗 Troutdale, the WEST end of the corridor (Exit 18) — 0–5 min off I-84 on your way in or out.' },
+      { tag: 'optional', name: 'Hood River detour', img: 'hood-river',
+        what: 'The most dog-friendly Gorge town: waterfront trail, pFriem / Ferment patios, and the Fruit Loop stands.',
+        dogs: 'Dog-friendly brewery patios; leashed waterfront walk.',
+        route: '⏱ Adds ~1.5–2 hrs round-trip east past the falls — only worth it on a longer day.' },
+      { tag: 'note', name: 'Rowena Crest viewpoint', img: 'rowena-crest',
+        what: 'A stunning horseshoe-bend overlook on the old highway further east.',
+        dogs: 'Dogs roadside only — they’re banned on the Tom McCall Preserve trails.',
+        route: '🚗 ~30 min east of the falls — pair it with Hood River, not a quick add.' },
+    ],
+    fri: [
+      { tag: 'add', name: 'Little Zigzag Falls', img: 'little-zigzag-falls',
+        what: 'A flat, shady 0.6-mi round-trip (~20 min) to a 40-ft falls — the best-value dog walk of the transition day.',
+        dogs: 'Leashed; cool and shaded on a hot July afternoon.',
+        route: '🚗 Right on US-26 east of Rhododendron — about +20 min, basically on the line. (Needs a Northwest Forest Pass.)' },
+      { tag: 'add', name: 'Old Salmon River Trail (alternative)', img: 'salmon-river-trail',
+        what: 'An easy old-growth riverside walk in Welches; go as far as you like and turn around.',
+        dogs: 'Leashed and dog-loved.',
+        route: '🚗 ~3 min off US-26 at Welches — swap for Little Zigzag if you’d rather walk the river.' },
+      { tag: 'eat', name: 'Government Camp lunch', img: 'government-camp',
+        what: 'Mt. Hood Brewing (seasonal dog deck + treats) or Glacier Public House (dog patio).',
+        dogs: 'Dog-friendly decks/patios.',
+        route: '🍺 On US-26 at Govy — your natural pivot before turning west. No detour.' },
+      { tag: 'skip', name: 'Lost Lake · Ramona Falls · Mirror Lake',
+        what: 'Beautiful but day-killers: Lost Lake and Ramona are 1.5–2 hrs off-route, Mirror Lake is a real 2.5-hr hike, and Ramona’s bridgeless log river-crossing is risky for small dogs.',
+        dogs: 'Ramona especially — skip with the pups.',
+        route: '⛔ Not on a transition day with ~4+ hrs of driving already.' },
+    ],
+    sat: [
+      { tag: 'note', name: 'Anchor the morning on low tide',
+        what: 'Time Haystack Rock tide-pooling to the morning low tide — arrive ~1–1.5 hrs before it for sea stars and anemones.',
+        dogs: 'Leashed at the rock (Marine Garden); off-leash elsewhere on the sand.',
+        route: '⏱ Pin the day around the tide window — ⚠️ get exact Jul 24–26 times from cannonbeach.org day-of.' },
+      { tag: 'swap', name: 'Hug Point → Tolovana + Arcadia Beach', img: 'tolovana-beach',
+        what: 'Hug Point is CLOSED (erosion, no reopen date). Tolovana (south end, full Haystack view) and Arcadia (quiet cove ~3 mi south) give the same pretty-beach access.',
+        dogs: 'Tolovana is off-leash city-beach; Arcadia is leashed (state park).',
+        route: '↔ Direct swap — Tolovana is ~5 min south of downtown, essentially no added time.' },
+      { tag: 'add', name: 'Manzanita (dog-town half-day)', img: 'manzanita',
+        what: 'Maybe the most dog-centric town on the coast: a 7-mi flat dog beach, water bowls everywhere, easy eats.',
+        dogs: 'Off-leash beach; lots of dog-friendly patios.',
+        route: '🚗 ~20 min south of Cannon Beach — plan a half-day. Best escape if downtown is mobbed Saturday.' },
+      { tag: 'add', name: 'Seaside Promenade (evening)', img: 'seaside-promenade',
+        what: 'A flat 1.5-mi oceanfront boardwalk — an easy golden-hour stroll.',
+        dogs: 'Leashed and very dog-friendly.',
+        route: '🚗 ~15 min north — tack it onto the evening.' },
+      { tag: 'eat', name: 'Cannon Beach dog patios',
+        what: 'Public Coast Brewing (the best — bowls + treats), Pelican Brewing, Bill’s Tavern; Suzy’s Scoops ice cream; coffee at Elk Creek or Bald Eagle.',
+        dogs: 'Patios welcome; order inside at Bill’s. (Sleepy Monk café is closed — skip it.)',
+        route: '🍺 All in town — no driving.' },
+      { tag: 'skip', name: 'Saddle Mountain',
+        what: 'A big summit hike, but the upper trail’s exposed wire-mesh matting catches paws.',
+        dogs: 'Not recommended for two small dogs.',
+        route: '⛔ Skip it with the pups.' },
+    ],
+    sun: [
+      { tag: 'note', name: 'Leave Astoria by ~12:15–12:30',
+        what: 'Astoria → PDX is ~2 hrs via US-30, so a ~9am–12:30 window means 2–3 stops, not six.',
+        dogs: '',
+        route: '⏱ This single deadline shapes the whole morning — protect the 5:39 flight.' },
+      { tag: 'add', name: 'Astoria Column (do it first)', img: 'astoria-column',
+        what: 'The best Columbia panorama from a 125-ft hilltop tower — one person climbs the 164 steps, one holds the dogs.',
+        dogs: 'Leashed on the grounds; not up inside the tower.',
+        route: '🚗 On the hill above town, ~10 min up — go first for light and low crowds. $10/yr parking pass.' },
+      { tag: 'add', name: 'Riverwalk + Bowpicker / Coffee Girl', img: 'astoria-riverwalk',
+        what: 'A flat waterfront stroll plus Bowpicker’s famous beer-battered tuna & chips (opens 11am Sun, expect a line) or Coffee Girl on the pier.',
+        dogs: 'Leashed; everything here is outdoor / walk-up.',
+        route: '🚶 In town, pairs with the Column. Bowpicker only if you’re leaving on the later side.' },
+      { tag: 'eat', name: 'Dog-OK breakfast',
+        what: 'Blue Scorcher Bakery (dog sidewalk seating, open Sun 7am) or Pig ’N Pancake takeout.',
+        dogs: 'Sidewalk seating / takeout.',
+        route: '🍽️ Fuel up early before the stops.' },
+      { tag: 'optional', name: 'Fort Clatsop (Lewis & Clark NHP)', img: 'fort-clatsop',
+        what: 'Flat forested leashed-dog trails and a replica 1805 fort, already on the PDX side of town.',
+        dogs: 'Leashed on the trails; not inside the fort rooms.',
+        route: '🚗 ~10 min south toward PDX — fits ONLY if you drop another stop.' },
+      { tag: 'skip', name: 'Cape Disappointment, WA',
+        what: 'Wrong direction from PDX, needs a separate Washington Discover Pass, and is partly closed for renovation through ~June 2026 — it eats the whole morning.',
+        dogs: 'Leashed-OK if you go, but the time math doesn’t work today.',
+        route: '⛔ Recommended skip to protect the flight. Save it for a trip where it’s your first stop.' },
+    ],
+  };
+
+  const TRIP_NOTES = [
+    { k: '🐾 Off-leash perk', v: 'Cannon Beach, Seaside and Manzanita allow dogs OFF-LEASH under voice control on the main sand. State parks (Ecola, Oswald West, Fort Stevens) and the Haystack Rock tide-pool zone are leashed-only.' },
+    { k: '🐾 Waterfall day = dog-friendly', v: 'Every Thursday stop (Vista House grounds, Latourell, Bridal Veil, Wahkeena, Multnomah, Horsetail) allows leashed dogs on the paved paths — a pet stroller is fine on Multnomah’s paved plaza and out to Benson Bridge (only the steep switchback trail to the very top isn’t stroller-friendly, and you don’t need it). Just the Multnomah Falls Lodge interior/restaurant is no-dogs; there are water bowls outside. Note: the Lodge restrooms are under renovation through Nov 2026 (porta-potties only).' },
+    { k: '🏠 Indoors = no dogs', v: 'Pittock Mansion, Timberline Lodge, the Astoria Column tower, the Multnomah Falls Lodge interior, Powell’s and the gardens/zoo are service-animals-only. Plan to tag-team those.' },
+    { k: '🎟️ Oregon State Parks', v: 'Ecola (Sat) + Fort Stevens (Sun) each charge a day-use parking fee — $12/day for out-of-state cars in 2026. Just pay per day at the machine/booth (~$24 total); the $75 non-resident annual pass isn’t worth it for a single trip. One permit covers the whole car.' },
+    { k: '🎟️ NW Forest Pass', v: 'Trillium Lake (Fri) charges $10/vehicle, paid on-site — only the $30 annual NW Forest Pass is accepted in lieu (the $5 single-day pass is NOT). You visit once, so just pay the $10 at the booth. Timberline parking is free. One fee covers the whole car.' },
+    { k: '🎟️ Multnomah Falls', v: 'A $2 timed-use permit is required 9am–6pm in summer — or just arrive before 9am and skip the permit entirely.' },
+    { k: '⚠️ Hug Point closed', v: 'Emergency erosion closure since Nov 2025, no reopen date as of mid-2026 — Saturday routes around it (see that day’s ideas).' },
+    { k: '⚠️ Re-confirm', v: 'Tide times, the Sandy River Delta gate, the Astoria trolley and seasonal patio hours can change — re-check the week before you go.' },
+  ];
+
+  // ---------- render ----------
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+  function ideasHtml(key) {
+    const list = DAY_IDEAS[key] || [];
+    if (!list.length) return '';
+    const cards = list.map(x => {
+      const photos = (x.img && IDEA_IMAGES[x.img]) || [];
+      const gal = photos.length
+        ? `<div class="idea-gallery">${photos.map(g =>
+            `<img src="${esc(g.f)}" alt="${esc(g.t)}" title="${esc(g.t)}" data-cap="${esc(x.name)}" loading="lazy">`).join('')}</div>`
+        : '';
+      return `
+      <div class="idea">
+        ${gal}
+        <span class="itag ${x.tag}">${esc(x.tag)}</span><h4>${esc(x.name)}</h4>
+        <p class="what">${esc(x.what)}</p>
+        <div class="meta">
+          ${x.dogs ? `<div class="dogline">🐾 ${esc(x.dogs)}</div>` : ''}
+          ${x.route ? `<div class="routeline">${esc(x.route)}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    return `<details class="ideas reveal">
+      <summary><span class="chev">▸</span>💡 Ideas &amp; alternatives for this day · ${list.length}</summary>
+      <p class="ideas-lead">Not booked — optional adds, swaps and skips, with the routing/time hit for each.</p>
+      <div class="idea-grid">${cards}</div>
+    </details>`;
+  }
+
+  function weatherHtml(key) {
+    const w = (WEATHER.days || {})[key];
+    if (!w) return '';
+    return `<div class="day-weather"><span class="wx-i">${w.icon}</span><b>${w.high}° / ${w.low}°</b> · ${esc(w.summary)}${w.loc ? ` · <b>📍 ${esc(w.loc)}</b>` : ''}</div>`;
+  }
+
+  const nav = document.getElementById('daynav');
+  const main = document.getElementById('trip');
+
+  trip.forEach(day => {
+    const a = document.createElement('a');
+    a.href = '#' + day.key;
+    a.style.setProperty('--c', day.color);
+    a.innerHTML = `<span class="dot"></span>${day.dow}`;
+    a.dataset.key = day.key;
+    nav.appendChild(a);
+
+    const sec = document.createElement('section');
+    sec.className = 'day';
+    sec.id = day.key;
+    sec.style.setProperty('--c', day.color);
+
+    let items = '';
+    day.items.forEach((it, i) => {
+      const n = i + 1;
+      if (it.kind === 'step') {
+        items += `<div class="item reveal" data-n="${n}">
+          <div class="step"><span class="ic">${it.ic || '•'}</span><span>${it.text}</span></div>
+        </div>`;
+      } else {
+        const photos = STOP_IMAGES[it.stop] || [];
+        const imgs = photos.map(g =>
+          `<img src="${esc(g.f)}" alt="${esc(g.t)}" title="${esc(g.t)}" data-cap="${esc(it.name)}" loading="lazy">`
+        ).join('');
+        const gallery = imgs
+          ? `<div class="gallery">${imgs}</div>${photos.length > 1 ? `<div class="swipe-hint">← swipe through <b>${photos.length}</b> photos →</div>` : ''}`
+          : '<div class="gallery-empty">No photos for this stop.</div>';
+        const flag = it.flag
+          ? `<div class="flag${it.flagOptional ? ' optional' : ''}">${it.flag}</div>` : '';
+        items += `<div class="item place reveal" data-n="${n}">
+          <div class="card">
+            ${gallery}
+            <div class="card-body">
+              <span class="badge">${esc(it.badge)}</span>
+              <h3>${esc(it.name)}</h3>
+              <p>${it.desc}</p>
+              ${it.walk ? `<div class="walk${it.walkHike ? ' hike' : ''}">${it.walkHike ? '🥾' : '🚶'} ${esc(it.walk)}</div>` : ''}
+              ${flag}
+            </div>
+          </div>
+        </div>`;
+      }
+    });
+
+    const note = day.note
+      ? `<div class="daynote reveal">📌 ${day.note}</div>` : '';
+
+    sec.innerHTML = `
+      <div class="day-head reveal">
+        <div class="dow">${day.dow} · ${day.date}</div>
+        <h2>${esc(day.title)}</h2>
+        <p class="theme">${esc(day.theme)}</p>
+        ${weatherHtml(day.key)}
+      </div>
+      <div class="timeline">${items}${note}</div>
+      ${ideasHtml(day.key)}`;
+    main.appendChild(sec);
+  });
+
+  // ---------- top weather strip ----------
+  (function () {
+    const days = WEATHER.days || {};
+    const colors = Object.fromEntries(trip.map(d => [d.key, d.color]));
+    const cells = trip.map(d => d.key).filter(k => days[k]).map(k => {
+      const w = days[k];
+      return `<div class="wx-day" style="--c:${colors[k]}">
+        <div class="wx-dow">${esc(w.dow)}</div>
+        <div class="wx-date">${esc(w.date)}</div>
+        <div class="wx-icon">${w.icon}</div>
+        <div class="wx-temp">${w.high}°<span> / ${w.low}°</span></div>
+        <div class="wx-sum">${esc(w.short || w.summary)}</div>
+        ${w.loc ? `<div class="wx-loc">📍 ${esc(w.loc)}</div>` : ''}
+      </div>`;
+    }).join('');
+    if (!cells) return;
+    const m = WEATHER.meta || {};
+    document.getElementById('weatherbar').innerHTML = `
+      <div class="wx-card">
+        <div class="wx-title">🌤️ Weather <span>— ${esc(m.headline || 'typical for these dates')}</span></div>
+        <div class="wx-strip">${cells}</div>
+        ${m.note ? `<div class="wx-note">${esc(m.note)}</div>` : ''}
+      </div>`;
+  })();
+
+  // ---------- before-you-go notes panel ----------
+  document.getElementById('tripnotes').innerHTML = `
+    <details class="notes" open>
+      <summary><span class="chev">▸</span>🧭 Before you go — passes, permits &amp; dog rules</summary>
+      <div class="notes-card">
+        ${TRIP_NOTES.map(n => `<div class="note-row"><span class="k">${esc(n.k)}</span><span class="v">${esc(n.v)}</span></div>`).join('')}
+      </div>
+    </details>`;
+
+  // ---------- scroll reveal ----------
+  const revObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  // ---------- scrollspy nav ----------
+  const links = Object.fromEntries([...nav.querySelectorAll('a')].map(a => [a.dataset.key, a]));
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+        links[e.target.id]?.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('.day').forEach(s => spy.observe(s));
+
+  // ---------- lightbox ----------
+  const lb = document.getElementById('lightbox');
+  const lbImg = lb.querySelector('img');
+  const lbCap = lb.querySelector('.cap');
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t.tagName === 'IMG' && t.closest('.gallery, .idea-gallery')) {
+      lbImg.src = t.src; lbImg.alt = t.alt;
+      lbCap.textContent = t.getAttribute('data-cap') || t.alt || '';
+      lb.classList.add('open');
+    } else if (t === lb || t.classList.contains('x')) {
+      lb.classList.remove('open'); lbImg.src = '';
+    }
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { lb.classList.remove('open'); lbImg.src = ''; } });
+<\/script>
+</body>
+</html>
+
+</script>
+
+  <script type="text/html" id="tpl-reservations">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reservations — Locked-in bookings</title>
+<style>
+  :root{
+    --ink:#1d2430; --muted:#5b6675; --line:#e3e8ef; --bg:#f6f8fb; --card:#fff;
+    --air:#274b8f; --air-bg:#e8eefb; --lodge:#2f6f4f; --lodge-bg:#e6f3ec; --car:#7a4bb8; --car-bg:#efe8fb;
+    --good:#1f8a4c; --good-bg:#e6f5ec; --warn:#b8651b; --warn-bg:#fbeede;
+    --pt:#8a5a12; --pt-bg:#fbf3df; --cr:#1f7a45; --cr-bg:#e4f5ea;
+    --shadow:0 1px 3px rgba(20,30,50,.08),0 8px 24px rgba(20,30,50,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+  header.hero{background:linear-gradient(135deg,#1f3a5f 0%,#2f6f4f 55%,#3a2f6e 100%);color:#fff;padding:34px 0 26px}
+  header.hero h1{margin:0 0 6px;font-size:28px;letter-spacing:-.02em}
+  header.hero p{margin:0;opacity:.93;font-size:14.5px;max-width:760px}
+  .trip{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+  .trip span{font-size:13px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:5px 11px;border-radius:999px}
+
+  /* ---- summary strip ---- */
+  .summary{display:grid;grid-template-columns:auto 1fr;gap:18px 26px;align-items:center;
+    background:linear-gradient(135deg,#fff,#f3f8ff);border:1px solid #d8e3f3;border-radius:16px;
+    padding:20px 22px;margin:22px 0 6px;box-shadow:var(--shadow)}
+  .summary .big{font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+  .summary .cash{font-size:34px;font-weight:800;color:#15233f;line-height:1.05;letter-spacing:-.02em}
+  .summary .cash small{display:block;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:normal;text-transform:none;margin-top:3px}
+  .altpay{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{font-size:13px;font-weight:700;padding:6px 12px;border-radius:10px;display:inline-flex;gap:7px;align-items:center}
+  .chip.pt{background:var(--pt-bg);color:var(--pt);border:1px solid #eaddb4}
+  .chip.cr{background:var(--cr-bg);color:var(--cr);border:1px solid #c7ebd5}
+  .chip.meta{background:#eef2f8;color:#46505f;border:1px solid var(--line);font-weight:650}
+  @media(max-width:560px){.summary{grid-template-columns:1fr}}
+
+  section{padding:22px 0 6px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .sec-head h2{margin:0;font-size:20px;letter-spacing:-.01em}
+  .sec-head .count{color:var(--muted);font-size:13px}
+
+  .cards{display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+  .card .top{display:flex;gap:0;flex-wrap:wrap}
+  .card .media{flex:0 0 250px;width:250px;min-width:0;max-width:100%;background:#dde3ec;position:relative;min-height:200px;overflow:hidden}
+  .card .media .film{display:flex;height:100%;width:250px;overflow-x:auto;scroll-snap-type:x mandatory}
+  .card .media img{width:250px;height:100%;min-height:200px;object-fit:cover;flex:0 0 auto;scroll-snap-align:start;cursor:zoom-in;display:block}
+  .card .media .film::-webkit-scrollbar{height:5px}
+  .card .media .film::-webkit-scrollbar-thumb{background:rgba(0,0,0,.28);border-radius:3px}
+  .card .media[data-multi]::after{content:"⟨ swipe ⟩";position:absolute;bottom:7px;left:50%;transform:translateX(-50%);
+    font-size:10px;font-weight:700;color:#fff;background:rgba(20,28,42,.6);padding:2px 8px;border-radius:999px;pointer-events:none}
+  @media(max-width:560px){.card .media,.card .media .film,.card .media img{width:100%;flex-basis:auto}}
+  .card .main{flex:1 1 300px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+  .kicker{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;font-size:11.5px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px}
+  .kicker.flight{background:var(--air-bg);color:var(--air)}
+  .kicker.lodging{background:var(--lodge-bg);color:var(--lodge)}
+  .kicker.car{background:var(--car-bg);color:var(--car)}
+  .card h3{margin:0;font-size:19px;letter-spacing:-.01em}
+  .provider{font-size:13.5px;color:var(--muted);margin-top:-4px}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 16px;font-size:13.5px}
+  .facts .k{font-weight:700;color:#3a4452;margin-right:5px}
+  .conf{font-size:12.5px;color:#54606e}
+  .note{font-size:13px;color:#4b5666;background:#f0f4f9;border:1px solid var(--line);border-radius:9px;padding:8px 11px}
+
+  /* flight segments */
+  .seg{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fafcff}
+  .seg + .seg{margin-top:9px}
+  .seg .route{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .seg .end{text-align:center}
+  .seg .end .time{font-size:20px;font-weight:800;line-height:1;letter-spacing:-.02em}
+  .seg .end .code{font-size:12px;font-weight:700;color:var(--muted);margin-top:3px}
+  .seg .end .city{font-size:11px;color:#8a93a3}
+  .seg .arrow{flex:1 1 40px;min-width:40px;text-align:center;color:#a7b1c0;font-size:12px;position:relative}
+  .seg .arrow::before{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:#cfd8e5}
+  .seg .arrow span{background:#fafcff;position:relative;padding:0 6px}
+  .seg .meta{font-size:12.5px;color:#54606e;margin-top:8px;display:flex;flex-wrap:wrap;gap:6px 14px}
+  .seg .meta b{color:#3a4452}
+
+  /* costs */
+  .costs{border-top:1px dashed var(--line);padding-top:10px;margin-top:2px}
+  .cline{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;padding:3px 0}
+  .cline .lbl{color:#46505f}
+  .cline .amt{font-weight:700;white-space:nowrap}
+  .badge{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:middle}
+  .badge.prop{background:var(--warn-bg);color:var(--warn)}
+  .badge.est{background:#eef2f8;color:#6a7686}
+  .cline .alt{font-size:11.5px;color:var(--pt);font-weight:700}
+  .ctotal{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:800;
+    border-top:1px solid var(--line);margin-top:6px;padding-top:8px}
+  .ctotal .amt{color:#15233f}
+  .altline{font-size:12px;color:var(--muted);margin-top:3px;text-align:right}
+
+  #lb{position:fixed;inset:0;background:rgba(8,12,20,.9);display:none;align-items:center;justify-content:center;z-index:100;padding:24px;cursor:zoom-out}
+  #lb.on{display:flex}
+  #lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.5)}
+  #lb .cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.85}
+
+  footer{margin:30px 0 56px;color:var(--muted);font-size:12.5px}
+  footer .fnote{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+  footer ul{margin:6px 0 0;padding-left:18px} footer li{margin:4px 0}
+  .empty{max-width:560px;margin:60px auto;text-align:center;color:var(--muted);line-height:1.7}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>🎫 Reservations</h1>
+    <p>The locked-in bookings for this trip — confirmed flights, lodging, and car, with real prices, guest names, and dates. This is the booked truth, not the options.</p>
+    <div class="trip" id="tripchips"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="summary" id="summary"></div>
+  <div id="sections"></div>
+
+  <footer>
+    <div class="fnote" id="footnote"></div>
+  </footer>
+</main>
+
+<div id="lb"><img alt=""><div class="cap"></div></div>
+
+<script>
+/* RESERVATIONS_DATA_START — generated by scripts/apply_reservations.py; do not hand-edit */
+    const RESERVATIONS = {"currency":"USD","travelers":["Adam Bandel","Diana Bandel"],"pets":2,"status":"reserved","items":[{"type":"flight","provider":"Alaska Airlines","title":"Austin ⇄ Portland — round trip","confirmation":"Tickets 0272148956046 / 0272148956047","dates":{"start":"2026-07-22","end":"2026-07-26"},"segments":[{"flight":"AS 541","aircraft":"Boeing 737-900 (Winglets)","from":"AUS","fromCity":"Austin","to":"PDX","toCity":"Portland","depart":"2026-07-22T07:15","arrive":"2026-07-22T09:25","cabin":"Coach (X)","seats":["12F (Adam)","12E (Diana)"]},{"flight":"AS 1370","aircraft":"Boeing 737 MAX 9","from":"PDX","fromCity":"Portland","to":"AUS","toCity":"Austin","depart":"2026-07-26T17:39","arrive":"2026-07-26T23:49","cabin":"Coach (X)","seats":["12E (Adam)","12D (Diana)"]}],"notes":"Main Preferred seats selected. Atmos Rewards eligible.","costs":[{"label":"Airfare — 2 travelers ($538.25 each)","cash":1076.5},{"label":"Main Preferred seats (4 selections)","cash":260.0},{"label":"In-cabin pet fee — $100 / pet each way × 2 dogs","cash":400.0}]},{"type":"lodging","provider":"The Nines, a Luxury Collection Hotel","title":"The Nines — Portland","confirmation":"","address":"525 SW Morrison Street, Portland, OR","phone":"1-503-222-9996","guest":"Adam Bandel","room":"Studio Suite, King","checkIn":"2026-07-22T16:00","checkOut":"2026-07-24T12:00","nights":2,"dates":{"start":"2026-07-22","end":"2026-07-24"},"photos":["hotel_images/pdx-nines.jpg","hotel_images/rooms/pdx-nines-r1.jpg","hotel_images/rooms/pdx-nines-r2.jpg"],"notes":"Marriott Luxury Collection atop Pioneer Courthouse Square. Max 2 dogs under ~40–60 lbs.","costs":[{"label":"Room total — 2 nights","cash":1446.0},{"label":"Pet fee — $85 / dog × 2 (billed at property)","cash":170.0,"atProperty":true}]},{"type":"lodging","provider":"The Drifthaven at Gearhart","title":"The Drifthaven at Gearhart","confirmation":"","address":"67 N Cottage Ave, Gearhart, OR","phone":"1-503-738-7373","guest":"Adam Bandel","room":"Signature Suite — 1 King & 1 Double, 1 Bedroom, Fireplace","checkIn":"2026-07-24T16:00","checkOut":"2026-07-26T11:00","nights":2,"dates":{"start":"2026-07-24","end":"2026-07-26"},"photos":["res_images/room01.jpg","res_images/r01.jpg"],"notes":"Boutique stay in Gearhart, just north of the Cannon Beach area. Paid with mixed tender — cash plus Capital One miles and a Venture X travel credit. Pet fee $25/pet confirmed on the hotel FAQ; the per-night cadence is per BringFido — confirm by phone (503-738-7373).","costs":[{"label":"Room total — 2 nights (net cash after miles + credit)","cash":215.98,"points":{"amount":72959,"program":"Capital One miles"},"credit":{"amount":300,"program":"Venture X travel credit"}},{"label":"Pet fee — $25 / dog / night × 2 dogs × 2 nights (billed at property)","cash":100.0,"atProperty":true,"estimated":true}]},{"type":"car","provider":"Alamo Rent A Car","title":"Nissan Rogue or similar","confirmation":"","vehicle":"Nissan Rogue or similar","class":"Midsize SUV","passengers":5,"mileage":"Unlimited","pickup":"2026-07-22T10:00","dropoff":"2026-07-26T16:30","location":"7240 NE Airport Way, Portland (PDX)","dates":{"start":"2026-07-22","end":"2026-07-26"},"photos":["res_images/rogue-02.jpg"],"notes":"Picked up and returned at the PDX Rental Car Center. Return vacuumed & hair-free to avoid a pet-cleaning fee.","costs":[{"label":"Car rental — 4 days","cash":422.87},{"label":"Taxes & fees","cash":155.46}]}],"totals":{"cash":4246.81,"cashAtProperty":270.0,"cashEstimated":100.0,"points":{"Capital One miles":72959},"credits":{"Venture X travel credit":300},"byType":{"flight":{"cash":1736.5,"points":{},"credits":{}},"lodging":{"cash":1931.98,"points":{"Capital One miles":72959},"credits":{"Venture X travel credit":300}},"car":{"cash":578.33,"points":{},"credits":{}}}}};
+/* RESERVATIONS_DATA_END */
+
+const $ = s => document.querySelector(s);
+const D = RESERVATIONS || {};
+const CUR = D.currency || "USD";
+const KIND = { flight:{icon:"✈️",label:"Flight"}, lodging:{icon:"🏨",label:"Lodging"},
+               car:{icon:"🚗",label:"Car"}, activity:{icon:"🎟️",label:"Activity"}, other:{icon:"📌",label:"Other"} };
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function money(x){ const s = CUR==="USD" ? "$" : ""; return s + Number(x||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function num(x){ return Number(x||0).toLocaleString("en-US"); }
+
+// Parse "2026-07-22T07:15" without timezone surprises.
+function parts(iso){
+  if(!iso) return null;
+  const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
+  if(!m) return null;
+  const [_, y, mo, d, hh, mi] = m;
+  const dt = new Date(+y, +mo-1, +d, hh?+hh:0, mi?+mi:0);
+  return { y:+y, mo:+mo, d:+d, hh:hh!=null?+hh:null, mi:mi!=null?+mi:null, dow:DOW[dt.getDay()] };
+}
+function fmtDate(iso){ const p=parts(iso); return p ? `${p.dow} ${MON[p.mo-1]} ${p.d}` : ""; }
+function fmtTime(iso){ const p=parts(iso); if(!p||p.hh==null) return ""; let h=p.hh%12||12, ap=p.hh<12?"a":"p"; return `${h}:${String(p.mi).padStart(2,"0")}${ap}`; }
+function fmtDateTime(iso){ const d=fmtDate(iso), t=fmtTime(iso); return t ? `${d} · ${t}` : d; }
+
+/* ---------- header chips + summary ---------- */
+function renderHead(){
+  const t = D.totals || {};
+  const s = { start: minDate(), end: maxDate() };
+  const chips = [];
+  if(s.start && s.end) chips.push(`🗓 ${fmtDate(s.start)} – ${fmtDate(s.end)}, ${parts(s.end).y}`);
+  if((D.travelers||[]).length) chips.push(`👥 ${D.travelers.join(" · ")}`);
+  if(D.pets) chips.push(`🐶 ${D.pets} dog${D.pets>1?"s":""}`);
+  chips.push(`🎫 ${(D.items||[]).length} bookings`);
+  $("#tripchips").innerHTML = chips.map(c=>`<span>${esc(c)}</span>`).join("");
+
+  const alt = [];
+  for(const [prog, amt] of Object.entries(t.points||{})) alt.push(`<span class="chip pt">🪙 ${num(amt)} ${esc(prog)}</span>`);
+  for(const [prog, amt] of Object.entries(t.credits||{})) alt.push(`<span class="chip cr">💳 ${money(amt)} ${esc(prog)}</span>`);
+  alt.push(`<span class="chip meta">${(D.items||[]).length} confirmed bookings</span>`);
+  let cashSub = "out of pocket";
+  if(t.cashAtProperty) cashSub += ` · incl. ${money(t.cashAtProperty)} at property`;
+  $("#summary").innerHTML =
+    `<div><div class="big">Total cash</div><div class="cash">${money(t.cash)}<small>${cashSub}</small></div></div>
+     <div class="altpay">${alt.join("")}</div>`;
+}
+function minDate(){ const a=(D.items||[]).map(i=>i.dates&&i.dates.start).filter(Boolean).sort(); return a[0]; }
+function maxDate(){ const a=(D.items||[]).map(i=>i.dates&&i.dates.end).filter(Boolean).sort(); return a[a.length-1]; }
+
+/* ---------- item cards ---------- */
+function film(photos){
+  if(!photos || !photos.length) return "";
+  const imgs = photos.map(p=>`<img src="${esc(p)}" alt="" loading="lazy" onerror="this.remove()">`).join("");
+  const multi = photos.length>1 ? " data-multi" : "";
+  return `<div class="media"${multi}><div class="film">${imgs}</div></div>`;
+}
+function costBlock(item){
+  const cs = item.costs||[];
+  if(!cs.length) return "";
+  let cash = 0; const pts={}, crs={};
+  const lines = cs.map(c=>{
+    cash += Number(c.cash||0);
+    let badges = "";
+    if(c.atProperty) badges += `<span class="badge prop">at property</span>`;
+    if(c.estimated) badges += `<span class="badge est">est.</span>`;
+    let altbits = [];
+    if(c.points && c.points.amount){ pts[c.points.program]=(pts[c.points.program]||0)+c.points.amount; altbits.push(`${num(c.points.amount)} ${esc(c.points.program)}`); }
+    if(c.credit && c.credit.amount){ crs[c.credit.program]=(crs[c.credit.program]||0)+c.credit.amount; altbits.push(`${money(c.credit.amount)} ${esc(c.credit.program)}`); }
+    const alt = altbits.length ? `<div class="altline">+ ${altbits.join(" · ")}</div>` : "";
+    return `<div class="cline"><span class="lbl">${esc(c.label)}${badges}</span><span class="amt">${c.cash!=null?money(c.cash):"—"}</span></div>${alt}`;
+  }).join("");
+  return `<div class="costs">${lines}<div class="ctotal"><span>Cash total</span><span class="amt">${money(cash)}</span></div></div>`;
+}
+function facts(pairs){
+  const rows = pairs.filter(p=>p[1]).map(p=>`<div><span class="k">${esc(p[0])}</span>${esc(p[1])}</div>`).join("");
+  return rows ? `<div class="facts">${rows}</div>` : "";
+}
+function flightBody(it){
+  const segs = (it.segments||[]).map(s=>`
+    <div class="seg">
+      <div class="route">
+        <div class="end"><div class="time">${fmtTime(s.depart)}</div><div class="code">${esc(s.from)}</div><div class="city">${esc(s.fromCity||"")}</div></div>
+        <div class="arrow"><span>${esc(s.flight||"✈")}</span></div>
+        <div class="end"><div class="time">${fmtTime(s.arrive)}</div><div class="code">${esc(s.to)}</div><div class="city">${esc(s.toCity||"")}</div></div>
+      </div>
+      <div class="meta"><span><b>${esc(fmtDate(s.depart))}</b></span>${s.aircraft?`<span>${esc(s.aircraft)}</span>`:""}${s.cabin?`<span>${esc(s.cabin)}</span>`:""}${(s.seats||[]).length?`<span>Seats: ${esc(s.seats.join(", "))}</span>`:""}</div>
+    </div>`).join("");
+  return segs + (it.notes?`<div class="note">${esc(it.notes)}</div>`:"") + costBlock(it);
+}
+function lodgingBody(it){
+  return facts([
+    ["Room", it.room],
+    ["Guest", it.guest],
+    ["Check-in", fmtDateTime(it.checkIn)],
+    ["Check-out", fmtDateTime(it.checkOut)],
+    ["Nights", it.nights],
+    ["Address", it.address],
+    ["Phone", it.phone],
+    ["Confirmation", it.confirmation]
+  ]) + (it.notes?`<div class="note">${esc(it.notes)}</div>`:"") + costBlock(it);
+}
+function carBody(it){
+  return facts([
+    ["Vehicle", it.vehicle],
+    ["Class", it.class],
+    ["Passengers", it.passengers],
+    ["Mileage", it.mileage],
+    ["Pick-up", fmtDateTime(it.pickup)],
+    ["Drop-off", fmtDateTime(it.dropoff)],
+    ["Location", it.location],
+    ["Confirmation", it.confirmation]
+  ]) + (it.notes?`<div class="note">${esc(it.notes)}</div>`:"") + costBlock(it);
+}
+function itemCard(it){
+  const k = KIND[it.type] || KIND.other;
+  let body = it.type==="flight" ? flightBody(it) : it.type==="lodging" ? lodgingBody(it) : it.type==="car" ? carBody(it) :
+    (facts([["Confirmation", it.confirmation]]) + (it.notes?`<div class="note">${esc(it.notes)}</div>`:"") + costBlock(it));
+  return `<article class="card">
+    <div class="top">
+      ${film(it.photos)}
+      <div class="main">
+        <span class="kicker ${it.type}">${k.icon} ${k.label}</span>
+        <h3>${esc(it.title||it.provider||"")}</h3>
+        ${it.provider && it.provider!==it.title ? `<div class="provider">${esc(it.provider)}</div>`:""}
+        ${body}
+      </div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const items = D.items||[];
+  if(!items.length){ $("#sections").innerHTML = `<div class="empty">No reservations recorded yet. Add them to <code>reservations.json</code> and run <code>scripts/apply_reservations.py</code>.</div>`; return; }
+  renderHead();
+  // group by type in a stable order
+  const order = ["flight","lodging","car","activity","other"];
+  const groups = {};
+  items.forEach(it=>{ (groups[it.type] = groups[it.type]||[]).push(it); });
+  let html = "";
+  order.forEach(type=>{
+    const list = groups[type]; if(!list) return;
+    const k = KIND[type]||KIND.other;
+    html += `<section><div class="sec-head"><h2>${k.icon} ${k.label}${list.length>1?"s":""}</h2><span class="count">${list.length}</span></div><div class="cards">${list.map(itemCard).join("")}</div></section>`;
+  });
+  $("#sections").innerHTML = html;
+
+  const t = D.totals||{};
+  const foot = [];
+  foot.push("<strong>How to read this:</strong> the headline is real cash charged. Points and statement credits are tracked separately — miles are never converted to a dollar figure.");
+  if(t.cashAtProperty) foot.push(`Fees marked <em>at property</em> (${money(t.cashAtProperty)}) are billed on-site at check-in/return, not prepaid.`);
+  if(t.cashEstimated) foot.push(`Amounts marked <em>est.</em> (${money(t.cashEstimated)}) are not yet confirmed.`);
+  $("#footnote").innerHTML = `<strong>Notes & fine print</strong><ul>${foot.map(f=>`<li>${f}</li>`).join("")}</ul>`;
+  bindThumbs();
+}
+
+const lb = $("#lb"), lbImg = lb.querySelector("img"), lbCap = lb.querySelector(".cap");
+function bindThumbs(){
+  document.querySelectorAll(".media img").forEach(img=>{
+    img.addEventListener("click", ()=>{ lbImg.src=img.src; lbCap.textContent=img.alt||""; lb.classList.add("on"); });
+  });
+}
+lb.onclick = ()=> lb.classList.remove("on");
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") lb.classList.remove("on"); });
+
+render();
+<\/script>
+</body>
+</html>
+
+</script>
+
+  <script type="text/html" id="tpl-map">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Oregon / Washington route map with large stop photos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, sans-serif; }
+    #map { height: 100%; width: 100%; }
+
+    .legend {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 1000;
+      background: white;
+      padding: 12px 14px;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+      max-width: 390px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .legend-title { font-weight: 700; margin-bottom: 8px; }
+    .legend-row { margin: 5px 0; }
+    .swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      margin-right: 7px;
+      vertical-align: -2px;
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #444;
+    }
+    .leaflet-routing-container {
+      max-height: 32vh;
+      overflow: auto;
+      opacity: .96;
+      font-size: 12px;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 14px;
+    }
+    .leaflet-popup-content {
+      width: 820px !important;
+      max-width: 82vw !important;
+      margin: 15px 16px;
+    }
+    .stop-label {
+      background: white;
+      border: 1px solid #777;
+      border-radius: 10px;
+      padding: 2px 6px;
+      font-size: 11px;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,.25);
+    }
+    .popup-card {
+      width: 820px;
+      max-width: 82vw;
+    }
+    .popup-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .popup-subtitle {
+      color: #444;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .image-grid {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+    .image-grid img {
+      height: 260px;
+      width: auto;
+      flex: 0 0 auto;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: #f2f2f2;
+      cursor: zoom-in;
+      scroll-snap-align: start;
+      transition: filter .12s ease;
+    }
+    .image-grid img:hover { filter: brightness(1.05); }
+    .image-hint {
+      font-size: 11px; color: #888; margin-top: 2px;
+    }
+    .image-credit {
+      margin-top: 7px;
+      font-size: 11px;
+      color: #666;
+    }
+    .loading, .fallback-note {
+      grid-column: 1 / -1;
+      color: #555;
+      font-size: 13px;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.86);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+    }
+    #lightbox.open {
+      display: flex;
+    }
+    #lightbox img {
+      max-width: 94vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.7);
+      background: #111;
+    }
+    #lightbox .close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      color: white;
+      font-size: 34px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+    }
+    #lightbox .caption {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      right: 20px;
+      text-align: center;
+      color: #ddd;
+      font-size: 13px;
+    }
+    @media (max-width: 850px) {
+      .leaflet-popup-content {
+        width: 88vw !important;
+      }
+      .popup-card {
+        width: 88vw;
+      }
+      .image-grid {
+        grid-template-columns: 1fr;
+      }
+      .image-grid img {
+        height: 230px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <div class="legend">
+    <div class="legend-title">Oregon / Washington trip — road route + larger stop photos</div>
+    <div class="legend-row"><span class="swatch" style="background:#7e22ce"></span>Wed: Portland first</div>
+    <div class="legend-row"><span class="swatch" style="background:#2563eb"></span>Thu: Waterfall Highway / Gorge</div>
+    <div class="legend-row"><span class="swatch" style="background:#16a34a"></span>Fri: Mt. Hood → Cannon Beach</div>
+    <div class="legend-row"><span class="swatch" style="background:#f97316"></span>Sat: Cannon Beach coast day</div>
+    <div class="legend-row"><span class="swatch" style="background:#dc2626"></span>Sun: Astoria / Washington → PDX</div>
+    <div class="note">Click a numbered stop to see larger photos. Click any photo for full-screen view. Photos are saved locally in the <b>images</b> folder; the map tiles still need internet.</div>
+  </div>
+
+  <div id="lightbox">
+    <div class="close" title="Close">&times;</div>
+    <img src="" alt="">
+    <div class="caption"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"><\/script>
+
+  <script>
+    const places = {"PDX / Portland Airport": {"lat": 45.5898, "lng": -122.5951, "query": "Portland International Airport Oregon exterior"}, "Downtown Portland": {"lat": 45.5152, "lng": -122.6784, "query": "Downtown Portland Oregon skyline"}, "Pittock Mansion viewpoint": {"lat": 45.5253, "lng": -122.7164, "query": "Pittock Mansion Portland Oregon view"}, "International Rose Test Garden": {"lat": 45.5189, "lng": -122.7053, "query": "International Rose Test Garden Portland Oregon"}, "Portland hotel area": {"lat": 45.5152, "lng": -122.6784, "query": "Downtown Portland Oregon skyline"}, "Vista House / Crown Point": {"lat": 45.5394, "lng": -122.2445, "query": "Vista House Crown Point Columbia River Gorge Oregon"}, "Latourell Falls": {"lat": 45.5388, "lng": -122.2186, "query": "Latourell Falls Oregon Columbia River Gorge"}, "Bridal Veil Falls": {"lat": 45.5535, "lng": -122.1815, "query": "Bridal Veil Falls Oregon Columbia River Gorge"}, "Wahkeena Falls": {"lat": 45.5751, "lng": -122.1288, "query": "Wahkeena Falls Oregon Columbia River Gorge"}, "Multnomah Falls": {"lat": 45.5762, "lng": -122.1158, "query": "Multnomah Falls Oregon"}, "Horsetail Falls": {"lat": 45.5901, "lng": -122.0696, "query": "Horsetail Falls Oregon Columbia River Gorge"}, "Timberline Lodge / Mt. Hood": {"lat": 45.3311, "lng": -121.7113, "query": "Timberline Lodge Mount Hood Oregon"}, "Trillium Lake": {"lat": 45.2707, "lng": -121.7381, "query": "Trillium Lake Mount Hood Oregon"}, "Cannon Beach hotel area": {"lat": 45.8918, "lng": -123.9615, "query": "Cannon Beach Oregon Haystack Rock"}, "Wayfarer Restaurant / Haystack Rock": {"lat": 45.8847, "lng": -123.9666, "query": "Haystack Rock Cannon Beach Oregon"}, "Ecola State Park": {"lat": 45.9197, "lng": -123.9743, "query": "Ecola State Park Oregon coast"}, "Indian Beach": {"lat": 45.9346, "lng": -123.9799, "query": "Indian Beach Ecola State Park Oregon"}, "Oswald West / Short Sand Beach": {"lat": 45.7524, "lng": -123.9632, "query": "Short Sand Beach Oswald West State Park Oregon"}, "Neahkahnie Viewpoint": {"lat": 45.747, "lng": -123.955, "query": "Neahkahnie Mountain viewpoint Oregon coast"}, "Astoria": {"lat": 46.1879, "lng": -123.8313, "query": "Astoria Oregon Columbia River"}, "Fort Stevens / Peter Iredale": {"lat": 46.1789, "lng": -123.9824, "query": "Peter Iredale shipwreck Fort Stevens Oregon"}, "Cape Disappointment": {"lat": 46.2811, "lng": -124.0529, "query": "Cape Disappointment State Park Washington lighthouse"}};
+    const routes = [{"day": "Wed 7/22", "color": "#7e22ce", "title": "Portland first", "stops": ["PDX / Portland Airport", "Downtown Portland", "Pittock Mansion viewpoint", "International Rose Test Garden", "Portland hotel area"]}, {"day": "Thu 7/23", "color": "#2563eb", "title": "Waterfall Highway / Columbia River Gorge", "stops": ["Portland hotel area", "Vista House / Crown Point", "Latourell Falls", "Bridal Veil Falls", "Wahkeena Falls", "Multnomah Falls", "Horsetail Falls", "Portland hotel area"]}, {"day": "Fri 7/24", "color": "#16a34a", "title": "Mt. Hood to Cannon Beach", "stops": ["Portland hotel area", "Timberline Lodge / Mt. Hood", "Trillium Lake", "Cannon Beach hotel area"]}, {"day": "Sat 7/25", "color": "#f97316", "title": "Cannon Beach coast day", "stops": ["Cannon Beach hotel area", "Wayfarer Restaurant / Haystack Rock", "Ecola State Park", "Indian Beach", "Oswald West / Short Sand Beach", "Neahkahnie Viewpoint", "Cannon Beach hotel area"]}, {"day": "Sun 7/26", "color": "#dc2626", "title": "North coast / Washington add-on to PDX", "stops": ["Cannon Beach hotel area", "Fort Stevens / Peter Iredale", "Astoria", "Cape Disappointment", "PDX / Portland Airport"]}];
+    /* IMAGES_DATA_START — generated by apply_images.py from images_manifest.json; do not hand-edit */
+    const STOP_IMAGES = {"PDX / Portland Airport":[{"f":"images/pdx-portland-airport-01.jpg","t":"PDX Portland 2985.jpg"},{"f":"images/pdx-portland-airport-02.jpg","t":"PDX Portland 1569.jpg"},{"f":"images/pdx-portland-airport-03.jpg","t":"PDX drop off canopy wide.jpg"},{"f":"images/pdx-portland-airport-04.jpg","t":"PDX Cargo Center at Portland International Airport (2015).jpg"},{"f":"images/pdx-portland-airport-05.jpg","t":"PDX from Rocky Butte.JPG"},{"f":"images/pdx-portland-airport-06.jpg","t":"Portland International Airport PDX check in counters (Quintin Soloviev).jpg"}],"Downtown Portland":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Pittock Mansion viewpoint":[{"f":"images/pittock-mansion-viewpoint-01.jpg","t":"Portland Oregon ~ Pittock Mansion ~ Historic Mansion ~ My Vintage Photo"},{"f":"images/pittock-mansion-viewpoint-02.jpg","t":"Portland and Mt Hood"},{"f":"images/pittock-mansion-viewpoint-03.jpg","t":"Portland, OR"},{"f":"images/pittock-mansion-viewpoint-04.jpg","t":"Foggy Morning at the Pittock Mansion in Black and White"},{"f":"images/pittock-mansion-viewpoint-05.jpg","t":"The Pittock Mansion 1914"},{"f":"images/pittock-mansion-viewpoint-06.jpg","t":"Pittock Mansion stairway"},{"f":"images/pittock-mansion-viewpoint-07.jpg","t":"View over Portland and Mt. Hood from Pittock Mansion"},{"f":"images/pittock-mansion-viewpoint-08.jpg","t":"Pittock Mansion View"}],"International Rose Test Garden":[{"f":"images/international-rose-test-garden-01.jpg","t":"International Rose Test Garden (Portland, Oregon)"},{"f":"images/international-rose-test-garden-02.jpg","t":"International Rose Test Garden - Portland Or."},{"f":"images/international-rose-test-garden-03.jpg","t":"Yours truly at International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-04.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-05.jpg","t":"International Rose Test Garden, Portland, Oregon (2022) - 020"},{"f":"images/international-rose-test-garden-06.jpg","t":"The International Rose Test Garden - Portland, Oregon"},{"f":"images/international-rose-test-garden-07.jpg","t":"International Rose Test Garden, Portland"},{"f":"images/international-rose-test-garden-08.jpg","t":"Yours truly at International Rose Test Garden, Portland"}],"Portland hotel area":[{"f":"images/downtown-portland-01.jpg","t":"Portland skyline panorama"},{"f":"images/downtown-portland-02.jpg","t":"McCormick Pier & downtown skyline"},{"f":"images/downtown-portland-03.jpg","t":"Downtown Portland (HDR)"},{"f":"images/downtown-portland-04.jpg","t":"Twilight skyline"},{"f":"images/downtown-portland-05.jpg","t":"Portland, Oregon"},{"f":"images/downtown-portland-06.jpg","t":"Skyline & Hawthorne Bridge"},{"f":"images/downtown-portland-07.jpg","t":"Portland dawn"},{"f":"images/downtown-portland-08.jpg","t":"Good morning, Portland"}],"Vista House / Crown Point":[{"f":"images/vista-house-crown-point-01.jpg","t":"Crown Point Vista House (HDR)"},{"f":"images/vista-house-crown-point-02.jpg","t":"Vista House, Crown Point, Oregon.jpeg - Historic Columbia River Highway - Multnomah County"},{"f":"images/vista-house-crown-point-03.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-04.jpg","t":"Crown Point Vista House"},{"f":"images/vista-house-crown-point-05.jpg","t":"Crown Point Clouds"},{"f":"images/vista-house-crown-point-06.jpg","t":"Vista House ~Oregon State ~ Columbia Gorge ~ My Old Photo"},{"f":"images/vista-house-crown-point-07.jpg","t":"Vista House"},{"f":"images/vista-house-crown-point-08.jpg","t":"Crown Point 3440 H"}],"Latourell Falls":[{"f":"images/latourell-falls-01.jpg","t":"Latourelle Falls, Oregon, in autumn."},{"f":"images/latourell-falls-02.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-03.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-04.jpg","t":"Upper Latourell Falls, Oregon"},{"f":"images/latourell-falls-05.jpg","t":"Vintage Postcard - Latourell Falls, Oregon"},{"f":"images/latourell-falls-06.jpg","t":"Latourell Falls - Oregon"},{"f":"images/latourell-falls-07.jpg","t":"Latourell Falls, Oregon"},{"f":"images/latourell-falls-08.jpg","t":"Lower Latourell Falls (Oregon, USA)"}],"Bridal Veil Falls":[{"f":"images/bridal-veil-falls-01.jpg","t":"A view of bridal veil falls, Oregon 01.jpg"},{"f":"images/bridal-veil-falls-02.jpg","t":"A view of bridal veil falls trail.jpg"},{"f":"images/bridal-veil-falls-03.jpg","t":"A view of bridal veil falls stairs.jpg"},{"f":"images/bridal-veil-falls-04.jpg","t":"Bridal Veil Falls kayaker.jpg"},{"f":"images/bridal-veil-falls-05.jpg","t":"Green cascade in Bridal Veil Falls (Unsplash).jpg"},{"f":"images/bridal-veil-falls-06.jpg","t":"Bridal Veil Falls (Oregon), 2017-05-28.jpg"}],"Wahkeena Falls":[{"f":"images/wahkeena-falls-01.jpg","t":"Wahkeena Falls - Oregon"},{"f":"images/wahkeena-falls-02.jpg","t":"Moss on Lava, Wahkeena Falls, Oregon 9-06"},{"f":"images/wahkeena-falls-03.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-04.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-05.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-06.jpg","t":"bridge at Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-07.jpg","t":"Wahkeena Falls, Oregon"},{"f":"images/wahkeena-falls-08.jpg","t":"Wahkeena Falls, Oregon, Columbia River"}],"Multnomah Falls":[{"f":"images/multnomah-falls-01.jpg","t":"Multnomah Falls, Oregon, c1916"},{"f":"images/multnomah-falls-02.jpg","t":"Multnomah Falls ~ Oregon"},{"f":"images/multnomah-falls-03.jpg","t":"Multnomah Falls, Oregon, in the autumn."},{"f":"images/multnomah-falls-04.jpg","t":"Multnomah Falls ~ Oregon ~ Northwestern United States"},{"f":"images/multnomah-falls-05.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"},{"f":"images/multnomah-falls-06.jpg","t":"Multnomah Falls ~ Oregon ~ Landmark"},{"f":"images/multnomah-falls-07.jpg","t":"Multnomah Falls, Oregon"},{"f":"images/multnomah-falls-08.jpg","t":"Multnomah Falls ~ Oregon ~ Northwest USA"}],"Horsetail Falls":[{"f":"images/horsetail-falls-01.jpg","t":"Horsetail Falls, Columbia Gorge - Oregon"},{"f":"images/horsetail-falls-02.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-03.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-04.jpg","t":"Horsetail Falls, Columbia Gorge, Oregon 8-22"},{"f":"images/horsetail-falls-05.jpg","t":"Upper Horsetail Falls in Oregon by Michael Matti"},{"f":"images/horsetail-falls-06.jpg","t":"Misty Crossroads"},{"f":"images/horsetail-falls-07.jpg","t":"Ponytail Falls"},{"f":"images/horsetail-falls-08.jpg","t":"Horsetail Falls, Oregon, in autumn"}],"Timberline Lodge / Mt. Hood":[{"f":"images/timberline-lodge-mt-hood-01.jpg","t":"Timberline Lodge (WPA-built, 1937)"},{"f":"images/timberline-lodge-mt-hood-02.jpg","t":"Timberline Lodge, Mount Hood"},{"f":"images/timberline-lodge-mt-hood-03.jpg","t":"Mount Hood"},{"f":"images/timberline-lodge-mt-hood-04.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-05.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-06.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-07.jpg","t":"Mount Hood, Oregon"},{"f":"images/timberline-lodge-mt-hood-08.jpg","t":"White River & White Falls"}],"Trillium Lake":[{"f":"images/trillium-lake-01.jpg","t":"Creating a Memory"},{"f":"images/trillium-lake-02.jpg","t":"Trillium Lake, Oregon"},{"f":"images/trillium-lake-03.jpg","t":"Late Evening at Mount Hood"},{"f":"images/trillium-lake-04.jpg","t":"Mount Hood and Trillium Lake"},{"f":"images/trillium-lake-05.jpg","t":"0134_Trillium_Lake_Swart_ODFW.jpg"},{"f":"images/trillium-lake-06.jpg","t":"Mt. Hood from Trillium Lake"},{"f":"images/trillium-lake-07.jpg","t":"Duck eye view of Mount Hood"},{"f":"images/trillium-lake-08.jpg","t":"Mount Hood from Trillium Lake"}],"Cannon Beach hotel area":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Wayfarer Restaurant / Haystack Rock":[{"f":"images/cannon-beach-hotel-area-01.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-02.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-03.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-04.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-05.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-06.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-07.jpg","t":"Cannon Beach, Haystack Rock, Oregon"},{"f":"images/cannon-beach-hotel-area-08.jpg","t":"Oregon Coast Sunrise by Michael Matti"}],"Ecola State Park":[{"f":"images/ecola-state-park-01.jpg","t":"Ecola State Park - Oregon Coast"},{"f":"images/ecola-state-park-02.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/ecola-state-park-03.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-04.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-05.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-06.jpg","t":"Ecola State Park, Oregon Coast"},{"f":"images/ecola-state-park-07.jpg","t":"Ecola State Park, Oregon Coast, Cannon Beach"},{"f":"images/ecola-state-park-08.jpg","t":"Ecola State Park, Oregon Coast"}],"Indian Beach":[{"f":"images/indian-beach-01.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-02.jpg","t":"Indian Beach, Ecola State Park, Oregon November 2015"},{"f":"images/indian-beach-03.jpg","t":"Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-04.jpg","t":"Ecola Viewpoint/Indian Beach, Ecola State Park, Oregon Coast, USA"},{"f":"images/indian-beach-05.jpg","t":"Indian Beach, Ecola State Park, Oregon Coast"},{"f":"images/indian-beach-06.jpg","t":"Arch from Indian Beach, Ecola State Park, Oregon"},{"f":"images/indian-beach-07.jpg","t":"Surf's Up"},{"f":"images/indian-beach-08.jpg","t":"Indian Beach Native"}],"Oswald West / Short Sand Beach":[{"f":"images/oswald-west-short-sand-beach-01.jpg","t":"Short Sand gray (3)"},{"f":"images/oswald-west-short-sand-beach-02.jpg","t":"Neahkahnie meets the water"},{"f":"images/oswald-west-short-sand-beach-03.jpg","t":"Short Sand gray (5)"},{"f":"images/oswald-west-short-sand-beach-04.jpg","t":"Oswald West State Park"},{"f":"images/oswald-west-short-sand-beach-05.jpg","t":"Neahkahnie over Short Sand Beach"},{"f":"images/oswald-west-short-sand-beach-06.jpg","t":"Short Sand gray (1)"},{"f":"images/oswald-west-short-sand-beach-07.jpg","t":"Short Sand gray (4)"},{"f":"images/oswald-west-short-sand-beach-08.jpg","t":"Short Sand gray (2)"}],"Neahkahnie Viewpoint":[{"f":"images/neahkahnie-viewpoint-01.jpg","t":"Whale watching from Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-02.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-03.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-04.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-05.jpg","t":"Neahkahnie Mountain, Oregon Coast"},{"f":"images/neahkahnie-viewpoint-06.jpg","t":"Viewpoint looking south, Neahkahnie Mountain, Oregon coast"},{"f":"images/neahkahnie-viewpoint-07.jpg","t":"Neahkahnie Mountain Trail, Oregon"},{"f":"images/neahkahnie-viewpoint-08.jpg","t":"Oregon coast - looking south from Neahkahnie Mountain"}],"Astoria":[{"f":"images/astoria-01.jpg","t":"The Astoria Bridge"},{"f":"images/astoria-02.jpg","t":"Astoria By Night"},{"f":"images/astoria-03.jpg","t":"A Relic of the Gilded Age (1893)"},{"f":"images/astoria-04.jpg","t":"Astoria Waterfront"},{"f":"images/astoria-05.jpg","t":"Astoria"},{"f":"images/astoria-06.jpg","t":"Columbia River"},{"f":"images/astoria-07.jpg","t":"Crossing the Columbia River"},{"f":"images/astoria-08.jpg","t":"20071007TRD004934"}],"Fort Stevens / Peter Iredale":[{"f":"images/fort-stevens-peter-iredale-01.jpg","t":"Between Sand and Sea"},{"f":"images/fort-stevens-peter-iredale-02.jpg","t":"Wreck of the Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-03.jpg","t":"Peter Iredale"},{"f":"images/fort-stevens-peter-iredale-04.jpg","t":"Peter Iredale shipwreck, Fort Stevens State Park, Oregon"},{"f":"images/fort-stevens-peter-iredale-05.jpg","t":"Peter Iredale shipwreck Fort Stevens Oregon"},{"f":"images/fort-stevens-peter-iredale-06.jpg","t":"Wreck of the Peter Iredale at Fort Stevens by Rod S"},{"f":"images/fort-stevens-peter-iredale-07.jpg","t":"Barnacles"},{"f":"images/fort-stevens-peter-iredale-08.jpg","t":"Peter Iredale"}],"Cape Disappointment":[{"f":"images/cape-disappointment-01.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-02.jpg","t":"Cape Disappointment Lighthouse, Washington"},{"f":"images/cape-disappointment-03.jpg","t":"Cape Disappointment State Park - Ilwaco, Washington"},{"f":"images/cape-disappointment-04.jpg","t":"North Head Lighthouse at Twilight, SW Coast, Washington"},{"f":"images/cape-disappointment-05.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-06.jpg","t":"Cape Disappointment Lighthouse (Cape Disappointment State Park, Ilwaco, Washington) - October 30th, 2018"},{"f":"images/cape-disappointment-07.jpg","t":"Cape Disappointment Lighthouse"},{"f":"images/cape-disappointment-08.jpg","t":"Cape Disappointment Lighthouse"}]};
+    /* IMAGES_DATA_END */
+
+    const map = L.map('map').setView([45.73, -123.05], 8);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxCaption = lightbox.querySelector('.caption');
+    const bounds = [];
+
+    function openLightbox(src, caption) {
+      lightboxImg.src = src;
+      lightboxImg.alt = caption || '';
+      lightboxCaption.textContent = caption || '';
+      lightbox.classList.add('open');
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightboxImg.src = '';
+    }
+
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox || e.target.classList.contains('close')) closeLightbox();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+    document.addEventListener('click', function(e) {
+      const t = e.target;
+      if (t && t.classList && t.classList.contains('popup-photo')) {
+        openLightbox(t.getAttribute('data-full') || t.src, t.getAttribute('title') || t.alt);
+      }
+    });
+
+    function makeIcon(color, num) {
+      return L.divIcon({
+        html: `<div style="
+          background:${color};
+          color:white;
+          border:2px solid white;
+          box-shadow:0 1px 5px rgba(0,0,0,.45);
+          width:24px;
+          height:24px;
+          border-radius:50%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-weight:700;
+          font-size:12px;">${num}</div>`,
+        className: '',
+        iconSize: [24,24],
+        iconAnchor: [12,12]
+      });
+    }
+
+    function escAttr(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    }
+
+    function popupHtml(route, stop, index) {
+      const imgs = STOP_IMAGES[stop] || [];
+      const grid = imgs.length
+        ? imgs.map(img =>
+            `<img class="popup-photo" src="${escAttr(img.f)}" alt="${escAttr(img.t)}" title="${escAttr(img.t)}" data-full="${escAttr(img.f)}">`
+          ).join('')
+        : '<div class="fallback-note">No local photo saved for this stop.</div>';
+      const hint = imgs.length > 2 ? `<div class="image-hint">← scroll for ${imgs.length} photos →</div>` : '';
+      return `
+        <div class="popup-card">
+          <div class="popup-title">${index + 1}. ${escAttr(stop)}</div>
+          <div class="popup-subtitle"><b>${route.day}</b> — ${route.title}</div>
+          <div class="image-grid">${grid}</div>
+          ${hint}
+          <div class="image-credit">Photos from Flickr (Creative Commons) &amp; Wikimedia Commons, saved locally. Click a photo to enlarge.</div>
+        </div>
+      `;
+    }
+
+    routes.forEach((route, routeIdx) => {
+      const waypoints = route.stops.map(stop => {
+        const p = places[stop];
+        bounds.push([p.lat, p.lng]);
+        return L.latLng(p.lat, p.lng);
+      });
+
+      route.stops.forEach((stop, i) => {
+        const p = places[stop];
+        const marker = L.marker([p.lat, p.lng], {
+          icon: makeIcon(route.color, i + 1),
+          title: `${route.day} — ${stop}`
+        }).addTo(map);
+
+        marker.bindPopup(popupHtml(route, stop, i), {
+          maxWidth: 900,
+          minWidth: 760,
+          autoPan: true,
+          autoPanPadding: [28, 28]
+        });
+
+        if (i === 0 || i === route.stops.length - 1 || route.stops.length <= 4) {
+          L.marker([p.lat, p.lng], {
+            icon: L.divIcon({
+              html: `<span class="stop-label">${route.day}: ${stop}</span>`,
+              className: '',
+              iconSize: null
+            }),
+            interactive: false
+          }).addTo(map);
+        }
+      });
+
+      try {
+        if (window.L && L.Routing) {
+          L.Routing.control({
+            waypoints: waypoints,
+            router: L.Routing.osrmv1({
+              serviceUrl: 'https://router.project-osrm.org/route/v1'
+            }),
+            routeWhileDragging: false,
+            addWaypoints: false,
+            draggableWaypoints: false,
+            fitSelectedRoutes: false,
+            show: routeIdx === 1,
+            collapsible: true,
+            lineOptions: {
+              styles: [
+                { color: 'white', opacity: 0.9, weight: 8 },
+                { color: route.color, opacity: 0.9, weight: 5 }
+              ]
+            },
+            createMarker: function() { return null; }
+          }).addTo(map);
+        }
+      } catch (err) {
+        console.warn('Routing failed for', route.day, '- markers and photos still work.', err);
+      }
+    });
+
+    map.fitBounds(bounds, { padding: [40, 40] });
+  <\/script>
+</body>
+</html>
+
+</script>
+
+  <script type="text/html" id="tpl-hotels">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hotel Options — Oregon Coast Trip (Jul 22–26, 2026)</title>
+<style>
+  :root{
+    --ink:#1d2430; --muted:#5b6675; --line:#e3e8ef; --bg:#f6f8fb; --card:#fff;
+    --pdx:#5b3fa6; --pdx-bg:#efeafb; --cb:#0f7a8c; --cb-bg:#e3f4f6;
+    --good:#1f8a4c; --good-bg:#e6f5ec; --warn:#b8651b; --warn-bg:#fbeede;
+    --pick:#c2912b; --pick-bg:#fbf3df; --shadow:0 1px 3px rgba(20,30,50,.08),0 8px 24px rgba(20,30,50,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+
+  /* Hero */
+  header.hero{background:linear-gradient(135deg,#243b6b 0%,#0f7a8c 60%,#3a8f6e 100%);color:#fff;
+    padding:40px 0 34px}
+  header.hero h1{margin:0 0 6px;font-size:30px;letter-spacing:-.02em}
+  header.hero p{margin:0;opacity:.92;font-size:15px;max-width:760px}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .legend span{font-size:12.5px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);
+    padding:5px 10px;border-radius:999px}
+
+  /* Sticky controls */
+  .controls{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .controls .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:11px 18px}
+  .controls .navlinks{display:flex;gap:8px;margin-right:auto}
+  .controls a.nav{font-weight:600;font-size:13.5px;text-decoration:none;padding:7px 13px;border-radius:8px;border:1px solid var(--line)}
+  .controls a.nav.pdx{color:var(--pdx);background:var(--pdx-bg);border-color:#ddd0f5}
+  .controls a.nav.cb{color:var(--cb);background:var(--cb-bg);border-color:#c5e8ec}
+  .controls label{font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .controls select{font:inherit;font-size:13.5px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  .controls .chk{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;cursor:pointer;user-select:none}
+
+  /* Section */
+  section.loc{padding:30px 0 8px}
+  .loc-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .loc-head h2{margin:0;font-size:23px;letter-spacing:-.01em}
+  .loc-head .dot{width:12px;height:12px;border-radius:50%;align-self:center}
+  .loc-head .dates{font-size:14px;color:var(--muted);font-weight:600}
+  .loc-sub{color:var(--muted);font-size:14px;margin:2px 0 20px}
+  #portland .dot{background:var(--pdx)} #cannonbeach .dot{background:var(--cb)}
+
+  /* Cards grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(20,30,50,.10),0 16px 40px rgba(20,30,50,.10)}
+  .card.hidden{display:none}
+  .thumb{position:relative;aspect-ratio:16/10;background:#dde3ec;overflow:hidden;cursor:zoom-in}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;
+    color:#7c8696;font-size:13px;padding:18px;background:repeating-linear-gradient(45deg,#eef2f7,#eef2f7 10px,#e7ecf3 10px,#e7ecf3 20px)}
+  .ribbon{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap}
+  .badge{font-size:11.5px;font-weight:700;letter-spacing:.01em;padding:4px 9px;border-radius:999px;
+    background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+  .badge.pick{background:var(--pick-bg);color:#7a5a12}
+  .badge.over{background:var(--warn-bg);color:var(--warn)}
+  .badge.good{background:var(--good-bg);color:var(--good)}
+  .badge.uniq{background:linear-gradient(135deg,#efe7fb,#f7eede);color:#6b3fa0;border:1px solid #e0d2f5}
+  .card.splurge{border-top:3px solid #c79a3c}
+  .price-tag{position:absolute;bottom:10px;right:10px;background:rgba(20,28,42,.86);color:#fff;
+    font-weight:700;font-size:14px;padding:6px 11px;border-radius:10px;line-height:1.1}
+  .price-tag small{display:block;font-weight:500;font-size:10.5px;opacity:.8}
+
+  .body{padding:15px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .body h3{margin:0;font-size:17.5px;letter-spacing:-.01em}
+  .area{font-size:13px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:11.5px;background:#f0f3f8;border:1px solid var(--line);color:#46505f;padding:3px 8px;border-radius:6px}
+  .row{font-size:13.5px;display:flex;gap:8px}
+  .row .k{flex:0 0 auto;font-weight:700;color:#3a4452}
+  .row .v{color:#374150}
+  .dogline{font-size:13.5px;background:var(--good-bg);border:1px solid #cdeeda;border-radius:9px;padding:8px 10px}
+  .dogline.warn{background:var(--warn-bg);border-color:#f1d9bd}
+  .blurb{font-size:13.5px;color:#454f5d}
+  .fee-note{font-size:12px;color:var(--warn);font-weight:600}
+  .cta{margin-top:auto;display:flex;gap:8px;align-items:center;padding-top:4px}
+  .btn{flex:1;text-align:center;text-decoration:none;font-weight:700;font-size:13.5px;
+    background:var(--ink);color:#fff;padding:10px 12px;border-radius:9px}
+  .btn:hover{background:#0f1623}
+  .src{font-size:11px;color:#9aa3b1}
+
+  /* Room panels */
+  .rooms{margin-top:2px}
+  .rooms>summary{cursor:pointer;font-weight:700;font-size:13px;color:#34557a;padding:9px 11px;margin-top:2px;
+    list-style:none;display:flex;align-items:center;gap:7px;background:#f1f6fb;border:1px solid #dbe7f1;border-radius:9px}
+  .rooms>summary::-webkit-details-marker{display:none}
+  .rooms>summary::before{content:"▸";color:#7e93a8;font-size:11px}
+  .rooms[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0}
+  .rooms[open]>summary::before{content:"▾"}
+  .roomlist{border:1px solid #dbe7f1;border-top:0;border-radius:0 0 9px 9px;padding:0 11px 4px}
+  .roomrow{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+  .roomrow:first-child{border-top:0}
+  .roomrow .rimg{width:108px;height:76px;flex:0 0 108px;object-fit:cover;border-radius:8px;cursor:zoom-in;background:#dde3ec}
+  .roomrow .ri{flex:1;min-width:0}
+  .roomrow .rt{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:12.5px}
+  .roomrow .rt>span:first-child{font-weight:700;color:#222a35}
+  .rprice{flex:0 0 auto;font-weight:800;color:#1f7a45;font-size:12.5px;white-space:nowrap}
+  .rprice small{font-weight:600;color:#6c8a78;font-size:9.5px}
+  .rmeta{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .sqft{font-weight:700;color:#37414f;background:#eef3f8;border:1px solid var(--line);padding:1px 6px;border-radius:5px}
+  .rfeat{font-size:11.5px;color:#54606e;margin-top:3px;line-height:1.4}
+  .rflag{margin-top:5px;font-size:10.5px;font-weight:700;display:inline-block;padding:2px 7px;border-radius:5px}
+  .rflag.no{background:#fde7e7;color:#b3261e}
+  .rflag.ask{background:var(--warn-bg);color:var(--warn)}
+
+  /* Table */
+  .tablewrap{overflow-x:auto;margin:26px 0 6px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:#f3f6fa;font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#56616f}
+  tbody tr:hover{background:#f8fafc}
+  td.fit-yes{color:var(--good);font-weight:700} td.fit-no{color:var(--warn);font-weight:700}
+  .tbl-toggle{margin:18px 0 0;font-size:13.5px}
+  .tbl-toggle summary{cursor:pointer;font-weight:700;color:var(--muted)}
+
+  /* Lightbox */
+  #lb{position:fixed;inset:0;background:rgba(8,12,20,.9);display:none;align-items:center;justify-content:center;
+    z-index:100;padding:24px;cursor:zoom-out}
+  #lb.on{display:flex}
+  #lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.5)}
+  #lb .cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.85}
+
+  footer{margin:36px 0 60px;color:var(--muted);font-size:13px}
+  footer .note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  footer h4{margin:0 0 8px;color:var(--ink);font-size:14px}
+  footer ul{margin:0;padding-left:18px} footer li{margin:4px 0}
+  .count{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+  @media(max-width:560px){header.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>🐾 Hotel Options — Oregon Coast Trip</h1>
+    <p>Dog-friendly stays for the two hotel nights of the trip, curated for the brief: <strong>$100–$300/night</strong>, very nice &amp; pretty, good areas, spacious rooms, and an easy <strong>2-small-dog</strong> policy. Prices are <em>estimates</em> for the exact dates — confirm live on the Hotels.com links.</p>
+    <div class="legend">
+      <span>💰 Price = nightly room rate, before tax &amp; pet fee</span>
+      <span>🐶 Every hotel here allows 2 dogs</span>
+      <span>⭐ = top pick for that town</span>
+      <span>⚠️ = typically runs over $300 on these dates</span>
+      <span>✨ = unique splurge pick ($300–900)</span>
+      <span>🛏 Room types, sizes &amp; photos inside each card</span>
+    </div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="navlinks">
+      <a class="nav pdx" href="#portland">Portland · 2 nts</a>
+      <a class="nav cb" href="#cannonbeach">Cannon Beach · 2 nts</a>
+    </div>
+    <label>Sort:
+      <select id="sort">
+        <option value="pick">Top picks first</option>
+        <option value="lo">Price: low → high</option>
+        <option value="hi">Price: high → low</option>
+      </select>
+    </label>
+    <label class="chk"><input type="checkbox" id="budgetOnly"> In budget only ($100–300)</label>
+    <label class="chk"><input type="checkbox" id="picksOnly"> Top picks only</label>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="loc" id="portland">
+    <div class="loc-head">
+      <span class="dot"></span>
+      <h2>Portland</h2>
+      <span class="dates">Wed Jul 22 → Fri Jul 24, 2026 · 2 nights</span>
+    </div>
+    <p class="loc-sub">Base for the arrival day + the Columbia Gorge waterfall day. You want a walkable, safe, pretty neighborhood (downtown core / West End / waterfront) with room for the pups. Portland's boutique scene is very dog-welcoming — several here charge <strong>no pet fee at all</strong>. The gold-accented ✨ <strong>unique splurge</strong> cards at the end are something special — a Columbia Gorge treehouse, a cliff-top 1921 hotel with its own 208-ft waterfall, and luxury glamping — all sitting right on your Thursday Gorge route.</p>
+    <p class="count" id="count-portland"></p>
+    <div class="grid" id="grid-portland"></div>
+    <details class="tbl-toggle"><summary>Show comparison table</summary>
+      <div class="tablewrap"><table id="tbl-portland"></table></div>
+    </details>
+  </section>
+
+  <section class="loc" id="cannonbeach">
+    <div class="loc-head">
+      <span class="dot"></span>
+      <h2>Cannon Beach</h2>
+      <span class="dates">Fri Jul 24 → Sun Jul 26, 2026 · 2 nights</span>
+    </div>
+    <p class="loc-sub">Base for the two coast days (Haystack Rock, Ecola, Oswald West). Cannon Beach is one of the most dog-friendly towns on the coast — dogs run <strong>off-leash</strong> on the main beach. Peak-summer oceanfront rooms get pricey; the ⚠️ resorts are the prettiest but usually top $300, so they're flagged. The gold-accented ✨ <strong>unique splurge</strong> cards at the end go bigger: a glass-walled Arch Cape oceanfront house, an off-grid glass A-frame in the coast forest, and a Scandinavian sauna cabin in Manzanita.</p>
+    <p class="count" id="count-cannonbeach"></p>
+    <div class="grid" id="grid-cannonbeach"></div>
+    <details class="tbl-toggle"><summary>Show comparison table</summary>
+      <div class="tablewrap"><table id="tbl-cannonbeach"></table></div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="note">
+      <h4>How to read this &amp; what to verify</h4>
+      <ul>
+        <li><strong>Prices are estimates</strong> for Jul 22–24 (Portland) and Jul 24–26 (Cannon Beach), based on current/typical 2026 summer rates — rooms aren't bookable this far out. The Hotels.com links are pre-pointed at each property; plug in the dates to see live rates.</li>
+        <li><strong>Pet fees &amp; taxes are on top</strong> of the nightly room rate shown. City/lodging tax runs ~15% in Portland and ~10–11% on the coast. A few Portland hotels (The Nines, Hi-Lo) also add a mandatory nightly <em>destination fee</em> — flagged on the card.</li>
+        <li><strong>Always book the designated pet room</strong> and re-confirm the 2-dog allowance when you reserve — every property limits dogs to specific rooms, and a couple (Surfsand, Tolovana) exclude their very top oceanfront units from pet stays.</li>
+        <li><strong>Room types &amp; sizes</strong> (the "🛏 Room types &amp; sizes" panel on each card) come from each hotel's own site/booking data: square footage, bed setup, view, occupancy, features, and an <em>estimated per-room nightly rate</em>. Where a hotel only allows dogs in certain rooms, the non-pet room types are flagged 🚫. Per-room rates are estimates and step up by tier — the live per-room price for your dates shows on the Hotels.com link.</li>
+        <li><strong>✨ Unique splurge stays ($300–900):</strong> the gold-accented cards are the "something special" picks — mostly vacation rentals (treehouse, glamping, oceanfront glass house, off-grid A-frame, design cabin) plus the historic Columbia Gorge Hotel. Their booking buttons go to the property/host (not Hotels.com). For the rentals, <strong>confirm the 2-dog allowance and any minimum-night requirement</strong> when you book — summer minimums can apply and a couple ask a per-stay pet deposit.</li>
+        <li>Dog policies were cross-checked against each hotel's own site plus <a href="https://www.bringfido.com/">BringFido</a>. All photos (hotel + room) are saved locally in <code>hotel_images/</code> so this page works offline; the Hotels.com galleries have full, current photo sets.</li>
+      </ul>
+    </div>
+  </footer>
+</main>
+
+<div id="lb"><img alt=""><div class="cap"></div></div>
+
+<script>
+/* ---- Data ---------------------------------------------------------------- */
+const HOTELS = {
+  portland: [
+    { name:"Kimpton RiverPlace Hotel", img:"hotel_images/pdx-riverplace.jpg", rank:1,
+      area:"RiverPlace / South Waterfront", areaType:"Waterfront",
+      tags:["No pet fee","River & marina views","Spacious ~350+ sqft","Dog park next door"],
+      blurb:"Portland's only downtown riverfront hotel — calm, upscale, lodge-meets-refined PacNW design with sweeping Willamette views and a riverside walk at the door.",
+      room:"Generous: Deluxe ~350 sqft, suites 410–885+ sqft.",
+      dogs:"2 dogs, any size — no pet fee. Crate if left unattended.", dogFee:"$0",
+      warn:false, lo:280, hi:320, price:"$280–320", extra:"",
+      url:"https://www.hotels.com/ho126645/kimpton-riverplace-hotel-an-ihg-hotel-portland-united-states-of-america/",
+      src:"riverplacehotel.com + BringFido" },
+
+    { name:"Woodlark Hotel", img:"hotel_images/pdx-woodlark.jpg", rank:2,
+      area:"West End / downtown core", areaType:"Downtown",
+      tags:["Design-forward boutique","Prime walkable spot","Low pet fee","VIP pet amenities"],
+      blurb:"The prettiest design boutique in town — two restored 1908/1912 buildings, light-filled tiled lobby, marble baths, Roseline coffee, Abigail Hall cocktails.",
+      room:"Entry kings ~230 sqft (cozy) up to ~665 sqft suites — size up a room for the dogs + gear.",
+      dogs:"Dogs of all sizes, count not capped; flat $50/stay + VIP pet bed/bowls/treats.", dogFee:"$50/stay",
+      warn:false, lo:230, hi:290, price:"$230–290", extra:"",
+      url:"https://www.hotels.com/ho963548544/woodlark-portland-united-states-of-america/",
+      src:"woodlarkhotel.com FAQ + BringFido" },
+
+    { name:"The Nines, a Luxury Collection Hotel", img:"hotel_images/pdx-nines.jpg", rank:3,
+      area:"Atop Pioneer Courthouse Square", areaType:"Downtown",
+      tags:["Most luxurious","Spacious ~350+ sqft","Rooftop dining","Best central location"],
+      blurb:"Glamorous, art-forward Marriott Luxury Collection in the historic Meier & Frank building — dramatic 7-story atrium, rooftop Departure + Urban Farmer steakhouse.",
+      room:"Among the roomiest here — standards ~350+ sqft, suites 440–823+ sqft.",
+      dogs:"Max 2 dogs (dogs only), under ~40–60 lbs — small dogs fine. $85 per dog/stay = $170.", dogFee:"$85/dog",
+      warn:false, lo:270, hi:320, price:"$270–320", extra:"+ $30/night destination fee & $170 dog fee push all-in higher",
+      url:"https://www.hotels.com/ho272144/the-nines-a-luxury-collection-hotel-portland-united-states-of-america/",
+      src:"BringFido + Marriott" },
+
+    { name:"Dossier (formerly Hotel Modera)", img:"hotel_images/pdx-dossier.jpg", rank:0,
+      area:"Downtown core — 1 blk from Pioneer Sq", areaType:"Downtown",
+      tags:["Best value","Roomy ~350 sqft","No destination fee","Art-forward"],
+      blurb:"Sophisticated, design-driven boutique with curated art, pillow menu, robes, courtyard and Bistro Alder — and it doesn't run small.",
+      room:"Roomy: standards ~350 sqft, Loft Suites ~450 sqft.",
+      dogs:"2 dogs, no weight limit (dogs only); $65/stay. 8th-floor Premium Kings aren't pet rooms.", dogFee:"$65/stay",
+      warn:false, lo:180, hi:220, price:"$180–220", extra:"",
+      url:"https://www.hotels.com/ho151068/dossier-portland-united-states-of-america/",
+      src:"dossierhotel.com FAQ + BringFido" },
+
+    { name:"Kimpton Hotel Vintage Portland", img:"hotel_images/pdx-kimpton-vintage.jpg", rank:0,
+      area:"Downtown / West End — by Pioneer Sq", areaType:"Downtown",
+      tags:["No pet fee","Historic 1894 building","Free nightly wine hour","Free bikes"],
+      blurb:"Luxury boutique in an 1894 red-brick landmark with an Italian-wine-country vibe, Il Solito restaurant, game lounge and Frette linens.",
+      room:"Entry King Studios 275–396 sqft (compact-to-decent); suites 650–1,040 sqft.",
+      dogs:"2 dogs, any size — no pet fee, no deposit.", dogFee:"$0",
+      warn:false, lo:230, hi:290, price:"$230–290", extra:"",
+      url:"https://www.hotels.com/ho125382/kimpton-hotel-vintage-portland-an-ihg-hotel-portland-united-states-of-america/",
+      src:"hotelvintage-portland.com + BringFido" },
+
+    { name:"Sentinel", img:"hotel_images/pdx-sentinel.jpg", rank:0,
+      area:"Downtown core / West End", areaType:"Downtown",
+      tags:["Classic-elegant","Grand restored lobby","Historic landmark","Jake's Grill"],
+      blurb:"Two adjoining National-Register buildings (1909 + 1923 Elks Temple) — grand lobby, terra-cotta facade, curated art; classic luxury, 99 rooms.",
+      room:"Deluxe 230–328 sqft (entry); Premier 300–400; suites 450–550 sqft — size up for space.",
+      dogs:"Dogs only, no size limit; $65/stay (waivable via the 'Paws & Indulge' package).", dogFee:"$65/stay",
+      warn:false, lo:220, hi:300, price:"$220–300", extra:"",
+      url:"https://www.hotels.com/ho164366/sentinel-portland-united-states-of-america/",
+      src:"sentinelhotel.com FAQ + BringFido" },
+
+    { name:"Hi-Lo Hotel, Autograph Collection", img:"hotel_images/pdx-hilo.jpg", rank:0,
+      area:"Downtown core — near Waterfront Park", areaType:"Downtown",
+      tags:["Industrial-chic boutique","Historic 1910 building","Local art","Rooms run small"],
+      blurb:"Industrial-chic Marriott boutique in Portland's first all-concrete building — polished concrete, reclaimed wood, gold fixtures, hand-painted wallpaper.",
+      room:"Runs small-to-mid: 250–311 sqft rooms, suites ~380 sqft.",
+      dogs:"2 dogs, under 50 lbs each; $50 non-refundable/stay (flat).", dogFee:"$50/stay",
+      warn:false, lo:200, hi:240, price:"$200–240", extra:"+ $26/night destination fee",
+      url:"https://www.hotels.com/ho565471/the-hi-lo-autograph-collection-portland-united-states-of-america/",
+      src:"hi-lo-hotel.com + Marriott + BringFido" },
+
+    { name:"Skamania Coves — Osprey Treehouse", img:"hotel_images/pdx-skamania-treehouse.jpg", rank:0, splurge:true,
+      area:"Stevenson, WA · private Columbia River cove (on your Thursday Gorge route)", areaType:"Treehouse",
+      tags:["✨ Octagonal treehouse","30 ft up a living fir","Private river cove + beach","Wraparound deck"],
+      blurb:"An octagonal treehouse built 30 ft up a living Douglas fir on its own private Columbia River cove — wraparound windows and a deck out over the water. About as novel as a stay gets.",
+      room:"~400 sq ft octagon · queen loft + queen sofa · sleeps 2 · private deck + beach access",
+      dogs:"Pets welcome, leashed (count not stated — confirm 2 dogs when booking)", dogFee:"modest pet fee",
+      warn:false, lo:385, hi:420, price:"$385–420", extra:"Books direct; a Gorge-day basecamp or a swap for one Portland night",
+      url:"https://skamaniacoves.com/vacation-home/treehouse/", bookSite:"Skamania Coves",
+      src:"skamaniacoves.com" },
+
+    { name:"Columbia Gorge Hotel & Spa", img:"hotel_images/pdx-columbia-gorge-hotel.jpg", rank:0, splurge:true,
+      area:"Hood River, OR · cliff edge above the Columbia (Thursday Gorge route)", areaType:"Historic hotel",
+      tags:["✨ Historic 1921 hotel","Its own 208-ft waterfall","Cliff-edge gardens","Fireplaces"],
+      blurb:"A 1921 Mission-style Historic Hotel of America clinging to the Gorge cliff, with 7 acres of gardens, ponds and bridges and its own 208-ft Wah Gwin Gwin waterfall plunging into the Columbia.",
+      room:"39 historic rooms & suites · queen or king · river-side rooms for the view · some w/ fireplaces",
+      dogs:"Up to 2 dogs under 50 lb (2nd-floor pet rooms; call to book)", dogFee:"$50/dog/night",
+      warn:false, lo:300, hi:560, price:"$300–560", extra:"A real hotel (not a rental) — easiest 2-night booking of the splurge picks",
+      url:"https://www.columbiagorgehotel.com/comfort", bookSite:"Columbia Gorge Hotel",
+      src:"columbiagorgehotel.com + BringFido" },
+
+    { name:"Under Canvas Columbia River Gorge", img:"hotel_images/pdx-under-canvas.jpg", rank:0, splurge:true,
+      area:"White Salmon, WA · 120-acre ridge with Mt. Hood views", areaType:"Luxury glamping",
+      tags:["✨ Safari-tent glamping","Stargazer skylight over the bed","Mt. Hood views","Nightly s'mores"],
+      blurb:"Upscale safari-tent glamping on a 120-acre ridge — king beds, ensuite baths and gas fireplaces under huge Gorge skies. The Stargazer tent has a skylight positioned right over the bed.",
+      room:"Canvas safari tent · king bed · ensuite bath · private deck · sleeps 2",
+      dogs:"Dogs welcome, leashed, not left alone in the tent", dogFee:"$35/dog/night",
+      warn:false, lo:349, hi:529, price:"$349–529", extra:"Seasonal (summer only); they're tents — weather-dependent comfort",
+      url:"https://www.undercanvas.com/camps/columbia-river-gorge/", bookSite:"Under Canvas",
+      src:"undercanvas.com" }
+  ],
+
+  cannonbeach: [
+    { name:"Land's End at Cannon Beach", img:"hotel_images/cb-landsend.jpg", rank:1,
+      area:"Oceanfront + steps to downtown", areaType:"Oceanfront",
+      tags:["Oceanfront","Walk to town","Ocean-view suites","Lowest pet fee"],
+      blurb:"Intimate 15-unit boutique that nails the rare combo: on the sand AND steps to shops & galleries. Light-filled suites with fireplaces, kitchenettes and a shared oceanfront terrace.",
+      room:"Spacious 1- & 2-BR ocean-view suites with separate bedrooms, sofa beds, dining areas — ocean views in nearly all units.",
+      dogs:"2 dogs, any size; $20 per dog/night (lowest oceanfront fee). House-trained, no puppies, no unattended.", dogFee:"$20/dog",
+      warn:false, lo:240, hi:290, price:"$240–290", extra:"",
+      url:"https://www.hotels.com/ho571568/land-s-end-at-cannon-beach-cannon-beach-united-states-of-america/",
+      src:"landsendcb.com/dogs" },
+
+    { name:"Tolovana Inn", img:"hotel_images/cb-tolovana.jpg", rank:2,
+      area:"Tolovana — true oceanfront", areaType:"Oceanfront",
+      tags:["Oceanfront","Most spacious (to 969 sqft)","Full kitchens","Indoor pool & sauna"],
+      blurb:"Big oceanfront complex with indoor pool, hot tub & sauna; suites have private oceanfront balconies, full kitchens and gas fireplaces — several right on the sand.",
+      room:"Widest range in town: 185 sqft standard → 525 sqft studio → 610 sqft 1-BR → 969 sqft 2-BR suites.",
+      dogs:"2 dogs (dogs only) in designated rooms; $35 per dog/night.", dogFee:"$35/dog",
+      warn:false, lo:160, hi:300, price:"$160–360", extra:"Standard/king stays in-budget; oceanfront suite is the splurge",
+      url:"https://www.hotels.com/ho530185/tolovana-inn-cannon-beach-united-states-of-america/",
+      src:"tolovanainn.com + BringFido" },
+
+    { name:"The Wayside Inn", img:"hotel_images/cb-wayside.jpg", rank:3,
+      area:"Tolovana — across from beach access", areaType:"Tolovana",
+      tags:["Ocean-view rooms","Indoor pool & hot tub","2-min walk to beach","Fireplace + deck"],
+      blurb:"Refreshed coastal-contemporary rooms — many top-floor units have ocean views, gas fireplaces and private decks. Heated indoor pool + big hot tub for cool coastal mornings.",
+      room:"Comfortable; the upper-floor ocean-view/deck rooms are the roomy, desirable ones (standards are more motel-style).",
+      dogs:"2 dogs, any size, in designated rooms; $25 per dog/night + welcome basket.", dogFee:"$25/dog",
+      warn:false, lo:230, hi:260, price:"$230–260", extra:"",
+      url:"https://www.hotels.com/ho548866/the-wayside-inn-cannon-beach-united-states-of-america/",
+      src:"thewayside-inn.com" },
+
+    { name:"Inn at Cannon Beach", img:"hotel_images/cb-inn-at-cannon-beach.jpg", rank:0,
+      area:"Midtown / Tolovana edge — garden setting", areaType:"Midtown",
+      tags:["Charming garden inn","Free hot breakfast","Quiet & tucked","Dog-wash station"],
+      blurb:"Charming, well-kept boutique with a landscaped garden/creek setting, gas fireplaces, afternoon cookies and free breakfast — consistently strong reviews and genuinely pretty.",
+      room:"Queen/king layouts plus a King Suite with sofa sleeper (roomiest). Garden/courtyard views, not ocean.",
+      dogs:"2 pets, any size, in designated rooms; $25 per pet/night + treats/bandanas/frisbees.", dogFee:"$25/dog",
+      warn:false, lo:200, hi:250, price:"$200–250", extra:"",
+      url:"https://www.hotels.com/ho494761/inn-at-cannon-beach-cannon-beach-united-states-of-america/",
+      src:"innatcannonbeach.com/pet-friendly" },
+
+    { name:"McBee Cottages", img:"hotel_images/rooms/cb-mcbee-r3.jpg", rank:0,
+      area:"Midtown — ½ block to the beach", areaType:"Midtown",
+      tags:["Best value","Charming 1940s cottages","Kitchenettes","½ block to sand"],
+      blurb:"Beautifully renovated 1940s motor-court cottages — white beadboard, schoolhouse lights, box-beam ceilings. Cozy, photogenic and central; several have gas fireplaces & kitchenettes.",
+      room:"Cottage units have separate sleeping nooks + living areas with sofas & kitchenettes — homier and roomier than a standard room. No ocean view.",
+      dogs:"2 pets, any size, no breed restrictions; ~$20 per pet/night (confirm at booking).", dogFee:"~$20/dog",
+      warn:false, lo:160, hi:199, price:"$160–199", extra:"Books under the Cannon Beach Hotel Collection",
+      url:"https://www.hotels.com/ho440336/cannon-beach-hotel-collection-cannon-beach-united-states-of-america/",
+      src:"BringFido + mcbeecottages.com" },
+
+    { name:"Hallmark Resort Cannon Beach", img:"hotel_images/cb-hallmark.jpg", rank:0,
+      area:"Oceanfront — closest hotel to Haystack Rock", areaType:"Oceanfront",
+      tags:["Closest to Haystack Rock","Heated pools & spa","Balconies","Paw-wash station"],
+      blurb:"Full bluff-top resort with ocean-view rooms, heated pools, hot tubs and spa; some rooms frame Haystack Rock from private balconies. Very dog-welcoming (donates pet fees to shelters).",
+      room:"Standards up to larger oceanview rooms + off-site 1-BR Pacific Suites — request a Haystack-facing balcony.",
+      dogs:"2 dogs per room; $35 per dog/night. No unattended pets (incl. balconies).", dogFee:"$35/dog",
+      warn:true, lo:330, hi:420, price:"$330–420", extra:"Over budget on a July weekend; city-view/standard rooms can dip toward ~$280",
+      url:"https://www.hotels.com/ho481972/hallmark-resort-cannon-beach-cannon-beach-united-states-of-america/",
+      src:"hallmarkresortcannonbeach.com/pet-policy" },
+
+    { name:"The Ocean Lodge", img:"hotel_images/cb-ocean-lodge.jpg", rank:0,
+      area:"Premier oceanfront — steps to Haystack Rock", areaType:"Oceanfront",
+      tags:["Premier oceanfront","Steps to Haystack","Fireplaces & balconies","Lodge-style charm"],
+      blurb:"Often rated the town's top oceanfront hotel — stone-fireplace lobby, library, classic Oregon-coast feel; rooms have private balconies, fireplaces, kitchenettes and big Haystack views.",
+      room:"Roomy oceanfront studios & suites with sitting/kitchenette areas; most units have ocean views.",
+      dogs:"2 pets per room; $25 per pet/night + dog-wash, treats/bowls.", dogFee:"$25/dog",
+      warn:true, lo:340, hi:430, price:"$340–430", extra:"Over budget on these dates; partial-ocean studios are the closest to band",
+      url:"https://www.hotels.com/ho30215392/the-ocean-lodge-cannon-beach-united-states-of-america/",
+      src:"theoceanlodge.com/pet-friendly" },
+
+    { name:"Surfsand Resort", img:"hotel_images/cb-surfsand.jpg", rank:0,
+      area:"Oceanfront — near Haystack Rock", areaType:"Oceanfront",
+      tags:["Oceanfront","Wayfarer restaurant on-site","Indoor pool/spa","Dog menu & welcome basket"],
+      blurb:"Polished oceanfront resort with beach bonfires, free cabanas and the on-site Wayfarer restaurant (plus a 'Bone Appetit' dog menu). Very dog-centric, classic-elegant vibe.",
+      room:"Range of rooms/suites; oceanview kings with balconies & soaking tubs. Note: top-floor beachfront units are NOT pet rooms (you get ocean-view, not beach-level).",
+      dogs:"2 pets, any size, per room; $35 per dog/night. No cats, no unattended pets.", dogFee:"$35/dog",
+      warn:true, lo:340, hi:470, price:"$340–470", extra:"Over budget on a July weekend — top-tier dog resort if budget can flex",
+      url:"https://www.hotels.com/ho487699/surfsand-resort-cannon-beach-united-states-of-america/",
+      src:"surfsand.com/pets + BringFido" },
+
+    { name:"Schilling Beach House", img:"hotel_images/cb-schilling.jpg", rank:0, splurge:true,
+      area:"Arch Cape · secluded oceanfront, ~10 min S of Cannon Beach", areaType:"Oceanfront home",
+      tags:["✨ Full glass ocean wall","180° Pacific panorama","Private beach access","Sleeps 12"],
+      blurb:"A single-story luxury home where the entire ocean-facing wall is glass — an uninterrupted 180° Pacific sweep from nearly every main room and the sunset deck, steps from your own private beach.",
+      room:"4 bd / 2 ba · king primary + 2 queens + bunk room · sleeps 12 · dining for 10",
+      dogs:"Dogs welcome (no count/size limit stated)", dogFee:"$25/dog/day",
+      warn:false, lo:350, hi:650, price:"$350–650", extra:"Books via Beachcomber — confirm a 2-night summer stay is allowed",
+      url:"https://www.beachcombervacationhomes.com/property/schilling-beach-house/", bookSite:"Beachcomber Homes",
+      src:"beachcombervacationhomes.com" },
+
+    { name:"Idyll Ridge", img:"hotel_images/cb-idyll-ridge.jpg", rank:0, splurge:true,
+      area:"Elsie, OR · off-grid forest, ~30 min E of Cannon Beach", areaType:"Glass A-frame",
+      tags:["✨ Off-grid glass A-frame","Wood-fired cedar hot tub","9 private acres","Solar-powered"],
+      blurb:"A handcrafted, fully off-grid glass-walled A-frame on 9 secluded forest acres — full-height window walls, a loft soaking tub, a wood-fired cedar hot tub and a mile of private trails. Reached by guest golf cart.",
+      room:"~1,600 sq ft · king loft + queen + queen sofa · sleeps 6",
+      dogs:"2 dogs, any size", dogFee:"$25/dog/night",
+      warn:false, lo:400, hi:600, price:"$400–600", extra:"Off-grid solar; forest seclusion (not oceanfront) — a stargazing retreat",
+      url:"https://www.idyllridge.com/", bookSite:"Idyll Ridge",
+      src:"idyllridge.com + Airbnb" },
+
+    { name:"Seacliff at Coast Cabins", img:"hotel_images/cb-seacliff.jpg", rank:0, splurge:true,
+      area:"Manzanita, OR · design cabin, walk to beach & town, ~25 min S", areaType:"Luxury cabin",
+      tags:["✨ Scandinavian design","Private sauna + hot tub","Ocean-view deck","Walk to dog beach"],
+      blurb:"A Scandinavian-inspired luxury cabin with a private dry sauna, private hot tub, outdoor shower and a panoramic ocean-view deck — refined and design-forward, steps from Manzanita's dog-friendly beach and shops.",
+      room:"~1,300 sq ft · 3 bd / 2.5 ba · sleeps 6 · chef's kitchen + wood stove",
+      dogs:"Up to 2 dogs, any size (bed, bowls & towels provided)", dogFee:"$25/dog/night + pet cleaning fee",
+      warn:false, lo:550, hi:900, price:"$550–900", extra:"",
+      url:"https://www.coastcabins.com/accommodations/seacliff.html", bookSite:"Coast Cabins",
+      src:"coastcabins.com" }
+  ]
+};
+
+/* ---- Room-level data: [type, sqft, beds, view, sleeps, features, pet(y/n/?), priceEst, imgFile] ---- */
+const ROOMS = {
+"Kimpton RiverPlace Hotel":[
+["King Guest Room (Deluxe)","350","1 King / 2 Doubles","City / courtyard",2,"Mini-fridge, oversized desk, robes","y","~$255","pdx-riverplace-r1.jpg"],
+["Riverfront Deluxe (King River View)","350","1 King / 2 Doubles","River / marina",2,"Willamette and marina view; some w/ soaking tub","y","~$300","pdx-riverplace-r2.jpg"],
+["Columbia River Suite","465","1 King","River",2,"Marina-view soaking tub, sitting area","y","~$360","pdx-riverplace-r3.jpg"],
+["Mount Hood Suite","625","1 King + sofa","River",4,"Wood fireplace, soaking tub, living area","y","~$470","pdx-riverplace-r4.jpg"],
+["Grand Suite","1100","1 King + sofa bed","River (panoramic)",4,"Separate living + dining, fireplace, jetted tub","y","~$650","pdx-riverplace-r5.jpg"],
+["Marina 2-Bedroom Suite / Cottage","1285","1 King + 1 Queen","Marina (balcony)",4,"2 bed / 2 bath, full kitchen, fireplace, balcony","y","~$850","pdx-riverplace-r6.jpg"]
+],
+"Woodlark Hotel":[
+["King Bedroom","230","1 King","Interior",2,"Walk-in shower, 50-in TV, Bluetooth","y","~$240","pdx-woodlark-r1.jpg"],
+["Double Bedroom","260","2 Queen / Double","City",4,"Family-friendly, city views","y","~$265","pdx-woodlark-r2.jpg"],
+["Superior / Deluxe King","230–260","1 King","City",2,"Grand windows; corner has vaulted ceilings","y","~$285","pdx-woodlark-r3.jpg"],
+["Studio Suite Bunk","350","1 King + twin bunks","Interior",4,"High ceilings, custom bunks, sitting area","y","~$330","pdx-woodlark-r4.jpg"],
+["Loft / Studio Suite","325–350","1 King","City",2,"Two-story loft w/ spiral stair, sitting area","y","~$345","pdx-woodlark-r5.jpg"],
+["Woodlark Suite","665","1 King","Corner city (panoramic)",2,"Separate living room, large soaking tub","y","~$575","pdx-woodlark-r6.jpg"]
+],
+"The Nines, a Luxury Collection Hotel":[
+["Superior (Atrium View)","380","1 King / 2 Queens","Atrium",4,"Marble bath, rainfall shower","y","~$270","pdx-nines-r1.jpg"],
+["Deluxe Exterior View","230","1 King / 2 Queens","City skyline",4,"9-ft ceilings, upholstered window seat","y","~$310","pdx-nines-r2.jpg"],
+["Club Level","n/a","1 King / 2 Queens","City",4,"Club Lounge access, concierge","?","~$400","pdx-nines-r3.jpg"],
+["One Bedroom Suite","n/a","1 King","Atrium",4,"Separate living room, dining, wet bar","?","~$550","pdx-nines-r4.jpg"],
+["Meier & Frank Suite","1536","1 King","City",4,"Living room, dining, den; three 55-in TVs","?","~$900","pdx-nines-r5.jpg"],
+["The Nines Suite","1768","1 King","City",4,"Butler's kitchen, infinity tub, fireplace","?","~$1,200","pdx-nines-r6.jpg"]
+],
+"Dossier (formerly Hotel Modera)":[
+["Standard Room","350","King / 2 Doubles","Garden / interior",4,"Garden soaking tub + standalone shower","y","~$210","pdx-dossier-r1.jpg"],
+["Premium Room","350","King / 2 Doubles","City (fl 8–19)",4,"Picture-window views — note: 8th-floor King is NOT a pet room","y","~$240","pdx-dossier-r2.jpg"],
+["Premium Corner Room","350","1 King","Corner city",2,"Wraparound windows, shower w/ a view","y","~$270","pdx-dossier-r3.jpg"],
+["Studio Suite","472","King + sleeper sofa","City",4,"Separate sitting area, garden soaking tub","y","~$320","pdx-dossier-r4.jpg"],
+["Penthouse Suite","890","1 King","Panoramic city (fl 19)",6,"Living room, dining for 6, wine cooler","?","~$650","pdx-dossier-r5.jpg"]
+],
+"Kimpton Hotel Vintage Portland":[
+["King / Queen Essential","223–300","1 King / 1 Queen","Interior / city",2,"Entry room; butcher-block desk","y","~$230","pdx-kimpton-vintage-r1.jpg"],
+["Two Queen Essential City View","324–396","2 Queens","City",4,"Larger; good for groups","y","~$280","pdx-kimpton-vintage-r2.jpg"],
+["King Premium","312–350","1 King","City",3,"Enhanced seating area","y","~$270","pdx-kimpton-vintage-r3.jpg"],
+["Queen Premium + Balcony Hot Tub","266–410","1 Queen","Sky / city",2,"Private balcony w/ outdoor hot tub","y","~$360","pdx-kimpton-vintage-r4.jpg"],
+["King Suite (Living Area / Soak Tub)","350–534","1 King + sofa sleeper","City",3,"Separate living area; soak-tub variant","y","~$400","pdx-kimpton-vintage-r5.jpg"],
+["Reserve / Luxury / Imperial Suite","652–1040","1 King + sofa sleeper","City / high floor",5,"Two-level; bedroom, dining, soaking tub, wet bar","y","~$650","pdx-kimpton-vintage-r6.jpg"]
+],
+"Sentinel":[
+["Deluxe Room","230–330","Queen or King","Interior / city",2,"Historic character, leather seating nook","y","~$215","pdx-sentinel-r1.jpg"],
+["Premier Room","325–400","King / 2 Doubles","City",4,"Spacious; fireplace on select corners","y","~$255","pdx-sentinel-r2.jpg"],
+["Premier Corner King","325–400","1 King","Corner city",2,"Working fireplace, extra windows","y","~$285","pdx-sentinel-r3.jpg"],
+["Executive King / Terrace Queen","300–350","King or Queen","City; some w/ terrace",2,"Quiet end-of-hall; terrace on select","y","~$280","pdx-sentinel-r4.jpg"],
+["Terrace Studio / Parlor Suite","450","King + pull-out","City",4,"Living area; Terrace adds fire-pit terrace","y","~$360","pdx-sentinel-r5.jpg"],
+["Bridgetown Parlor Suite","550","King + pull-out","City",4,"Wet bar, working fireplace, jetted tub","y","~$450","pdx-sentinel-r6.jpg"]
+],
+"Hi-Lo Hotel, Autograph Collection":[
+["Cozy Guest Room","250","1 King","City",2,"Heated tile floors, walk-in shower","y","~$220","pdx-hilo-r1.jpg"],
+["Guest Room","250","1 King","City",2,"Seating area / sofa","y","~$230","pdx-hilo-r2.jpg"],
+["Deluxe King","298","1 King","City",2,"Sofa; some w/ rainfall shower","y","~$250","pdx-hilo-r3.jpg"],
+["Premium King","311","1 King","City (high floor)",2,"Larger sitting area, elevated views","y","~$270","pdx-hilo-r4.jpg"],
+["Deluxe Double","324","1 King + sofa bed","City",4,"Sleeps up to 4","y","~$285","pdx-hilo-r5.jpg"],
+["Premium Double","324","1 King + sofa bed","City (high floor)",4,"Sleeps up to 4","y","~$295","pdx-hilo-r6.jpg"],
+["Lifestyle Junior Suite","380","1 King","Corner / city",2,"Alcove sofa, jetted soaking tub","y","~$320","pdx-hilo-r7.jpg"],
+["Alcove Guest Room","380","1 King","City (top floor)",2,"Curtained alcove bedroom","y","~$320","pdx-hilo-r8.jpg"],
+["Parlor Suite","380","1 King","Corner / city",2,"Separate parlor; connects to adjoining","y","~$330","pdx-hilo-r9.jpg"],
+["ADA King Guest Room","250","1 King","City",2,"Accessible bath, grab bars","y","~$225","pdx-hilo-r10.jpg"]
+],
+"Land's End at Cannon Beach":[
+["Ocean View Studio","n/a","Queen + sofa","Ocean view",2,"Most w/ fireplace + balcony; kitchenette","y","~$240","cb-landsend-r1.jpg"],
+["Cozy Ocean View Queen Studio","n/a","1 Queen","Ocean view",2,"Intimate; ocean view from the bed","y","~$210","cb-landsend-r1.jpg"],
+["Oceanfront 1-BR Queen Suite","n/a","Queen + sofa bed","Oceanfront",4,"Fireplace, kitchenette, terrace / Juliet balcony","y","~$300","cb-landsend-r3.jpg"],
+["Partial Ocean View King Balcony Suite","n/a","King + sofa bed","Partial ocean",4,"Fireplace, balcony, kitchenette","y","~$290","cb-landsend-r4.jpg"],
+["1-BR Queen Suite w/ Deck (ADA)","n/a","Queen + sofa bed","Partial ocean",4,"ADA, private deck, tiled fireplace","y","~$250","cb-landsend-r5.jpg"],
+["Ocean View 2-BR / 2-Bath Suite","n/a","2 bedrooms + sofa bed","Ocean view",6,"Full kitchen, whirlpool tub, dining","y","~$420","cb-landsend-r6.jpg"]
+],
+"Tolovana Inn":[
+["Standard Queen","185","1 Queen","Non-view",2,"Basic room; no balcony / kitchen / AC","y","~$160","cb-tolovana-r1.jpg"],
+["Corner King","245","1 King","Non-view",2,"Microwave and mini-fridge, corner space","y","~$190","cb-tolovana-r2.jpg"],
+["Studio Suite","525","Queen Murphy / bed","Ocean view",2,"Gas fireplace, balcony, full kitchen","y","~$290","cb-tolovana-r3.jpg"],
+["Oceanfront Studio","525","Queen Murphy / bed","Oceanfront",2,"Direct ocean views, fireplace, full kitchen","?","~$320","cb-tolovana-r4.jpg"],
+["One Bedroom Suite","610","Queen + Murphy","Ocean view",4,"Separate bedroom, fireplace, full kitchen","n","~$330","cb-tolovana-r5.jpg"],
+["Two Bedroom Suite","969","2 Queen + Murphy","Ocean view",6,"2 bed / 2 bath, full kitchen, fireplace, balcony","n","~$420","cb-tolovana-r6.jpg"]
+],
+"The Wayside Inn":[
+["Queen Studio","299","1 Queen","Partial ocean",2,"Fridge, microwave, private deck; no fireplace","y","~$215","cb-wayside-r1.jpg"],
+["Two Queen Studio","n/a","2 Queens","Ocean",4,"Gas fireplace, private deck","y","~$269","cb-wayside-r2.jpg"],
+["One Bedroom Suite","n/a","Queen + sofa bed","Partial ocean",4,"Full kitchen, gas fireplace, private bedroom","y","~$289","cb-wayside-r3.jpg"],
+["One Bedroom King Suite","n/a","King + sofa bed","Ocean",4,"Full kitchen, fireplace, top floor","y","~$319","cb-wayside-r4.jpg"],
+["1-BR Two Queen Suite","n/a","2 Queens + sofa bed","Ocean",6,"Full kitchen, fireplace, some w/ 2 baths","y","~$339","cb-wayside-r5.jpg"],
+["Two Bedroom Suite","n/a","2 bedrooms + hide-a-bed","Ocean",6,"2 baths, full kitchen, fireplace","y","~$389","cb-wayside-r6.jpg"],
+["Family Suite","n/a","2 bedrooms + hide-a-bed","Partial ocean",6,"First floor, full kitchen, patio","y","~$369","cb-wayside-r7.jpg"]
+],
+"Inn at Cannon Beach":[
+["Classic Queen w/ Sofa (ADA)","375–400","Queen + sofa sleeper","Garden / courtyard",4,"Gas fireplace, kitchenette, ADA-accessible","y","~$215","cb-inn-r1.jpg"],
+["Classic Double Queen Studio","375–400","2 Queens","Garden",4,"Gas fireplace, kitchenette","y","~$245","cb-inn-r2.jpg"],
+["Classic King Studio","375–400","1 King","Garden",2,"Gas fireplace, kitchenette","?","~$235","cb-inn-r3.jpg"],
+["Gallery King Studio Suite w/ Sofa","550–600","King + sofa sleeper","Garden",4,"Jacuzzi tub, largest suite","?","~$320","cb-inn-r4.jpg"]
+],
+"McBee Cottages":[
+["Cozy Queen","n/a","1 Queen","No ocean view",2,"Studio; some w/ kitchenette; private entrance","y","~$200","cb-mcbee-r1.jpg"],
+["Standard Queen (Kitchenette)","n/a","1 Queen","No ocean view",2,"Kitchenette w/ microwave","y","~$215","cb-mcbee-r2.jpg"],
+["Classic Queen","n/a","1 Queen","No ocean view",2,"Kitchenette, gas fireplace, seating","y","~$245","cb-mcbee-r3.jpg"],
+["Grand Queen","~210","Queen + sofa sleeper","No ocean view",4,"Separate bedroom + living, kitchen, fireplace","y","~$300","cb-mcbee-r4.jpg"]
+],
+"Hallmark Resort Cannon Beach":[
+["Neighborhood View Queen / King","244","Queen or King","City (non-view)",2,"Gas fireplace (select); fridge, microwave, Keurig","?","~$280","cb-hallmark-r1.jpg"],
+["Partial Ocean View Room","270","Queen or King","Ocean view",2,"Partial Haystack view; balcony on select","?","~$330","cb-hallmark-r2.jpg"],
+["Oceanfront Queen — Fireplace + Balcony","269","1 Queen","Oceanfront",2,"Haystack view, gas fireplace, walkout balcony","y","~$360","cb-hallmark-r2.jpg"],
+["Oceanfront King — Fireplace + Balcony","335","1 King","Oceanfront",2,"Panoramic Haystack view, fireplace, some jetted tub","y","~$400","cb-hallmark-r2.jpg"],
+["Pacific Suite (off-site 1-BR)","598","King + Queen + sofa","Ocean view",5,"Full kitchen, living room, fireplace, balcony","y","~$420","cb-hallmark-r5.jpg"]
+],
+"The Ocean Lodge":[
+["Oceanfront King Studio","250","1 King","Oceanfront",2,"Gas fireplace, oceanfront balcony, kitchenette","y","~$390","cb-ocean-lodge-r1.jpg"],
+["Premier Oceanfront King Studio + Sofa","275","King + sofa sleeper","Oceanfront",4,"Fireplace, balcony, kitchenette","y","~$420","cb-ocean-lodge-r2.jpg"],
+["Oceanfront Queen Suite + Sofa","299","Queen + sofa sleeper","Oceanfront",4,"Fireplace, balcony, kitchenette","y","~$430","cb-ocean-lodge-r3.jpg"],
+["Partial Ocean View Queen Studio","250","1 Queen","Partial ocean",2,"Fireplace, soaking tub, wet bar","n","~$340","cb-ocean-lodge-r4.jpg"],
+["NonView King Studio / Cottage","275","1 King (+/- sofa)","None",4,"Gas fireplace, kitchenette","?","~$300","cb-ocean-lodge-r5.jpg"]
+],
+"Surfsand Resort":[
+["Beachfront Suite King","452","King + sofa bed","Oceanfront",4,"Oceanfront balcony, soaking tub + rainshower, fireplace","y","~$469","cb-surfsand-r1.jpg"],
+["Beachfront Executive Suite","452","King + sofa bed","Oceanfront",4,"Balcony, soaking tub, fireplace, bath TV","y","~$459","cb-surfsand-r2.jpg"],
+["Beachfront Studio King","484","1 King","Oceanfront",2,"Balcony, soaking tub — top-floor units NOT pet rooms","n","~$429","cb-surfsand-r3.jpg"],
+["Beachfront Patio King","325","1 King","Oceanfront",2,"Deck + grass, Haystack views — NOT a pet room","n","~$419","cb-surfsand-r4.jpg"],
+["Lighthouse Studio King","312","1 King","Oceanfront",2,"Lighthouse views, patio/balcony, soaking tub","y","~$399","cb-surfsand-r5.jpg"],
+["Lighthouse Studio Two Doubles","290","2 Doubles","Oceanfront",4,"Lighthouse views, patio/balcony","y","~$399","cb-surfsand-r6.jpg"],
+["Haystack Studio King","312","1 King","Ocean view",2,"Haystack views, balcony, rainshower","y","~$369","cb-surfsand-r7.jpg"],
+["Puffin Studio King (Mtn View)","n/a","1 King","Partial ocean",2,"Partial view, balcony, soaking tub","y","~$339","cb-surfsand-r8.jpg"],
+["Puffin Studio King Non-View","n/a","1 King","None",2,"Patio/balcony; ~150 yd to beach","y","~$309","cb-surfsand-r9.jpg"],
+["Puffin Two Doubles Non-View","290","2 Doubles","None",4,"Soaking tub, fireplace; ~150 yd to beach","y","~$309","cb-surfsand-r10.jpg"]
+]
+};
+
+function viewTag(v){
+  if(/ocean/i.test(v)) return "🌊 "+v;
+  if(/garden/i.test(v)) return "🌿 "+v;
+  if(/city|skyline|atrium|corner|interior/i.test(v)) return "🏙 "+v;
+  return v;
+}
+function petFlag(pet){
+  if(pet==="n") return '<div class="rflag no">🚫 Not a dog room — pick another type</div>';
+  if(pet==="?") return '<div class="rflag ask">🐾 Dogs in designated rooms only — confirm this type</div>';
+  return "";
+}
+function roomRow(r, fallback){
+  const t=r[0], s=r[1], b=r[2], v=r[3], z=r[4], f=r[5], pet=r[6], p=r[7], img=r[8];
+  const sq = s==="n/a" ? "size n/a" : s+" sq ft";
+  return `<div class="roomrow">
+    <img class="rimg" src="hotel_images/rooms/${img}" alt="${t}" loading="lazy" data-cap="${t} · ${sq}" onerror="this.onerror=null;this.src='${fallback}'">
+    <div class="ri">
+      <div class="rt"><span>${t}</span><span class="rprice">${p}<small>/nt est.</small></span></div>
+      <div class="rmeta"><span class="sqft">${sq}</span> · ${b} · sleeps ${z}</div>
+      <div class="rfeat">${viewTag(v)} — ${f}</div>
+      ${petFlag(pet)}
+    </div>
+  </div>`;
+}
+function roomsPanel(h){
+  const list = ROOMS[h.name];
+  if(!list || !list.length) return "";
+  const fallback = h.img || ("hotel_images/rooms/"+list[0][8]);
+  return `<details class="rooms">
+    <summary>🛏 ${list.length} room types &amp; sizes — tap to compare</summary>
+    <div class="roomlist">${list.map(r=>roomRow(r, fallback)).join("")}</div>
+  </details>`;
+}
+
+/* ---- Render -------------------------------------------------------------- */
+const $ = s => document.querySelector(s);
+const sortSel = $("#sort"), budgetOnly = $("#budgetOnly"), picksOnly = $("#picksOnly");
+
+function inBudget(h){ return !h.splurge && h.lo <= 300; }      // any room option lands in/near $100–300
+function midPrice(h){ return (h.lo + h.hi) / 2; }
+
+function rankIcon(h){
+  if(h.rank===1) return "⭐ #1 pick";
+  if(h.rank===2) return "⭐ #2 pick";
+  if(h.rank===3) return "⭐ #3 pick";
+  return null;
+}
+
+function cardHTML(h){
+  const picks = rankIcon(h);
+  const ribbon = [];
+  if(picks) ribbon.push(`<span class="badge pick">${picks}</span>`);
+  if(h.dogFee==="$0") ribbon.push(`<span class="badge good">No pet fee</span>`);
+  if(h.warn) ribbon.push(`<span class="badge over">⚠️ Often &gt;$300</span>`);
+  if(h.splurge) ribbon.push(`<span class="badge uniq">✨ Unique · $300–900</span>`);
+
+  const thumb = h.img
+    ? `<img src="${h.img}" alt="${h.name}" loading="lazy" data-cap="${h.name} — ${h.area}">`
+    : `<div class="ph">No photo available offline — see the<br>Hotels.com gallery for current cottage photos</div>`;
+
+  const tags = h.tags.map(t=>`<span class="tag">${t}</span>`).join("");
+  const extra = h.extra ? `<div class="fee-note">⚠ ${h.extra}</div>` : "";
+
+  return `<article class="card${h.splurge?' splurge':''}" data-budget="${inBudget(h)?1:0}" data-pick="${h.rank?1:0}" data-mid="${midPrice(h)}">
+    <div class="thumb">${thumb}
+      <div class="ribbon">${ribbon.join("")}</div>
+      <div class="price-tag">${h.price}<small>/night · est. + tax</small></div>
+    </div>
+    <div class="body">
+      <h3>${h.name}</h3>
+      <div class="area">📍 ${h.area}</div>
+      <div class="tags">${tags}</div>
+      <div class="blurb">${h.blurb}</div>
+      <div class="row"><span class="k">Room:</span><span class="v">${h.room}</span></div>
+      <div class="dogline ${h.warn?'':''}">🐾 <strong>Dogs:</strong> ${h.dogs}</div>
+      ${extra}
+      ${roomsPanel(h)}
+      <div class="cta">
+        <a class="btn" href="${h.url}" target="_blank" rel="noopener">View on ${h.bookSite||"Hotels.com"} →</a>
+      </div>
+      <div class="src">Policy source: ${h.src}</div>
+    </div>
+  </article>`;
+}
+
+function tableHTML(list){
+  const head = `<thead><tr>
+    <th>Hotel</th><th>Area</th><th>Est. / night</th><th>Pet fee</th><th>2 dogs?</th><th>In budget</th>
+  </tr></thead>`;
+  const rows = list.map(h=>`<tr>
+    <td><a href="${h.url}" target="_blank" rel="noopener">${rankIcon(h)?'⭐ ':''}${h.name}</a></td>
+    <td>${h.areaType}</td>
+    <td>${h.price}</td>
+    <td>${h.dogFee}</td>
+    <td>Yes</td>
+    <td class="${inBudget(h)?'fit-yes':'fit-no'}">${inBudget(h)?'Yes':'Over'}</td>
+  </tr>`).join("");
+  return head + `<tbody>${rows}</tbody>`;
+}
+
+function sortList(list){
+  const v = sortSel.value;
+  const arr = list.slice();
+  if(v==="lo") arr.sort((a,b)=>a.lo-b.lo || midPrice(a)-midPrice(b));
+  else if(v==="hi") arr.sort((a,b)=>b.hi-a.hi || midPrice(b)-midPrice(a));
+  else arr.sort((a,b)=>{ // top picks first, then price low->high
+    const ra=a.rank||99, rb=b.rank||99;
+    return ra-rb || a.lo-b.lo;
+  });
+  return arr;
+}
+
+function render(){
+  ["portland","cannonbeach"].forEach(loc=>{
+    let list = sortList(HOTELS[loc]);
+    if(budgetOnly.checked) list = list.filter(inBudget);
+    if(picksOnly.checked)  list = list.filter(h=>h.rank);
+    $("#grid-"+loc).innerHTML = list.map(cardHTML).join("") || `<p style="color:#5b6675">No hotels match these filters.</p>`;
+    $("#tbl-"+loc).innerHTML = tableHTML(sortList(HOTELS[loc]));
+    const total = HOTELS[loc].length;
+    $("#count-"+loc).textContent = `Showing ${list.length} of ${total} options`;
+  });
+  bindThumbs();
+}
+
+/* ---- Lightbox ------------------------------------------------------------ */
+const lb = $("#lb"), lbImg = lb.querySelector("img"), lbCap = lb.querySelector(".cap");
+function bindThumbs(){
+  document.querySelectorAll("img[data-cap]").forEach(img=>{
+    const open = ()=>{ lbImg.src=img.src; lbCap.textContent=img.dataset.cap||""; lb.classList.add("on"); };
+    const host = img.closest(".thumb") || img;
+    host.onclick = open;
+  });
+}
+lb.onclick = ()=> lb.classList.remove("on");
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") lb.classList.remove("on"); });
+
+sortSel.onchange = render;
+budgetOnly.onchange = render;
+picksOnly.onchange = render;
+render();
+<\/script>
+</body>
+</html>
+
+</script>
+
+  <script type="text/html" id="tpl-car">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rental Car Options — PDX (Jul 22–26, 2026)</title>
+<style>
+  :root{
+    --ink:#1d2430; --muted:#5b6675; --line:#e3e8ef; --bg:#f6f8fb; --card:#fff;
+    --suv:#2f6f4f; --suv-bg:#e6f3ec; --book:#274b8f; --book-bg:#e8eefb;
+    --good:#1f8a4c; --good-bg:#e6f5ec; --warn:#b8651b; --warn-bg:#fbeede;
+    --val:#1f7a45; --val-bg:#e4f5ea; --shadow:0 1px 3px rgba(20,30,50,.08),0 8px 24px rgba(20,30,50,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+
+  header.hero{background:linear-gradient(135deg,#1f3a5f 0%,#2f6f4f 60%,#3a8f6e 100%);color:#fff;padding:38px 0 30px}
+  header.hero h1{margin:0 0 6px;font-size:29px;letter-spacing:-.02em}
+  header.hero p{margin:0;opacity:.93;font-size:15px;max-width:780px}
+  .trip{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .trip span{font-size:13px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:5px 11px;border-radius:999px}
+
+  .controls{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  .controls .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:11px 18px}
+  .controls .navlinks{display:flex;gap:8px;margin-right:auto;flex-wrap:wrap}
+  .controls a.nav{font-weight:600;font-size:13.5px;text-decoration:none;padding:7px 12px;border-radius:8px;border:1px solid var(--line)}
+  .controls a.nav.suv{color:var(--suv);background:var(--suv-bg);border-color:#c7e6d4}
+  .controls a.nav.book{color:var(--book);background:var(--book-bg);border-color:#cdd9f3}
+  .controls label{font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+  .controls select{font:inherit;font-size:13.5px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
+
+  /* TL;DR callout */
+  .tldr{background:linear-gradient(135deg,#fff,#f3f8ff);border:1px solid #d8e3f3;border-radius:14px;
+    padding:18px 20px;margin:22px 0 4px;box-shadow:var(--shadow)}
+  .tldr h2{margin:0 0 10px;font-size:18px}
+  .tldr ul{margin:0;padding-left:20px}
+  .tldr li{margin:6px 0;font-size:14.5px}
+  .tldr b{color:#173a6b}
+
+  section{padding:26px 0 6px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .sec-head h2{margin:0;font-size:22px;letter-spacing:-.01em}
+  .sec-head .dot{width:12px;height:12px;border-radius:50%;align-self:center}
+  #suvs .dot{background:var(--suv)} #book .dot{background:var(--book)}
+  .sec-sub{color:var(--muted);font-size:14px;margin:2px 0 18px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(20,30,50,.10),0 16px 40px rgba(20,30,50,.10)}
+
+  .thumb{position:relative;aspect-ratio:16/10;background:#dde3ec;overflow:hidden;cursor:zoom-in}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .ribbon{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap}
+  .badge{font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+  .badge.rank{background:#fbf3df;color:#7a5a12}
+  .badge.cls{background:rgba(20,28,42,.82);color:#fff}
+  .cargo-tag{position:absolute;bottom:10px;right:10px;background:rgba(20,28,42,.86);color:#fff;font-weight:700;font-size:14px;
+    padding:6px 11px;border-radius:10px;line-height:1.1;text-align:right}
+  .cargo-tag small{display:block;font-weight:500;font-size:10px;opacity:.82}
+
+  .body{padding:15px 16px 16px;display:flex;flex-direction:column;gap:9px;flex:1}
+  .body h3{margin:0;font-size:17.5px;letter-spacing:-.01em}
+  .lane{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:12px;font-weight:700;
+    background:var(--good-bg);color:var(--good);border:1px solid #cdeeda;padding:4px 9px;border-radius:7px}
+  .row{font-size:13.5px;display:flex;gap:8px}
+  .row .k{flex:0 0 auto;font-weight:700;color:#3a4452}
+  .fitline{font-size:13.5px;background:#f0f4f9;border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+  .dognote{font-size:13px;color:#3f6b52}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:11.5px;background:#f0f3f8;border:1px solid var(--line);color:#46505f;padding:3px 8px;border-radius:6px}
+  .tag.val{background:var(--val-bg);border-color:#c7ebd5;color:var(--val)}
+  .petline{font-size:12.5px;background:var(--warn-bg);border:1px solid #f1d9bd;border-radius:8px;padding:7px 9px;color:#6b4418}
+  .price{font-weight:800;font-size:20px;color:#15233f}
+  .price small{font-weight:600;font-size:12px;color:var(--muted)}
+  .cta{margin-top:auto;padding-top:6px}
+  .btn{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:13.5px;background:var(--ink);color:#fff;padding:10px 12px;border-radius:9px}
+  .btn:hover{background:#0f1623}
+  .onsite{font-size:11.5px;color:var(--suv);font-weight:700}
+  .src{font-size:11px;color:#9aa3b1}
+
+  /* aggregators */
+  .aggs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:16px}
+  .agg{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 14px;box-shadow:var(--shadow)}
+  .agg .at{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--book)}
+  .agg h4{margin:3px 0 5px;font-size:15px}
+  .agg p{margin:0 0 9px;font-size:12.5px;color:#54606e}
+  .agg a{font-size:12.5px;font-weight:700;color:var(--book);text-decoration:none}
+
+  .tablewrap{overflow-x:auto;margin:24px 0 6px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:#f3f6fa;font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#56616f}
+  tbody tr:hover{background:#f8fafc}
+
+  #lb{position:fixed;inset:0;background:rgba(8,12,20,.9);display:none;align-items:center;justify-content:center;z-index:100;padding:24px;cursor:zoom-out}
+  #lb.on{display:flex}
+  #lb img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 12px 50px rgba(0,0,0,.5)}
+  #lb .cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.85}
+
+  footer{margin:34px 0 60px;color:var(--muted);font-size:13px}
+  footer .note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  footer h4{margin:0 0 8px;color:var(--ink);font-size:14px}
+  footer ul{margin:0;padding-left:18px} footer li{margin:5px 0}
+  @media(max-width:560px){header.hero h1{font-size:23px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>🚗 Rental Car Options — Portland Airport (PDX)</h1>
+    <p>A right-sized 2-row SUV — roomy but not huge — with modern driver-assist (lane-keeping + adaptive cruise), enough cargo for your gear, and a dog-friendly rental policy. Pickup and drop-off both at PDX.</p>
+    <div class="trip">
+      <span>📍 Pickup &amp; return: PDX Rental Car Center</span>
+      <span>🛬 Wed Jul 22, 2026 · ~10:00 AM</span>
+      <span>🛫 Sun Jul 26, 2026 · ~3:00 PM</span>
+      <span>🗓 4-day rental</span>
+      <span>👥 2 adults · 🐶 2 dogs · 🧳 2 bags · 🛒 1 large dog stroller</span>
+    </div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="navlinks">
+      <a class="nav suv" href="#suvs">Best-fit SUVs</a>
+      <a class="nav book" href="#book">Where to book &amp; prices</a>
+      <a class="nav book" href="#compare">Compare</a>
+    </div>
+    <label>Sort companies:
+      <select id="sort">
+        <option value="lo">Price: low → high</option>
+        <option value="hi">Price: high → low</option>
+      </select>
+    </label>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <div class="tldr">
+    <h2>⚡ The short version</h2>
+    <ul>
+      <li><b>Reserve a “Standard SUV” (2-row)</b> for cargo margin, or an <b>Intermediate SUV</b> to save — both swallow 2 bags + a large folded stroller with the dogs on the back seat. You book a <em>class</em>, not a model, so you’ll get “X or similar.”</li>
+      <li><b>Best to hope for / request:</b> <b>Hyundai Tucson</b> or <b>Honda CR-V</b> (most cargo), or a <b>Subaru Outback/Forester</b> if you want AWD + the easiest dog loading. All six picks below have <b>lane-keeping + adaptive cruise standard</b>.</li>
+      <li><b>Cheapest path:</b> book a refundable <b>Costco Travel</b> rate now and set an <b>AutoSlash</b> price-tracker. Realistic peak-July all-in: <b>~$350–470</b> (Intermediate) / <b>~$450–600</b> (Standard) for the 4 days, incl. PDX’s ~28–30% taxes/fees.</li>
+      <li><b>Dogs:</b> every brand allows them with no upfront fee — but <b>return it vacuumed &amp; hair-free</b> or risk a $50–250 (up to ~$450) cleaning fee. Bring a back-seat/cargo cover.</li>
+      <li><b>Book now</b> — these are peak-summer dates only ~a month out; SUVs and the best rates go first.</li>
+    </ul>
+  </div>
+
+  <section id="suvs">
+    <div class="sec-head"><span class="dot"></span><h2>Best-fit SUVs</h2></div>
+    <p class="sec-sub">Ranked by cargo room behind the back seat (you need 2 suitcases + 1 large folded dog stroller back there). All are compact-to-midsize 2-row SUVs — “good size, not huge” — and all have <strong>lane-keeping assist, adaptive cruise &amp; automatic emergency braking standard on every trim</strong> (so the rental trim doesn’t matter). Tap a photo to enlarge.</p>
+    <div class="grid" id="grid-suvs"></div>
+  </section>
+
+  <section id="book">
+    <div class="sec-head"><span class="dot"></span><h2>Where to book &amp; prices</h2></div>
+    <p class="sec-sub">All major brands are <strong>on-site at the PDX Rental Car Center</strong> (ground floor of the parking garage, a short walk from baggage claim — no shuttles since the 2024 consolidation). Totals are <em>estimates</em> for the 4 days <strong>including</strong> PDX’s ~28–30% taxes &amp; fees — confirm live, and book refundable so you can rebook if the price drops.</p>
+    <div class="grid" id="grid-book"></div>
+
+    <h3 style="margin:26px 0 0;font-size:16px">💡 Cheapest way to book the same car</h3>
+    <div class="aggs" id="aggs"></div>
+  </section>
+
+  <section id="compare">
+    <div class="sec-head"><span class="dot"></span><h2>Compare</h2></div>
+    <div class="tablewrap"><table id="tbl"></table></div>
+  </section>
+
+  <footer>
+    <div class="note">
+      <h4>Notes &amp; fine print</h4>
+      <ul>
+        <li><strong>Prices are estimates</strong> for Jul 22–26, 2026 and <strong>include</strong> the PDX fee stack — Oregon has no sales tax, but Multnomah County adds a <strong>17% rental tax</strong> plus a ~11% concession-recovery fee and facility charges (~28–30% total on airport pickups). Picking up <em>off-airport</em> avoids the concession fee (~10–17% less) but adds a trip into town.</li>
+        <li><strong>You reserve a class, not a model.</strong> “Intermediate SUV” / “Standard SUV” bookings come as “[model] or similar.” The 6 cars above are what to hope for; <strong>National’s Emerald Aisle</strong> lets you pick any SUV in the aisle on the spot, and <strong>Turo</strong> lets you choose the exact model.</li>
+        <li><strong>Driver-assist isn’t guaranteed by class</strong> — but every model above has lane-keeping + adaptive cruise <em>standard on all trims</em>, so any example you’re handed will have it. If you want to be sure, Turo lets you pick a specific car, or ask at the counter.</li>
+        <li><strong>Dogs:</strong> no brand charges an upfront pet fee, but all reserve the right to bill a cleaning/detailing fee ($50–250, up to ~$450 reported at Avis/Hertz) for leftover hair/odor. Use a seat/cargo cover, secure the dogs, and <strong>vacuum + lint-roll before return.</strong> Service animals are exempt. <strong>Hertz</strong> can provide a pet barrier grate if you ask ~24h ahead.</li>
+        <li><strong>Turo</strong> is peer-to-peer (no counter — meet the host or arrange airport delivery); pet rules are per-host, so <strong>message the host before booking</strong> to confirm 2 dogs are OK. <strong>Fox</strong> and <strong>Nu Car</strong> are not official on-site PDX partners (broker/shuttle) — skip unless dramatically cheaper and you confirm pickup logistics.</li>
+        <li>Vehicle photos are representative model-year images (Wikimedia Commons), saved locally so this page works offline.</li>
+      </ul>
+    </div>
+  </footer>
+</main>
+
+<div id="lb"><img alt=""><div class="cap"></div></div>
+
+<script>
+const MODELS = [
+ {n:"Hyundai Tucson", yr:"2025", rank:1, cls:"Intermediate SUV", cargo:"41.2",
+  verdict:"Roomiest here — a large folded stroller + 2 suitcases fit with room to spare, dogs on the back seat.",
+  suite:"Hyundai SmartSense", dog:"Wide tailgate + low, flat floor — load gear over the dogs easily; roomy rear bench.",
+  img:"car_images/tucson.jpg"},
+ {n:"Honda CR-V", yr:"2025", rank:2, cls:"Intermediate SUV", cargo:"39.3",
+  verdict:"Boxy, upright hold easily takes a large folded stroller + 2 bags (gas trims 39.3; hybrids ~35, still fits).",
+  suite:"Honda Sensing", dog:"Tall square opening, flat floor, wide-opening rear doors — simple dog loading.",
+  img:"car_images/crv.jpg"},
+ {n:"Toyota RAV4", yr:"2025", rank:3, cls:"Compact SUV", cargo:"37.6",
+  verdict:"37.6 cu ft handles the stroller + 2 suitcases — and it’s the easiest SUV to actually get at PDX.",
+  suite:"Toyota Safety Sense 2.5", dog:"Manageable liftover, wide hatch, easy-clean cargo for sandy/muddy coast paws.",
+  img:"car_images/rav4.jpg"},
+ {n:"Subaru Outback", yr:"2025", rank:4, cls:"Intermediate SUV", cargo:"32.6",
+  verdict:"The number understates it — a long, low, flat floor swallows a stroller lengthwise + bags. Snugger than Tucson/CR-V but it fits.",
+  suite:"Subaru EyeSight", dog:"Low liftover + long flat floor; standard AWD for the Gorge & Coast. The PNW classic.",
+  img:"car_images/outback.jpg"},
+ {n:"Mazda CX-50", yr:"2025", rank:5, cls:"Compact SUV", cargo:"31.4",
+  verdict:"Mostly yes — low, wide floor takes a folded stroller + 2 bags; a very bulky stroller may need the bags stacked.",
+  suite:"Mazda i-Activsense", dog:"Low wide cargo opening; good rear-seat room for two small dogs.",
+  img:"car_images/cx50.jpg"},
+ {n:"Subaru Forester", yr:"2025", rank:6, cls:"Compact SUV", cargo:"27.5–29.9",
+  verdict:"Tight but doable — smallest cargo here, but the boxy shape stands a folded stroller upright beside 2 bags.",
+  suite:"Subaru EyeSight", dog:"Best dog access of the group: big square doors, upright roof, easy step-in. Standard AWD.",
+  img:"car_images/forester.jpg"},
+];
+
+const COMPANIES = [
+ {n:"Dollar & Thrifty", lo:300, hi:410, day:"~$75–100/day", cls:"Intermediate / Standard SUV",
+  tags:[["💲 Lowest base","val"],["Same Hertz-owned fleet",""]],
+  pet:"Pets free, secured; excess hair/soiling = $50–250 cleaning.",
+  url:"https://www.dollar.com/us/en/location/unitedstates/oregon/portland/pdx", note:"Often the lowest base rate — watch counter upsells."},
+ {n:"Budget", lo:310, hi:420, day:"~$78–105/day", cls:"Intermediate / Standard SUV",
+  tags:[["💲 Value","val"],["Costco-bookable",""]],
+  pet:"Pets free; return fur-free or pay damage/special-cleaning.",
+  url:"https://www.budget.com/en/locations/us/or/portland/pdx", note:"Frequent value pick at PDX."},
+ {n:"Alamo", lo:320, hi:430, day:"~$80–105/day", cls:"Intermediate / Standard SUV",
+  tags:[["💲 Value","val"],["Costco-bookable",""]],
+  pet:"Pets free; return clean & hair-free or $50–250+ fee.",
+  url:"https://www.alamo.com/en/car-rental-locations/us/or/portland-international-airport-46a1.html", note:"Often cheapest of the Enterprise trio."},
+ {n:"Sixt", lo:320, hi:450, day:"~$80–110/day", cls:"Intermediate / Standard SUV",
+  tags:[["Newer fleet",""]],
+  pet:"Pets free if secured & returned clean; fee for heavy soiling.",
+  url:"https://www.sixt.com/car-rental/usa/portland/portland-airport/", note:"Often newer / European models."},
+ {n:"Enterprise", lo:340, hi:420, day:"~$85–105/day", cls:"Intermediate / Standard SUV",
+  tags:[["Costco-bookable",""],["Reliable",""]],
+  pet:"Pets free; return clean & hair-free or $50–250+ fee.",
+  url:"https://www.enterprise.com/en/car-rental-locations/us/or/portland-international-airport-46e1.html", note:"Solid on-site standby."},
+ {n:"National", lo:360, hi:450, day:"~$90–110/day", cls:"Intermediate / Standard SUV",
+  tags:[["Pick-your-own SUV aisle",""]],
+  pet:"Pets free, secured; return hair-free to avoid fee.",
+  url:"https://www.nationalcar.com/en/car-rental-locations/us/or/portland-international-airport-46n1.html",
+  note:"Emerald Club: grab any RAV4/Edge-size in the aisle, skip the counter."},
+ {n:"Hertz", lo:350, hi:460, day:"~$90–115/day", cls:"Midsize / Standard SUV",
+  tags:[["🐾 Pet grate available",""]],
+  pet:"Housebroken pets free; request a pet grate ~24h ahead; cleaning fees up to ~$450.",
+  url:"https://www.hertz.com/us/en/location/unitedstates/oregon/portland/pdxt11", note:"Vacuum before return — biggest reported cleaning fees."},
+ {n:"Avis", lo:350, hi:470, day:"~$90–115/day", cls:"Intermediate / Standard SUV",
+  tags:[["Costco-bookable",""]],
+  pet:"Pets free; hair/stain cleaning fees can reach ~$450.",
+  url:"https://www.avis.com/en/locations/nam/us/or/portland/pdx", note:"Avis Preferred skips the counter."},
+ {n:"Turo (peer-to-peer)", lo:420, hi:620, day:"~$85–115/day + fees", cls:"Any 2-row SUV a host lists",
+  tags:[["Pick the exact model",""],["⚠️ Confirm host pet rule","warn"]],
+  pet:"Set per host — many allow dogs; message the host BEFORE booking re: 2 dogs + hair cleaning.",
+  url:"https://turo.com/us/en/suv-rental/united-states/pdx", note:"No counter — meet host or arrange delivery; add Turo trip fee + protection."},
+];
+
+const AGGS = [
+ {t:"Best first stop", n:"Costco Travel", d:"Often the lowest all-in total, plus a free additional driver and free cancellation (Alamo/Avis/Budget/Enterprise).", u:"https://www.costcotravel.com/Rental-Cars"},
+ {t:"Price-drop tracker", n:"AutoSlash", d:"Book a refundable rate anywhere, then AutoSlash tracks PDX prices and rebooks you lower (~20% extra typical).", u:"https://autoslash.com/track"},
+ {t:"Compare all brands", n:"Kayak", d:"One search across every PDX brand/class — filter to Intermediate/Standard SUV to find the baseline rate.", u:"https://www.kayak.com/Portland-Airport-SUV-Rentals.PDX.acsv.ksp"},
+ {t:"Coupons + bundles", n:"Expedia", d:"Cross-brand compare with member coupons; pick pay-at-counter / free-cancel so you can rebook lower later.", u:"https://www.expedia.com/Car-Rentals"},
+ {t:"Cheapest but risky", n:"Priceline Express", d:"Deepest discount, but the brand is hidden until after booking and it’s non-refundable — risky with a specific size + pet need.", u:"https://www.priceline.com/drive/"},
+];
+
+const $ = s => document.querySelector(s);
+
+function modelCard(m){
+  return `<article class="card">
+    <div class="thumb">
+      <img src="${m.img}" alt="${m.yr} ${m.n}" loading="lazy" data-cap="${m.yr} ${m.n} — ${m.cargo} cu ft cargo">
+      <div class="ribbon"><span class="badge rank">#${m.rank} fit</span><span class="badge cls">${m.cls}</span></div>
+      <div class="cargo-tag">${m.cargo} cu ft<small>cargo behind seats</small></div>
+    </div>
+    <div class="body">
+      <h3>${m.yr} ${m.n}</h3>
+      <span class="lane">✓ Lane-keep + adaptive cruise standard</span>
+      <div class="fitline">🧳 <strong>Fits your gear:</strong> ${m.verdict}</div>
+      <div class="row"><span class="k">Driver-assist:</span><span>${m.suite} (lane-keeping, adaptive cruise, auto emergency braking)</span></div>
+      <div class="dognote">🐾 ${m.dog}</div>
+    </div>
+  </article>`;
+}
+
+function companyCard(c){
+  const tags = c.tags.map(t=>`<span class="tag ${t[1]||''}">${t[0]}</span>`).join("");
+  return `<article class="card">
+    <div class="body">
+      <h3>${c.n}</h3>
+      <div class="onsite">● On-site at PDX Rental Car Center</div>
+      <div class="price">$${c.lo}–${c.hi} <small>est. total · 4 days, incl. taxes/fees</small></div>
+      <div class="row"><span class="k">Rate:</span><span>${c.day} · ${c.cls}</span></div>
+      <div class="tags">${tags}</div>
+      <div class="petline">🐾 ${c.pet}</div>
+      <div class="row"><span style="color:#54606e">${c.note}</span></div>
+      <div class="cta"><a class="btn" href="${c.url}" target="_blank" rel="noopener">Check rates &amp; book →</a></div>
+    </div>
+  </article>`;
+}
+
+function aggCard(a){
+  return `<div class="agg"><div class="at">${a.t}</div><h4>${a.n}</h4><p>${a.d}</p>
+    <a href="${a.u}" target="_blank" rel="noopener">Open ${a.n} →</a></div>`;
+}
+
+function tableHTML(list){
+  const head = `<thead><tr><th>Company</th><th>SUV class</th><th>Est. 4-day total</th><th>Per day</th><th>On-site at PDX</th><th>Dogs</th></tr></thead>`;
+  const rows = list.map(c=>`<tr>
+    <td><a href="${c.url}" target="_blank" rel="noopener">${c.n}</a></td>
+    <td>${c.cls}</td><td>$${c.lo}–${c.hi}</td><td>${c.day}</td>
+    <td>${c.n.startsWith("Turo")?"Meet host":"Yes"}</td>
+    <td>OK · return hair-free</td>
+  </tr>`).join("");
+  return head + `<tbody>${rows}</tbody>`;
+}
+
+function sortedCompanies(){
+  const v = $("#sort").value;
+  const a = COMPANIES.slice();
+  a.sort((x,y)=> v==="hi" ? (y.lo-x.lo) : (x.lo-y.lo));
+  return a;
+}
+
+function render(){
+  $("#grid-suvs").innerHTML = MODELS.map(modelCard).join("");
+  $("#grid-book").innerHTML = sortedCompanies().map(companyCard).join("");
+  $("#aggs").innerHTML = AGGS.map(aggCard).join("");
+  $("#tbl").innerHTML = tableHTML(sortedCompanies());
+  bindThumbs();
+}
+
+const lb = $("#lb"), lbImg = lb.querySelector("img"), lbCap = lb.querySelector(".cap");
+function bindThumbs(){
+  document.querySelectorAll("img[data-cap]").forEach(img=>{
+    img.closest(".thumb").onclick = ()=>{ lbImg.src=img.src; lbCap.textContent=img.dataset.cap||""; lb.classList.add("on"); };
+  });
+}
+lb.onclick = ()=> lb.classList.remove("on");
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") lb.classList.remove("on"); });
+$("#sort").onchange = render;
+render();
+<\/script>
+</body>
+</html>
+
+</script>
+
+  <script>
+    (function(){
+      const DEFAULT = 'plan';
+      const frames = {};
+      document.querySelectorAll('iframe.frame').forEach(f => frames[f.dataset.tab] = f);
+      const tabs = document.querySelectorAll('.tab');
+      const spinner = document.getElementById('spinner');
+      const loaded = {};
+
+      function load(tab){
+        if(loaded[tab]) return;
+        const raw = document.getElementById('tpl-' + tab).textContent;
+        frames[tab].srcdoc = raw.split('<\\/script>').join('<' + '/script>');
+        loaded[tab] = true;
+      }
+
+      function activate(tab){
+        if(!frames[tab]) tab = DEFAULT;
+        tabs.forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+        Object.values(frames).forEach(f => f.classList.toggle('active', f.dataset.tab === tab));
+        load(tab);
+        spinner.style.display = 'none';
+        if(history.replaceState) history.replaceState(null, '', '#' + tab);
+        else location.hash = tab;
+      }
+
+      tabs.forEach(b => b.addEventListener('click', () => activate(b.dataset.tab)));
+      window.addEventListener('hashchange', () => activate((location.hash || ('#' + DEFAULT)).slice(1)));
+      activate((location.hash || ('#' + DEFAULT)).slice(1));
+    })();
+  </script>
+</body>
+</html>
