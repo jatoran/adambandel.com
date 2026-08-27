@@ -2,54 +2,42 @@
 title: Building Agent Systems That Don't Collapse
 date: 2026-02-01
 project: agent-thunderdome
-discussions:
-  - name: "Lobsters"
-    url: "https://lobste.rs/s/example"
-  - name: "Hacker News"
-    url: "https://news.ycombinator.com/item?id=87654321"
 ---
 
-Lessons learned from building Agent Thunderdome: separating concerns, making state observable, and why testing LLM behavior is harder than it should be.
+Agent Thunderdome is a grid simulation where LLM-driven agents wander a procedurally generated map, run into each other, and fight verbal duels judged by a referee model. The premise is silly on purpose. The useful part is that it forced me to handle every way an LLM agent system falls apart, at a scale small enough that I could actually watch it happen.
 
-## The Problem with LLM Agent Systems
+## Almost every failure is the model returning something you didn't plan for
 
-Most LLM agent demos look impressive but collapse under real usage. The core issue? They mix concerns, hide state, and make debugging nearly impossible.
+Not "the model gave a bad answer." The model gave an answer the code couldn't use.
 
-## What I Learned
+Agent actions have to come back as parseable commands: MOVE, ATTACK, WAIT. Models do not reliably do this. So actions get parsed with regex, retried on failure, and fall back to WAIT if the retry also fails. WAIT is the important part. There has to be a legal default, because an unusable response is a normal occurrence, not an exception worth halting over.
 
-### 1. Separate Decision Making from Execution
+The referee had the same problem in a different costume. It has to pick a winner. It is explicitly told that DRAW is not an option. It will still occasionally return a draw, or something unparseable. So there's a fallback that assigns the winner at random. That feels like cheating, and it isn't. The alternative is a simulation that stops because a language model got diplomatic.
 
-Your LLM should produce structured decisions, not execute them directly. This makes testing possible and bugs reproducible.
+The rule that came out of this: every LLM call needs a defined behavior for the case where the response is unusable, and you pick it in advance. If you don't pick one, you've picked "crash."
 
-```python
-# Bad: LLM produces and executes
-response = llm.call("What should the agent do?")
-execute(response)  # Hope it works!
+## Keep the non-LLM parts boring
 
-# Good: LLM produces structured output
-action = llm.call_with_schema("What should the agent do?", ActionSchema)
-execute(action)  # Validate first, execute second
-```
+Map generation is deterministic and validates itself. After generating terrain it runs a BFS reachability check to guarantee every floor tile belongs to one connected component, so nothing can spawn somewhere it can't leave.
 
-### 2. Make State Observable
+That's not clever, and that's the point. The simulation core is a plain state machine, and the LLM is the only source of nondeterminism anywhere in the system. When something goes wrong you immediately know which half to look at, and you can replay a scenario without the world itself shifting underneath you.
 
-Stream everything. State changes, LLM calls, costs, errors. If you can't see it, you can't debug it.
+The moment your world logic is also probabilistic, you don't have a system you can debug. You have a slot machine you can watch.
 
-In Agent Thunderdome, I used Server-Sent Events to stream every state change to the browser. This made debugging trivial - I could watch agents think in real-time.
+## If you can't see it, it isn't real
 
-### 3. Use Deterministic Core Logic
+Everything streams to the browser over Server-Sent Events: state changes, agent decisions, battle rounds, referee rationale. The full simulation state gets serialized out, with change detection so it isn't repeating itself for no reason.
 
-Your world simulation should be deterministic. Only the LLM should be non-deterministic. This lets you replay scenarios and write actual tests.
+SSE instead of WebSockets because the traffic only goes one direction and I didn't need the complexity of the other option. This is the recurring thing with agent systems. You can't infer what happened from the final state, because the final state is the end of a chain of decisions, most of which looked reasonable in isolation. Watching the agents think in real time turned debugging from archaeology into observation.
 
-## The Architecture That Worked
+## What it demonstrated
 
-- **Simulation Core:** Pure, deterministic state machine
-- **Decision Layer:** LLM calls with structured schemas
-- **Execution Layer:** Validates and applies actions
-- **Observation Layer:** Streams everything to clients
+Personality is real, and it lives in the system prompt. Agents with different system prompts produce distinctly different combat styles, and the battle theme feature lets you push that hard: every remark must be a pirate insult, every agent speaks in haiku. It works better than it has any right to.
 
-This separation makes the system testable, debuggable, and maintainable.
+Sequential context matters more than I expected. A responder that knows what its opponent just said produces a coherent exchange. Generate both in parallel and you get two monologues that happen to be adjacent.
 
-## Next Steps
+And simple validate-and-retry absorbs most LLM unpredictability. Most, never all, which is why the fallback exists at all.
 
-I'm working on making the battle system more sophisticated and adding better agent memory. The key is keeping the architecture clean while adding features.
+## Next
+
+Better agent memory, and a more sophisticated battle system. The constraint is keeping the architecture this clean while adding to it, because that separation is the only reason any of this was debuggable in the first place.

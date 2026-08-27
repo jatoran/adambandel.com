@@ -11,3 +11,7 @@ _site/
 .jekyll-metadata
 vendor/
 .bundle/
+
+# Local scratch
+.trash/
+.swe-mux/

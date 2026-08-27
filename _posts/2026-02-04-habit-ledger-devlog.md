@@ -4,28 +4,18 @@ date: 2025-08-28
 project: habit-ledger
 ---
 
-## Context: quantified-self brainrot (affectionate)
+I've been in the quantified self world for over a decade and I genuinely like tracking data about myself. ActivityWatch handles computer history. Sleep has been through a few trackers, Sleep as Android for a long time and Fitbit currently. The rest is manual: habits, exercise, and point events like reading or meditation.
 
-I've been part of the quantified self "track everything" world for **over a decade**, and I genuinely love tracking data about myself. Over time I've relied on a bunch of tools--**ActivityWatch** for computer history, sleep trackers like **Sleep as Android** (and currently **Fitbit**), plus habit/exercise/event tracking (reading, meditation, workouts, etc.).
+The app I used for that last category for years was Keep Track. Then I finally bit the bullet and tried to get my data out of it, and the exports are horribly formatted. JSON, CSV, plain text, it doesn't matter which one you pick. All of them are a mess.
 
-## The problem: exports that make me want to walk into the ocean
+That's disqualifying for me. The data has to go into my metrics dashboard and parse cleanly over a long time horizon, tens of thousands of datapoints, and I'm not writing brittle cleanup scripts forever to compensate for someone else's export function.
 
-For a long time, I used an app called "Keep Track." Then I finally bit the bullet and tried to export my data... and the exports were **horribly horribly formatted**. JSON, CSV, text--doesn't matter: it's a mess.
+The other half is entry. If logging something isn't effortless I will stop doing it, and then the dataset has a hole in it that no amount of later effort fills.
 
-## Why that's unacceptable (for me)
+## What I built
 
-I need **clean data** that can go straight into my metrics dashboard and be parsed cleanly over time--**tens of thousands of datapoints**, not "eh close enough." Also: I needed habit entry to be **stupid easy**, because if it's not frictionless, I won't keep up with it.
+Habit Ledger. It's not on the Play Store, it's just a personal APK.
 
-## The solution: Habit Ledger
+It makes tracking and exporting my manually logged habits and activities easy. It adds a customizable home screen widget per activity, so logging is one tap of muscle memory rather than a decision. And it stores entries in a simple database that exports in a format which drops straight into my system.
 
-So I built **Habit Ledger**--a very simple app (not on the App Store; just a personal APK).
-
-**What it does:**
-
-- Makes it easy to **track + export** the habits/activities I log manually.
-- Adds **customizable home screen widgets** for each activity, so logging becomes quick-tap muscle memory.
-- Stores entries in a simple database, then outputs a **reformatted export** that can go straight into my system without me writing a bunch of brittle cleanup scripts.
-
-## Current state
-
-It's intentionally minimal: quick entry, clean export, done. "It's really that simple."
+It's really that simple. There isn't much else to it, and there isn't supposed to be.

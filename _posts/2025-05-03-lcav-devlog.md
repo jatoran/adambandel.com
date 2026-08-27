@@ -4,43 +4,26 @@ date: 2025-05-03
 project: lcav
 ---
 
-## TL;DR
+LCAV stands for LLM Code Analysis and Validation. I built it during the era when applying a model's output meant copying a large block of code, or an entire file, over the top of your existing code and hoping nothing quietly disappeared in the process.
 
-I built a **"LLM code analysis + validation"** tool back when the workflow was basically: *copy/paste huge blocks of code (or whole files) and pray the model didn't quietly delete something important.*
+## What it does
 
-## What this thing is
+It parses Python and TypeScript, walks the code with an AST parser and some supporting tooling, and builds a map of relations and dependencies. Then you paste in a proposed change and it tells you what that change actually touches.
 
-A system that ingests proposed changes (Python / TypeScript, etc.), parses the code, and produces a **dependency-impact view** so you can see what the change would break--or subtly mutate--across the codebase.
+It auto-detects which files and functions are being modified based on what you pasted, then produces two views: a dependency graph and a text analysis, both at configurable granularity. Impact renders as a heat map, where red means this code was affected and the other colors mark different kinds of effect.
 
-## Core idea
+## What it catches
 
-Instead of trusting vibes, it uses an **AST parser + supporting tooling** to build a **map of relations/dependencies**, then surfaces impacts as:
+The failure modes of that workflow were all the same shape. The model silently drops a function. It drops your comments. It leaves out a variable or a constant. It forgets an import. It replaces something it had no business replacing.
 
-* a **heat map** (red = "this got affected," other colors = other kinds of effects),
-* plus additional analysis so you can scan what's at risk.
+Every one of those is invisible in a diff you're skimming at speed, and obvious in a dependency map.
 
-## How the workflow works
+## The tradeoff
 
-1. You paste in a proposed change.
-2. It **auto-detects which files / functions are being changed** based on what you pasted.
-3. It generates:
-   * a **graph** (impact/dependency view)
-   * and **text analysis**, with configurable granularity.
+It adds a step between generating code and applying it. You paste into the tool, read the analysis, then go back. That's real friction and I felt it every single time.
 
-## What it's good at catching (the "LLM betrayal" checklist)
+For a production codebase, or any codebase you intend to keep for years, I still think it's worth paying. The damage from this failure mode isn't a broken build you notice immediately. It's slow, silent degradation you find out about much later.
 
-It's basically a detector for the classic failure modes:
+## Honest current status
 
-* dropped functions
-* dropped comments
-* missing variables/constants
-* forgotten imports
-* replacements that absolutely should not have happened
-
-## The tradeoff (why it's not always on)
-
-It adds friction: an extra step between "LLM generates code" and "you apply code," because you're pasting into this tool, reading the analysis, then going back. Cumbersome--but for **production / critical codebases**, it's a legit safety net against slow, silent degradation.
-
-## Current status / honest usage
-
-I barely use it now. Models are... honestly pretty good these days.
+I hardly use it. Models are pretty good these days.

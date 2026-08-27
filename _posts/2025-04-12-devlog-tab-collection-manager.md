@@ -4,39 +4,30 @@ date: 2025-04-12
 project: tab-collection-manager
 ---
 
-## Why this exists
+I used the Toby Tabs extension for years. It's genuinely good at the thing it does. I end up with a pile of tabs whenever I'm deep in a topic or working through a set of tools, and when I move from one topic to the next I want to close all of it and get it back later, or save a group of related links as a bundle for a project.
 
-I've used the Toby Tabs extension for years because it's genuinely great for corralling tab chaos: deep dives, tool work, project switching, saving "topic bundles" so I can close a mess and come back later. 
+Sometime in 2024 they started deprecating features to push people onto a paid Pro plan. Someone probably bought the company and wanted a quick return off users who depend on it. I'm not having it, and Chrome extensions are a joke to create, so I wasn't going to get screwed over a workflow I'd relied on for years.
 
-Then sometime in 2024 they started deprecating features to force people onto a paid Pro plan. I'm not having it. Chrome extensions are a joke to create, and I'm not getting squeezed for a workflow I rely on. 
+## So I built my own
 
-## The decision
+Tab Collection Manager. It took one day.
 
-So I built my own: **Tab Collection Manager (TCM)**. It was easy. It took **one day**. 
+It has every feature I used Toby for: saving groups of tabs as collections and restoring them later. The one thing it doesn't have is sync. I could build it, but there were tradeoffs I didn't care enough about to take on.
 
-## What TCM does (and what it deliberately doesn't)
+It's snappier than Toby, and better than most other tab collection extensions I've looked at, because they all get bloated with features until they're absolutely ridiculous. It's on the Chrome Web Store and you can use it.
 
-**Feature parity:** It covers basically everything I used Toby for—saving tab groups/collections and restoring them later. 
+The known rough edge: export is a little wonky, and one of the export buttons doesn't work. You can still export everything.
 
-**The intentional omission:** No sync (yet). I *could* build it, but I didn't care enough to take on the trade-offs at the time. 
+There are a couple of features I'd like to add someday, and it's about one cloud coding session of work. I haven't felt the pull, because it already does exactly what I need it to do.
 
-## Current status
+## Why I'm not monetizing it
 
-* **Faster/snappier than Toby**, and honestly better than a lot of other tab collection extensions because they get bloated with "features" until they're ridiculous. 
-* It's live on the Chrome Web Store, usable as-is. 
-* **Known rough edge:** export is a little wonky and one export button doesn't work, but you *can* export everything. 
-* **Maybe later:** a couple extra features I'd like to add, basically "one cloud code session" worth of work—I just haven't felt like it because it already does what I need perfectly. 
+I made this for me and for future me. Tools at this scale should be made for yourself, and it's only getting easier. It won't be long before a non-developer can produce a simple Chrome extension. I'm not saying they'll be shipping hosted applications, but an extension is low-hanging fruit and it isn't hard.
 
-## Why I'm not trying to monetize it
+I do want more eyes on my tools, just not more money from them. Visibility buys connections and goodwill, and I like knowing something I made ended up in someone else's toolbox and gets used. For an application that took almost no time to build, that's enough.
 
-I made this for me (and future-me). Tools like this should be "made for yourself," and it's only getting easier—won't be long before even non-devs can crank out simple extensions. 
+## The part that angers me
 
-That said: I *do* want more eyes on my tools, even without charging. Visibility buys connections and goodwill, and I like knowing something I made is useful in someone else's toolbox. 
+The greed is rampant and everything has to be monetized.
 
-## Rant
-
-This is exactly why it angers me: the greed is rampant, and everyone tries to monetize everything. 
-
-And shame on Toby for taking advantage of long-time users—especially the "turn off your ability to access your tabs/collections on a deadline" move instead of leaving people on a legacy plan (or at minimum letting them keep access to what they already saved). That's not "business," that's just bad tactics and greed. 
-
-End.
+Shame on Toby specifically, for leaning into monetization by taking things away from long-time users. Not just deprecating features, but shutting off your ability to reach your own saved tabs and collections on a deadline, rather than grandfathering people onto a legacy plan or at minimum letting them keep access to what they'd already saved. Plenty of people never saw the notification emails. I don't know whether they walked it back. Either way it's bad tactics and it's just greed.

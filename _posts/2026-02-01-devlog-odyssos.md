@@ -1,59 +1,39 @@
 ---
-title: Devlog — Odyssos
+title: Devlog - Odyssos
 date: 2026-02-01
 project: odyssos
 ---
 
-## Snapshot
+Odyssos is the first game I've developed past any serious threshold and actually released to players. It's a browser incremental, so there was no Steam release to organize. I just wanted it in front of as many eyes as possible.
 
-**Odyssos** is one of the first games I've actually developed *and* released for real players. It's a browser incremental, so no Steam release circus—just get it in front of eyes and see what happens. 
+It took the better part of a year, built with GPT-3.5 and GPT-4 plus a lot of manual coding. It's one of the last projects where I hand-wrote a large share of it, before AI got good enough that doing that on a project like this stopped being necessary.
 
-It still needs balancing, but it took the better part of a year to build, using GPT-3.5 + GPT-4 plus a decent chunk of custom/manual coding. It's also one of the last projects where I did a lot of the manual coding myself, before AI got "good enough" that doing it all by hand stopped feeling necessary for something like this. 
+## How it actually went
 
-## Timeline (how it actually happened)
+Three months of initial build. Six months away on other work and other projects. Three months back on it once I decided I wanted something published, because I'd never released a game. Then I felt myself losing steam, so I gave it one week of cleanup and put it out.
 
-* **~3 months**: initial build push
-* **~6 months**: stepped away for other work/projects
-* **~3 months**: came back to finish and get it publishable
-* **~1 week**: final cleanup sprint, then release (because I could feel myself losing steam and I wanted to *finish something*) 
+## Reception
 
-## Reception (the good + the annoying)
+Mixed reviews. The negatives were almost entirely about balancing, which is correct, because the balancing is bad. The praise was about the gameplay, and it pulled real logged hours across a couple of incremental game sites. That's the part I cared about.
 
-It got **mixed reviews**, and the negative ones were *almost entirely* about **balancing**. 
-At the same time, it also got a lot of praise—people seemed to genuinely enjoy the gameplay, and I racked up a lot of logged playtime across a couple incremental game sites. 
+Most of the feedback in my games Discord was some version of "this game explodes after level X." I already knew. It was still useful, because now I have actual playtesting data instead of my own guesses about where the curve breaks.
 
-## What I think I did right
+## What I got right
 
-### The "gently unfolding" UI
+A lot of work went into the UI and the tutorial pacing, specifically not dumping a thousand menus and options on someone the moment they arrive. I hate that, and I believe most players hate it. A gently unfolding interface was the plan from day one and I think I pulled it off.
 
-A ton of work went into the UI and tutorial pacing—specifically: **don't dump a thousand menus/options on players immediately**. I hate that, and I'm pretty sure most players do too, so the plan from day one was a UI that gradually unfolds instead of jumpscaring you with complexity. I think I pulled that off pretty well. 
+The other thing is that I finished it. For a first released game, and one of the first projects I've pushed past the twenty percent mark at all, I'm proud of that on its own.
 
-### Actually finishing (rare event)
+## What's still wrong
 
-For my first game that I've released—hell, one of the first I've even pushed past the "20% done" zone—I'm legitimately proud of it. 
+The balancing problems aren't only curve tuning. Some of them are in the actual calculations. A current model would annihilate that cleanup work if I sat down with it properly, which means the only real blocker is me setting aside the time. Another month of focused work and I think it's near feature-complete and balanced.
 
-## What's still broken / unfinished
+There's nothing especially notable about the architecture. This wasn't the clever-systems project. This was the make-a-real-game-and-ship-it project.
 
-### Balancing (obvious) + math (worse)
+## Next
 
-The balancing problems aren't just curve tuning—some issues are in the **actual calculations**. And yeah, a modern model (Opus 4.5 / GPT-5.2) would probably annihilate the cleanup and balancing work if I sat down and did it properly. The limiting factor is just me setting aside the time. 
+Do the real balancing pass, curves and calculations both. Polish until it's well received across the board instead of split. Then port it to Android and monetize it a little, which would be nice, but isn't the goal.
 
-### Player feedback pattern
-
-Most feedback threads were basically: "Hey, this game **explodes** after X level." I already knew about that, but it was still useful—and now I have real playtesting data to work from. 
-
-## Architecture notes (or lack thereof)
-
-I don't think there's anything especially notable architecturally here. This isn't the "clever systems engineering" project—it's the "make a real game and release it" project. 
-
-## Next steps (when I stop procrastinating)
-
-* Do the real balancing pass (curves **and** calculation fixes) 
-* Finish/polish until it's actually "well received" across the board 
-* Port/import it into an **Android app** and maybe monetize it a bit (not the core goal, but still nice) 
-
-## Why I care (the real reason)
-
-The best part isn't money. It's the proof: I can make something that other people actually enjoy, and I'm not insane for thinking my ideas are fun. 
+The goal was proof. I can make something that a lot of people genuinely enjoy, and I'm not crazy for thinking my ideas are fun.
 
 You can play it at [odyssos.io](https://odyssos.io).

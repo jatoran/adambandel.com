@@ -4,62 +4,35 @@ date: 2025-11-26
 project: gallery-of-conceptual-lenses
 ---
 
-I spent a chunk of a day digging into prompt engineering and modern research: basically, *how do you get better results from a model?*
+I spent most of a day going through prompt engineering research and current work on latent space, trying to answer the plain version of the question: how do you get better output from a model?
 
-That immediately turned into a side-quest: **how do you extend the model's "horizon"**—not by asking harder, but by getting it to explore *more of what it could plausibly access*.
+That turned into a side rabbit hole. Not how do you ask a harder question, but how do you extend the model's horizon so it reaches material it wouldn't normally reach.
 
-## The "latent space" rabbit hole (and the problem)
+## The problem
 
-When you send a prompt to an LLM, you're lighting up particular associations—neurons, connections, hidden-layer pathways—based on how your prompt relates to everything the model has learned.
+When you send a prompt, you activate a particular set of neurons and connections in the hidden layers, and which ones light up is dictated by how your prompt relates to everything the model learned. Most of the latent space stays dark.
 
-That's usually great: it's efficient, it stays on-topic, it gives you the "reasonable" answer to the thing you asked.
+That's usually the correct behavior. It's efficient and it keeps the answer related to what you asked. But if what you want is creativity, the dark part is exactly where you want it going, and the question becomes how you make it search there deliberately.
 
-But if you want the model to be **more creative**, the core question becomes:
-**How do you get it to search wider—into regions it wouldn't normally touch?**
+## Lenses
 
-## The idea
+A lens is a frame of thought: a philosophy, a discipline, a language, a subject, an objective. A handle that forces a different approach to the same prompt. There are several distinct lens types and they can be crossed, so you can combine ontological principles with philosophical frames and get an approach that wouldn't occur on its own.
 
-I'm calling it a **Gallery of Conceptual Lenses**.
+The mechanic:
 
-A "lens" is a frame of thought: a philosophy, a discipline, a language, an objective—basically a handle that forces the model to approach the same prompt from a different angle.
+1. Embed the prompt to locate it in the space. To be precise about which space, this isn't the embedding space of the entire language. It's the space of the lens set you selected.
+2. Pick your lenses. Say you pick four.
+3. Generate the combinations, a four by four matrix of them. You end up with things like Buddhism, JavaScript, Gravel, Sky.
+4. Find the combination closest to your prompt. That's your anchor.
+5. Then find the combinations that are as far from your prompt and from each other as possible, so the set spreads across the space instead of clustering in one corner of it.
+6. Hand the model the prompt plus those approaches and tell it to answer through each one.
 
-So instead of "one prompt -> one default trajectory," you do:
+Instead of one prompt producing one default trajectory, you have a set of deliberately distant entry points, each activating a different region, each with different material to pull from.
 
-**one prompt -> many intentionally distant trajectories**.
+## The drawback
 
-## How it works (mechanics)
+This makes the model less focused. I'm explicitly forcing it to wander, so drift is the cost of admission, not a bug I can tune out later.
 
-Here's the mental model / algorithm as I'm currently thinking about it:
+Which means it's the wrong tool when you need one tight answer, and the right tool when you need a spread. For brainstorming and getting to genuinely novel angles it's been useful.
 
-1. **Embed the prompt** into an embedding space (i.e., locate it in the "sea" of meaning).
-2. **Pick a set of lenses** (philosophies / frames).
-3. **Generate combinations** of lenses (example in my notes: if you pick four lenses, you build a "4x4 matrix" of combinations).
-
-   * Example vibe: *Buddhism x JavaScript x Gravel x Sky* (yes, that kind of weird).
-4. From those combinations:
-
-   * Find the combo **closest to the prompt** (to stay anchored).
-   * Then find combos that are **as far away from the prompt and from each other as possible** (to maximize spread across the space).
-5. Now you've got **a set of far-separated "approach points"**—multiple ways into the same problem, deliberately distributed.
-6. You tell the model: **answer using these distinct approaches**—each one pushes activation into a different region, which (in practice) tends to pull in more novel material.
-
-## Why it's useful (what I'm seeing)
-
-Once you do this, each lens-combo "activates" farther regions of the embedding space, so you get:
-
-* more creativity,
-* more weird cross-links,
-* more usable brainstorming output,
-* more chances of stumbling into a novel angle.
-
-This has been a legit tool for "think outside the box" tasks and idea generation.
-
-## Tradeoffs / known drawbacks
-
-This probably makes the model **less focused**. I'm basically forcing it to explore, so drift is part of the deal.
-
-So: not ideal if you need a tight, single answer. Great if you need a *spread* of approaches.
-
-## Current one-line thesis
-
-**Creativity via distance:** deliberately choose conceptual lenses that are far apart (and far from the prompt) to widen the model's search, then harvest the best results back toward the original intent.
+The one-line version: creativity through distance. Choose lenses far apart from each other and far from the prompt, widen the search, then pull the good results back toward what you originally wanted.

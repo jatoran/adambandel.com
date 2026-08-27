@@ -4,35 +4,20 @@ date: 2024-11-22
 project: tokyo-map
 ---
 
-*Note: the transcript auto-labeled multiple "speakers," but it's just me.*
+I was planning a second trip to Tokyo and thought it would be nice to carry an interactive map of everywhere I wanted to go, with the locations clustered by area so I could see route and density at a glance.
 
-## Context / Why I started it
+## What it was
 
-I was planning a second trip to **Tokyo** (I'd already been once), and I wanted a simple interactive map I could carry around. Goal: see all my "places I want to hit" clustered by neighborhood so I can sanity-check routes and density at a glance.
+A single HTML file saved locally on my phone. Every pin carried its own metadata, images, and links for that point of interest. No app, no account, no connection required.
 
-## What I built (the idea)
+I pulled a lot of GeoJSON for the map itself, and used APIs to pull location data, images, and descriptions. I believe that was Google Maps, but I want to confirm it before I state it as fact.
 
-- A locally saved, **single HTML file** I could keep on my phone.
-- Pins for each point of interest, where each pin includes:
-  - metadata
-  - images
-  - links (per location)
+## What happened
 
-## Data / Inputs
+It was a nice little tool and genuinely cool to see everything laid out that way. It seems like it should be great for travel.
 
-- Pulled a lot of map **GeoJSON** data.
-- Used APIs to pull location data + images/descriptions (I *think* it was Google Maps, but I need to confirm before I say that publicly).
+I started it a couple of days before I left, so I never had time to polish it, and I didn't end up using it on the trip. There are probably better alternatives out there already, though maybe not free ones.
 
-## Result
+## If I pick it up again
 
-It was a "nice little tool," and honestly pretty cool to see everything visualized like that--feels like it *should* be great for travel. There are probably better replacements already (maybe not free).
-
-## What actually happened
-
-I started it only a couple days before leaving, so I didn't have time to polish it...and I didn't end up using it. Yeah.
-
-## If I revive it later (quick notes)
-
-- Confirm/record exact data sources (especially the images/descriptions pipeline).
-- Start earlier next time so it's not "cool concept, zero finish."
-- Quick win: add a basic "near me / next stop" mode + offline-friendly caching so it's actually used in-motion (not just admired).
+Confirm and record the actual data sources, especially the image and description pipeline. Start earlier than two days out. Add a "what's near me, what's next" mode plus offline caching, so it's usable while moving rather than just nice to look at while sitting still.

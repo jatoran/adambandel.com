@@ -4,46 +4,22 @@ date: 2025-10-15
 project: list-import-studio
 ---
 
-## What I'm building
+A large part of my job is taking messy lists of contacts and companies and getting them into our database without breaking anything. That means matching, deduplication, normalization, and formatting, and it means being certain the import isn't overwriting something good or creating a second copy of a record that already exists.
 
-**List Import Studio**: a node-based workflow builder for list cleaning + importing contacts/companies into our database, without accidentally **overriding** good data or **duplicating** records.
+There are plenty of tools for this and some of them are probably better than mine. I wanted a node-based flow specifically, because I wanted the logic visible and reusable instead of buried in a script I'd have to reread every time I ran it.
 
-## The pain this is solving
+## How it works
 
-A huge chunk of my work is taking messy lists and doing the unglamorous stuff:
+Attach a data source. Compare it against existing data and against the other sources you've attached. Normalize, then run conditionals, which can get complex and can reference either the existing records or the other incoming ones. From there you match, combine, join, split, and transform as far as the data needs you to go.
 
-* matching + de-duping
-* normalization + formatting
-* making sure the import doesn't stomp on something it shouldn't
+## The feature that justifies the whole thing
 
-There are plenty of tools for this (and yeah, there are probably "better" ones), but I specifically wanted a **node-based flow** so the logic is explicit and reusable.
+You can save a pattern and rerun it. Once a workflow is something you do regularly, you load that profile and run the same pipeline instead of rebuilding the logic from memory.
 
-## Core idea: "attach -> compare -> transform"
+Trade show leads are the case that makes this obvious. If your company does shows several times a month, you're repeating the import constantly, and every single one arrives differently. The lead scanner exports change. The sales reps' formats change, and so does the way each of them takes notes. The event might hand you a rich dataset or almost nothing at all.
 
-The workflow is basically:
+So the variation is endless, but the boilerplate wrapped around it is identical every time. Locking down the boilerplate is the entire point, so the variation is the only thing left that needs thought.
 
-1. **Attach a data source** (your incoming list)
-2. **Compare it against existing/other attached sources**
-3. **Normalize + run complex conditionals** (against existing data, or multiple inputs)
-4. **Match / combine / join / break / transform** data as needed - extensively, elaborately, the whole deal.
+## Status
 
-## The "this is the point" feature: saveable patterns
-
-On top of all the transforms, you can **save these patterns** and rerun them.
-So if you have a workflow you do often, you just load that profile and run the same pipeline again instead of reinventing it every time.
-
-## Why this matters in real life: trade show lead imports
-
-Trade show lead imports are the perfect example of why this needs to exist:
-
-* you do them repeatedly (sometimes multiple times a month)
-* every event exports differently
-* lead scanners vary
-* sales reps' formats and notes vary
-* sometimes the event gives you a ton of fields, sometimes basically nothing
-
-So there's endless variation, but also tons of repeatable boilerplate. This system is meant to lock down the boilerplate so the variation doesn't wreck you.
-
-## Current status / outcome
-
-I use it consistently. It's **very robust**, and it saves me **hours** on every list I have to upload.
+I use it consistently. It's robust, and it saves me hours on every list I have to upload.

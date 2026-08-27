@@ -1,31 +1,19 @@
 ---
-title: "Devlog: Insta Note"
+title: "Devlog: InstaNote"
 date: 2026-02-04
 project: instanote
 ---
 
-**Insta note** is a quick-capture app I built for *instant* note entry--open it, keyboard pops, type, done. It's the "no ceremony" pipeline for getting thoughts out of my head and into a safe place.
+InstaNote is a quick capture app. Tap the widget, the keyboard is already up, type, send. It goes straight to my own email.
 
-## What it does
+That's the whole product. Google OAuth for sign-in, a slim widget that launches directly into a text input, and a share target so other apps can hand off links, photos, or basically anything, and it routes to my inbox without stopping to show me UI.
 
-- **Fast note entry** as the entire point of the product
-- **Google OAuth** for sign-in (simple, familiar, low friction)
-- A **slim widget** that immediately launches the keyboard + a text input (straight to the action)
+## Why the destination is email
 
-## Core workflow (the whole philosophy)
+The standard path to writing something down is unlock, find the app, wait for it to load, tap new note, start typing. By step three the thought is frequently gone. Widget to keyboard is one step. That number is the entire point of the app.
 
-I wanted **quick notes to myself**, and I refused to let it get bloated. No fluff. No extra steps. Just speed. It's *very simple* and *super fast* because that's the only thing I actually care about in this context.
+Sending it to my own email instead of storing it locally is the other half. My inbox is already where things get processed, so there's no second place to remember to check and no export sitting in my future. There is no real database here. A note lives long enough to get sent, and the permanent copy ends up in a system I already use and already search.
 
-## Sharing / capture pipeline
+## Does it work
 
-It also supports **share context from other apps**, so I can capture inputs coming from anywhere:
-
-- Send **links**
-- Send **photos**
-- Send basically **anything**
-
-...and route it to **my own email immediately**.
-
-## Reality check: does it work?
-
-Yes. This is the rare case where what I wanted is exactly what it gives me: **fast note entry**, period. I use it constantly--every day--to send myself notes.
+Yes, and that's rarer than it sounds. This is the case where what I wanted is exactly what I got: fast note entry, no fluff, nothing else. I use it every day to send myself notes.
