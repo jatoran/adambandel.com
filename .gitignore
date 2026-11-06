@@ -15,3 +15,6 @@ vendor/
 # Local scratch
 .trash/
 .swe-mux/
+
+# Private planning: the marketing kit is its own repository, published only to the hub
+.private/
