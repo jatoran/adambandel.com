@@ -16,7 +16,7 @@ I've used it as my daily notes app for months. Here's how it works and what it a
 
 ![The editor on a note, with headings, checkboxes, a table, and a Rust code block rendered live](/images/projects/continuity/hero.png)
 
-Line 1 there is showing its raw `# Project Kestrel` source because the caret is on it. Everything else stays rendered. That's the display map, and I'll come back to it.
+Line 1 there is showing its raw `# Kestrel migration` source because the caret is on it. Everything else stays rendered. That's the display map, and I'll come back to it.
 
 ## The file is not the document
 
@@ -25,6 +25,12 @@ The standard model: a file on disk is the document, the editor holds a copy in m
 All of that is scaffolding around one decision nobody revisits.
 
 Continuity inverts it. The rope in memory and the SQLite database are the document. Files are output.
+
+Which is the kind of claim that's worth demonstrating rather than asserting. Here the process is killed with `TerminateProcess` mid-sentence, no save, no prompt, no shutdown handler, and then relaunched:
+
+![Killing the process mid-sentence and relaunching, with the note, tab and caret position all restored](/images/projects/continuity/crash-safety.gif)
+
+The note, its content, the open tab and the caret position all come back, and typing carries on from the middle of the sentence. Nothing was recovered, because nothing was lost.
 
 The write path, from a key going down to the bytes being durable, is six steps and no step in it waits on a user decision:
 

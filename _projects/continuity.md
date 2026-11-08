@@ -40,13 +40,17 @@ The second is the editing engine underneath it, extracted into a storage-neutral
 
 ## Screenshots
 
-Line 1 shows its raw `# Project Kestrel` source under the caret while everything else stays rendered, which is the display-map rule in a single frame.
+Line 1 shows its raw `# Kestrel migration` source under the caret while everything else stays rendered, which is the display-map rule in a single frame.
 
 ![The editor on a note, with headings, checkboxes, a table, and a Rust code block rendered live](/images/projects/continuity/hero.png)
 
 Markdown renders as each line is completed. No preview pane, no mode switch.
 
 ![Typing a note from empty, with each line rendering as it is finished](/images/projects/continuity/live-markdown.gif)
+
+The process is killed with `TerminateProcess` mid-sentence and relaunched. The note, the open tab and the caret position all come back, and typing picks up where the sentence stopped, because there was never an unsaved state to lose.
+
+![Killing the process mid-sentence and relaunching, with the note, tab and caret restored](/images/projects/continuity/crash-safety.gif)
 
 Find across the note, with regex, case, word, and scope toggles and a match counter.
 
