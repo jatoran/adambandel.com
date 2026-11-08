@@ -16,5 +16,8 @@ vendor/
 .trash/
 .swe-mux/
 
+# Devlog drafts the weekly tool-releases run writes for the operator: unpublished, and this repo is public
+_drafts/
+
 # Private planning: the marketing kit is its own repository, published only to the hub
 .private/
