@@ -1,8 +1,8 @@
 ---
 title: News Aggregator
-summary: AI-powered news aggregation platform that de-sensationalizes content from Reddit, Twitter, and RSS feeds
+summary: A self-hosted reader that merges Reddit and RSS into one feed, ranked so no source buries the rest, with an LLM layer for neutral headlines
 started: 2024-11-10
-updated: 2026-01-30
+updated: 2026-11-07
 type: web-app
 stack:
   - Python
@@ -10,13 +10,14 @@ stack:
   - PostgreSQL
   - React
   - TypeScript
+  - Material UI
   - Docker
 tags:
   - ai
   - data
   - automation
-loc: 20754
-files: 90
+loc: 24513
+files: 112
 architecture:
   database: PostgreSQL
   api: REST
@@ -26,92 +27,82 @@ architecture:
 
 ## Overview
 
-News Aggregator is a self-hosted platform designed to combat information overload by intelligently collecting, filtering, and enriching content from multiple sources. It aggregates posts from Reddit, Twitter/X, RSS feeds, and custom websites into a unified interface, then applies LLM-powered analysis to de-sensationalize headlines, extract key concepts, and score content relevance.
+News Aggregator pulls Reddit, RSS and a few other kinds of source into one feed that I read instead of the sites themselves.
+It runs on my home server as a Docker Compose stack: six Python services, an nginx front end and Postgres 16.
+On 8 November 2026 it was following 225 sources and holding 56,233 items from the last 30 days, 9,517 from Reddit and 46,716 from RSS, so about 1,900 new items a day.
 
-The system follows a microservices architecture with specialized scrapers, a central data pipeline, and an LLM enrichment layer. Users can define preference rules to automatically boost or penalize content based on keywords, sentiment, categories, and engagement metrics.
+The code is private.
+This page describes it; there is no repository to link.
 
 ## Screenshots
 
-<!-- SCREENSHOT: Main feed view showing aggregated news items in masonry grid layout with source badges and engagement metrics visible -->
-![Main feed view](/images/projects/news-aggregator/screenshot-1.png)
+The feed in Balanced Recency order, with Reddit posts and RSS items interleaved.
 
-<!-- SCREENSHOT: Preference rules modal showing example rule configuration for boosting AI-related content -->
-![Preference rules configuration](/images/projects/news-aggregator/screenshot-2.png)
+![The feed in list view, with Reddit and RSS items interleaved](/images/projects/news-aggregator/feed.png)
 
-<!-- SCREENSHOT: Article detail view showing LLM-generated summary, extracted concepts, and original vs de-sensationalized title -->
-![Article detail with AI analysis](/images/projects/news-aggregator/screenshot-3.png)
+The other orderings sit beside it: publish date, preference score, and the raw Reddit and Twitter engagement numbers.
+
+![The sort menu open over the feed](/images/projects/news-aggregator/sort-options.png)
 
 ## Problem
 
-Modern news consumption involves checking multiple platforms (Reddit, Twitter, RSS readers) while being bombarded with sensationalized headlines, duplicate stories, and irrelevant content. There's no unified way to:
-- Aggregate content across different source types
-- Filter out low-quality or repetitive posts
-- Get objective summaries without clickbait
-- Personalize feeds based on actual preferences rather than engagement-maximizing algorithms
+My notes from the start of the project, December 2024, list what it was for: de-sensationalize news by reading the content and writing alternative, unbiased titles and descriptions; cull the nonsense; remove items I don't want to see; combine duplicates and prefer the original source; and prioritize what I do want through preference rules.
+The line that sums it up: "really want to be able to filter out nonsense from various feeds."
+
+Merging sources brings its own problem: the busiest one takes over the top of the feed.
+The early versions of this one were mostly fresh Reddit posts with a score of 1.
 
 ## Approach
 
-The solution uses a distributed microservices architecture where each component has a single responsibility.
+### Ingestion
+
+- Reddit goes through my Search Gateway, so this app holds no Reddit credentials. Listings default to hot, 25 posts a subreddit, one subreddit at a time.
+- RSS and Atom are parsed directly, and article bodies are extracted through the gateway. Hacker News items get their comments from the Algolia API.
+- Twitter/X profiles and arbitrary web pages also go through the gateway, but neither is producing items right now (see Limits).
+- A scheduler service owns the cadence: Reddit and Twitter every 30 minutes, RSS hourly, custom web sources every 70 minutes, with per-source overrides. An hourly job settles each Reddit post's score once it is about 36 hours old. Items older than 30 days are deleted nightly.
+
+### Ranking
+
+The default order, Balanced Recency, is a weighted fair queue across sources.
+Each item gets a base score from recency (an 18-hour half-life) plus its engagement relative to the median of its own subreddit or account, so a small subreddit's good post can compete with a big subreddit's average one.
+On top of that, every source has a target share of the feed, set in two levels: by type first (RSS 40%, Reddit 35%, Twitter 25%), then split among that type's sources by a per-source weight.
+A source that falls behind its share gets a bounded catch-up bonus, so it surfaces without flooding the top of the page.
+
+The version before this one buried slow sources completely.
+The first tweet sat at position 62 and five followed accounts were nowhere in the top 200, because a recency handicap cost a nine-hour-old tweet more than any engagement could earn back, and the only anti-dominance rule never fired.
+With fair share, all 19 sources in the test pool appear by about position 67 and the first tweet lands at 8.
+The median age of the top 30 moved from 8.5 hours to 8.6.
+
+### The LLM layer
+
+For each item the enrichment service asks a model, through OpenRouter, for a neutral title with the emotional language and hyperbole removed, a short factual summary, key concepts, facts, tone, keywords, categories, and a flag for promotional SEO filler.
+It runs only for sources that opt in, only on items with at least 200 characters of content, and only on Reddit posts that have earned some engagement first.
+
+### Preference rules
+
+Rules can boost or bury items by category, keyword, title, source type, concept, sentiment or content, scoped to everything, one feed or one source.
+They feed a preference score, which is also one of the sort orders.
 
 ### Stack
 
-- **Backend Framework** - FastAPI for async REST APIs across all services, enabling high-throughput scraping without blocking
-- **Database** - PostgreSQL 16 with JSONB columns for flexible metadata storage (LLM outputs, engagement metrics, source-specific fields)
-- **Task Scheduling** - APScheduler for periodic scrape jobs with configurable intervals per source
-- **Reddit Integration** - asyncpraw for authenticated Reddit API access with rate limit handling
-- **Twitter Scraping** - Nitter-based scraper to bypass API restrictions
-- **LLM Integration** - OpenRouter API for model-agnostic summarization and analysis
-- **Frontend** - React 18 with Material UI, featuring masonry layouts, infinite scroll, and drag-and-drop feed ordering
-- **Deployment** - Docker Compose orchestrating 9 services with health checks and dependency ordering
-
-### Challenges
-
-- **Rate limiting across multiple APIs** - Implemented per-source semaphores, TTL-cached in-flight request tracking, and exponential backoff to prevent thundering herd problems while maximizing throughput
-- **Memory leaks in long-running scrapers** - SQLAlchemy identity maps accumulated objects over time; solved by explicitly calling `expunge_all()` before closing sessions across 21 locations
-- **Duplicate content detection** - Database constraints on URLs plus UPSERT patterns for engagement metrics reduced database size by 92% (1.5GB to 120MB)
-- **Balancing recommendation relevance** - Reddit trending posts dominated feeds; implemented source fatigue penalties, type rotation boosts, and anti-consecutive algorithms to ensure diverse results
+- FastAPI for every service, Postgres 16 with JSONB for per-source metadata, APScheduler for the refresh jobs
+- React 18, TypeScript and Material UI, with grid, compact, list, detailed and gallery views, read and read-later state, and swipe-to-read on a phone
+- Docker Compose on my home server, deployed from my PC
 
 ## Outcomes
 
-The platform successfully aggregates thousands of posts daily while maintaining sub-second query times. The preference scoring system allows fine-grained control over content ranking, and the LLM integration provides genuinely useful summaries that cut through sensationalism.
+Much of the recent work has been upkeep on a stack that runs around the clock.
 
-Key technical wins:
-- Microservices architecture enables independent scaling of scrapers vs. query layer
-- JSONB columns eliminated schema migrations for evolving LLM output formats
-- Health check cascade ensures services start in correct dependency order
+- Reddit comment metrics were being inserted on every refresh instead of updated: 3.98 million metric rows for 2,800 comments. Fixing that took the database from 1.5 GB to 120 MB.
+- The periodic score recalculation went from 254 seconds and 1.6 GB of memory to about 7 seconds and 130 MB, and the stats refresh from 5.5 seconds and 720 MB of growth to 0.7 seconds and 9 MB.
+- The recommended feed query dropped from about 800 ms to 50-80 ms.
+- Twitter provider failures used to look like empty timelines, and failed scrapes returned success. Both now report as failures.
 
-## Implementation Notes
+## Limits
 
-The recommendation engine normalizes scores across different source types since Reddit and Twitter have vastly different engagement scales:
-
-```python
-# From shared/recommendation_utils.py
-def calculate_recommended_score(item, source_type, index_in_type):
-    base = normalize_score(item.trending_score, source_type)
-
-    # Apply source fatigue - recently seen sources get penalized
-    fatigue_boost = math.log(max(1, index_diff)) * 3600
-
-    # Anti-consecutive penalty prevents 5 Reddit posts in a row
-    if consecutive_count > 2:
-        base *= 0.7 ** (consecutive_count - 2)
-
-    return base + recency_boost + preference_adjustment
-```
-
-Preference rules support complex boolean conditions stored as JSONB:
-
-```python
-# Example rule: Boost AI content from Twitter
-{
-    "conditions": {
-        "AND": [
-            {"field": "category", "op": "contains", "value": "AI"},
-            {"field": "source_type", "op": "==", "value": "Twitter"}
-        ]
-    },
-    "adjustments": {"score": 5}
-}
-```
-
-The data flow follows a clear pipeline: Scheduler triggers Scraper -> Scraper POSTs to Ingestor -> Ingestor stores and queues LLM jobs -> LLM Manager enriches top items -> Fetcher serves filtered results to Frontend.
+- The LLM layer is switched off. Enrichment is off by default for new sources, and none of the 56,233 items in the current 30-day window has a rewritten headline, so the de-sensationalizing described above is built but not running.
+- Twitter/X is not producing anything. Its sources show no items in the current window; it depends on a nitter provider that keeps breaking.
+- RSS descriptions sometimes show raw HTML in the card views.
+- About 54% of recent Reddit posts trip the low-engagement penalty, so Reddit fills about 29% of the feed against its 35% target.
+- It is single-user, with no authentication, and only reachable on my own network.
+- Two goals from the original notes were never built: fact-checking, and a user prompt that sets the rewriting style.
