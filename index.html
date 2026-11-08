@@ -195,22 +195,12 @@
     <section id="posts">
         <h2>Recent Posts</h2>
         <ul class="list">
+            {% for post in site.posts limit:4 %}
             <li>
-                <span class="date">Feb 01, 2026</span>
-                <a href="/posts/2026/02/01/building-agent-systems/">Building Agent Systems That Don't Collapse</a>
+                <span class="date">{{ post.date | date: "%b %d, %Y" }}</span>
+                <a href="{{ post.url }}">{{ post.title }}</a>
             </li>
-            <li>
-                <span class="date">Feb 01, 2026</span>
-                <a href="/posts/2026/02/01/rebuilding-portfolio/">Why I'm Rebuilding My Portfolio (Again)</a>
-            </li>
-            <li>
-                <span class="date">Jan 22, 2026</span>
-                <a href="/posts/2026/01/22/developer-tools-for-ai/">Lessons from Building Developer Tools for AI</a>
-            </li>
-            <li>
-                <span class="date">Jan 15, 2026</span>
-                <a href="/posts/2026/01/15/making-llm-battles-deterministic/">Making LLM Battles Deterministic</a>
-            </li>
+            {% endfor %}
             <li>
                 <span class="date">—</span>
                 <a href="/posts">View all posts →</a>
