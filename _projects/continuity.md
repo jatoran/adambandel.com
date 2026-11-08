@@ -48,10 +48,6 @@ Markdown renders as each line is completed. No preview pane, no mode switch.
 
 ![Typing a note from empty, with each line rendering as it is finished](/images/projects/continuity/live-markdown.gif)
 
-The process is hard-killed with `Stop-Process -Force` mid-session and relaunched. The note, its content, the open tab, and the caret position all come back, because there was never an unsaved state to lose.
-
-![Killing the process mid-session and relaunching, with everything restored](/images/projects/continuity/crash-safety.gif)
-
 Find across the note, with regex, case, word, and scope toggles and a match counter.
 
 ![The find bar matching "throughput" in both a heading and body text](/images/projects/continuity/find.png)
@@ -97,13 +93,13 @@ A shared behavior corpus runs against every binding: same inputs, same resulting
 ```
 winget install Continuity.Continuity     # Windows desktop
 cargo add continuity-engine              # Rust, crates.io
-npm i @continuity-editor/editor@next     # Browser and Electron, preview channel
+npm i @continuity-editor/editor          # Browser and Electron
 ```
 
 MSI, portable zip, and standalone exe ship in each GitHub release, as do the Python wheel and the C DLL plus header. PyPI is deliberately empty until there are cross-platform wheels worth publishing.
 
 ## Honest constraints
 
-The desktop app is Windows-only and will stay Windows-only. The engine is portable, the app is not. It's not a code editor: fenced blocks highlight and it's fine for code notes, but it isn't an IDE. It's early, currently 0.4.13, and things break. Builds are unsigned, so installs show a SmartScreen warning until code signing is in place. The `@next` on the npm install is load-bearing, because the SDK publishes to a preview dist-tag and a bare install won't resolve.
+The desktop app is Windows-only and will stay Windows-only. The engine is portable, the app is not. It's not a code editor: fenced blocks highlight and it's fine for code notes, but it isn't an IDE. It's early, currently 0.4.13, and things break. Builds are unsigned, so installs show a SmartScreen warning until code signing is in place. There is no hosted browser demo yet.
 
 MIT licensed.

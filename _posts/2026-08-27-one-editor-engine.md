@@ -117,7 +117,7 @@ Plus dhat asserting zero new heap allocations per keystroke in steady state, and
 ## Using it
 
 ```bash
-npm install @continuity-editor/editor@next
+npm install @continuity-editor/editor
 cargo add continuity-engine
 ```
 
@@ -131,7 +131,7 @@ cargo add continuity-engine
 <continuity-editor value="# Hello"></continuity-editor>
 ```
 
-The `@next` is load-bearing. It's a preview channel, publishes to the `next` dist-tag, and a bare install won't resolve.
+Update, November 2026: when this went up the SDK only published to a `next` preview tag and the install needed `@next`. It now publishes to `latest`, so a plain install gets the current version, and `@next` points at an older build.
 
 Python and a C ABI ship in each GitHub release. PyPI is deliberately empty: the wheel is Windows-only with no sdist, and a `pip install` that explodes on Linux is worse than a package that doesn't exist. I'll publish it when there are wheels worth publishing.
 

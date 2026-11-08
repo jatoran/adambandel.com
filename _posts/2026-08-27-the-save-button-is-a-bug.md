@@ -26,12 +26,6 @@ All of that is scaffolding around one decision nobody revisits.
 
 Continuity inverts it. The rope in memory and the SQLite database are the document. Files are output.
 
-Which is the kind of claim that's worth demonstrating rather than asserting. Here the process is hard-killed with `Stop-Process -Force` mid-session, no save, no prompt, no graceful shutdown, and then relaunched:
-
-![Killing the process mid-session and relaunching, with the note, tab, and caret position all restored](/images/projects/continuity/crash-safety.gif)
-
-The note, its content, the open tab, and the caret position all come back. Nothing was recovered, because nothing was lost.
-
 The write path, from a key going down to the bytes being durable, is six steps and no step in it waits on a user decision:
 
 1. **Keystroke.** `WM_CHAR` arrives on the UI thread.
