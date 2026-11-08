@@ -20,6 +20,12 @@ Twelve commits on 9 May, and by the end of them the thing already had a rope, pe
 
 That's not a brag about velocity, it's a statement about how much of an editor is well-trodden ground. Ropes are solved. Undo trees are solved. The parts that took the remaining three weeks were the parts nobody writes down.
 
+The live Markdown part, which is the reason the project exists at all, looked like this once it settled:
+
+![Typing a note from empty, with each line rendering as it is finished](/images/projects/continuity/live-markdown.gif)
+
+Each line renders as it's completed, and the line under the caret shows its source instead. No preview pane, no mode switch.
+
 The commit shape over those 23 days is two heavy bursts and then a long grind. The 12 May spike is CI, conventions, and perf gates landing at once. The 24 May spike is resize tearing, tab dragging, and search.
 
 ## The decision everything else hangs off

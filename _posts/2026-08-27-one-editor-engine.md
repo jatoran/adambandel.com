@@ -8,6 +8,10 @@ Extracting a Win32 editor's core into a storage-neutral Rust crate, so the same 
 
 I write a Windows Markdown notes editor. Last year I pulled its editing core into a standalone crate, and it now runs in four places off one codebase: the native Win32 app, a browser Web Component compiled to WASM, a Python module, and a C ABI.
 
+![The native Win32 app on a note, with headings, checkboxes, a table, and a Rust code block rendered live](/images/projects/continuity/hero.png)
+
+That's the native surface. The interesting claim is that the browser one runs the same edit planner, not a reimplementation of it.
+
 Same text handling, same selections, same undo, same Markdown projection. Not four implementations that agree by convention and drift apart over eighteen months. One implementation.
 
 Every one of these executes the same edit planner and the same Markdown projection:

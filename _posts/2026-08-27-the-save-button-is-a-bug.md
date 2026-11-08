@@ -14,6 +14,10 @@ So I wrote an editor that doesn't have one. Continuity writes every keystroke to
 
 I've used it as my daily notes app for months. Here's how it works and what it actually cost.
 
+![The editor on a note, with headings, checkboxes, a table, and a Rust code block rendered live](/images/projects/continuity/hero.png)
+
+Line 1 there is showing its raw `# Project Kestrel` source because the caret is on it. Everything else stays rendered. That's the display map, and I'll come back to it.
+
 ## The file is not the document
 
 The standard model: a file on disk is the document, the editor holds a copy in memory, the copy diverges, and you periodically reconcile. Every bit of save-button UX falls out of that. Dirty indicators. "Do you want to save changes?" Autosave timers. Recovery dialogs that offer you a version from 14 minutes ago and ask you to guess which one you want.
@@ -21,6 +25,12 @@ The standard model: a file on disk is the document, the editor holds a copy in m
 All of that is scaffolding around one decision nobody revisits.
 
 Continuity inverts it. The rope in memory and the SQLite database are the document. Files are output.
+
+Which is the kind of claim that's worth demonstrating rather than asserting. Here the process is hard-killed with `Stop-Process -Force` mid-session, no save, no prompt, no graceful shutdown, and then relaunched:
+
+![Killing the process mid-session and relaunching, with the note, tab, and caret position all restored](/images/projects/continuity/crash-safety.gif)
+
+The note, its content, the open tab, and the caret position all come back. Nothing was recovered, because nothing was lost.
 
 The write path, from a key going down to the bytes being durable, is six steps and no step in it waits on a user decision:
 
@@ -115,6 +125,12 @@ No `async fn` anywhere in the workspace. Threads and `crossbeam_channel`, and a 
 What's in it, generated from source: 26 crates, 217k lines of Rust, 306 commands, 80 selection edits, 18 themes, 0 async fns.
 
 The constraint I'd push on anyone building something similar: **the rope is canonical and the display map only projects.** Markdown rendering goes through a display map that can hide, replace, or wrap source ranges. It cannot invent content. Every WYSIWYG feature has to survive the display map being ripped out, or it's the wrong feature.
+
+In practice that looks like this. Each line renders as it's completed, and the line under the caret shows its source:
+
+![Typing a note from empty, with each line rendering as it is finished](/images/projects/continuity/live-markdown.gif)
+
+There's no preview pane and no mode switch, because there's nothing to preview. The text on screen is a projection of the bytes in the file, computed per line.
 
 That rule killed several things I wanted. It also means what you see is always what's in the file, which is the whole reason to use a plain-text notes app instead of a rich-text one that lies to you about what it's storing.
 

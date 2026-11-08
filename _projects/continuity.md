@@ -3,6 +3,8 @@ title: Continuity
 summary: A Markdown notes editor for Windows with no save button, plus the storage-neutral Rust engine extracted from it
 status: Active
 date: 2026-05-09
+started: 2026-05-09
+updated: 2026-10-12
 github: https://github.com/jatoran/continuity
 type: desktop
 stack:
@@ -17,7 +19,7 @@ tags:
   - rust
   - desktop
 loc: 217000
-files: 26
+files: 1176
 architecture:
   auth: none
   database: SQLite
@@ -35,6 +37,24 @@ Continuity is two things in one repository.
 The first is a native Win32 Markdown notes editor. Every keystroke writes to a local SQLite database, so the database is the document and writing a `.md` file is an export rather than a commitment. There is no save button, no dirty indicator, and no prompt when you close a window, because there is never an unsaved state to lose.
 
 The second is the editing engine underneath it, extracted into a storage-neutral Rust crate. The same engine runs in four places off one codebase: the native app, a browser Web Component compiled to WASM, a Python module, and a C ABI.
+
+## Screenshots
+
+Line 1 shows its raw `# Project Kestrel` source under the caret while everything else stays rendered, which is the display-map rule in a single frame.
+
+![The editor on a note, with headings, checkboxes, a table, and a Rust code block rendered live](/images/projects/continuity/hero.png)
+
+Markdown renders as each line is completed. No preview pane, no mode switch.
+
+![Typing a note from empty, with each line rendering as it is finished](/images/projects/continuity/live-markdown.gif)
+
+The process is hard-killed with `Stop-Process -Force` mid-session and relaunched. The note, its content, the open tab, and the caret position all come back, because there was never an unsaved state to lose.
+
+![Killing the process mid-session and relaunching, with everything restored](/images/projects/continuity/crash-safety.gif)
+
+Find across the note, with regex, case, word, and scope toggles and a match counter.
+
+![The find bar matching "throughput" in both a heading and body text](/images/projects/continuity/find.png)
 
 ## Problem
 
@@ -75,7 +95,7 @@ A shared behavior corpus runs against every binding: same inputs, same resulting
 ## Installing it
 
 ```
-winget install Continuity.Continuity     # Windows desktop, manifest PR in review
+winget install Continuity.Continuity     # Windows desktop
 cargo add continuity-engine              # Rust, crates.io
 npm i @continuity-editor/editor@next     # Browser and Electron, preview channel
 ```
@@ -84,6 +104,6 @@ MSI, portable zip, and standalone exe ship in each GitHub release, as do the Pyt
 
 ## Honest constraints
 
-The desktop app is Windows-only and will stay Windows-only. The engine is portable, the app is not. It's not a code editor: fenced blocks highlight and it's fine for code notes, but it isn't an IDE. It's early, currently 0.4.8, and things break. Builds are unsigned, so installs show a SmartScreen warning until code signing is in place. The `@next` on the npm install is load-bearing, because the SDK publishes to a preview dist-tag and a bare install won't resolve.
+The desktop app is Windows-only and will stay Windows-only. The engine is portable, the app is not. It's not a code editor: fenced blocks highlight and it's fine for code notes, but it isn't an IDE. It's early, currently 0.4.13, and things break. Builds are unsigned, so installs show a SmartScreen warning until code signing is in place. The `@next` on the npm install is load-bearing, because the SDK publishes to a preview dist-tag and a bare install won't resolve.
 
 MIT licensed.
