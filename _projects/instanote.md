@@ -1,7 +1,7 @@
 ---
 title: InstaNote
 summary: An Android app that sends quick notes, links and photos to your own Gmail from a home screen widget or the share menu
-type: desktop
+type: android
 stack:
   - Kotlin
   - Android SDK

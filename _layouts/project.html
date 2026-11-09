@@ -98,7 +98,7 @@ layout: default
             {% if page.type %}<div class="meta-item"><span class="meta-label">Type:</span> <span class="meta-value">{{ page.type }}</span></div>{% endif %}
             {% if page.loc %}<div class="meta-item"><span class="meta-label">Code:</span> <span class="meta-value">{{ page.loc | divided_by: 1000 }}k lines</span></div>{% endif %}
             {% if page.files %}<div class="meta-item"><span class="meta-label">Files:</span> <span class="meta-value">{{ page.files }}</span></div>{% endif %}
-            {% if page.started and page.updated %}<div class="meta-item"><span class="meta-label">Active:</span> <span class="meta-value">{{ page.started | date: "%b %Y" }} — {{ page.updated | date: "%b %Y" }}</span></div>{% endif %}
+            {% if page.started and page.updated %}<div class="meta-item"><span class="meta-label">Active:</span> <span class="meta-value">{{ page.started | date: "%b %Y" }} to {{ page.updated | date: "%b %Y" }}</span></div>{% endif %}
         </div>
         {% if page.stack %}
         <div class="meta-row">
