@@ -1,6 +1,6 @@
 ---
 title: News Aggregator
-summary: A self-hosted reader that merges Reddit and RSS into one feed, ranked so no source buries the rest, with an LLM layer for neutral headlines
+summary: A self-hosted news reader that merges Reddit and RSS into one feed, ranked so no source buries the rest, with an LLM layer for neutral headlines that is currently switched off
 started: 2024-11-10
 updated: 2026-11-07
 type: web-app
@@ -45,6 +45,8 @@ The other orderings sit beside it: publish date, preference score, and the raw R
 ![The sort menu open over the feed](/images/projects/news-aggregator/sort-options.png)
 
 ## Problem
+
+I wanted my own news feed, so I'm not controlled by other platforms' algorithms.
 
 My notes from the start of the project, December 2024, list what it was for: de-sensationalize news by reading the content and writing alternative, unbiased titles and descriptions; cull the nonsense; remove items I don't want to see; combine duplicates and prefer the original source; and prioritize what I do want through preference rules.
 The line that sums it up: "really want to be able to filter out nonsense from various feeds."

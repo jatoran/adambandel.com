@@ -1,6 +1,6 @@
 ---
 title: Personal Media Feed
-summary: AI-powered content aggregator that enriches, organizes, and surfaces media from 15+ sources
+summary: A self-hosted media library for videos, podcasts, books, shows, games and manga that identifies a pasted link and fills in its details
 started: 2025-04-15
 updated: 2026-01-15
 type: web-app
@@ -32,9 +32,11 @@ architecture:
 
 ## Overview
 
-Personal Media Feed (PMF) is a sophisticated content aggregation and management system that pulls media from diverse sources—YouTube channels, podcasts, RSS feeds, books, TV shows, games, manga, comics, and more—then enriches each item with AI-generated metadata. The system uses LLMs to extract summaries, keywords, sentiment, and named entities, while ChromaDB provides semantic search across the entire library.
+Personal Media Feed (PMF) keeps YouTube channels, podcasts, RSS feeds, books, TV shows, games, manga, comics and more in one library.
+An LLM reads each item and adds a summary, keywords, sentiment and named entities, and ChromaDB provides semantic search across the whole library.
 
-What sets PMF apart is its resolver orchestrator: a unified abstraction over 15+ external APIs (TMDB, IGDB, AniList, MangaDex, iTunes, PodcastIndex, etc.) that automatically identifies content and fetches rich metadata. Combined with smart views, content classification, and Sonarr/Radarr integration, it creates a personalized media dashboard that grows smarter over time.
+Given a link, a resolver works out what the item is and fetches its details from more than 15 metadata services, including TMDB, IGDB, AniList, MangaDex, iTunes and PodcastIndex, picking the ones that fit the content type.
+PMF also has saved filter views (Smart Views), content classes that keep some kinds of items out of the main feed, and a Sonarr and Radarr integration that checks whether a show or movie is already in the media library and adds it if not.
 
 ## Screenshots
 
@@ -49,44 +51,44 @@ What sets PMF apart is its resolver orchestrator: a unified abstraction over 15+
 
 ## Problem
 
-Modern content consumption is fragmented across dozens of platforms—YouTube, Spotify, Goodreads, Steam, Crunchyroll—each with its own interface, recommendations, and tracking. There's no unified view of "what should I consume next?" that respects personal context and history.
+Media is spread across YouTube, Spotify, Goodreads, Steam, Crunchyroll and dozens of other platforms, each with its own interface, recommendations and tracking.
+None of them gives one view of what to watch, read or play next based on everything you've already tracked.
 
-Existing solutions either focus on a single medium (Plex for video, Calibre for books) or require manual curation. I wanted a system that could ingest a URL, automatically identify what it is, fetch rich metadata, and organize it alongside everything else I'm tracking.
+The tools that pull some of it together either cover one medium, like Plex for video or Calibre for books, or need everything entered by hand.
+I wanted something I could give a URL to that would work out what it is, fetch its details, and file it alongside everything else I'm tracking.
 
 ## Approach
 
-The architecture separates concerns into a modular backend with specialized domains, connected to a React frontend via REST and Server-Sent Events.
+The backend is split into modules by domain and talks to a React frontend over REST and Server-Sent Events.
 
 ### Stack
 
-- **FastAPI + Python** - Async-first backend with SQLModel ORM for clean data modeling; enables parallel resolver calls and streaming enrichment updates
-- **React 19 + TypeScript** - Modern frontend with Zustand for state management and TanStack Query for server state synchronization
-- **ChromaDB** - Vector embeddings enable semantic search ("find me something like that documentary about space")
-- **OpenAI/OpenRouter** - LLM interface for extracting titles, summaries, keywords, mood, complexity, and named entities from raw content
-- **SQLite** - Simple, portable database with FTS5 for full-text search; separate dev/prod databases prevent accidents
+- FastAPI with SQLModel. The backend is async, so resolver calls run in parallel and enrichment progress streams to the browser as it happens.
+- React 19 and TypeScript, with Zustand for UI state and TanStack Query for server data.
+- ChromaDB for semantic search over embeddings, so a search like "find me something like that documentary about space" can find an item without its title.
+- OpenAI and OpenRouter models to pull a title, summary, keywords, mood, complexity and named entities out of the raw content.
+- SQLite with FTS5 for full-text search. Dev and prod use separate database files, so testing can't touch real data.
 
 ### Challenges
 
-- **Resolver orchestration** - Coordinating 15+ external APIs with different rate limits, authentication schemes, and response formats required building a token-bucket rate limiter and unified type system. Each resolver implements a common interface, and the orchestrator routes requests based on content type hints.
-
-- **Enrichment pipeline** - Processing YouTube transcripts, PDF content, and HTML articles through LLMs needed careful prompt engineering and cost tracking. The system extracts content via Trafilatura/BeautifulSoup, chunks it appropriately, and sends structured prompts that return consistent JSON schemas.
-
-- **Filter synchronization** - Keeping filter state consistent across sidebar, filter panel, URL parameters, and smart views required a centralized Zustand store with careful attention to which component owns what. Smart views store filter criteria as JSON that maps directly to store keys.
+- The metadata services all have different rate limits, authentication and response formats. Each one gets a token-bucket rate limiter and implements one shared interface with common types, and the orchestrator routes each request to providers based on hints about the content type.
+- Enrichment reads YouTube transcripts, PDFs and HTML articles. Trafilatura or BeautifulSoup extracts the text, it gets chunked, and the model receives a structured prompt that asks for a fixed JSON schema. Getting consistent output took careful prompt work, and the API cost needed tracking.
+- Filter state lives in the sidebar, the filter panel, the URL and saved views at once. Keeping it consistent took one central Zustand store and care about which component owns which value. A saved view stores its filters as JSON whose keys match the store's.
 
 ## Outcomes
 
-The system now tracks 1000+ media items across all categories with minimal manual input. Adding a URL triggers automatic identification, metadata resolution, and AI enrichment—typically completing in under 10 seconds for known sources.
+PMF tracks more than 1,000 media items across every category.
+Adding a URL identifies the item, resolves its metadata and runs the LLM enrichment, usually in under 10 seconds for sources it already knows.
 
-Key learnings:
-- **Resolver abstraction pays off** - Adding new sources (MangaDex, ComicVine) takes hours, not days, because the orchestrator pattern is established
-- **Semantic search changes discovery** - Finding "that video about distributed systems with the funny presenter" actually works via ChromaDB embeddings
-- **Smart views reduce friction** - Pre-defined filters like "Unwatched Tech Videos" or "Books Added This Month" make the feed immediately useful
+Adding a new source, like MangaDex or ComicVine, takes hours rather than days, because the resolver pattern is already in place.
+Semantic search through the ChromaDB embeddings finds items from a loose description, like "that video about distributed systems with the funny presenter".
+On first start the app creates a set of default saved views, such as Videos, Articles, Documentaries and Consumed.
 
 ## Implementation Notes
 
 ### Resolver Orchestrator
 
-The system routes metadata requests through a unified orchestrator that selects appropriate providers based on content type:
+Metadata requests go through one orchestrator, which picks providers by content type:
 
 ```python
 class ResolverOrchestrator:
@@ -109,7 +111,7 @@ class ResolverOrchestrator:
 
 ### Collection Population
 
-YouTube channels use an efficient upload playlist conversion for pagination:
+A YouTube channel's videos are paged through its uploads playlist, whose ID is the channel ID with the `UC` prefix swapped for `UU`:
 
 ```python
 # Convert channel ID to uploads playlist for efficient fetching
@@ -119,7 +121,7 @@ uploads_playlist_id = "UU" + channel_id[2:]
 
 ### SSE Enrichment Updates
 
-Real-time progress updates stream to the frontend during enrichment:
+Enrichment progress streams to the frontend as it happens:
 
 ```python
 @router.get("/stream")

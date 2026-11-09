@@ -1,6 +1,6 @@
 ---
 title: Prompt Development Kit
-summary: Desktop app for visual AI prompt engineering with node-based workflows and code context integration
+summary: A desktop app for building chains of AI prompts as connected nodes, with reusable variables and project code pulled into the prompts
 started: 2025-05-04
 updated: 2025-05-04
 type: desktop
@@ -29,9 +29,11 @@ architecture:
 
 ## Overview
 
-Prompt Development Kit (PDK) is a cross-platform desktop application for building, organizing, and managing complex AI prompt workflows. It provides a visual node-based editor where users can create prompt sequences, manage variables across scopes, and integrate code context from their projects directly into prompts.
+Prompt Development Kit (PDK) is a cross-platform desktop app for building and organizing chains of AI prompts.
+Each prompt is a node on a canvas, and you connect nodes into sequences, use variables at several scopes, and pull code from your own projects straight into the prompts.
 
-The application bridges the gap between simple prompt copy-paste workflows and programmatic prompt engineering, offering a visual interface for prompt development without requiring coding knowledge.
+I never released it, and I stopped using it.
+The code context part outlived it as its own app, [Code Context Builder](/projects/code-context-builder/).
 
 ## Screenshots
 
@@ -46,46 +48,41 @@ The application bridges the gap between simple prompt copy-paste workflows and p
 
 ## Problem
 
-Prompt engineering for LLMs often involves:
-- Managing multiple prompt variations and versions
-- Reusing common patterns across different prompts
-- Incorporating code snippets and documentation into prompts
-- Tracking which combinations work best
-
-Existing solutions force users into either plain text files (no structure) or full programming (high barrier). PDK provides a middle ground: visual prompt composition with variables, versioning, and code integration.
+Working with LLM prompts means keeping several variations and versions of a prompt, reusing the same patterns across prompts, and pasting code and documentation into them.
+I built PDK so I could string predefined prompts together as nodes and reuse them by changing only the variables, with global or locally scoped variables holding the context.
 
 ## Approach
 
 ### Stack
 
-- **React + TypeScript** - Type-safe component architecture for the complex UI
-- **ReactFlow** - Node-based visual canvas for connecting prompt sequences
-- **Tauri + Rust** - Native performance and small binary size for desktop distribution
-- **SQLite** - Embedded database for persistent storage without external dependencies
-- **Zustand** - Lightweight state management for multi-pane layout persistence
+- React and TypeScript for the interface
+- ReactFlow for the node canvas
+- Tauri and Rust for the desktop app. PDK was the first thing I built with Tauri, because I wanted something cross-platform that I could share easily.
+- SQLite as an embedded database, so there is nothing external to install
+- Zustand for state such as the multi-pane layout
 
 ### Challenges
 
-- **Variable resolution order** - Implemented recursive variable expansion with cycle detection, distinguishing between content variables (expand recursively) and response variables (literal substitution)
-- **Multi-pane state persistence** - Built a recursive tree structure for pane splits with localStorage persistence, allowing users to view multiple flows simultaneously
-- **Code context synchronization** - Used the `notify` crate for file watching to auto-update code context variables when source files change
+- Variable resolution order. Variables expand recursively with cycle detection. Content variables expand recursively, and response variables are substituted literally.
+- Multi-pane layout. Pane splits are stored as a recursive tree and persisted in localStorage, so several flows can be open side by side.
+- Keeping code context current. The `notify` crate watches the source files, and code context variables update when those files change.
 
 ## Outcomes
 
-The application successfully handles complex prompt workflows:
-- Visual node connections map to prompt sequences
-- Three-tier variable system (global, flow, code context) covers common reuse patterns
-- Version history enables experimentation without losing previous work
-- Token counting provides cost awareness before execution
+Connecting nodes on the canvas defines a prompt sequence.
+Variables come in three scopes (global, flow and code context), which covers the common kinds of reuse.
+Version history keeps earlier versions of flows and nodes, so you can experiment without losing previous work.
+Token counting is built in, though it ended up switched off in the flow and node views for performance and stays on in the code context builder.
+File scanning runs in parallel with Rayon.
 
-Key technical wins:
-- Cold start under 500ms due to Tauri's lightweight runtime
-- SQLite handles thousands of nodes without performance degradation
-- Parallel file scanning via Rayon processes large codebases efficiently
+It was good for managing a collection of prompts I wanted to remember, and for building hierarchical prompt chains, some of them quite complex, mostly for coding and for generating documentation.
+Overall, though, defining prompt workflows in it was too cumbersome, and I stopped using it.
+Once you code a lot, you find you don't use the same prompts over and over: every project is different, every day is different, and different models need different prompting.
+What I kept using was the code context builder inside it, so I took that out and made it a standalone app.
 
 ## Implementation Notes
 
-The variable system uses a `{{variable_name}}` syntax with three scopes:
+The variable system uses a `{% raw %}{{variable_name}}{% endraw %}` syntax with three scopes:
 
 ```typescript
 // Variable resolution priority
@@ -94,7 +91,7 @@ The variable system uses a `{{variable_name}}` syntax with three scopes:
 3. Global variables (available everywhere)
 ```
 
-The database schema includes 16 tables tracking flows, nodes, variables, versions, and soft-deleted items:
+The database schema has 19 tables, covering flows, nodes, variables, versions and soft-deleted items:
 
 ```sql
 -- Core tables for flow/node versioning

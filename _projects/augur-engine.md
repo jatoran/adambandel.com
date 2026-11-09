@@ -1,6 +1,6 @@
 ---
 title: Augur Engine
-summary: Dagster-based financial data platform with 180+ assets, 30+ data providers, and LLM trading simulation
+summary: A pipeline that pulls market prices, SEC filings, government records and economic data into one database, plus a simulator for testing LLM trading agents on it
 started: 2025-12-02
 updated: 2026-01-30
 type: data-pipeline
@@ -30,9 +30,11 @@ architecture:
 
 ## Overview
 
-Augur Engine is a production-grade financial data platform that ingests, transforms, and serves market data for quantitative analysis. Built on Dagster's orchestration framework, it implements a Medallion Architecture (Bronze/Silver/Gold tiers) to progressively refine raw data from 32 external providers into analytics-ready datasets stored in ClickHouse.
+Augur Engine is a financial data pipeline built on Dagster.
+It pulls data from 32 external providers and refines it through Bronze, Silver and Gold tiers (the Medallion Architecture) into ClickHouse tables for quantitative analysis.
 
-The platform's vision extends beyond data pipelines: it provides an API surface that enables LLM-powered trading agents to test theories, run backtests, and execute paper trading simulations. The broad data coverage (SEC filings, Congressional bills, lobbying records, GDELT geopolitical events, macro indicators) supports analyst agents that surface alpha signals across structured data, documents, and alternative datasets.
+On top of the data sits an API that LLM trading agents use to test theories, run backtests and paper trade.
+The data is broad on purpose, covering SEC filings, Congressional bills, lobbying records, GDELT geopolitical events and macro indicators, so that analyst agents can look for trading signals across structured data, documents and alternative datasets.
 
 ## Screenshots
 
@@ -47,58 +49,57 @@ The platform's vision extends beyond data pipelines: it provides an API surface 
 
 ## Problem
 
-Building quantitative trading strategies requires access to diverse, high-quality financial data. Most retail and small institutional traders face fragmented data sources, inconsistent schemas, stale data, and no infrastructure to combine market prices with alternative data like SEC filings, Congressional voting records, or institutional fund flows.
+Building a quantitative trading strategy takes a wide range of financial data that can be trusted.
+Most retail and small institutional traders have that data scattered across sources with inconsistent schemas, some of it stale, and nothing to combine market prices with alternative data like SEC filings, Congressional voting records or institutional fund flows.
 
-This project consolidates 30+ data sources into a unified, query-ready platform with:
-- Automated ingestion with rate limiting and incremental processing
-- Schema-driven data quality checks (238+ asset checks)
-- A simulation environment for testing LLM trading agents without look-ahead bias
+Augur Engine pulls 30+ of those sources into one database that can be queried directly.
+Ingestion is automated, rate limited and incremental.
+There are 238+ asset checks generated from the table schemas, and a simulation environment for testing LLM trading agents without look-ahead bias.
 
 ## Approach
 
 ### Stack
 
-- **Orchestration (Dagster)** - Manages 182 assets with declarative dependencies, materialization sensors, and built-in observability. Asset checks validate data quality at each tier.
+- Dagster runs the pipeline: 182 assets with declared dependencies, materialization sensors and built-in observability. Asset checks validate the data at each tier.
 
-- **OLAP Database (ClickHouse)** - Columnar storage optimized for analytical queries across 88 tables. ReplacingMergeTree handles upserts; partitioning by date enables efficient time-series queries.
+- ClickHouse holds the analytical data in 88 columnar tables. ReplacingMergeTree handles upserts, and partitioning by date keeps time-series queries efficient.
 
-- **Relational Database (PostgreSQL)** - Source of truth for reference data: instruments, universes, organizations, and persons. Powers the symbol resolver used across all assets.
+- PostgreSQL is the source of truth for reference data (instruments, universes, organizations and persons) and backs the symbol resolver that every asset uses.
 
-- **Data Processing (Polars)** - Lazy evaluation and streaming for memory-efficient transformations. Schema validation against `ClickHouseTableSchema` definitions.
+- Polars does the transformations, with lazy evaluation and streaming to keep memory use down, and validates data against the `ClickHouseTableSchema` definitions.
 
-- **API Layer (FastAPI)** - REST endpoints for dynamic SQL queries with safety guardrails (mutation blocking, row limits, timeouts). Serves the vanilla JS frontend for data exploration.
+- FastAPI serves REST endpoints for ad hoc SQL queries, with guardrails that block mutations and cap rows and run time. It also serves a plain JavaScript frontend for exploring the data.
 
-- **LLM Trading Simulation (augur_firm)** - Multi-agent trading simulation framework. Agents receive structured market briefings, execute tool-calling for research, and submit orders through a paper trading engine.
+- augur_firm is the LLM trading simulation. Several agents get structured market briefings, call tools to do research, and submit orders through a paper trading engine.
 
 ### Challenges
 
-- **Rate limiting across 30+ APIs** - Built a distributed rate limiter using PostgreSQL advisory locks. Tokens are stored in `rate_limit_tokens` table; cross-worker coordination prevents API bans during parallel Dagster runs.
+- Rate limiting across 30+ APIs: parallel Dagster runs call the same APIs from several workers. The rate limiter is shared through PostgreSQL, with tokens in a `rate_limit_tokens` table and advisory locks coordinating the workers, which keeps parallel runs from getting banned by the providers.
 
-- **ClickHouse deduplication edge cases** - SEC 13F data showed 100x undercounts for large managers like BlackRock. Root cause: `ORDER BY` keys weren't unique when filings contained multiple sub-managers per CUSIP. Fixed by adding a hash-based row identifier.
+- ClickHouse deduplication edge cases: SEC 13F holdings for large managers like BlackRock came out 100 times too low. The `ORDER BY` keys weren't unique when a filing listed several sub-managers for the same CUSIP, so ReplacingMergeTree collapsed separate holdings into one row. A hash-based row identifier fixed it.
 
-- **LLM tool-calling reliability** - Agents hallucinated tool names (`get_technicals_quality_stocks` instead of `get_quality_stocks`). Implemented fuzzy matching with `_normalize_tool_name()` and switched from markdown to JSON tool definitions.
+- LLM tool-calling reliability: agents made up tool names, like `get_technicals_quality_stocks` for `get_quality_stocks`. Tool names now go through fuzzy matching in `_normalize_tool_name()`, and the tool definitions moved from markdown to JSON.
 
-- **Mixed intent responses** - When LLMs returned both trades and research queries in one response, trades were silently dropped. Solution: preserve first-response trades before research phase and merge with subsequent responses.
+- Mixed intent responses: when a model returned trades and research queries in the same response, the trades were silently dropped. The trades from the first response are now kept through the research phase and merged with the responses that follow.
 
 ## Outcomes
 
-The platform successfully ingests data from 32 providers into 88 ClickHouse tables, with 182 Dagster assets and 238+ automated quality checks. Key achievements:
+Augur Engine ingests data from 32 providers into 88 ClickHouse tables through 182 Dagster assets, with 238+ automated quality checks.
 
-- **Zero-API bootstrap**: Fresh installations can load from Parquet cache without API calls using `full_bootstrap_job`
-- **Incremental processing**: Watermark-based loading processes only new data, reducing daily runs to minutes
-- **Full Docker deployment**: All services (Dagster, FastAPI, ClickHouse, PostgreSQL) run in containers with proper dependency ordering
-- **LLM simulation framework**: Trading agents can execute multi-day backtests with persistent memory, watchlists, and engine-enforced stop-losses
+- A fresh install can load from the Parquet cache with `full_bootstrap_job`, without a single API call.
+- Loading is incremental: watermarks mean each run processes only new data, so a daily run takes minutes.
+- Dagster, FastAPI, ClickHouse and PostgreSQL all run in Docker containers, started in dependency order.
+- Trading agents can run multi-day backtests with persistent memory, watchlists, and stop-losses that the engine enforces.
 
-Lessons learned:
-- Schema-as-code (`ClickHouseTableSchema`) eliminates drift between code and database
-- Dagster's asset checks catch data quality issues before they propagate downstream
-- Rate limiting needs distributed coordination in production; in-memory buckets fail with multiple workers
+Defining every table once in code, as a `ClickHouseTableSchema`, keeps the code and the database from drifting apart.
+Dagster's asset checks catch bad data before it spreads to downstream assets.
+Rate limiting needs coordination across workers; in-memory buckets fail as soon as there is more than one.
 
 ## Implementation Notes
 
 ### Schema-Driven Architecture
 
-All table definitions live in Python dataclasses, generating DDL, IO manager configs, and asset checks:
+Every table is defined once as a Python dataclass, and its DDL, IO manager config and asset checks are generated from that definition:
 
 ```python
 RAW_OHLCV_DAILY = ClickHouseTableSchema(

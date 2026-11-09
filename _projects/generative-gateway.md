@@ -1,6 +1,6 @@
 ---
 title: Generative Gateway
-summary: Provider-agnostic HTTP gateway for LLM APIs with unified schemas, usage tracking, and cost management
+summary: An HTTP service that puts one API in front of LLM providers and logs the tokens and cost of every request
 started: 2025-11-07
 updated: 2026-01-04
 type: api
@@ -29,9 +29,13 @@ architecture:
 
 ## Overview
 
-Generative Gateway is a provider-agnostic HTTP gateway that sits between client applications and multiple LLM providers (currently OpenRouter). It provides a unified API for chat completions, embeddings, and multi-modal interactions while adding enterprise-grade features like per-request cost tracking, session persistence, real-time streaming, and comprehensive observability.
+Generative Gateway is an HTTP service that sits between applications and the LLM providers they call.
+The provider behind it is currently OpenRouter.
+It gives applications one API for chat completions, embeddings, and messages that include images, PDFs or audio.
+On top of that it records the cost of every request, keeps conversation sessions, streams responses, and exports metrics and traces.
 
-The gateway abstracts away the complexity of different provider APIs, allowing applications to switch models or providers without code changes. It tracks every request with token counts, latency, and USD cost estimates, enabling teams to monitor and control their AI spending.
+Because apps call the gateway instead of a provider, switching models or providers doesn't need a code change in the app.
+Every request is logged with its token counts, latency and estimated cost in USD.
 
 ## Screenshots
 
@@ -46,49 +50,49 @@ The gateway abstracts away the complexity of different provider APIs, allowing a
 
 ## Problem
 
-Modern AI applications often need to:
-- Use multiple LLM providers or switch between them based on cost, performance, or availability
-- Track usage and costs at a granular level for billing and budgeting
-- Maintain conversation history across sessions
-- Handle streaming responses, tool calling, and multi-modal inputs (images, PDFs, audio)
-- Support "thinking" models with extended reasoning capabilities
+An app that calls LLMs usually needs to:
 
-Building these features from scratch for each application is time-consuming and error-prone. Existing solutions either lock you into a single provider or lack the observability needed for production workloads.
+- Use more than one provider, or switch between them on cost, speed or availability
+- Track usage and cost closely enough for billing and budgets
+- Keep conversation history across sessions
+- Handle streaming responses, tool calling, and images, PDFs and audio as input
+- Support "thinking" models that do extended reasoning
+
+Building all of that again for every app is slow and easy to get wrong.
 
 ## Approach
 
-The gateway implements a layered architecture that cleanly separates concerns while maintaining flexibility.
+Requests come in through one schema, and an adapter layer translates them for each provider.
 
 ### Stack
 
-- **FastAPI** - Async Python framework chosen for its native async support, automatic OpenAPI documentation, and Pydantic integration for request validation
-- **Next.js 16 + React 19** - Modern frontend stack with React Query for data fetching and server components for optimal performance
-- **SQLite** - Embedded database for zero-config deployment; schema supports easy migration to PostgreSQL for scaling
-- **OpenTelemetry** - Distributed tracing and metrics collection, exportable to any observability backend
-- **httpx** - Async HTTP client for provider requests with streaming support
-- **Server-Sent Events** - Real-time streaming of token deltas, reasoning output, and generated images
+- FastAPI, for its async support, automatic OpenAPI docs and Pydantic request validation
+- Next.js 16 and React 19 for the web UI, with React Query for data fetching and server components
+- SQLite, so there is no database server to deploy; the schema is written to move to PostgreSQL if it needs to scale
+- OpenTelemetry for distributed tracing and metrics, which can export to any observability backend
+- httpx as the async HTTP client for provider requests, including streaming
+- Server-Sent Events to stream token deltas, reasoning output and generated images
 
 ### Challenges
 
-- **Unified Thinking Interface** - Different providers implement extended reasoning differently (DeepSeek uses `:thinking` suffix, Claude uses `budget_tokens`, Gemini uses `effort` levels). Solved by mapping a single `thinking` configuration to provider-specific implementations at the adapter layer.
+- Providers each handle extended reasoning differently: DeepSeek uses a `:thinking` suffix, Claude uses `budget_tokens`, Gemini uses `effort` levels. The gateway takes one `thinking` setting, and the adapter layer maps it to each provider's version.
 
-- **Multi-Modal Message Handling** - Supporting text, images (base64/URL), PDFs, and audio in a single message format required careful schema design. Implemented a `ContentPart` union type that validates content based on message type and model capabilities.
+- Text, images (base64 or URL), PDFs and audio all fit in one message format through a `ContentPart` union type, which validates content against the message type and the model's capabilities.
 
-- **Session Persistence with Images** - Storing generated images in conversation history for context continuity. Images are persisted as base64 in the session store and properly decoded when loading history for subsequent requests.
+- Generated images stay in the conversation history so later requests have them as context. They are stored as base64 in the session store and decoded when the history is loaded for the next request.
 
-- **Real-Time Cost Tracking** - Computing accurate USD costs requires knowing per-model token pricing, which changes frequently. Implemented a pricing refresh system that pulls current rates from OpenRouter and caches them locally, with manual refresh endpoint for immediate updates.
+- Accurate USD costs need per-model token pricing, which changes often. The gateway pulls current rates from OpenRouter and caches them locally, and an endpoint refreshes them on demand.
 
 ## Outcomes
 
-The gateway successfully provides:
+- One API across 100+ models from different providers
+- Every request logged with its input and output tokens and its USD cost
+- Conversation history kept automatically and loaded lazily
+- Retries with exponential backoff, and hedged requests for calls where latency matters
+- Prometheus metrics, OpenTelemetry traces and structured JSON logs
 
-- **Provider Abstraction** - Single API works across 100+ models from different providers
-- **Cost Visibility** - Every request logged with input/output tokens and USD cost
-- **Session Management** - Automatic conversation history with lazy loading
-- **Resilience** - Retry with exponential backoff, hedged requests for latency-sensitive calls
-- **Observability** - Prometheus metrics, OpenTelemetry traces, structured JSON logging
-
-Key learning: The adapter pattern works well for provider abstraction, but the real complexity lives in normalizing response formats. Provider APIs return reasoning, tool calls, and multi-modal content in wildly different structures.
+The adapters handled the differences between provider APIs well.
+Most of the complexity was in normalizing responses, because providers return reasoning, tool calls and multi-modal content in wildly different structures.
 
 ## Implementation Notes
 

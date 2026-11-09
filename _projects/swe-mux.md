@@ -1,10 +1,10 @@
 ---
 title: swe-mux
-summary: A terminal multiplexer for coding agents. Real terminals on your own machine, a status per session, and the same sessions on your phone.
+summary: A terminal multiplexer for coding agents with high optimization for mobile use and development
 status: Active
 date: 2026-08-16
 started: 2026-07-12
-updated: 2026-10-23
+updated: 2026-11-08
 github: https://github.com/jatoran/swe-mux
 demo: https://swemux.dev/demo/
 type: desktop + web
@@ -30,10 +30,20 @@ discussions:
 
 ## Overview
 
-swe-mux runs coding agents in real terminals on your own machine and serves the same live sessions to the desktop and the phone.
+swe-mux is a terminal multiplexer for all your agent sessions, highly optimized for mobile use.
+It runs Claude Code, Codex, opencode, pi, oh-my-pi or any other shell in real terminals on your own machine, and the phone gets the same workspace with the same features, installed from the browser as a web app over your own Tailscale network.
 
-Claude Code, Codex, opencode, pi and oh-my-pi get a live status (working, done, or waiting on you), searchable history and resume.
-Anything else runs as an ordinary terminal with everything except the status.
+The same keys and controls work in each of those agents: Shift+Enter for a new line, Ctrl+Backspace to delete a word, the same submit, the same paste (images too), and the same text selection and click-to-place-the-cursor.
+Switching from Codex to Claude Code changes nothing about how you drive it.
+
+I usually have several Codex and Claude sessions running across different projects.
+I found the phone and project-notes experience in herdr, cmux and Orca lacking for how I work, so I built swe-mux.
+
+It also has hands-free voice control: a wake word and a short command sends a message, interrupts an agent, reads the last reply aloud or starts a new agent in a project, and anything the commands don't cover goes to an assistant that asks before doing anything consequential.
+I use it while jogging and driving without looking at my phone.
+
+Every project gets a Markdown notes editor that renders as you type, on the desk and on the phone, and a selection from it can be sent to an agent.
+A compact sidebar lists every project and its sessions with each one's state: working, idle, or waiting on you and why.
 
 It is the actual terminal, not a UI wrapped around an agent.
 Start `claude` in a plain shell pane and that pane becomes an agent session.
@@ -46,6 +56,15 @@ SSH into one shell from a phone gets you a terminal, but not the frontend you ne
 
 ## Approach
 
+### The phone is the same sessions
+
+The phone gets the same live sessions over your own Tailscale network, installed from the browser as a web app: the terminal with a row of extra keys for the ones a phone keyboard lacks, git diff review, files, notes, and a push notification when an agent needs a decision.
+A dev server bound to 127.0.0.1 on the host is proxied through swe-mux, so the phone opens it without another exposed port.
+Tailscale Serve on 443 provides the HTTPS that the microphone, clipboard and push require.
+
+There is no separate login.
+The tailnet policy is the access control, so any device it admits gets a terminal on the machine.
+
 ### Status from three signals
 
 Status comes from the CLI's hooks, its transcript, and the terminal screen.
@@ -54,31 +73,22 @@ The arbitration is pinned by 71 replay fixtures recorded from real sessions.
 
 ### A supervisor owns the terminals
 
-A separate supervisor process owns the PTYs, so the daemon can restart and the app can update underneath them without ending a session.
-My own daemon started 609 times in the 89 days its log covers.
+A separate supervisor process owns the terminals, so the daemon can restart and the app can update underneath them without ending a session.
+My own daemon started 619 times in the 104 days its log covered up to 6 November.
 A reboot, a power loss or the supervisor itself dying still ends the live processes; what survives those is the transcript and enough state to resume each agent.
-
-### The phone is the same sessions
-
-The phone gets the same live sessions over your own Tailscale network, installed as a PWA: the terminal with a key rail, git diff review, files, notes, and a push notification when an agent needs a decision.
-A dev server bound to 127.0.0.1 on the host is proxied through swe-mux, so the phone opens it without another exposed port.
-Tailscale Serve on 443 provides the HTTPS that the microphone, clipboard and push require.
-
-There is no separate login.
-The tailnet policy is the access control, so any device it admits gets a terminal on the machine.
 
 ### Agents land their own branches
 
 Agents work in their own git worktrees.
 A land queue merges trunk into a branch, runs the project's verification command, and fast-forwards trunk, one branch at a time.
 A conflict or a failed check goes back to the agent that owns the branch; the queue never resolves anything itself.
-Between Aug 21 and Sep 8 it landed 339 branches across three projects and handed 55 back.
+Between Aug 21 and Sep 8 it landed 339 branches across three of my projects.
 
 ### Stack
 
 - Python and aiohttp for the daemon, SQLite for history, telemetry and the queues
 - Preact and TypeScript for the frontend, xterm.js for the terminals
-- pywebview over WebView2 for the Windows window; everywhere else it is a browser tab or a PWA
+- pywebview over WebView2 for the Windows window; everywhere else it is a browser tab or a web app
 - PyInstaller and Inno Setup for the Windows app; the PyPI wheel ships the built frontend, so it needs no Node
 
 ## Limits

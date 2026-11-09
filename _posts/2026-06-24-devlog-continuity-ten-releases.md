@@ -29,9 +29,9 @@ Long lines were overflowing the wrap width. Not by a little, and not consistentl
 
 There turned out to be three unrelated causes stacked on top of each other.
 
-- **Stale worker fonts.** The layout worker was measuring with a font it had cached before a theme or scale change, so every measurement was subtly wrong in a way that only showed up at the wrap boundary.
-- **A max-advance ceiling.** A clamp meant to bound pathological measurement was silently truncating legitimate ones.
-- **Hanging-indent continuation budget.** Wrapped continuation lines under a list marker weren't accounting for the indent when computing remaining width.
+- Stale worker fonts. The layout worker was measuring with a font it had cached before a theme or scale change, so every measurement was subtly wrong in a way that only showed up at the wrap boundary.
+- A max-advance ceiling. A clamp meant to bound pathological measurement was silently truncating legitimate ones.
+- The hanging-indent continuation budget. Wrapped continuation lines under a list marker weren't accounting for the indent when computing remaining width.
 
 Each one alone would have been findable. Together they masked each other: fix one and the symptom persists, so you conclude the fix was wrong and revert it.
 
@@ -61,8 +61,8 @@ Your notes folder is not yours alone. Cloud sync touches it. Antivirus touches i
 
 The rule that came out of it:
 
-- **Buffer clean, file changed:** reload silently. There's nothing to lose and a prompt is noise.
-- **Buffer dirty, file changed:** banner with reload, keep mine, or show diff. Never a modal, never automatic.
+- Buffer clean, file changed: reload silently. There's nothing to lose and a prompt is noise.
+- Buffer dirty, file changed: banner with reload, keep mine, or show diff. Never a modal, never automatic.
 
 The part that took the time wasn't the rule, it was applying it at *every* entry point. Opening, reopening, session restore, cross-window reveal, and the single-instance handoff where a second launch forwards its file to the running process. Miss one and you have a path where the app quietly disagrees with the disk, which is exactly the class of bug this project exists to not have.
 

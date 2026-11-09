@@ -1,6 +1,6 @@
 ---
 title: Predator-Prey Neural Net Simulation
-summary: Evolutionary ecosystem simulation with neural network AI, real-time visualization, and emergent predator-prey dynamics
+summary: A simulation of predators and prey whose behavior comes from small neural networks that evolve over generations
 started: 2025-05-19
 updated: 2025-05-21
 type: game
@@ -29,9 +29,12 @@ architecture:
 
 ## Overview
 
-A real-time evolutionary ecosystem simulation where neural network-powered creatures compete for survival. Prey seek food and flee predators, predators hunt to survive, and both species evolve through genetic inheritance and mutation. The simulation features procedurally generated terrain, dynamic weather systems, day/night cycles, and hardware-accelerated rendering.
+Predator-Prey Neural Net Simulation is a real-time ecosystem simulation in which every creature is driven by a small neural network.
+Prey look for food and run from predators, predators hunt to survive, and both species evolve through inheritance and mutation.
+The world has procedurally generated terrain, weather that shifts between sun, rain, drought and cold snaps, a day/night cycle, and an OpenGL renderer for hardware acceleration.
 
-The project explores emergent behavior through simple rules: creatures with better-suited genes and neural networks survive longer and reproduce more, leading to population dynamics and evolutionary pressures that mirror real ecological systems.
+The rules are simple: creatures whose genes and networks suit their conditions live longer and reproduce more.
+Population cycles and evolutionary pressure come out of that on their own.
 
 ## Screenshots
 
@@ -46,34 +49,36 @@ The project explores emergent behavior through simple rules: creatures with bett
 
 ## Problem
 
-Traditional artificial life simulations often rely on hand-coded behavior rules that produce predictable outcomes. I wanted to explore whether meaningful survival strategies could emerge from neural networks that evolve through natural selection rather than explicit training, and whether complex population dynamics could arise from simple genetic rules.
+Artificial life simulations often rely on hand-coded behavior rules, which produce predictable outcomes.
+I wanted to see whether meaningful survival strategies could come out of neural networks shaped by natural selection instead of training, and whether complex population dynamics could come out of simple genetic rules.
 
 ## Approach
 
-The simulation combines evolutionary algorithms with neural networks to create an ecosystem where behavior evolves organically.
+Nothing is trained.
+Each creature's network weights are part of its genome, so behavior is inherited, mutated and selected along with everything else.
 
 ### Stack
 
-- **PyGame/ModernGL** - Dual rendering backends: PyGame for accessibility and rapid prototyping, OpenGL for hardware-accelerated performance at scale
-- **NumPy** - Vectorized operations for terrain generation, genetic clustering, and neural network computations
-- **Custom Neural Networks** - Lightweight feed-forward networks with weights encoded in the genome, enabling heritable AI behavior
-- **Spatial Indexing** - Quadtree and uniform grid implementations for O(log n) neighbor queries instead of O(n²)
+- PyGame and ModernGL: two rendering backends, PyGame for simplicity and quick prototyping, OpenGL for hardware-accelerated rendering with larger populations
+- NumPy for vectorized terrain generation and genetic clustering
+- Neural networks: small feed-forward networks written from scratch, with the weights stored in the genome so behavior is inherited
+- Spatial indexing: quadtree and uniform grid implementations for O(log n) neighbor queries instead of O(n²)
 
 ### Challenges
 
-- **Performance at scale** - Initial O(n²) neighbor lookups caused frame drops with 200+ entities. Implemented a dual spatial index system (quadtree + uniform grid) with configurable cell sizes and stack-based traversal for cache efficiency
-- **Balancing ecosystem stability** - Early simulations resulted in extinction cascades. Tuned energy costs, reproduction thresholds, and perception radii through extensive parameter exploration to achieve stable predator-prey cycles
-- **Species emergence tracking** - Needed a way to identify when genetic drift created distinct populations. Implemented hierarchical clustering with configurable genetic distance thresholds and async processing to avoid frame stutters
+- Neighbor lookups started out O(n²), which dropped frames past 200 entities. Two spatial indexes replaced them, a quadtree and a uniform grid, with configurable cell sizes and stack-based traversal for cache efficiency.
+- Early runs ended in extinction cascades. Getting stable predator-prey cycles took a lot of tuning of energy costs, reproduction thresholds and perception radii.
+- Telling when genetic drift has produced a distinct population takes hierarchical clustering of the genomes, with a configurable genetic distance threshold. It runs asynchronously so it doesn't cause frame stutters.
 
 ## Outcomes
 
-The simulation successfully demonstrates emergent evolutionary behavior. Prey populations develop faster movement genes when predator pressure is high. Predators evolve improved perception when prey become harder to catch. The neural networks, despite their simplicity (4-5 inputs, 5 outputs), learn effective survival strategies through evolution alone.
+Prey populations develop faster movement genes when predator pressure is high.
+Predators evolve better perception when prey get harder to catch.
+The networks are small, 4-5 inputs and 5 outputs, and evolution alone still gets them to survival strategies that work.
 
-Key technical achievements:
-- Maintains 60 FPS with 300+ active entities
-- Memory-optimized entity classes using `__slots__`
-- Comprehensive test suite with 30+ test modules
-- Modular architecture separating simulation, rendering, and AI concerns
+It holds 60 FPS with more than 300 active entities.
+Entity classes use `__slots__` to save memory.
+Simulation, rendering and AI are separate modules, and there are more than 30 test modules.
 
 ## Implementation Notes
 
@@ -94,11 +99,11 @@ class FeedForwardNet:
         return x
 ```
 
-Offspring inherit averaged parent weights with 10% mutation rate, allowing beneficial behavioral adaptations to spread through the population.
+Offspring inherit the average of their parents' weights with a 10% mutation rate, so behavior that helps can spread through the population.
 
 ### Spatial Indexing Strategy
 
-The simulation uses a hybrid approach based on entity density:
+The uniform grid is the default index, and the quadtree is still available as an alternative:
 
 ```python
 class UniformGrid(SpatialIndex):

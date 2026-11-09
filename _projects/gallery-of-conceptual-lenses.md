@@ -1,6 +1,6 @@
 ---
 title: Gallery of Conceptual Lenses
-summary: Diversity-maximizing engine that selects orthogonal analytical frameworks for multi-perspective problem analysis
+summary: A brainstorming tool that picks perspectives for a problem, such as disciplines and philosophies, that are relevant but far apart from each other
 started: 2025-05-18
 updated: 2025-11-26
 type: web-app
@@ -31,9 +31,13 @@ architecture:
 
 ## Overview
 
-Gallery of Conceptual Lenses is a perspective engineering engine that goes beyond traditional semantic search to construct a "maximum entropy bounding box" of diverse analytical frameworks around any problem statement. Rather than finding similar concepts, it optimizes for *diversity within relevance*—forcing users to examine issues through distinct, non-obvious theoretical lenses from disciplines, philosophies, and cognitive frameworks they might never have considered.
+Gallery of Conceptual Lenses takes a problem statement and picks a set of lenses for it, where a lens is a frame of thought: a discipline, a philosophy, a reasoning mode, a cognitive bias and so on.
+Each lens has to be relevant to the problem, and together they have to be as far apart from each other in embedding space as possible.
+That's the reverse of semantic search, which returns whatever is closest.
+The chosen lenses go into a prompt template, so a model can work the problem from each of them.
 
-The system maintains a curated taxonomy of 1000+ concepts across eight dimensions (disciplines, epistemic schools, rhetorical styles, value frameworks, formal structures, cognitive bias probes, temporal horizons, and scale granularities), then applies MaxMin greedy optimization to select a set of lenses that are both relevant to the problem and maximally distant from each other in semantic space.
+The lenses come from a taxonomy of more than 1,000 concepts in 12 categories, among them disciplines, epistemic schools, rhetorical styles, value frameworks, formal structures, cognitive bias probes, time horizons and scales.
+A greedy MaxMin selection then picks lenses that clear a relevance threshold and sit as far as possible from the ones already chosen.
 
 ## Screenshots
 
@@ -48,38 +52,46 @@ The system maintains a curated taxonomy of 1000+ concepts across eight dimension
 
 ## Problem
 
-When analyzing complex problems, humans default to familiar frameworks—an economist sees market failures, an engineer sees systems to optimize, a philosopher sees ethical dilemmas. This tunnel vision limits solution quality. Existing tools like semantic search only exacerbate this by returning *similar* content, reinforcing existing biases rather than challenging them.
+One day I spent a long time researching prompt engineering and current work on latent space, and went down a side rabbit hole: how do you extend a model's horizon?
 
-The goal was to build a system that could systematically inject intellectual diversity into any analysis, surfacing perspectives from quantum physics, indigenous knowledge systems, game theory, deep ecology, or chaos mathematics—whichever combination maximizes the analytical coverage of the problem space.
+When you send a prompt to an LLM, it activates the neurons and connections in the hidden layers that relate to the prompt, and a lot of the latent space goes unused.
+That's generally good, because it's efficient and gives you something related to what you asked.
+But if you want the model to be more creative, you want it searching through things as different from the prompt as possible.
+
+People have the same habit with familiar frameworks: an economist sees market failures, an engineer sees systems to optimize, a philosopher sees ethical dilemmas.
+Semantic search makes it worse, because it returns content similar to what you already asked.
+The goal was a way to pull in perspectives from anywhere (quantum physics, indigenous knowledge systems, game theory, deep ecology, chaos mathematics), in whatever combination covers the most ground around the problem.
 
 ## Approach
 
 ### Stack
 
-- **Streamlit** - Interactive UI for real-time parameter tuning and visualization; same codebase supports CLI for batch processing
-- **OpenAI text-embedding-3-large** - High-dimensional (1536d) semantic representations for taxonomy concepts and problem statements
-- **sentence-transformers** - Local fallback embeddings for offline development and cost reduction
-- **scikit-learn** - Cosine similarity calculations and candidate filtering
-- **UMAP** - Dimensionality reduction for intuitive 2D visualization of the lens selection process
-- **NumPy** - Vector operations including the composite lens averaging strategy
+- Streamlit for the UI, with controls for the parameters and the plots. The same `main.py` also runs from the command line for batch runs.
+- OpenAI `text-embedding-3-large` for embedding the taxonomy and the problem statement, at 3,072 dimensions.
+- sentence-transformers (`all-MiniLM-L6-v2`) as a local fallback, for offline work and to cut API cost.
+- scikit-learn for cosine similarity and candidate filtering.
+- UMAP for the original 2D plot of the selection. The current plot uses PCA instead, centered on the problem and fitted to the chosen lenses so they spread out on screen.
+- NumPy for the vector math, including averaging parts into composite lenses.
 
 ### Challenges
 
-- **Combinatorial explosion** - With 8 taxonomy dimensions and hundreds of values each, full enumeration is intractable. Solved via Monte Carlo reservoir sampling that caps candidate pools at ~10,000 while maintaining statistical representativeness.
-
-- **Composite lens semantics** - Multi-part lenses like "Game Theory × Deep Ecology" don't exist in embedding space. Implemented on-the-fly vector averaging with dynamic threshold adjustment (+0.025 per part beyond 2) to prevent noisy combinations from appearing falsely relevant.
-
-- **Diversity vs relevance tension** - Pure diversity optimization ignores problem context; pure relevance optimization returns similar lenses. The MaxMin greedy algorithm with minimum separation constraints (0.15 cosine distance) achieves the optimal trade-off.
+- Crossing categories multiplies fast, and the biggest category has hundreds of values, so not every combination can be scored. Reservoir sampling caps the candidate pool at 10,000 by default, with every combination equally likely to make it in.
+- A multi-part lens like "Game Theory × Deep Ecology" has no embedding of its own, so its vector is the average of its parts, computed on the fly. To keep noisy combinations from passing as relevant, the relevance threshold rises by 0.025 for each part beyond two.
+- Optimizing only for diversity ignores the problem, and optimizing only for relevance returns lenses that all look alike. The relevance threshold takes care of the first, and the MaxMin selection, which keeps chosen lenses at least 0.15 cosine distance apart, takes care of the second.
 
 ## Outcomes
 
-The system successfully generates lens sets where every pair has low semantic overlap, verified visually via the pairwise heatmap. In practice, a problem like "impact of AI on employment" might yield lenses spanning behavioral economics, philosophy of mind, labor history, systems dynamics, and speculative fiction—none of which an unaided human would likely combine.
+Every pair of chosen lenses is at least the minimum separation apart, and a pairwise similarity heatmap shows how much any two of them overlap.
 
-The architecture demonstrates that diversity optimization is a tractable alternative to similarity search for certain creative and analytical applications. The embedding cache strategy reduces API costs by 95%+ after initial taxonomy pre-computation.
+The taxonomy is embedded once and cached to disk, and composite lenses are averaged from cached vectors instead of being embedded, so after that first pass a new problem needs one embedding call.
+The cache cuts API cost by more than 95%.
+
+The drawback is that working from lenses that far apart makes the model less focused.
+But when I want it to think outside the box or take several approaches to something, I've found it a great tool for brainstorming and coming up with new ideas.
 
 ## Implementation Notes
 
-The core diversity selection uses a MaxMin greedy algorithm that anchors on the most relevant lens, then iteratively selects whichever remaining candidate maximizes the minimum distance to all already-selected lenses:
+The selection starts from the lens most similar to the problem, then keeps adding whichever remaining candidate is farthest from its nearest already-chosen lens:
 
 ```python
 def step4_pick_far_apart_lenses(relevant_lenses, n_lenses, min_separation):
@@ -105,4 +117,4 @@ def step4_pick_far_apart_lenses(relevant_lenses, n_lenses, min_separation):
     return chosen
 ```
 
-The dual CLI/Streamlit architecture detects runtime environment via `sys.streamlit_is_running`, enabling the same `main.py` to serve both headless batch processing and interactive exploration without code duplication.
+`main.py` checks `sys.streamlit_is_running` to tell whether it's running under Streamlit, so the same file serves as the web UI and as a command-line tool for batch runs.

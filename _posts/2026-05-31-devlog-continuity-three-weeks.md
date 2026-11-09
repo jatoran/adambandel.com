@@ -34,9 +34,9 @@ Sublime's crash-safety is the feature I actually wanted, and it's the one you ca
 
 Every keystroke writes to a local SQLite database. The database is the document. A `.md` file is an export.
 
-That sounds like a storage detail and it isn't. It decides what a tab is, what closing a window means, what "unsaved" means, whether there's a dirty indicator, whether closing prompts you. Answering it first meant I never had to build the save-state machinery, which meant I never had to remove it.
+That sounds like a storage detail and it isn't. It decides what a tab is, what closing a window means, what "unsaved" means, whether there's a dirty indicator, whether closing prompts you. Answering it first meant saving to a file never had to be what keeps your work safe. Ctrl+S still writes the file and a tab still shows when its file is behind, but closing it or crashing loses nothing.
 
-The corresponding rule on the rendering side landed with Markdown preview on day one: **the rope is canonical, and the display map only projects.** It can hide, replace, or wrap source ranges. It cannot invent content. Every WYSIWYG feature has to survive the display map being ripped out.
+The corresponding rule on the rendering side landed with Markdown preview on day one: the text is the source of truth, and the rendering only shows it. The rendering layer can hide, replace, or wrap parts of the source. It cannot add content. Every WYSIWYG feature has to survive that layer being ripped out.
 
 That killed several things I wanted over the following weeks, which is the point of having it.
 
@@ -48,17 +48,17 @@ From 17 to 21 May the commit messages degrade into `Performance Fixing`, `Perfor
 
 What came out of it was the tracing infrastructure and the perf gates, which turned out to matter more than any individual optimization. Gates that fail the build are the only reason the numbers held for the next three months.
 
-These are the gates that came out of that fortnight. Upper bound at p99, still enforced today, unchanged:
+These are the gates that came out of that fortnight, upper bound at p99. Painting a frame and re-parsing the Markdown have tighter targets, 2 ms and 1 ms, but the tests run on shared hardware and fail at four times those:
 
 | Gate | p99 budget |
 |---|---:|
 | keypress to pixel | 8 ms |
+| WM_PAINT to frame ready | 8 ms |
 | core apply edit | 4 ms |
-| WM_PAINT to frame ready | 2 ms |
+| incremental Markdown parse | 4 ms |
 | buffer apply edit | 2 ms |
-| incremental Markdown parse | 1 ms |
 
-Plus a dhat assertion of zero new heap allocations per keystroke in steady state.
+Zero heap allocations per keystroke became a rule for the typing path as well, but it's checked in code review, not by a test.
 
 ## Then the unglamorous half
 
@@ -68,13 +68,13 @@ And one commit on 30 May titled `FIXED OFF FOCUS BUFFER SHIT`, which I'm leaving
 
 On 31 May there were release binaries, and then four releases in under two hours, because packaging something for other people surfaces four things instantly.
 
-Where it stood at v0.1.0, three weeks in: 101 commits, 18 phases, 4 releases on day one, 0 save buttons.
+That was v0.1.0, three weeks in.
 
 ## What I'd tell myself on 9 May
 
-Deciding the storage model before the UI was the single call that paid off, and it paid off by preventing work rather than producing any. Most of what makes a notes app annoying is save-state, and I never built it.
+Deciding the storage model before the UI was the single call that paid off, and it paid off by preventing work rather than producing any. Most of what makes a notes app annoying is save-state, and here it never has to protect anything.
 
-Writing the perf gates during the optimization push rather than after it was the second one. Optimizations you can't defend against regression aren't optimizations, they're a mood.
+Writing the perf gates during the optimization push rather than after it was the second one. An optimization with nothing guarding it against regression doesn't last.
 
 The thing I got wrong: 18 numbered phases and a spec that described a finished product. Useful scaffolding for about ten days, then it became a document I was maintaining instead of following. Phase numbers stop being a coordinate the moment the next phase lands. That eventually became a conventions rule banning phase-numbered filenames, which exists because the codebase was full of them.
 

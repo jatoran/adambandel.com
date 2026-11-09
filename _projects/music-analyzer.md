@@ -1,6 +1,6 @@
 ---
 title: Music Analyzer
-summary: Real-time audio analysis system extracting musical features for AI music generation
+summary: Analyzes whatever music is playing on a Windows PC as it plays, and turns a recorded song into a prompt for the AI music generator Suno
 started: 2026-01-02
 updated: 2026-01-07
 type: desktop
@@ -32,9 +32,11 @@ architecture:
 
 ## Overview
 
-Music Analyzer is a sophisticated real-time audio analysis system that captures system audio and extracts comprehensive musical features using a combination of AI models and digital signal processing. It generates "Music Intelligence Profiles" optimized for AI music generation systems like Suno v5.
+Music Analyzer captures whatever audio is playing on a Windows PC and analyzes it as it plays, with a mix of neural models and ordinary signal processing.
+Record a song from start to finish and it builds a profile of the whole track, then turns that into a prompt for AI music generators like Suno v5.
 
-The system runs as a FastAPI web server with WebSocket streaming, providing live visualization of audio analysis at 10Hz refresh rate. It combines multiple specialized analyzers—from neural network classifiers to traditional DSP algorithms—and uses modal fusion to cross-validate signals between models for improved accuracy.
+It runs as a FastAPI server and streams results over a WebSocket to a browser page that updates 10 times a second.
+Several analyzers run side by side, from neural network classifiers to plain DSP, and a fusion step checks them against each other: if one model hears singing but the separated vocal track is silent, the singing is dropped.
 
 ## Screenshots
 
@@ -49,42 +51,44 @@ The system runs as a FastAPI web server with WebSocket streaming, providing live
 
 ## Problem
 
-Creating effective prompts for AI music generation requires detailed understanding of a song's musical characteristics—genre, instrumentation, tempo, key, production style, and emotional arc. Manually describing these attributes is tedious and often inaccurate.
+A good prompt for an AI music generator has to describe a song's genre, instruments, tempo, key, production style and emotional arc.
+Describing all of that by hand is tedious and often inaccurate.
 
-Existing audio analysis tools either focus on single aspects (just beat detection, just genre classification) or require offline processing. There was no unified system that could analyze music in real-time across multiple dimensions and output prompts specifically optimized for AI music generators.
+Existing audio analysis tools either do one thing, like beat detection or genre classification, or only work offline.
+None of them analyzed music live across all of these at once and wrote the result as a prompt for a music generator.
 
 ## Approach
 
-Built a multi-model analysis pipeline that combines the strengths of different approaches: fixed-taxonomy classification (AST), zero-shot classification (CLAP), neural pitch detection (CREPE), source separation (Demucs), and traditional DSP algorithms (librosa).
+Each part of the analysis uses a different kind of model: AST classifies against a fixed set of labels, CLAP matches audio to labels written in plain language without training on them (zero-shot), CREPE tracks pitch, Demucs separates the audio into stems, and librosa does the traditional signal processing.
 
 ### Stack
 
-- **Audio Capture** - PyAudioWPatch with WASAPI loopback for zero-config system audio capture on Windows
-- **Neural Models** - PyTorch with CUDA for GPU-accelerated inference (AST, CLAP, CREPE, emotion2vec, Demucs)
-- **DSP Analysis** - librosa for spectral features, beat tracking, chord detection, and key estimation
-- **Web Server** - FastAPI with WebSocket streaming for real-time browser visualization
-- **Frontend** - Vanilla JS with Chart.js for live metrics and temporal charts
-- **LLM Integration** - httpx async client connecting to Generative Gateway for enhanced prompt generation
+- Audio capture: PyAudioWPatch with WASAPI loopback, which records system audio on Windows with no setup
+- Neural models: AST, CLAP, CREPE, emotion2vec and Demucs on PyTorch, running on the GPU through CUDA
+- DSP: librosa for spectral features, beat tracking, chord detection and key estimation
+- Web server: FastAPI, streaming to the browser over a WebSocket
+- Frontend: vanilla JS with Chart.js for the live metrics and the charts over time
+- LLM: an async httpx client that calls my Generative Gateway during prompt generation
 
 ### Challenges
 
-- **Model hallucinations** - Individual models often misclassify audio. Solved with modal fusion: cross-validating signals between AST, CLAP, and Demucs. If AST detects "singing" but Demucs shows no vocal stem energy, the vocal detection is suppressed.
+- Each model on its own often misclassifies audio. AST, CLAP and Demucs are cross-checked against each other, so if AST detects "singing" but the Demucs vocal stem has no energy, the vocal detection is suppressed.
 
-- **VRAM pressure** - Running 5+ neural models simultaneously exhausts GPU memory. Implemented lazy loading where models only load when explicitly enabled, plus per-model toggles in the UI.
+- Running five or more neural models at once runs out of GPU memory. Models only load when they are switched on, and each has its own toggle in the UI.
 
-- **Real-time performance** - Needed consistent 10Hz analysis with GPU models. Precomputed CLAP text embeddings (eliminating encoder passes in hot loop) and batched multi-category inference achieve 10-50x speedup.
+- Holding a steady 10 Hz with GPU models meant precomputing CLAP's text embeddings, so the text encoder never runs in the hot loop, and batching every category into one inference pass. Together those made it 10-50x faster.
 
-- **Song structure detection** - Detecting verse/chorus/bridge boundaries without beat grid information. Built multi-feature change detection tracking energy, brightness, warmth, and vocal presence with adaptive thresholding and fallback auto-splitting.
+- Song sections (verse, chorus, bridge) have to be found without a beat grid. Boundaries come from changes in energy, brightness, warmth and vocal presence, with an adaptive threshold and a fallback that splits flat songs automatically.
 
 ## Outcomes
 
-The system successfully generates detailed Suno v5 prompts that capture a song's evolving characteristics—not just static tags, but per-section descriptions of dynamics, texture, production techniques, and instrumentation. The modal fusion approach measurably reduces model hallucinations compared to single-model classification.
+The Suno v5 prompts it writes follow the song as it changes.
+Instead of one set of tags for the whole track, each section gets its own description of dynamics, texture, production and instrumentation.
 
-Key learnings:
-- Zero-shot models (CLAP) complement fixed-taxonomy models (AST) well—each catches what the other misses
-- Precomputing static embeddings is essential for real-time neural network inference
-- Cross-model validation is more robust than confidence thresholds for filtering false positives
-- Frame-based session recording enables clean separation between real-time and offline processing
+CLAP's zero-shot labels and AST's fixed ones work well together; each catches what the other misses.
+Precomputing static embeddings is essential for real-time inference.
+Checking one model against another filters false positives more reliably than confidence thresholds.
+Recording sessions as frames keeps the real-time analysis cleanly separate from the offline processing afterwards.
 
 ## Implementation Notes
 

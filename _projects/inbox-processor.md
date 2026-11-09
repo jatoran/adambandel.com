@@ -1,6 +1,6 @@
 ---
 title: Inbox Processor
-summary: Unified content ingestion hub with AI-powered deduplication and intelligent routing
+summary: A web app that collects emails and typed notes in one inbox to sort, flags duplicates, and passes links on to a media feed
 started: 2025-11-27
 updated: 2026-01-01
 type: web-app
@@ -30,9 +30,10 @@ architecture:
 
 ## Overview
 
-Inbox Processor is a unified "second brain" entry point that aggregates content from multiple sources—Gmail and manual notes—into a single processing pipeline. It standardizes inputs, enforces context assignment, detects duplicates using both hash-based and semantic similarity matching, and intelligently routes items to their final destinations in external systems.
-
-The system addresses a common knowledge management pain point: information arrives from multiple channels but lacks a unified system for organization, deduplication, and routing. Rather than manually sorting emails and notes into different apps, Inbox Processor provides a triage interface that ensures nothing falls through the cracks.
+Inbox Processor collects emails from Gmail and notes typed into it by hand, and puts them in one queue to sort.
+Every item has to be given a context before it can be processed.
+Duplicates are flagged two ways, by exact hash and by semantic similarity, and from there an item is archived or sent on to another app with one click.
+Right now the one destination wired up is my Personal Media Feed (PMF) app.
 
 ## Screenshots
 
@@ -47,45 +48,40 @@ The system addresses a common knowledge management pain point: information arriv
 
 ## Problem
 
-Information overload is real. Emails containing bookmarks, articles, media recommendations, and notes arrive constantly but end up scattered across inboxes without proper categorization. Manual triage is tedious, duplicates slip through, and items meant for specific systems (like a media feed or note-taking app) require manual copy-paste workflows.
+Bookmarks, articles, media recommendations and notes arrive by email all the time and end up scattered across inboxes with no categories.
+Sorting them by hand is tedious, duplicates slip through, and anything meant for another system, like a media feed or a notes app, has to be copied over by hand.
 
-The goal was to create a single intake point that:
-- Pulls content from email automatically
-- Allows quick manual note entry
-- Requires context assignment upfront (no more "I'll organize this later")
-- Catches duplicates before they clutter destination systems
-- Routes items to the right place with one click
+The goal was one intake point that pulls in email automatically, takes quick manual notes, makes you pick a context up front instead of leaving the sorting for later, catches duplicates before they reach the destination apps, and sends each item to the right place in one click.
 
 ## Approach
 
-The system uses a hybrid architecture combining traditional CRUD operations with vector embeddings for intelligent deduplication.
+It is an ordinary CRUD app with a vector index added for finding duplicates.
 
 ### Stack
 
-- **FastAPI (Python)** - Async-first API framework with automatic OpenAPI documentation. Handles Gmail sync, CRUD operations, and external service integration.
-- **React + TypeScript** - Modern frontend with hooks-based state management. Vite for fast development builds, Tailwind CSS for styling.
-- **SQLite + SQLAlchemy** - Lightweight relational storage for inbox items with full ORM support. No separate database server needed.
-- **ChromaDB** - Vector database for semantic similarity search. Uses `all-MiniLM-L6-v2` embeddings to detect near-duplicate content even when wording differs.
-- **Docker Compose** - Containerized deployment with multi-stage builds for both frontend (Nginx) and backend (Uvicorn).
+- FastAPI (Python) for the API, which handles Gmail sync, the CRUD operations and calls to other services, with automatic OpenAPI docs
+- React and TypeScript for the frontend, with hooks for state, Vite for builds and Tailwind CSS for styling
+- SQLite with SQLAlchemy for the inbox items, so there is no separate database server
+- ChromaDB as the vector database, with `all-MiniLM-L6-v2` embeddings, to find near-duplicates even when the wording differs
+- Docker Compose for deployment, with multi-stage builds for the frontend (served by Nginx) and the backend (Uvicorn)
 
 ### Challenges
 
-- **Semantic vs. Exact Deduplication** - Hash-based deduplication catches identical content but misses paraphrased duplicates. Solved by combining SHA256 hashes with vector similarity (cosine distance < 0.5). Added secondary attachment checks to prevent false positives when file attachments differ.
+- A hash catches identical content but misses a paraphrased duplicate. SHA256 hashes are combined with vector similarity (cosine distance under 0.5), plus a second check on attachments so that two items with different files aren't flagged as the same.
 
-- **Bulk Operations with External Services** - Archiving items needs to sync state back to Gmail. Implemented async batch operations with semaphore-based throttling to avoid overwhelming the Gmail API while keeping the UI responsive.
+- Archiving an item has to sync back to Gmail. Bulk archives run as async batches throttled by a semaphore, so the Gmail API isn't flooded and the UI stays responsive.
 
-- **Context Enforcement** - Users tend to defer organization. Made context selection mandatory on both manual entry and import, with clear visual indicators. Items can't be processed without a context.
+- Sorting tends to get put off. A context is required on both manual entry and import, each item shows its context as a badge, and nothing can be processed without one.
 
 ## Outcomes
 
-The system successfully consolidates the email-to-second-brain workflow into a single interface. Key wins:
+- Bulk selection and one-click routing replace the copy-paste
+- Semantic matching catches duplicates the hash misses
+- A required context keeps an unsorted pile from building up
+- Every item is tracked through its lifecycle, from inbox to processed to archived
 
-- **Faster triage** - Bulk selection and one-click routing eliminates repetitive copy-paste
-- **Fewer duplicates** - Semantic matching catches items that hash-based dedup misses
-- **Forced organization** - Mandatory context prevents the "unsorted" pile from growing
-- **Audit trail** - All items tracked through their lifecycle (inbox → processed → archived)
-
-Vector embeddings proved surprisingly effective for catching "soft duplicates" like forwarded emails or slightly reworded bookmarks. The hybrid approach (hash + vector) provides both speed and accuracy.
+The embeddings catch near-duplicates like forwarded emails or slightly reworded bookmarks.
+The hash check runs first, and the vector search only runs when there is no exact match.
 
 ## Implementation Notes
 
@@ -117,7 +113,7 @@ if not existing:
 
 ### Data Model
 
-Items flow through defined states with clear transitions:
+Items move through these states:
 
 ```
 inbox → processed → archived
@@ -131,10 +127,10 @@ The `InboxItem` model tracks source (`gmail` or `manual`), `source_id` for Gmail
 
 ### Frontend Filtering
 
-The sidebar provides multi-dimensional filtering:
+The sidebar filters by:
 
-- **Context**: JAR, CMR, Personal, Uncategorized
-- **Type**: Web Links, Text Emails, Attachments, YouTube, IMDb
-- **Status**: Processed, Failed, Archived
+- Context: JAR, CMR, Personal, Uncategorized
+- Type: Web Links, Text Emails, Attachments, YouTube, IMDb
+- Status: Processed, Failed, Archived
 
 Filters combine with `useMemo` for client-side performance. Dark mode persists to localStorage with system preference detection on first load.

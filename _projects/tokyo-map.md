@@ -1,6 +1,6 @@
 ---
 title: Tokyo Map
-summary: Interactive Tokyo transit map with metro stations, rail lines, and curated points of interest
+summary: An interactive Tokyo map of the places I wanted to visit on a trip and the nearest train stations to each, saved as one HTML file
 started: 2024-11-04
 updated: 2024-11-22
 type: web-app
@@ -20,9 +20,11 @@ files: 7
 
 ## Overview
 
-Tokyo Map is an interactive web-based map application that visualizes Tokyo's complex transit network alongside curated points of interest. It generates a self-contained HTML file featuring metro stations, rail lines with color-coded routes, and 80+ Tokyo attractions with descriptions, photos, and nearest station information.
+Tokyo Map is a Python program that builds an interactive map of Tokyo as a single HTML file.
+It shows the metro stations and rail lines, each line in its own color, and the places I wanted to visit, from teamLab exhibitions to yokocho alleys.
+Each place's popup lists its three nearest stations and, where available, a description and photos.
 
-The application fetches real geographic data from OpenStreetMap, geocodes addresses, pulls Wikipedia descriptions, and renders everything into a feature-rich Leaflet.js map with responsive design for both desktop and mobile use.
+It pulls station, line and ward data from OpenStreetMap, geocodes the addresses, fetches descriptions from Wikipedia, and renders it all as a Leaflet.js map laid out for a phone as well as a desktop.
 
 ## Screenshots
 
@@ -37,39 +39,46 @@ The application fetches real geographic data from OpenStreetMap, geocodes addres
 
 ## Problem
 
-Navigating Tokyo as a visitor is challenging due to the city's sprawling metro network with 13+ lines and hundreds of stations. Existing maps either focus purely on transit or purely on attractions, rarely connecting the two. Travelers need to know not just where something is, but how to get there via public transit.
+I had been to Tokyo once before and was planning a second trip, and I thought it would be nice to have an interactive map to go around with me.
+It would show the places I wanted to visit, so I could see them clustered around the areas I was going to, and it would all be saved locally as a single HTML file on my phone.
+Each pin would have its own details, images and links.
 
-This project was built to create a personal travel companion that combines curated destinations with practical transit information, showing the 3 nearest metro stations to any point of interest.
+Tokyo's metro network has 13+ lines and hundreds of stations, so the map also shows the three nearest stations to every place.
 
 ## Approach
 
-The solution pulls live data from OpenStreetMap and Wikipedia to build a comprehensive, self-updating map.
+All the data is fetched when the map is built and cached to files, so the HTML is a snapshot, not a live map.
 
 ### Stack
 
-- **Folium + Leaflet.js** - Generates interactive maps from Python with full JavaScript interactivity, no backend server required
-- **OSMnx** - Queries OpenStreetMap's Overpass API for transit infrastructure (stations, rail lines, ward boundaries)
-- **GeoPandas** - Handles geospatial data manipulation, coordinate transformations, and spatial queries
-- **Geopy/Nominatim** - Geocodes street addresses to coordinates with rate limiting and caching
-- **SciPy KDTree** - Enables fast nearest-neighbor queries to find closest metro stations to each address
-- **Branca** - Creates color-coded line visualizations for distinct metro routes
+- Folium and Leaflet.js: interactive maps generated from Python, with no backend server
+- OSMnx to query OpenStreetMap's Overpass API for stations, rail lines and ward boundaries
+- GeoPandas for the geospatial data, coordinate transformations and spatial queries
+- Geopy with Nominatim to geocode street addresses, rate-limited and cached
+- SciPy's KDTree for nearest-neighbor queries, to find the closest stations to each address
+- Branca to give each line its own color
 
 ### Challenges
 
-- **Rate limiting and caching** - OpenStreetMap and Nominatim have request limits. Implemented file-based caching (CSV/GeoJSON) for all API responses to enable rapid iteration without re-fetching data
-- **Japanese character handling** - Station and line names exist in Japanese, English, or mixed formats. Built a translation mapping system (`line_name_mapping.json`) to normalize display names
-- **Mobile responsiveness** - Folium generates desktop-first maps. Added custom CSS media queries and a collapsible sidebar with touch-friendly controls for mobile viewing
-- **Image association** - Matching downloaded photos to locations required parsing filenames with regex patterns and fuzzy matching against address names
+- OpenStreetMap and Nominatim limit requests. Every API response is cached to a file (CSV or GeoJSON), so the map can be rebuilt quickly without fetching the data again.
+- Station and line names come in Japanese, English or a mix. A mapping file, `line_name_mapping.json`, normalizes the display names.
+- Folium maps are built for the desktop first. Custom CSS media queries and a collapsible sidebar with touch-friendly controls make it usable on a phone.
+- Matching the downloaded photos to places meant parsing filenames with regex and fuzzy-matching them against the address names.
 
 ## Outcomes
 
-The map successfully renders 100+ metro stations across all major Tokyo lines with accurate coloring, plus 80+ points of interest ranging from teamLab exhibitions to hidden yokocho alleys. Each destination shows:
+The finished map has more than 800 stations and 69 places.
+Each place shows:
 
-- Wikipedia-sourced descriptions
-- Up to 3 photos (when available)
-- The 3 nearest metro stations with line names and walking distances
+- a Wikipedia description, when the lookup found one, which was about a third of the time
+- up to 3 photos, when there are any
+- its 3 nearest stations, with line names and straight-line distances
 
-The output is a single, portable HTML file (~2MB) that works offline once loaded, making it ideal for travel where internet access may be limited.
+The output is one HTML file of about 16 MB.
+The pins and their details are in the file itself, but the map tiles and the Leaflet scripts load from the internet, and the photos are linked from the disk of the PC that built it, so they don't show anywhere else.
+
+It was a nice little tool, and it was cool to have it all visualized like that, but I didn't end up using it.
+I only started it a couple of days before I left, so I didn't have time to really polish it.
 
 ## Implementation Notes
 

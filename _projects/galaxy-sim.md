@@ -1,6 +1,6 @@
 ---
 title: Galaxy Sim
-summary: 4X space strategy simulation with multi-layer AI factions competing for galactic dominance
+summary: A space strategy simulation that plays itself, with AI factions colonizing, researching, fighting and making alliances across a generated galaxy
 started: 2025-05-19
 updated: 2026-01-05
 type: game
@@ -19,9 +19,12 @@ files: 50
 
 ## Overview
 
-Galaxy Sim is a 4X (eXplore, eXpand, eXploit, eXterminate) space strategy simulation where 10 AI-controlled factions compete for galactic dominance. Each faction operates autonomously through a sophisticated multi-layer AI system, managing colonization, fleet movements, combat, diplomacy, research, and economic development across a procedurally generated spiral galaxy.
+Galaxy Sim is a 4X space strategy simulation (explore, expand, exploit, exterminate) in which 10 AI-controlled factions compete for a procedurally generated spiral galaxy.
+Each faction runs itself through a set of AI modules that cover colonization, fleet movement, combat, diplomacy, research and the economy.
 
-The simulation runs in real-time with a Pygame visualization layer, rendering the galaxy map with faction territories, fleet movements, and combat encounters. What makes this project unique is its focus on emergent gameplay through complex AI decision-making rather than player input—it's essentially a galaxy-scale civilization simulation that runs itself.
+The simulation runs in real time, and Pygame draws the galaxy map with faction territory, fleet movements and battles.
+There is no player.
+Everything that happens comes from the factions' own decisions, so it is closer to a galaxy-scale civilization simulation that runs itself than to a game you play.
 
 ## Screenshots
 
@@ -36,27 +39,30 @@ The simulation runs in real-time with a Pygame visualization layer, rendering th
 
 ## Problem
 
-Traditional 4X strategy games rely on scripted AI behaviors that become predictable after a few playthroughs. I wanted to explore whether decomposing AI decision-making into specialized subsystems—each with its own domain expertise—could produce more emergent and interesting faction behaviors. The goal was to create a simulation where watching AI factions compete would be genuinely unpredictable and engaging.
+Traditional 4X strategy games use scripted AI, and it gets predictable after a few playthroughs.
+I wanted to find out whether splitting the AI's decisions across specialized subsystems, each responsible for one area, would produce faction behavior that is more emergent and more interesting.
+The goal was a simulation that stays unpredictable enough to be worth watching.
 
 ## Approach
 
-The core architectural decision was separating strategic concerns into independent AI modules that communicate through a central orchestrator, rather than building a monolithic decision engine.
+The main architectural decision was to split strategy into independent AI modules that report to a central orchestrator, instead of building one monolithic decision engine.
 
 ### Stack
 
-- **Python 3.12** - Primary language, chosen for rapid prototyping and dataclass support
-- **Pygame** - Real-time visualization of galaxy state, fleet movements, and combat
-- **Custom ECS** - Entity Component System architecture optimized for spatial queries and cache efficiency
-- **JSON Configuration** - Data-driven design for ships, structures, technologies, and faction definitions
+- Python 3.12, chosen for fast prototyping and dataclasses
+- Pygame for drawing the galaxy, fleet movements and combat in real time
+- A custom Entity Component System (ECS), built for spatial queries and cache efficiency
+- JSON files that define the ships, structures, technologies and factions
 
 ### Architecture
 
-The game uses an **Entity Component System** pattern where:
-- Entities are integer IDs representing star systems and fleets
-- Components are dataclasses (Position, Fleet, Owner, StarSystem) stored in contiguous arrays
-- Systems operate on entities with specific component combinations each frame/turn
+The game uses the Entity Component System pattern.
 
-The AI architecture splits decision-making across five specialized modules:
+- Entities are integer IDs for star systems and fleets.
+- Components are dataclasses (Position, Fleet, Owner, StarSystem) stored in contiguous arrays.
+- Systems run each frame or turn on the entities that have the components they need.
+
+The AI splits its decisions across five modules (empire, military, economy, research and diplomacy), which all report to the orchestrator; the diagram shows four of them.
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -71,30 +77,28 @@ The AI architecture splits decision-making across five specialized modules:
     └─────────┘ └─────────┘ └─────────┘ └─────────┘
 ```
 
-Each sub-AI proposes actions within its domain. The orchestrator filters by affordability, resolves conflicts, and prioritizes execution.
+Each module proposes actions in its own area.
+The orchestrator drops what the faction can't afford, resolves conflicts between proposals, and sets the order they run in.
 
 ### Challenges
 
-- **AI Coordination** - Initially, sub-AIs would propose conflicting actions (e.g., EconomicAI wants to build farms while MilitaryAI needs ships). Solved by implementing a priority queue in the orchestrator with resource reservation, letting higher-priority actions claim resources first.
-
-- **Combat Balance** - Early combat was deterministic and boring. Added synergy mechanics (scouts boost destroyer damage), force ratio multipliers (overwhelming force deals bonus damage), and siege-style multi-round attrition to create more dynamic engagements.
-
-- **Performance at Scale** - O(n²) distance checks between fleets and systems caused stuttering with 40+ systems. Implemented sector-based spatial indexing in `SpatialManager` for O(1) proximity lookups.
-
-- **Faction Differentiation** - Making 10 factions feel distinct required more than just different colors. Each faction has personality traits (aggressiveness 0-1.0, defensiveness, expansion_desire), economic modifiers (extraction multiplier, population growth), and preferred research paths that meaningfully affect their behavior.
+- Coordinating the modules. At first they proposed conflicting actions, for example the economic AI building farms while the military AI needed ships. The fix was a priority queue in the orchestrator with resource reservation, so higher-priority actions claim resources first.
+- Combat balance. Early combat was deterministic and boring. I added synergy (scouts raise destroyer damage), force-ratio multipliers (a much larger force deals bonus damage) and siege-style attrition over several rounds, so battles don't all go the same way.
+- Performance. Checking the distance between every fleet and every system is O(n²), and it stuttered with 40+ systems. Sector-based spatial indexing in `SpatialManager` made proximity lookups O(1).
+- Telling factions apart. Ten factions needed more than ten colors. Each one has personality traits (aggressiveness from 0 to 1.0, defensiveness, expansion_desire), economic modifiers (extraction multiplier, population growth) and preferred research paths, and those change how it behaves.
 
 ## Outcomes
 
-The multi-layer AI architecture produces genuinely emergent behavior. Factions form opportunistic alliances against dominant powers, recognize when they have overwhelming advantage and switch to aggressive elimination strategies, and adapt their expansion patterns based on border threats. The simulation rarely plays out the same way twice.
+Factions form alliances against whichever faction is dominant, switch to wiping out rivals once they have an overwhelming advantage, and change where they expand based on threats at their borders.
+The simulation rarely plays out the same way twice.
 
-Key technical insights:
-- **Decomposition pays off** - Specialized AI modules are easier to tune and debug than monolithic decision trees
-- **Event-driven communication** - Using an event bus for inter-system messaging (e.g., fleet arrival triggers combat check) kept systems decoupled and testable
-- **Data-driven design** - Defining ships, structures, and factions in JSON made balancing iterations much faster
+Splitting the AI into specialized modules made it easier to tune and debug than one monolithic decision tree.
+Systems pass messages over an event bus instead of calling each other; a fleet arriving at a system, for example, triggers a combat check.
+Defining ships, structures and factions in JSON made balancing changes much faster.
 
 ## Implementation Notes
 
-The ECS uses array-based storage for frequently accessed components to maximize cache efficiency:
+The ECS keeps the most frequently used components in arrays, for cache efficiency:
 
 ```python
 class ECSManager:
@@ -105,7 +109,7 @@ class ECSManager:
         self._live_fleets: set[int] = set()  # O(n) iteration without scanning
 ```
 
-Combat calculates damage through synergy bonuses and force ratio multipliers:
+Combat damage includes the synergy bonus and the force-ratio multiplier:
 
 ```python
 def calculate_synergy_bonus(attacker_fleet: dict) -> float:
@@ -116,7 +120,7 @@ def calculate_synergy_bonus(attacker_fleet: dict) -> float:
     return 1.0
 ```
 
-The galaxy is procedurally generated using spiral arm distribution:
+The galaxy is procedurally generated along spiral arms:
 
 ```python
 for i in range(num_systems):

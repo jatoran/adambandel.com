@@ -1,6 +1,6 @@
 ---
 title: Odyssos
-summary: Incremental idle game with training, exploration, and multi-tier rebirth mechanics
+summary: A browser incremental idle game where you train, explore and fight tournaments to raise your power level, then reset for permanent bonuses and push further
 type: web-app
 stack:
   - JavaScript (ES6 modules)
@@ -18,9 +18,14 @@ files: 97
 
 ## Overview
 
-Odyssos is a feature-rich incremental idle game that blends training progression, world exploration, tournament combat, and artifact collection into a cohesive gameplay loop. Players grind through multiple realms (Force, Wisdom, Energy, Divine), conquer zones across expansive worlds, and strategically invest in upgrades to increase their Power Level.
+Odyssos is an incremental idle game that runs in the browser.
+You train in four realms (Force, Wisdom, Energy and Divine), each with its own resource, conquer zones across a series of worlds, fight in tournaments, collect artifacts, and spend on upgrades to raise your power level.
+It is released, and you can play it at [odyssos.io](https://odyssos.io).
 
-The game features a sophisticated multi-tier rebirth system where players sacrifice progress for permanent bonuses, deep automation options that reward long-term investment, and an interconnected modifier system where upgrades can affect entire categories of game features. Built entirely with vanilla JavaScript and ES6 modules, the architecture prioritizes modularity and data-driven content creation.
+Rebirths reset your progress in exchange for permanent bonuses, in several tiers.
+Automation, which you earn through upgrades and rebirths, takes over the repetitive buying.
+Upgrades all go through one modifier system, so a single upgrade can affect one training, a whole realm, or every feature of a kind.
+It is written in vanilla JavaScript with ES6 modules, and the game content is defined in JSON data files rather than in code.
 
 ## Screenshots
 
@@ -35,20 +40,24 @@ The game features a sophisticated multi-tier rebirth system where players sacrif
 
 ## Problem
 
-Incremental games often suffer from shallow mechanics that become repetitive after initial engagement. Many lack the interconnected systems that create emergent gameplay and strategic depth. Additionally, browser-based idle games need robust offline progress calculation and efficient save state management to provide seamless player experience across sessions.
+The plan from the start was a game that unfolds gradually.
+I hate being overwhelmed by a thousand menus and options when I start a game, and I believe most players do too, so a lot of the work went into the interface and the tutorial opening up a piece at a time.
+I had also never released a game, and I wanted this one published and in front of as many people as I could.
+
+On the technical side, a browser idle game has to work out what you earned while the tab was closed, and save a lot of state compactly between sessions.
 
 ## Approach
 
 ### Stack
 
-- **JavaScript ES6 Modules** - Chosen for native browser module support without framework overhead, enabling clean separation of concerns across 95+ component files
-- **break_eternity.js** - Handles numbers up to 10^^1e308, essential for incremental games where values grow exponentially beyond JavaScript's native limits
-- **lz-string** - Compresses save data before localStorage persistence, critical for games with hundreds of stateful objects
-- **Parcel** - Zero-config bundling with hot reload for rapid development iteration
+- JavaScript ES6 modules: no framework, loaded natively by the browser, split across 95+ component files.
+- break_eternity.js: handles numbers up to 10^^1e308, which an incremental game needs because its values grow far past what a native JavaScript number can hold.
+- lz-string: compresses the save before it goes into localStorage, which matters with hundreds of objects carrying state.
+- Parcel: bundling with no configuration, and hot reload during development.
 
 ### Challenges
 
-- **Priority-Based Modifier System** - Upgrades needed to affect multiple targets (specific trainings, entire realms, or all features) with correct calculation order. Solved with a ModTree linked-list structure where each node has a priority determining evaluation order, supporting add, multiply, exponent, and tetration operations
+- Modifier order. Upgrades had to affect several kinds of target (a specific training, a whole realm, or every feature) and be calculated in the right order. The answer was ModTree, a linked list of modifier nodes, each with a priority that sets its evaluation order. It supports add, multiply, exponent and tetration.
 
 ```javascript
 // ModTree calculates final values by traversing priority-sorted nodes
@@ -63,26 +72,31 @@ performCalculation(type, val1, val2) {
 }
 ```
 
-- **Offline Progress Simulation** - Needed accurate idle gains that account for autobuying, unlocks, and compounding production. Implemented asynchronous chunk-based simulation that processes the game loop in 10-second intervals using setTimeout, preventing UI freeze while maintaining calculation accuracy
+- Offline progress. Idle gains had to account for autobuying, unlocks and compounding production. The game loop is replayed asynchronously in 10-second chunks with setTimeout, which keeps the calculation accurate without freezing the UI.
 
-- **Modular State Persistence** - With 20+ distinct feature types (trainings, zones, artifacts, skills, etc.), save/load needed clean separation. Created dedicated state handler classes for each feature type, with a central StateManager orchestrating serialization, lz-string compression, and rebirth-aware selective resets
+- Saving state. With 20+ kinds of feature (trainings, zones, artifacts, skills and more), saving and loading needed clean separation. Each feature type has its own state handler class, and a central StateManager handles serialization, lz-string compression, and the selective resets a rebirth needs.
 
 ## Outcomes
 
-The modifier system successfully handles hundreds of active modifiers with type-targeting (e.g., `allTrain`, `forceTrain`) and priority-based calculation without circular dependencies. Offline processing accurately simulates extended idle periods while displaying a progress modal for longer calculations.
+It took the better part of a year, and I released it.
+Reviews were mixed, and the negative ones were almost all about balancing.
+The praise was for the gameplay, and players logged a lot of hours on a couple of incremental game sites.
+It still needs balancing.
 
-Key architectural learnings:
-- Observer pattern via EventManager enables loose coupling between UI and game logic
-- Data-driven content (16 JSON files define all game features) allows rapid iteration without code changes
-- Separating "what to save" from "how to save" in state management simplified adding new features
+The modifier system handles hundreds of active modifiers, targeted by type (for example `allTrain` or `forceTrain`) and calculated by priority, without circular dependencies.
+Offline progress simulates long idle periods and shows a progress window while the longer calculations run.
 
-The game successfully implements multiple prestige layers, with Rebirth 1 (Essence) fully functional and architecture prepared for Rebirth 2 (Godhood) and Rebirth 3 (Transcendence) tiers.
+An EventManager (the observer pattern) keeps the UI and the game logic loosely coupled.
+All game content is defined in 16 JSON files, so content changes don't need code changes.
+Separating what gets saved from how it gets saved made it simpler to add new features to the save system.
+
+Rebirth 1 (Essence) works, and the code is set up for Rebirth 2 (Godhood) and Rebirth 3 (Transcendence).
 
 ## Implementation Notes
 
 ### Architecture Pattern
 
-The codebase follows a Mediator pattern with the Game class as central coordinator:
+The Game class is a mediator that coordinates everything else:
 
 ```
 Game (Mediator)
@@ -98,7 +112,7 @@ Game (Mediator)
 
 ### Data-Driven Design
 
-All game content is defined in JSON, making it easy to add new trainings, zones, or artifacts:
+All game content is defined in JSON, so a new training, zone or artifact is a new data entry:
 
 ```json
 // trainingData.json example
@@ -117,7 +131,8 @@ All game content is defined in JSON, making it easy to add new trainings, zones,
 
 ### ID Range System
 
-Organized ID allocation prevents collisions across feature types:
+Each feature type has its own ID range, so IDs never collide:
+
 - Realms: 10-40
 - Trainings: 1001-2201
 - Skills: 40001+

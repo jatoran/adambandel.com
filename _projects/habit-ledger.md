@@ -1,6 +1,6 @@
 ---
 title: Habit Ledger
-summary: Privacy-first Android app for tracking habits, health metrics, and activities with home screen widgets
+summary: An Android app for logging habits and activities from home screen widgets, stored on the phone and exported as JSON
 started: 2025-08-14
 updated: 2025-08-28
 type: android
@@ -29,9 +29,13 @@ architecture:
 
 ## Overview
 
-Habit Ledger is a comprehensive habit and activity tracking Android application built with modern Jetpack Compose. It allows users to track various types of quantitative and qualitative metrics—from daily water intake and exercise to mood, weight, and custom events—all stored locally on device for complete data privacy.
+Habit Ledger is an Android app for tracking habits and activities, built with Jetpack Compose.
+It tracks both numbers and qualitative entries, from daily water intake and exercise to mood, weight and custom events, all stored locally on the phone.
+It isn't on the Play Store; it's a personal APK.
 
-The app supports five distinct tracker types (quantity, counter, event, note, choice), flexible tagging, customizable home screen widgets for at-a-glance tracking, and an automated reminder system. Data can be exported to JSON or backed up incrementally via NDJSON mirroring.
+There are five tracker types: quantity, counter, event, note and choice.
+Entries can be tagged, each tracker can have its own customizable home screen widget, and reminders run on a schedule.
+Data exports to JSON, and an incremental backup mirrors it to NDJSON.
 
 ## Screenshots
 
@@ -49,24 +53,28 @@ The app supports five distinct tracker types (quantity, counter, event, note, ch
 
 ## Problem
 
-Most habit tracking apps either require cloud accounts (privacy concern), lack flexibility for different data types, or don't provide quick-access widgets for frictionless logging. I needed an app that could track everything from binary events ("Did I take my vitamins?") to accumulating counters ("Calories today") to measurements ("Weight this morning")—all with minimal friction and complete local control.
+I've been part of the quantified self movement for over a decade, and I love tracking information about myself.
+ActivityWatch tracks my computer history, sleep has gone through several trackers, Sleep as Android and currently Fitbit, and the rest I track by hand: habits, exercise, and point events like reading or meditation.
+For a very long time I used KeepTrack for that, and its JSON, CSV and text exports are horribly formatted.
+I need clean data I can put into my metrics dashboard and parse cleanly over time, tens of thousands of data points.
+I also needed a very easy form of entry.
+
+The app had to track everything from binary events ("Did I take my vitamins?") to accumulating counters ("Calories today") to measurements ("Weight this morning"), be quick to log, and keep the data on the phone.
 
 ## Approach
 
-Built a flexible tracking system with five tracker types covering most personal data logging needs, combined with Glance-based widgets for instant access from the home screen.
-
 ### Stack
 
-- **Jetpack Compose** - Modern declarative UI with Material Design 3 for a clean, responsive interface
-- **Room Database** - Local SQLite storage with proper foreign keys, indices, and cascade deletes for data integrity
-- **Glance AppWidget** - Compose-based home screen widgets with split-tap controls for counter manipulation
-- **WorkManager** - Reliable background scheduling for reminders and incremental backups
-- **Kotlinx Serialization** - Type-safe JSON handling for exports, widget state, and complex field storage
-- **DataStore Preferences** - Modern key-value storage for user settings and widget configurations
+- Jetpack Compose with Material Design 3 for the UI.
+- Room: local SQLite storage with foreign keys, indices and cascade deletes.
+- Glance AppWidget: the home screen widgets, written in Compose, with split-tap controls for counters.
+- WorkManager: schedules the reminders and the incremental backups.
+- Kotlinx Serialization: JSON for exports, widget state and the more complex stored fields.
+- DataStore Preferences: user settings and widget configuration.
 
 ### Challenges
 
-- **Counter state consistency** - Handling edge cases where users backdate entries or set future timestamps required clamping logic that prevents future `lastResetAt` timestamps from breaking delta accumulation:
+- Counter state consistency: an entry can be backdated or given a future timestamp. Both the entry time and the last reset are clamped to the current time, so a future `lastResetAt` can't break the sum of deltas:
 
 ```kotlin
 val effectiveMillis = minOf(atMillis, nowMillis)
@@ -74,23 +82,23 @@ val effectiveLastReset = minOf(latestReset ?: effectiveMillis, nowMillis)
 val sum = entryDao.sumDeltasSince(trackerId, effectiveLastReset)
 ```
 
-- **Widget interactivity within Glance constraints** - Glance widgets have limited interactivity compared to full Compose. Implemented ActionCallback patterns for widget actions (delta application, counter reset) and a split-tap layout approximating 30%/70% zones using weighted boxes for intuitive increment/decrement.
+- Widget interactivity within Glance's limits: Glance widgets are much less interactive than full Compose. Widget actions, applying a delta or resetting a counter, go through ActionCallback, and the split-tap layout is two equal halves, minus on the left and plus on the right.
 
-- **Timezone-aware entry timestamps** - Preserving user intent when entries cross timezone boundaries (travel, daylight saving) by capturing the local timezone offset at entry creation time and computing `dayKey` in local time.
+- Time zones: an entry should stay on the day it was logged when travel or daylight saving changes the local time. Each entry stores the local time zone offset when it is created, and its `dayKey` is computed in local time.
 
 ## Outcomes
 
-The app provides a flexible, privacy-respecting habit tracking solution with genuinely useful home screen widgets. The counter widget with split-tap controls enables logging meals or activities in seconds without opening the app.
+The counter widget's split-tap controls log a meal or an activity in seconds without opening the app.
+It makes it very easy to track and export the habits and activities I log by hand, and the export goes straight into my metrics dashboard.
 
-Key technical learnings:
-- Glance AppWidget framework is powerful but requires careful state management between the widget and app database
-- Room's Flow-based reactive queries integrate seamlessly with Compose for live UI updates
-- WorkManager's `ExistingWorkPolicy.APPEND` is ideal for incremental backup patterns
-- Many-to-many relationships (entries-to-tags) need junction tables with proper indices for query performance
+Glance needs careful state management between the widget and the app's database.
+Room's Flow queries feed straight into Compose, so the UI updates live.
+WorkManager's `ExistingWorkPolicy.APPEND` suits incremental backups.
+The many-to-many link between entries and tags needs a junction table with indices to keep queries fast.
 
 ## Implementation Notes
 
-The data model uses five entity types with a flexible schema:
+The data model has five entity types:
 
 ```kotlin
 enum class TrackerKind { QUANTITY, NOTE, EVENT, COUNTER, CHOICE }
@@ -109,7 +117,7 @@ data class Entry(
 )
 ```
 
-Counter trackers maintain a separate `CounterState` entity for efficient total lookups, recomputed on delta entries and resets:
+Counter trackers keep a separate `CounterState` entity so the current total is a quick lookup, recomputed on each delta entry and reset:
 
 ```kotlin
 @Entity
@@ -120,4 +128,4 @@ data class CounterState(
 )
 ```
 
-The reminder system uses bit masks for weekly day selection (`notifWeeklyDaysMask` where bits 0-6 = Sun-Sat) and supports skip-if-logged-today behavior for non-intrusive notifications.
+Reminders store their weekly days as a bit mask (`notifWeeklyDaysMask`, bits 0-6 for Sunday through Saturday), and a skip-if-logged-today option keeps a reminder from firing for something already logged that day.

@@ -1,6 +1,6 @@
 ---
 title: Project Dashboard
-summary: Windows desktop app for instantly launching dev projects via global hotkey command palette
+summary: A Windows project launcher where a global hotkey brings up a search box and one keypress opens the project in VS Code, a terminal or Claude Code
 started: 2025-11-29
 updated: 2026-01-31
 type: desktop
@@ -30,9 +30,11 @@ architecture:
 
 ## Overview
 
-Project Dashboard is a Windows desktop application that provides instant access to local development projects through a global hotkey command palette. Press `Win+Shift+W` from anywhere and immediately search, filter, and launch projects in VS Code, terminals, file managers, or AI coding assistants like Claude Code.
+Project Dashboard is a Windows desktop app for opening local code projects.
+`Win+Shift+W` brings up a command palette from anywhere, where you search for a project and open it in VS Code, a terminal, the file manager, or a coding agent such as Claude Code.
 
-The app combines a FastAPI backend, a React/Next.js web dashboard, and native Windows integration via CustomTkinter for the command palette overlay. It runs quietly in the system tray, consuming minimal resources while providing sub-100ms project launching.
+It is a FastAPI backend, a React/Next.js web dashboard, and a native CustomTkinter window for the palette.
+It runs in the system tray.
 
 ## Screenshots
 
@@ -47,40 +49,41 @@ The app combines a FastAPI backend, a React/Next.js web dashboard, and native Wi
 
 ## Problem
 
-Developers working on multiple projects waste time navigating file explorers, remembering paths, and context-switching between tools. Opening a project typically requires: finding the folder, launching the IDE, maybe opening a terminal, checking if services are running. This friction adds up across dozens of daily context switches.
-
-Existing launchers like Alfred or Raycast are macOS-only. Windows alternatives lack deep integration with development workflows and don't understand project structures, git status, or development tooling.
+Opening a project usually means finding its folder, starting the editor, maybe opening a terminal, and checking whether its services are running.
+Across many projects, that adds up.
 
 ## Approach
 
-The solution is a dedicated project launcher that understands developer workflows. A global hotkey summons an instant search interface, and configurable keybindings launch projects directly into the right tool.
+A global hotkey opens a search box over the project list, and each launcher has its own key: Enter opens VS Code, Ctrl+Enter a terminal, Ctrl+C Claude Code.
+The launchers and their keys are set in a JSON config.
 
 ### Stack
 
-- **FastAPI** - Lightweight REST API for project CRUD, launching, and file serving. Chosen for async support and automatic OpenAPI docs
-- **Next.js 16 + React 19** - Static export served by FastAPI. Modern React features like server components and the React compiler for optimal bundle size
-- **CustomTkinter** - Native Windows overlay for the command palette. Provides instant show/hide without browser overhead
-- **pystray + pynput** - System tray icon and global hotkey capture. Works across all Windows applications
-- **@dnd-kit** - Accessible drag-and-drop for project reordering in the web dashboard
+- FastAPI: a small REST API for adding and editing projects, launching them, and serving files. Chosen for async support and the automatic OpenAPI docs.
+- Next.js 16 and React 19: built as a static export that FastAPI serves.
+- CustomTkinter: a native Windows window for the command palette, so showing and hiding it doesn't go through a browser.
+- pystray and pynput: the tray icon and the global hotkey, which works whichever application has focus.
+- @dnd-kit: drag-and-drop reordering of projects in the web dashboard.
 
 ### Challenges
 
-- **Global hotkey responsiveness** - Initial Tkinter window creation was too slow (~500ms). Solved by pre-spawning the window off-screen and using show/hide instead of create/destroy. Now achieves <50ms from keypress to visible
-- **Windows focus stealing** - Windows aggressively prevents apps from stealing focus. Required using `AttachThreadInput` and `SetForegroundWindow` via ctypes to reliably focus the palette
-- **Project scanning timeouts** - Large monorepos with deep node_modules trees caused hangs. Implemented 10-second timeout with ThreadPoolExecutor and restricted directory traversal to known subdirectories
+- Hotkey response. Creating the Tkinter window on each press was too slow (about 500 ms). The window is now created once, off-screen, and shown and hidden instead of created and destroyed, which gets it from keypress to visible in under 50 ms.
+- Focus. Windows works hard to stop apps from taking focus, and focusing the palette reliably took `AttachThreadInput` and `SetForegroundWindow` through ctypes.
+- Scan timeouts. Large monorepos with deep node_modules trees made the scanner hang. Scans now run in a ThreadPoolExecutor with a 10-second timeout, and only descend into known subdirectories.
 
 ## Outcomes
 
-The command palette provides reliable sub-100ms project access from any application. Project scanning correctly identifies frameworks (React, Next.js, FastAPI, etc.) and discovers documentation files. Drag-and-drop reordering persists across sessions.
+The palette opens a project in under 100 ms from any application.
+Scanning picks up each project's framework (React, Next.js, FastAPI and others) and its documentation files.
+The drag-and-drop order of projects is kept between sessions.
 
-Key learnings:
-- Pre-spawning UI elements beats lazy initialization for perceived performance
-- Windows API integration via ctypes is powerful but requires careful thread management
-- JSON file storage is sufficient for personal tools with <100 records
+Creating the window ahead of time did more for how fast it feels than creating it on demand.
+Calling the Windows API through ctypes works, but it needs careful thread management.
+A JSON file is enough storage for a personal tool with fewer than 100 records.
 
 ## Implementation Notes
 
-The command palette bypasses HTTP entirely for speed, calling Python services directly:
+The command palette skips HTTP and calls the Python services directly, for speed:
 
 ```python
 # Direct store import for speed (bypasses HTTP)
@@ -98,7 +101,7 @@ def _launch_project(self, project: Dict, launch_type: str):
     threading.Thread(target=do_launch, daemon=True).start()
 ```
 
-Project scanning uses defensive timeouts and directory caps to prevent hangs:
+Scanning has a timeout and a cap on directory entries so it can't hang:
 
 ```python
 SCAN_TIMEOUT = 10  # seconds
@@ -114,7 +117,7 @@ def scan(self, path_str: str) -> Project:
             raise ValueError(f"Scan timed out after {SCAN_TIMEOUT}s")
 ```
 
-The launcher system supports both built-in commands and custom CLI tools defined in config:
+Launchers are either built-in commands or any CLI tool defined in the config:
 
 ```json
 {

@@ -1,6 +1,6 @@
 ---
 title: InstaNote
-summary: Android note-taking app with home screen widget and one-tap Gmail integration
+summary: An Android app that sends quick notes, links and photos to your own Gmail from a home screen widget or the share menu
 type: desktop
 stack:
   - Kotlin
@@ -26,9 +26,11 @@ architecture:
 
 ## Overview
 
-InstaNote is a lightweight Android application designed for capturing thoughts instantly. The app features a home screen widget that opens a note entry dialog with a single tap, allowing users to quickly jot down ideas without navigating through multiple screens. Notes can be sent directly to your Gmail inbox with one tap, making it easy to transfer quick captures to a more permanent location.
+InstaNote is an Android app for getting a note down fast.
+A slim home screen widget opens a text box with the keyboard already up, and one more tap sends the note to your own Gmail inbox.
+Other apps can share to it as well, so a link, a photo or any other file goes straight to your email without opening a screen.
 
-The app integrates with Google Sign-In for authentication and uses the Gmail API to send notes (with optional file attachments) directly to the user's own email address, effectively turning your inbox into a note repository.
+It signs in with Google and sends through the Gmail API, attachments included, to your own address, so the inbox is where the notes end up.
 
 ## Screenshots
 
@@ -43,42 +45,41 @@ The app integrates with Google Sign-In for authentication and uses the Gmail API
 
 ## Problem
 
-Traditional note-taking apps require multiple steps: unlock phone, find app, wait for load, tap new note, then finally start typing. This friction means fleeting thoughts are often lost before they can be captured.
+A normal notes app takes several steps before you can type: unlock the phone, find the app, wait for it to load, tap new note.
+A passing thought is often gone by then.
 
-Additionally, quick notes often need to reach a more permanent destination—email inboxes, where they can be processed alongside other tasks. The standard Android share flow adds unnecessary steps when you just want to email yourself.
+Quick notes also often need to end up somewhere more permanent, like an email inbox, where they get dealt with alongside everything else.
+The standard Android share flow adds steps of its own when all you want is to email yourself.
 
 ## Approach
 
-Built a minimal-friction capture flow with two key features:
+Two things keep capture short: the widget opens straight into note entry, and the app sends the email itself instead of handing off to a mail app.
 
 ### Stack
 
-- **Kotlin** - Modern Android language with coroutines for async operations
-- **Android SDK 34** - Targets latest Android while supporting devices back to API 24 (Android 7.0)
-- **Jetpack Compose + View Binding** - Hybrid UI approach using ViewBinding for traditional layouts
-- **Gmail API** - Direct integration for sending emails without opening another app
-- **Google Sign-In** - OAuth2 authentication for Gmail API access
-- **SharedPreferences** - Local note storage using JSON serialization via Gson
+- Kotlin, with coroutines for the async work
+- Android SDK 34 as the target, running on Android 7.0 (API 24) and up
+- Jetpack Compose and View Binding are both in the build; the screens are traditional layouts through View Binding
+- Gmail API, to send email without opening another app
+- Google Sign-In, for the OAuth2 access the Gmail API needs
+- SharedPreferences for local note storage, serialized to JSON with Gson
 
 ### Challenges
 
-- **Gmail API Integration** - Constructing MIME messages with attachments required working with JavaMail on Android, including proper Base64 encoding for the raw email content. Used `MimeMultipart` to handle text bodies alongside file attachments.
+- Sending through the Gmail API meant building MIME messages with JavaMail on Android and Base64-encoding the raw email. `MimeMultipart` carries the text body alongside any attachments.
 
-- **Widget-to-Activity Communication** - The home screen widget needed to launch directly into the note entry screen. Solved by passing an `isFromWidget` flag via PendingIntent, allowing the activity to adjust its behavior accordingly.
+- The home screen widget had to launch straight into the note entry screen. It passes an `isFromWidget` flag through its PendingIntent, and the activity adjusts its behavior when the flag is set.
 
-- **Delete Confirmation UX** - Implemented a 2-second confirmation window for deletions without a modal dialog. First tap changes the delete button to "CONFIRM" with red background, auto-reverts after 2 seconds if not confirmed. Uses `Handler.postDelayed()` for timing.
+- Deleting a note takes a second tap instead of a dialog. The first tap turns the delete button red and changes it to "CONFIRM", and it reverts after 2 seconds if the second tap doesn't come, timed with `Handler.postDelayed()`.
 
-- **Share Intent Handling** - The app receives both `ACTION_SEND` (single item) and `ACTION_SEND_MULTIPLE` (multiple files) intents, automatically emailing shared content to the user without showing UI.
+- The app accepts both `ACTION_SEND` (one item) and `ACTION_SEND_MULTIPLE` (several files) from other apps, and emails the shared content to you without showing any screen.
 
 ## Outcomes
 
-The app achieves its core goal of minimal-friction note capture. The widget provides one-tap access, and the email integration means notes automatically arrive in Gmail for later processing.
+Fast note entry was what I wanted from this, and that's what it gives me.
+I use it every day to send myself notes.
 
-Key technical learnings:
-- Gmail API authentication flow on Android using `GoogleAccountCredential`
-- MIME message construction with `javax.mail` on Android
-- RecyclerView patterns with custom deletion confirmation
-- AppWidget development with PendingIntent for activity launching
+Building it meant working out the Gmail API sign-in flow on Android with `GoogleAccountCredential`, MIME message construction with `javax.mail`, a RecyclerView with its own delete confirmation, and an app widget that launches an activity through a PendingIntent.
 
 ## Implementation Notes
 

@@ -4,17 +4,17 @@ date: 2026-08-27
 project: continuity
 ---
 
-Extracting a Win32 editor's core into a storage-neutral Rust crate, so the same edit planner runs on the desktop and in WASM.
+Extracting a Win32 editor's core into a Rust crate that knows nothing about storage, so the same editing code runs on the desktop and in WASM.
 
-I write a Windows Markdown notes editor. Last year I pulled its editing core into a standalone crate, and it now runs in four places off one codebase: the native Win32 app, a browser Web Component compiled to WASM, a Python module, and a C ABI.
+I write a Windows Markdown notes editor. In July I pulled its editing core into a standalone crate, and it now runs in four places off one codebase: the native Win32 app, a browser Web Component compiled to WASM, a Python module, and a C ABI.
 
 ![The native Win32 app on a note, with headings, checkboxes, a table, and a Rust code block rendered live](/images/projects/continuity/hero.png)
 
-That's the native surface. The interesting claim is that the browser one runs the same edit planner, not a reimplementation of it.
+That's the native surface. The interesting claim is that the browser one runs the same editing code, not a reimplementation of it.
 
-Same text handling, same selections, same undo, same Markdown projection. Not four implementations that agree by convention and drift apart over eighteen months. One implementation.
+Same text handling, same selections, same undo, same Markdown rendering. Not four implementations that agree by convention and drift apart over eighteen months. One implementation.
 
-Every one of these executes the same edit planner and the same Markdown projection:
+Every one of these executes the same editing code and the same Markdown rendering:
 
 | Surface | Package | What it brings |
 |---|---|---|
@@ -33,9 +33,9 @@ The obvious plan is: take the editor, delete the platform-specific parts, ship w
 
 My buffer layer owned its own persistence. Edits went into a rope *and* into SQLite in the same call. Which is a completely reasonable design for a durable notes app, and completely wrong for an embedded editor, where the host owns storage and may not have a filesystem at all.
 
-So the real first move wasn't extraction. It was making the engine **storage-neutral**: it owns buffers, selections, edit planning, undo, and revisions, and it owns *nothing else*. No SQLite. No filesystem. No background threads. No window.
+So the real first move wasn't extraction. It was taking storage out of the engine entirely: it owns buffers, selections, edit planning, undo, and revisions, and it owns nothing else. No SQLite. No filesystem. No background threads. No window.
 
-The desktop app didn't lose durability. It stopped being the thing that has durability and became the thing that *projects* engine output into SQLite. The engine emits revisioned change batches; the Windows host writes them down. An embedded engine in someone's web app simply has no such host, and works fine, because nothing inside the engine ever assumed one existed.
+The desktop app didn't lose durability. It stopped being the thing that has durability and became the thing that writes the engine's output into SQLite. The engine emits revisioned change batches; the Windows host writes them down. An embedded engine in someone's web app simply has no such host, and works fine, because nothing inside the engine ever assumed one existed.
 
 That inversion is the whole trick. Everything else fell out of it.
 
@@ -47,18 +47,18 @@ Above `display_map`, adapters. Below it, nothing knows what a pixel is. Nothing 
 |---|---|
 | `text`, `win` | Leaves. No dependencies. |
 | `buffer` | Rope, revisions, undo, selections |
-| `engine` | Edit planning, change batches. Storage-neutral. |
+| `engine` | Edit planning, change batches. No storage. |
 | `host` | Portable intents and events |
 | `decorate` | tree-sitter Markdown spans |
 | `display_map` | Source to display projection |
 
 Then the adapters sit on top: DirectWrite/Direct2D, HWND, and UIA on Windows; textarea, DOM, CSS, and browser AT in the web build.
 
-The rule that keeps it honest: if a behavior can live in shared Rust, it must. The moment I catch myself writing an edit planner in JavaScript, the design is wrong and I stop.
+The rule that keeps it honest: if a behavior can live in shared Rust, it must. The moment I catch myself writing editing logic in JavaScript, the design is wrong and I stop.
 
-**Shared Rust, written once:** text, selections, revisions, undo. Multi-cursor edit planning. Indentation and smart newline. List and task continuation. Markdown parsing and decoration. Source to display projection. Portable input intents.
+Shared Rust, written once: text, selections, revisions, undo. Multi-cursor edit planning. Indentation and smart newline. List and task continuation. Markdown parsing and decoration. Source to display projection. Portable input intents.
 
-**Adapter or host:** rendering and pixel measurement. Keyboard, IME, clipboard. Accessibility bridges. Scrolling, focus, window lifecycle. Files and persistence. Menus and application UI. Durability acknowledgements.
+Adapter or host: rendering and pixel measurement. Keyboard, IME, clipboard. Accessibility bridges. Scrolling, focus, window lifecycle. Files and persistence. Menus and application UI. Durability acknowledgements.
 
 ## 80 edit operations, one undo group
 
@@ -68,13 +68,13 @@ Every one goes through the same path. A planner takes the edit plus current sele
 
 The detail that took two attempts: **the ops list is built in descending byte order.** Apply front-to-back across multiple cursors and every edit invalidates the offsets of the ones after it. Go backwards and earlier offsets stay valid. Obvious in hindsight, which is where all the good bugs live.
 
-There's a behavior corpus every binding runs. Same inputs, same resulting text, same selections, same revision numbers, same deltas. When the Python binding and the browser disagree about what a block toggle does, that's a failing test, not a support ticket six months later.
+There's one set of behavior tests every binding runs. Same inputs, same resulting text, same selections, same revision numbers, same deltas. When the Python binding and the browser disagree about what a block toggle does, that's a failing test, not a support ticket six months later.
 
 ## What WASM actually costs
 
 480 KB packed npm package, 1.2 MB `.wasm` inside it. Unpacked it's 1.6 MB total: 1.2 MB of `continuity_wasm_bg.wasm` and 0.4 MB of JavaScript. The engine is most of it and that is the trade.
 
-Bigger than a JavaScript-only editor. What it buys is that the browser runs the identical edit planner as the native app, which is the only reason a shared behavior corpus means anything.
+Bigger than a JavaScript-only editor. What it buys is that the browser runs the identical editing code as the native app, which is the only reason those shared tests mean anything.
 
 The split: WASM owns editor state, operations, Markdown decoration, and display-map reports. JavaScript owns the semantic textarea, DOM projection, browser input, accessibility, scheduling, and host events. The package creates no database, no filesystem access, no worker, no Electron bridge. It's an editor, not a framework with opinions about your architecture.
 
@@ -100,19 +100,19 @@ None of those are Rust problems. All three are in the thin adapter layer, which 
 
 ## The numbers
 
-Workspace inventory, generated from source: 26 crates, 217k lines of Rust, 306 commands, 80 selection edits, 4 binding surfaces, 0 async fns.
+From the workspace inventory, generated from source: 26 crates and 217k lines of Rust, with no async fns anywhere.
 
-Perf gates, which fail the build rather than a dashboard. Upper bound at p99:
+Perf gates, which fail the build rather than a dashboard. Upper bound at p99. Painting a frame and re-parsing the Markdown have tighter targets, 2 ms and 1 ms, but the tests run on shared hardware and fail at four times those:
 
 | Gate | p99 budget |
 |---|---:|
 | keypress to pixel | 8 ms |
+| WM_PAINT to frame ready | 8 ms |
 | core apply edit | 4 ms |
-| WM_PAINT to frame ready | 2 ms |
+| incremental Markdown parse | 4 ms |
 | buffer apply edit | 2 ms |
-| incremental Markdown parse | 1 ms |
 
-Plus dhat asserting zero new heap allocations per keystroke in steady state, and a hard 9 MiB cap on the stripped desktop binary.
+Plus a hard 9 MiB cap on the stripped desktop binary. Zero heap allocations per keystroke is a rule for the typing path, but it's checked in code review, not by a test.
 
 ## Using it
 

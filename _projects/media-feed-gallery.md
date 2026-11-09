@@ -1,6 +1,6 @@
 ---
 title: Media Feed Gallery
-summary: Self-hosted media aggregator for 4chan, Reddit, and Booru with local caching and unified browsing
+summary: A self-hosted gallery that syncs media from 4chan boards, subreddits and booru image boards on a schedule and keeps a local copy of all of it
 started: 2026-01-16
 updated: 2026-02-01
 type: web-app
@@ -29,9 +29,11 @@ architecture:
 
 ## Overview
 
-Media Feed Gallery is a self-hosted web application that aggregates media content from multiple sources—4chan boards, Reddit subreddits, and Booru imageboards—into a single, unified interface. The system syncs content on configurable schedules, caches media locally, and provides a responsive gallery UI for browsing everything in one place.
+Media Feed Gallery is a self-hosted web app that pulls media from 4chan boards, Reddit subreddits and booru image boards into one gallery.
+It syncs each source on a schedule you set, caches the media locally, and shows everything in one responsive gallery.
 
-The project emphasizes being a "polite" client to upstream APIs through sophisticated rate limiting, exponential backoff, and daily scheduling that prevents overwhelming external services. All synced content is stored locally, enabling offline browsing and fast access without repeated API calls.
+It is built to be a polite client of the sites it pulls from, with rate limiting, exponential backoff, and daily scheduling so it doesn't flood them with requests.
+Everything it syncs is stored locally, so browsing works offline and doesn't call the sources again.
 
 ## Screenshots
 
@@ -46,37 +48,39 @@ The project emphasizes being a "polite" client to upstream APIs through sophisti
 
 ## Problem
 
-Browsing media across 4chan, Reddit, and various Booru sites means constantly switching between tabs, dealing with different UIs, and losing track of content. These sites have inconsistent APIs, aggressive rate limits, and no unified way to save or organize media. Additionally, content on imageboards is ephemeral—threads get pruned and media disappears.
+Browsing media across 4chan, Reddit and various booru sites means switching between tabs and interfaces and losing track of things.
+The sites have inconsistent APIs, aggressive rate limits, and no shared way to save or organize media.
+Imageboard content also doesn't last: threads get pruned, and their media disappears with them.
 
-This project solves these problems by creating a local archive that syncs content from all sources, caches everything locally, and presents it through a single responsive interface.
+This project keeps a local archive instead.
+It syncs every source, caches all of the media, and shows it in one interface.
 
 ## Approach
 
-The architecture separates concerns cleanly: fetchers handle source-specific API quirks, a sync service orchestrates operations, and a scheduler manages automatic refresh with persistent job queues that survive restarts.
+Fetchers deal with each source's API quirks, a sync service runs the syncs, and a scheduler handles automatic refresh from a job queue that survives restarts.
 
 ### Stack
 
-- **Express + better-sqlite3** - Lightweight Node.js backend with synchronous SQLite for simplicity and reliability; WAL mode for crash recovery
-- **Preact + Vite** - Minimal React-like frontend with fast HMR development; virtual scrolling for large galleries
-- **Python (asyncpraw)** - Reddit's API requires OAuth; a subprocess handles authentication complexity
-- **Custom RequestGovernor** - Token bucket + semaphore rate limiter with per-provider and per-host controls
+- Express and better-sqlite3: a small Node.js backend, using SQLite synchronously because it is simpler, with WAL mode for crash recovery.
+- Preact and Vite: a small React-like frontend with fast hot reload in development, and virtual scrolling for large galleries.
+- Python (asyncpraw): Reddit's API requires OAuth, so a Python subprocess handles the authentication.
+- RequestGovernor: a custom rate limiter that combines a token bucket and semaphores, with limits per provider and per host.
 
 ### Challenges
 
-- **Rate limiting across providers** - Built a RequestGovernor with token buckets, concurrency semaphores, and automatic backoff that respects `Retry-After` headers. Each provider (4chan, Reddit, Booru) has independent limits
-- **Reddit API complexity** - Reddit requires OAuth and has unique pagination. Solved by spawning a Python subprocess using asyncpraw, capturing JSON output for the Node backend to process
-- **Delta sync for 4chan** - Threads change constantly. Implemented image count tracking to only re-fetch threads with new content, drastically reducing API calls
-- **Persistent job queues** - Auto-refresh jobs survive server restarts via SQLite-backed queue with atomic job claiming using `UPDATE...RETURNING`
+- Rate limits across providers. The RequestGovernor combines token buckets, concurrency semaphores and automatic backoff that respects `Retry-After` headers, and each provider (4chan, Reddit, booru) has its own limits.
+- Reddit. Reddit requires OAuth and paginates its own way, so the Node backend spawns a Python subprocess that uses asyncpraw and reads the JSON it prints.
+- Delta sync for 4chan. Threads change constantly, so the sync tracks each thread's image count and only re-fetches threads that have new images, which cuts the number of API calls.
+- Persistent job queue. Auto-refresh jobs live in a queue backed by SQLite, so they survive a server restart, and workers claim jobs atomically with `UPDATE...RETURNING`.
 
 ## Outcomes
 
-The system successfully aggregates content from all three source types with minimal API impact. The RequestGovernor prevents rate limit violations even under heavy sync loads. Local caching means previously-synced content loads instantly, and the unified UI makes browsing across sources seamless.
-
-Key patterns developed here—the request governor, persistent job queue, and delta sync strategy—are reusable for any multi-source content aggregation system.
+It pulls from all three kinds of source.
+Anything already synced loads from the local cache instead of the source.
 
 ## Implementation Notes
 
-The RequestGovernor implements a sophisticated rate limiting strategy:
+The RequestGovernor waits on a global semaphore, a per-host semaphore and a token bucket, then on any backoff in effect for the host:
 
 ```javascript
 // Token bucket with per-host tracking
@@ -93,7 +97,7 @@ async acquire(provider, host) {
 }
 ```
 
-The auto-refresh scheduler uses SQLite for job persistence:
+The auto-refresh scheduler keeps its jobs in SQLite:
 
 ```javascript
 // Atomic job claiming prevents race conditions
@@ -111,4 +115,4 @@ claimJob(workerId) {
 }
 ```
 
-Views allow combining multiple sources with weighted interleaving—for example, showing 60% Reddit and 40% Booru content mixed together based on configurable weights.
+Views combine several sources with weighted interleaving, for example 60% Reddit and 40% booru content mixed together by weights you set.

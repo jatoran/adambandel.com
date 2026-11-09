@@ -1,6 +1,6 @@
 ---
 title: Search Gateway
-summary: Unified REST API aggregating 27+ search and content extraction providers with fallbacks, caching, and cost tracking
+summary: One API for web search and fetching page content through many providers, with fallbacks, caching and cost tracking
 started: 2025-11-07
 updated: 2025-12-15
 type: api
@@ -30,9 +30,12 @@ architecture:
 
 ## Overview
 
-Search Gateway is a unified REST API that aggregates 27+ search and content extraction providers behind a single endpoint. It enables applications to query Brave, Tavily, DuckDuckGo, arXiv, GitHub, Reddit, YouTube, Wikipedia, and many more through consistent request/response schemas, with automatic fallback chains when providers fail.
+Search Gateway is a REST API that puts 27+ search and content extraction providers behind one interface.
+Applications query Brave, Tavily, DuckDuckGo, arXiv, GitHub, Reddit, YouTube, Wikipedia and the rest with the same request and response schemas, and when a provider fails, the request falls back along a chain to the next one.
 
-The gateway handles the complexity of managing multiple API keys, rate limits, cost tracking, and caching so consumers can focus on their search logic rather than provider integration. It is designed for AI agents, developer tools, and any application requiring reliable, cost-controlled access to diverse web search and content sources.
+The gateway holds the API keys and handles rate limits, cost tracking and caching, so the applications that call it only deal with their own search logic.
+It is meant for AI agents, developer tools and other applications that need web search and page content with the costs kept under control.
+My News Aggregator gets its Reddit posts and article text through it.
 
 ## Screenshots
 
@@ -44,46 +47,38 @@ The gateway handles the complexity of managing multiple API keys, rate limits, c
 
 ## Problem
 
-Modern applications often need to search the web, fetch articles, query academic papers, or extract content from URLs. Each provider (Brave, Tavily, DuckDuckGo, etc.) has different APIs, rate limits, pricing models, and capabilities. Managing 10+ provider integrations creates significant maintenance burden:
+Applications that search the web, fetch articles, query academic papers or extract content from URLs end up integrating several providers, and each one (Brave, Tavily, DuckDuckGo and so on) has its own API, rate limits, pricing and capabilities.
+Maintaining 10+ of those integrations is a lot of upkeep.
+Each has its own authentication and schema and needs its own throttling, there is no common fallback when one fails or rate-limits, costs are hard to track across pay-per-use services, and every integration repeats the same caching logic.
 
-- Different authentication mechanisms and API schemas
-- Varying rate limits requiring per-provider throttling
-- No unified fallback when a provider fails or rate-limits
-- Difficulty tracking costs across pay-per-use services
-- Redundant caching logic in each integration
-
-Search Gateway solves this by providing one API to rule them all, with intelligent routing, automatic retries, and comprehensive observability.
+Search Gateway handles all of that in one place, with routing by operation, automatic retries, metrics and tracing.
 
 ## Approach
 
 ### Stack
 
-- **FastAPI** - High-performance async Python framework handling concurrent provider calls efficiently
-- **SQLite** - Lightweight persistence for response caching, usage tracking, and idempotency without external dependencies
-- **Redis** (optional) - Multi-replica rate limit coordination for horizontal scaling
-- **Playwright** - Headless browser extraction for JavaScript-heavy pages that block traditional crawlers
-- **Prometheus + OpenTelemetry** - Full observability with metrics export and distributed tracing
+- FastAPI: async, so calls to several providers run concurrently.
+- SQLite: response cache, usage tracking and idempotency, with no external database to run.
+- Redis, optional: coordinates rate limits across replicas when the gateway runs more than one.
+- Playwright: a headless browser for extracting JavaScript-heavy pages that block ordinary crawlers.
+- Prometheus and OpenTelemetry: metrics export and distributed tracing.
 
 ### Challenges
 
-- **Provider abstraction** - Each of the 27+ providers has unique quirks. Created a `BaseAdapter` class with standardized retry logic, exponential backoff, and capability declarations. Adapters implement a consistent interface while handling provider-specific transformations internally.
+- Provider abstraction: each of the 27+ providers has its own quirks. A `BaseAdapter` class holds the shared retry logic, exponential backoff and capability declarations, and each adapter implements the same interface while handling its provider's transformations internally.
 
-- **Intelligent fallback routing** - Not all providers support all operations. Built a `ProviderSelector` that maps operations (search:web, search:news, extract:web, search:academic) to capable providers, respecting priority order and circuit breaker states.
+- Fallback routing: not every provider supports every operation. A `ProviderSelector` maps each operation (search:web, search:news, extract:web, search:academic) to the providers that can do it, in priority order, and skips any provider whose circuit breaker is open.
 
-- **Cost tracking accuracy** - Providers use different pricing models (per-request, per-credit, tiered plans). Implemented a cost estimation engine that reads provider catalog YAML and calculates real-time spend with tier awareness.
+- Cost tracking: providers charge per request, per credit or by tiered plan. A cost estimation engine reads the provider catalog YAML and calculates spend as requests happen, taking the plan tier into account.
 
-- **Stale-while-revalidate caching** - For high-availability, implemented cache modes that can serve stale data immediately while refreshing in the background, reducing perceived latency for non-critical freshness requirements.
+- Stale-while-revalidate caching: some cache modes serve a stale result immediately and refresh it in the background, which cuts the wait for requests that don't need the freshest data.
 
 ## Outcomes
 
-The gateway successfully abstracts provider complexity, reducing integration effort from weeks to hours for new applications. Key achievements:
+All 27+ providers answer through the same schemas, fallbacks route around failing providers automatically, and costs are tracked per client, so each client can have its own spending budget.
 
-- **27+ providers** integrated with consistent schemas
-- **Sub-second** average response times with aggressive caching
-- **Zero-config fallbacks** that automatically route around failures
-- **Accurate cost tracking** enabling budget controls per client
-
-Learned the importance of defensive coding when dealing with third-party APIs - providers change schemas, rate limits, and behaviors without notice. The circuit breaker pattern proved essential for graceful degradation.
+Providers change their schemas, rate limits and behavior without notice, so the adapters have to be written defensively.
+The circuit breakers are what let the gateway keep working when a provider goes down.
 
 ## Implementation Notes
 

@@ -10,7 +10,7 @@ I tried Orca and herdr. Both were better than what I had. Neither had a real mar
 
 ## What it is
 
-A terminal multiplexer. It runs any shell or CLI in real terminals on your own machine and serves the same live sessions to your desktop and your phone. Claude Code, Codex, opencode, pi and oh-my-pi get a live status (working, done, or waiting on you), searchable history and resume. Anything else runs as an ordinary terminal with everything except the status.
+swe-mux is a terminal multiplexer. It runs any shell or CLI in real terminals on your own machine and serves the same live sessions to your desktop and your phone. Claude Code, Codex, opencode, pi and oh-my-pi get a live status (working, done, or waiting on you), searchable history and resume. Anything else runs as an ordinary terminal with everything except the status.
 
 It's the actual terminal, not a UI wrapped around the agent. You can use it as a plain terminal, or start `claude` in a shell and that pane becomes an agent session.
 
@@ -22,7 +22,7 @@ Status comes from three places: the CLI's hooks, its transcript, and the termina
 
 ## The phone
 
-The same sessions, over your own Tailscale network, installed as a PWA. The terminal with a usable keyboard and a key rail for the keys a phone keyboard doesn't have, git diff review, files, notes, and a push notification when an agent needs a decision.
+The phone gets the same sessions over your own Tailscale network, installed from the browser as a web app. It has the terminal with a usable keyboard and a row of extra keys for the ones a phone keyboard doesn't have, git diff review, files, notes, and a push notification when an agent needs a decision.
 
 A dev server bound to 127.0.0.1 on the host is proxied through swe-mux, so the phone opens it without another port being exposed. Being able to play-test and check a frontend on the phone is what closed the development loop there for a lot of my projects. I can work from anywhere now, and I do.
 

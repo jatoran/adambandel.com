@@ -1,6 +1,6 @@
 ---
 title: Personal Metrics Dashboard
-summary: Self-hosted ETL pipeline aggregating Fitbit, app usage, mood, and location data into DuckDB for correlation analysis
+summary: A pipeline that merges Fitbit, app usage, mood and location exports into one row per day, with a dashboard for finding correlations
 started: 2025-11-30
 updated: 2025-11-30
 type: data-pipeline
@@ -28,9 +28,11 @@ architecture:
 
 ## Overview
 
-A comprehensive personal data analytics platform that ingests, unifies, and correlates health and productivity metrics from over 15 different data sources. The system implements a bronze/silver/gold data lake architecture using DuckDB as the analytical database, transforming raw exports from Fitbit, ActivityWatch, RescueTime, Daylio, and other apps into a unified daily metrics table optimized for correlation analysis.
+Personal Metrics Dashboard pulls health and productivity data from over 15 sources into one place and looks for correlations between them.
+Raw exports from Fitbit, ActivityWatch, RescueTime, Daylio and other apps go through bronze, silver and gold tiers in DuckDB and end up in one daily metrics table built for correlation analysis.
 
-The pipeline processes years of personal data (spanning 2017-2025) including sleep stages, heart rate variability, SpO2, steps, app usage patterns, mood tracking, weight measurements, and location history. A Streamlit-based dashboard provides interactive visualizations, lagged correlation analysis, and a pipeline status monitor.
+The data runs from 2017 to 2025: sleep stages, heart rate variability, SpO2, steps, app usage, mood, weight and location history.
+A Streamlit dashboard on top shows charts, lagged correlations and the status of the pipeline.
 
 ## Screenshots
 
@@ -45,21 +47,23 @@ The pipeline processes years of personal data (spanning 2017-2025) including sle
 
 ## Problem
 
-Personal health and productivity data is fragmented across dozens of apps and devices, each with proprietary export formats. Manually analyzing relationships between sleep quality and next-day productivity, or tracking how exercise affects mood over time, requires tedious data wrangling and loses the temporal context needed for meaningful insights.
+Health and productivity data is spread across dozens of apps and devices, each with its own export format.
+Checking how sleep affects the next day's productivity, or how exercise affects mood over time, means a lot of manual data wrangling, and the timing that makes those comparisons mean anything gets lost along the way.
 
-This project solves the data unification problem by creating a single source of truth where metrics from different sources can be joined, compared, and analyzed together. It handles the complexity of overlapping data sources (e.g., multiple sleep trackers), timezone-aware daily boundaries, and the challenge of correlating metrics with different sampling frequencies.
+This project puts every metric in one database, where metrics from different sources can be joined and compared.
+It has to deal with sources that overlap, like more than one sleep tracker, with day boundaries that depend on the time zone, and with correlating metrics sampled at different frequencies.
 
 ## Approach
 
-The architecture follows a medallion (bronze/silver/gold) data lake pattern:
+The pipeline follows the medallion data lake pattern, with raw data in a bronze database, daily aggregates in silver, and one wide daily table in gold.
 
 ### Stack
 
-- **DuckDB** - Embedded analytical database chosen for columnar storage, fast aggregations, and single-file deployment. Supports complex window functions for rolling averages and lag analysis.
-- **Pandas** - DataFrame manipulation for parsing heterogeneous source formats and data transformation.
-- **Streamlit** - Rapid prototyping of interactive dashboards with minimal frontend code. Enables date range filtering, metric selection, and real-time chart updates.
-- **Altair** - Declarative visualization library for creating faceted heatmaps, time series, and correlation matrices.
-- **ijson** - Streaming JSON parser for handling large ActivityWatch exports without loading entire files into memory.
+- DuckDB: an embedded analytical database, picked for columnar storage, fast aggregations and single-file deployment. Its window functions handle the rolling averages and lag analysis.
+- Pandas: parses the different source formats and transforms the data.
+- Streamlit: the dashboard, with very little frontend code. It has date range filters, metric selection, and charts that update as the filters change.
+- Altair: the charts, including faceted heatmaps, time series and correlation matrices.
+- ijson: streams large ActivityWatch exports instead of loading the whole file into memory.
 
 ### Data Flow
 
@@ -94,23 +98,21 @@ Source Files (CSV/JSON)
 
 ### Challenges
 
-- **Offset daily boundaries** - Personal sleep cycles don't align with midnight. Implemented a configurable `DAY_TERMINATION_HOUR` (default 5 AM) so a sleep session ending at 2 AM is credited to the previous day's metrics.
+- Offset day boundaries: sleep doesn't stop at midnight. A configurable `DAY_TERMINATION_HOUR`, 5 AM by default, decides where a day ends, so a sleep session that ends at 2 AM counts toward the previous day.
 
-- **Source overlap resolution** - When multiple apps track the same activity (e.g., ActivityWatch and RescueTime both tracking computer usage), the system applies per-device-per-day priority rules. A day with any ActivityWatch data for "desktop" ignores RescueTime's desktop data, but still uses RescueTime's mobile data if AW didn't capture it.
+- Overlapping sources: ActivityWatch and RescueTime both track computer usage, so priority is decided per device per day. On a day with any ActivityWatch data for the desktop, RescueTime's desktop data is ignored, but its mobile data is still used if ActivityWatch didn't capture mobile.
 
-- **Incremental processing** - With 8+ years of data and frequent exports, full reprocessing is expensive. Each parser tracks file hashes in a `processed_files` table, skipping unchanged files on subsequent runs.
+- Incremental processing: with 8+ years of data and frequent exports, reprocessing everything is expensive. Each parser records file hashes in a `processed_files` table and skips files that haven't changed.
 
-- **Schema evolution** - As new metrics become available (e.g., Fitbit adding new HRV fields), parsers use `ALTER TABLE ADD COLUMN` to backfill missing columns without dropping existing data.
+- Schema changes: when a source adds a metric, like Fitbit adding new HRV fields, the parser adds the missing column with `ALTER TABLE ADD COLUMN` instead of dropping existing data.
 
 ## Outcomes
 
-The unified daily metrics table enables analyses that were previously impossible:
+An automated lag scan across 30-day windows found that calorie intake correlates most strongly with weight change 14 days later.
+Sleep quality, measured as deep sleep percentage, shows a correlation of 0.3 or more with the next day's app productivity categories.
+KeepTrack entries for caffeine, exercise and meditation can be correlated against the biometric data.
 
-- **Lag correlation scanning** - Automated search across 30-day windows finds that calorie intake correlates strongest with weight change 14 days later
-- **Cross-domain insights** - Sleep quality (deep sleep %) shows 0.3+ correlation with next-day app productivity categories
-- **Habit tracking validation** - KeepTrack entries (caffeine, exercise, meditation) can be correlated against biometric outcomes
-
-The modular parser architecture makes adding new data sources straightforward - each parser is a self-contained ~200 line script following the same pattern.
+Adding a source means writing one more parser, a self-contained script of about 200 lines that follows the same pattern as the others.
 
 ## Implementation Notes
 
@@ -157,7 +159,7 @@ for file_path in source_files:
 
 ### Data Classifications
 
-The system handles multiple temporal data patterns:
+The data comes in four temporal patterns, each aggregated differently:
 
 | Type | Examples | Aggregation Strategy |
 |------|----------|---------------------|

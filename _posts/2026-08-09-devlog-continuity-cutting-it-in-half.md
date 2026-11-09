@@ -8,7 +8,7 @@ Pulling the editing core out of the app took one commit and three days. Making i
 
 Six weeks of nothing, then this. The gap between 24 June and 16 July is me using the editor instead of working on it, which is the correct order of operations and also how I ended up wanting something else.
 
-The idea: the editing core is the valuable part, and it's welded to a Win32 application that only runs on my operating system. Text handling, selections, undo, Markdown projection, an 80-variant edit planner. None of that is Windows-specific. All of it is trapped.
+The idea: the editing core is the valuable part, and it's welded to a Win32 application that only runs on my operating system. Text handling, selections, undo, Markdown rendering, and the code that turns 80 kinds of edit command into changes to the text. None of that is Windows-specific. All of it is trapped.
 
 ## The thing blocking extraction wasn't the UI
 
@@ -16,13 +16,13 @@ The obvious plan is to delete the platform-specific parts and ship what's left. 
 
 My buffer layer owned its own persistence. Edits went into a rope *and* into SQLite in the same call. Which is a completely reasonable design for the app from devlog 1, where the whole premise is that every keystroke is durable, and completely wrong for an embedded editor where the host owns storage and may not have a filesystem.
 
-So the first move wasn't extraction. It was making the engine **storage-neutral**: it owns buffers, selections, edit planning, undo, and revisions, and it owns nothing else. No SQLite. No filesystem. No threads. No window.
+So the first move wasn't extraction. It was taking storage out of the engine entirely: it owns buffers, selections, edit planning, undo, and revisions, and it owns nothing else. No SQLite. No filesystem. No threads. No window.
 
-The desktop app didn't lose durability. It stopped being the thing that *has* durability and became the thing that *projects* engine output into SQLite. Same guarantee, moved one layer out. An embedded engine simply has no such host, and works, because nothing inside ever assumed one existed.
+The desktop app didn't lose durability. It stopped being the thing that has durability and became the thing that writes the engine's output into SQLite. Same guarantee, moved one layer out. An embedded engine simply has no such host, and works, because nothing inside ever assumed one existed.
 
 That inversion is the whole trick. Everything else fell out of it.
 
-It landed as one commit on 17 July, `feat(embedding): add shared editor engine and desktop shell`: 500 files touched, +34,540 and -9,135 lines, six milestones closed, three days for milestones 0 through 10.5, zero durability lost.
+It landed as one commit on 17 July, `feat(embedding): add shared editor engine and desktop shell`, touching 500 files after three days of work, and the app lost no durability in the move.
 
 Not a commit I'd defend as good practice. It's one architectural move that either applies everywhere or nowhere, and splitting it would have produced a series of non-compiling states.
 
@@ -65,16 +65,16 @@ The rehearsal step exists now. You generate the public checkout and run the full
 
 ### Two that were actually interesting
 
-**0.2.33: the SBOM was invalid.** GitHub's attestation action requires CycloneDX with `bomFormat`, `specVersion`, and a serial number. Mine had the first two. Fixed with a deterministic RFC 9562 UUIDv8 serial, deterministic being the operative word because the bundle has to hash identically on a rebuild.
+0.2.33, the invalid SBOM. GitHub's attestation action requires CycloneDX with `bomFormat`, `specVersion`, and a serial number. Mine had the first two. Fixed with a deterministic RFC 9562 UUIDv8 serial, deterministic being the operative word because the bundle has to hash identically on a rebuild.
 
-**0.2.26: large-paste geometry.** A browser perf gate failed on wrapped-line measurement that only manifested with a large paste into heavily wrapped content. That one was a real product bug the release process caught, which is the argument for having release gates at all.
+0.2.26, large-paste geometry. A browser perf gate failed on wrapped-line measurement that only manifested with a large paste into heavily wrapped content. That one was a real product bug the release process caught, which is the argument for having release gates at all.
 
 ## What the engine bought
 
-Four surfaces off one codebase: the native Win32 app, a browser Web Component compiled to WASM, a Python module, and a C ABI. Same edit planner, same undo, same Markdown projection.
+Four surfaces off one codebase: the native Win32 app, a browser Web Component compiled to WASM, a Python module, and a C ABI. The same editing code, the same undo, the same Markdown rendering.
 
-The thing that makes it real rather than aspirational is the shared behavior corpus. Same inputs, same resulting text, same selections, same revisions, same deltas, run against every binding. When Python and the browser disagree about a block toggle, that's a failing test today, not a support ticket in eighteen months.
+The thing that makes it real rather than aspirational is one shared set of behavior tests. Same inputs, same resulting text, same selections, same revisions, same deltas, run against every binding. When Python and the browser disagree about a block toggle, that's a failing test today, not a support ticket in eighteen months.
 
-Cost: 1.2 MB of WASM. Real, and I'm not going to spin it. What it buys is that the browser runs the identical planner, which is the only reason the corpus means anything.
+Cost: 1.2 MB of WASM. Real, and I'm not going to spin it. What it buys is that the browser runs the identical editing code, which is the only reason those shared tests mean anything.
 
 Next: discovering that publishing a package and making it installable are different problems.

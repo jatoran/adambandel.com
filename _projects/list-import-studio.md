@@ -1,6 +1,6 @@
 ---
 title: List Import Studio
-summary: Desktop app for visual data transformation pipelines with fuzzy matching, validation, and multi-dataset workflows
+summary: A desktop app for cleaning contact and company lists and matching them against existing records before an import
 started: 2025-10-03
 updated: 2025-10-15
 type: desktop
@@ -29,9 +29,12 @@ architecture:
 
 ## Overview
 
-List Import Studio is a desktop application for importing, transforming, and enriching tabular data through visual pipelines. Users load CSV/XLSX files, map columns to reference schemas, build transformation graphs with filtering, branching, and derivation nodes, then execute workflows that handle deduplication, fuzzy record matching, and human-in-the-loop review gates.
+List Import Studio is a desktop app for importing, cleaning and enriching tabular data through a visual pipeline.
+It loads CSV and XLSX files, maps their columns to a reference schema, and runs them through a graph of nodes that filter, branch and derive new fields.
+Running the pipeline handles deduplication and fuzzy record matching, and it stops at review gates where a person checks the edge cases.
 
-The application combines a React/TypeScript frontend running in Tauri with a Python sidecar that handles heavy data processing via Polars. Communication happens through JSON-RPC over stdio, avoiding HTTP overhead while enabling rich bidirectional command dispatch.
+The frontend is React and TypeScript running in Tauri, and the heavy data processing happens in a Python sidecar using Polars.
+The two talk JSON-RPC over stdio, which avoids the overhead of HTTP.
 
 ## Screenshots
 
@@ -46,42 +49,47 @@ The application combines a React/TypeScript frontend running in Tauri with a Pyt
 
 ## Problem
 
-Data imports from external sources are messy. Phone numbers come in inconsistent formats, emails need validation, company names require standardization, and duplicate records need detection. Traditional ETL tools are either too complex for one-off imports or too limited for sophisticated matching logic.
+For my work, I do a lot of list cleaning and importing of contacts and companies into our database.
+That takes a lot of matching and normalization, to make sure an import isn't overwriting or duplicating something.
+Phone numbers come in inconsistent formats, emails need validating, company names need standardizing, and duplicates need finding.
+There are lots of tools for this, and probably some better ones, but I wanted a node-based flow.
 
-The goal was to build a tool that makes it easy to:
-- Visually design transformation pipelines without writing code
-- Apply fuzzy matching with configurable blocking rules and scoring ensembles
-- Pause execution at review gates for human verification of edge cases
-- Track data lineage to explain how any output row was derived
+I also wanted to be able to save a workflow that comes up often and run it again.
+Trade show leads are an example.
+If a company does trade shows several times a month, that import comes up constantly, and each one is different: the lead scanner formats differ, the sales reps' formats and notes differ, and so does how much data each event hands over.
+The goal was to have a lot of the boilerplate taken care of.
+
+The pipeline is built visually, without writing code.
+It applies fuzzy matching with configurable blocking rules and scoring ensembles, pauses at review gates so a person can verify the edge cases, and tracks lineage so it can explain how any output row was derived.
 
 ## Approach
 
 ### Stack
 
-- **Tauri 2** - Desktop shell providing native file dialogs, process spawning, and cross-platform distribution without Electron's overhead
-- **React 19 + TypeScript** - Frontend with feature-based architecture; hooks manage workflow state while Zod validates RPC contracts
-- **Python Sidecar** - Polars-based data engine spawned as a subprocess; handles all heavy computation
-- **JSON-RPC over stdio** - Custom protocol avoiding HTTP; parent process writes JSON requests to stdin, child responds via stdout
-- **SQLite + Parquet** - Workspace metadata in SQLite; cached pipeline stages in columnar Parquet for efficient resumption
+- Tauri 2: the desktop shell, for native file dialogs, process spawning, and cross-platform builds without Electron's overhead.
+- React 19 and TypeScript: the frontend, organized by feature. Hooks hold the workflow state, and Zod validates the RPC contracts.
+- Python sidecar: the data engine, built on Polars and spawned as a subprocess. All the heavy computation happens here.
+- JSON-RPC over stdio: no HTTP. The app writes JSON requests to the sidecar's stdin, and the sidecar answers on stdout.
+- SQLite and Parquet: workspace metadata goes in SQLite, and each pipeline stage is cached as columnar Parquet so a run can resume without starting over.
 
 ### Challenges
 
-- **Row identity across transforms** - After filtering, standardizing, and deduplicating, tracking which output rows correspond to which inputs requires persistent identifiers. Solution: each row gets a `row_ref` string that propagates through the pipeline, enabling the explain/review features to fetch original values.
+- Row identity across transforms: after filtering, standardizing and deduplicating, there has to be a way to tell which input row each output row came from. Each row gets a `row_ref` string that travels through the pipeline, and the explain and review features use it to fetch the original values.
 
-- **Multi-dataset lineage** - Match and Relate nodes combine two datasets, complicating schema propagation. Solution: routes track `source_dataset_ids`, and the frontend builds field selectors that label origins as "From Dataset: X" or "From Node: Transform".
+- Multi-dataset lineage: Match and Relate nodes combine two datasets, which makes it harder to carry the schema forward. Routes track `source_dataset_ids`, and the field selectors in the frontend label where each field came from, "From Dataset: X" or "From Node: Transform".
 
-- **Pause/resume execution** - Full runs on large datasets can take significant time; users need to pause at review nodes and resume later. Solution: cache checkpoints after each node with stable keys derived from input data + config hashes. Resume rehydrates from the last checkpoint without re-running earlier stages.
+- Pause and resume: a full run on a large dataset can take a long time, and it has to be able to stop at a review node and pick up later. Each node's output is cached as a checkpoint under a stable key built from hashes of its input data and config, and resuming loads the last checkpoint instead of re-running the earlier stages.
 
-- **Quick-fix suggestions** - When validation detects issues (e.g., invalid phone formats), the UI should suggest fixes. Solution: validator registry maps issue codes to transform suggestions; clicking "Apply fix" inserts the appropriate Transform node with pre-configured normalization.
+- Quick-fix suggestions: when validation finds a problem, like invalid phone formats, the UI suggests a fix. A validator registry maps each issue code to a transform, and clicking "Apply fix" inserts a Transform node with the normalization already configured.
 
 ## Outcomes
 
-The visual pipeline approach proves effective for complex data workflows. Key wins:
+I use it consistently, and it saves me hours on each list I have to upload.
 
-- **Iterative refinement** - Preview at any node shows exactly what data looks like mid-pipeline; adjust transform config and immediately see results
-- **Caching efficiency** - Re-running after config changes only recomputes affected nodes; unchanged upstream stages load from Parquet cache
-- **Review workflow** - Match scoring produces histograms; users set thresholds and manually review borderline cases before export
-- **Lineage transparency** - Clicking any output row shows its derivation path through the pipeline with intermediate values
+- Every node has a preview of the data at that point in the pipeline, so a transform's config can be changed and the result checked straight away.
+- After a config change, a re-run only recomputes the affected nodes; unchanged upstream stages load from the Parquet cache.
+- Match scoring produces a histogram. Thresholds are set from it, and borderline cases are reviewed by hand before export.
+- Clicking any output row shows the path it took through the pipeline, with the intermediate values.
 
 ## Implementation Notes
 
@@ -151,7 +159,7 @@ def build_blocking_index(records: DataFrame, rules: list[BlockingRule]) -> dict:
 
 ### State Persistence
 
-Workspace state auto-saves to SQLite on navigation, enabling seamless resume:
+Workspace state saves to SQLite automatically on navigation, so work picks up where it left off:
 
 ```typescript
 // Frontend: src/features/workspace/hooks/useProjectPersistence.ts
