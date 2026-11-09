@@ -1,22 +1,24 @@
 ---
 title: Transformer Training Full Pipeline
-summary: A pipeline that cleans, filters and deduplicates public text, code and math datasets into training data for a 1-billion-parameter language model
+summary: A small English language model built end to end, in two parts - a pipeline that curates public text, code and math into training data, and the code that pretrains and fine-tunes the model
 started: 2025-06-11
 updated: 2025-10-28
-type: data-pipeline
+type: machine-learning
 stack:
   - Python
   - DuckDB
   - PyTorch
   - Apache Parquet
   - Hugging Face Transformers
+  - Accelerate
+  - TRL
   - MosaicML Streaming
 tags:
   - ai
   - data
   - machine-learning
-loc: 25312
-files: 188
+loc: 28783
+files: 232
 architecture:
   auth: none
   database: DuckDB
@@ -29,9 +31,11 @@ architecture:
 
 ## Overview
 
-This pipeline takes more than 20 public datasets, each in its own format, and turns them into training data for a 1B-parameter English language model, with a target of 40 billion tokens.
-A central DuckDB database tracks every document through 22 processing stages, from the raw files to tokenized MosaicML (MDS) shards ready for distributed training.
-No stage deletes or overwrites a document; each one records what it decided, so the database holds the full history.
+This project builds a small English language model end to end, from raw public datasets to a model you can chat with.
+It has two parts, kept as two repositories: a data-curation pipeline that turns public datasets into training data, and the training code that pretrains the model and then fine-tunes it.
+
+The plan is a 1B-parameter model trained on 40 billion curated tokens of prose, code and math.
+So far a 350M-parameter trial model has been pretrained and instruction-tuned on a single rented GPU, and the curation pipeline has passed an end-to-end smoke test but has not done its full run.
 
 It's a learning project.
 The model isn't meant for production; the point is to work through each stage of building one, from data curation to alignment, on modest hardware.
@@ -58,11 +62,15 @@ One-off filtering scripts can't be reproduced or audited, and changing a curatio
 So the pipeline had to bring more than 20 datasets with different schemas into one format and apply over 30 quality signals and filters while keeping a record of every decision.
 It also had to organize the output by content type for curriculum training, let a filter change without an expensive re-run, and produce the same result every time from its configuration.
 
+Training then had to fit a budget: one rented GPU, a development setup on Windows, and no custom CUDA work, using the optimizations that ship with PyTorch and its libraries instead.
+
 ## Approach
 
-All of the curation logic is in YAML files, and the stages run as a directed acyclic graph defined there.
+### Data curation
 
-### Stack
+All of the curation logic is in YAML files, and the stages run as a directed acyclic graph defined there.
+A central DuckDB database tracks every document through 22 processing stages, from the raw files to tokenized MosaicML (MDS) shards ready for distributed training.
+No stage deletes or overwrites a document; each one records what it decided, so the database holds the full history.
 
 - DuckDB holds the central manifest. Each stage reads the state the previous one left and writes its own, which gives every document an unbroken chain of custody. Any stage's result can be queried without re-running anything. The manifest is about 48 GB.
 - Apache Parquet with zstd compression holds the document text, small on disk and still open to random access from the manifest.
@@ -70,6 +78,14 @@ All of the curation logic is in YAML files, and the stages run as a directed acy
 - MosaicML Streaming is the output format, MDS shards organized by content type and category for curriculum training and distributed loading.
 - PII redaction uses regex patterns for email addresses, phone numbers, credit card and Social Security numbers and similar, and replaces each match with a placeholder or a fake value from Faker.
 - datasketch computes the MinHash signatures for near-deduplication. The LSH banding runs on disk in chunks, so memory use stays bounded.
+
+### Training
+
+The model is a Llama-style decoder built with Hugging Face Transformers, with configurations for a 350M and a 1B size.
+Pretraining runs through Accelerate on a rented A40 with FlashAttention-2, torch.compile and an 8-bit paged AdamW from bitsandbytes, at a 4,096-token context.
+The learning rate, betas and weight decay came out of an Optuna sweep rather than defaults.
+Instruction tuning uses TRL with QLoRA: the base model is loaded in 4-bit and only small adapter weights are trained, then merged back into the model.
+A preference-tuning (DPO) stage is planned, and its folder is still empty.
 
 ### Challenges
 
@@ -80,7 +96,11 @@ All of the curation logic is in YAML files, and the stages run as a directed acy
 
 ## Outcomes
 
-As of the October 2025 update, the pipeline is code complete and passes an end-to-end smoke test that runs the whole thing, through to the final MDS shards, on small samples of the datasets.
+The first 350M pretraining run failed partway; the second ran to its final step, 20,100 steps of about a million tokens each, and the model was then instruction-tuned with QLoRA and merged.
+That was the trial run, in June and July 2025.
+The 1B model has not been trained.
+
+As of the October 2025 update, the curation pipeline is code complete and passes an end-to-end smoke test that runs the whole thing, through to the final MDS shards, on small samples of the datasets.
 The full run over all of the data hasn't started, so the 40-billion-token figure is the target, not a measured result.
 
 On those samples, every source (RedPajama, StarCoder, MegaMath, Open Orca, HelpSteer2 and the rest) ends up in one schema, and every document's path from raw input to final shard can be queried in the manifest, including which filter removed it and why.
@@ -92,7 +112,7 @@ Keeping metadata in DuckDB and the text in Parquet keeps queries flexible and st
 
 ## Implementation Notes
 
-The stages run in order from cheapest to most expensive:
+The curation stages run in order from cheapest to most expensive:
 
 ```
 s00 Validation       → s01 Parquet Conversion → s02 HTML Cleaning
