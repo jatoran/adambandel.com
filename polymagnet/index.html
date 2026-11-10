@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <!-- Unlisted: the published copy is reached by its link, not through search engines. -->
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="data:," />
+    <title>Polymagnet Capability Reel</title>
+    <script type="module" crossorigin src="./assets/index-CC_I2QEL.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-TWyASERh.css">
+  </head>
+  <body>
+    <canvas id="stage" aria-label="Animated 3D view of programmable magnet behaviors"></canvas>
+
+    <div id="hud">
+      <div id="labels"></div>
+
+      <header id="chapter">
+        <span id="chapter-index"></span>
+        <h1 id="chapter-title"></h1>
+      </header>
+
+      <aside id="panels">
+        <section class="panel" id="panel-pattern">
+          <h2 id="pattern-title"></h2>
+          <canvas id="pattern-canvas"></canvas>
+          <div class="legend">
+            <span><i class="swatch north"></i>North</span>
+            <span><i class="swatch south"></i>South</span>
+            <span><i class="swatch unwritten"></i>Unwritten</span>
+          </div>
+        </section>
+        <section class="panel" id="panel-chart">
+          <h2 id="chart-title"></h2>
+          <div class="chart-wrap">
+            <canvas id="chart-canvas" role="img"></canvas>
+          </div>
+        </section>
+      </aside>
+
+      <footer id="caption">
+        <p id="caption-text"></p>
+        <span id="caption-tag" hidden></span>
+      </footer>
+
+      <div id="disclaimer">Illustrative simulation. Forces are shown in relative units.</div>
+
+      <section id="summary" class="off">
+        <h2>Programmable Magnet Behaviors</h2>
+        <div class="tiles"></div>
+        <p>Each behavior is a pattern written into standard magnet material by the same magnetizer.</p>
+        <div class="brand">
+          <strong>Correlated Magnetics Research</strong>
+          <span>Polymagnet &middot; polymagnet.com</span>
+        </div>
+      </section>
+    </div>
+
+    <div id="dip"></div>
+
+    <div id="transport">
+      <div id="scrub-track" role="slider" aria-label="Playback position" tabindex="-1">
+        <div id="scrub-fill"></div>
+      </div>
+      <div class="controls">
+        <button id="btn-play" type="button">Play</button>
+        <span id="time-readout">0:00 / 0:00</span>
+        <span class="spacer"></span>
+        <button id="btn-loop" type="button">Loop: off</button>
+        <button id="btn-speed" type="button">1x</button>
+        <button id="btn-fullscreen" type="button">Fullscreen</button>
+      </div>
+    </div>
+
+    <div id="boot">Preparing the field model</div>
+
+  </body>
+</html>
