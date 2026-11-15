@@ -33,6 +33,11 @@ These parts of the renderer for the room and the jungle are derived from Abyssal
 - `src/wgsl/post.js`: the depth-aware blur and upsample, the tone mapping.
 - `src/renderer.js`: the frame structure, cell culling, GPU timing and dynamic resolution.
 
+## The stars over the moon
+
+The positions, magnitudes and colour indices of the stars brighter than magnitude 6.5 in the moon's sky are from the Yale Bright Star Catalogue, 5th Revised Edition (D. Hoffleit and W. H. Warren Jr., 1991), distributed by the Centre de Données astronomiques de Strasbourg as catalogue V/50.
+`tools/make-stars.mjs` packs them into `src/moon/stars-data.js`; the catalogue itself is not part of this repository.
+
 ## Abyssal Garden license
 
 MIT License
