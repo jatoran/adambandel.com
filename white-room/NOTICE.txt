@@ -1,8 +1,28 @@
 # Notice
 
-White Room builds on the renderer architecture of Abyssal Garden by Maksymilian Dendura (https://github.com/Noniv/abyssal-garden), used under the MIT License.
+White Room contains Abyssal Garden by Maksymilian Dendura (https://github.com/Noniv/abyssal-garden), used under the MIT License, and builds on its renderer.
 
-Parts derived from it are marked in the source files that contain them:
+## The world behind the blue door
+
+The underwater world behind the blue door is the scene of Abyssal Garden, brought over from its source.
+Everything in `src/abyss/` is that scene's code, adapted to stand behind a doorway:
+
+- `src/abyss/layout.js`: the scene's layout tables, viewpoints and camera path.
+- `src/abyss/world.js`: its world generator.
+- `src/abyss/meshes.js`: its procedural meshes (rocks, sponges, coral, the whale fluke, the wreck, the manta, the fish).
+- `src/abyss/wgsl.js`: its shaders (terrain density, caustics, materials, kelp, animals, water surface, particles, light shafts).
+- `src/abyss/renderer.js`: its draw calls, draw distances and levels of detail.
+- `src/abyss/build.js`: its build steps and their order.
+- `src/audio.js`: its soundscape (rumble, wash, rush, drone, bubbles, chimes, whale calls).
+- `src/player.js`: its swimming (speeds, how the body takes them up, sliding along rock).
+- `src/wgsl/post.js`: its grade, applied where the underwater world shows.
+
+What White Room adds to that world is the blue door: the door and the plinth it stands on, the pipelines that draw the world through the doorway, the doorway's light in the water, and the water laid over the room seen from it.
+Nothing is generated where the door stands; the rest of the world comes out as it does in Abyssal Garden.
+
+## The jungle and the room
+
+These parts of the renderer for the room and the jungle are derived from Abyssal Garden, and are marked in the source files that contain them:
 
 - `src/math.js`: seeded random streams, value noise, quaternion helpers.
 - `src/geometry.js`: surface nets, the trilinear sampler, the mesh builder core, the icosphere.
