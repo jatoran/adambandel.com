@@ -1,0 +1,20 @@
+[
+  {"name": "concrete_board", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [124, 121, 115], "mean_roughness": 0.822},
+  {"name": "concrete_smooth", "layer": 1, "size_m": [3.0, 3.0], "mean_srgb": [127, 128, 125], "mean_roughness": 0.541},
+  {"name": "plaster", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [213, 209, 206], "mean_roughness": 0.881},
+  {"name": "wood_floor", "layer": 3, "size_m": [1.7, 1.7], "mean_srgb": [122, 92, 63], "mean_roughness": 0.471},
+  {"name": "wood_fine", "layer": 4, "size_m": [1.8, 1.8], "mean_srgb": [137, 105, 80], "mean_roughness": 0.576},
+  {"name": "wood_rough", "layer": 5, "size_m": [2.0, 2.0], "mean_srgb": [90, 79, 65], "mean_roughness": 0.674},
+  {"name": "stone_floor", "layer": 6, "size_m": [2.3, 2.3], "mean_srgb": [76, 77, 77], "mean_roughness": 0.543},
+  {"name": "tiles", "layer": 7, "size_m": [1.27, 1.27], "mean_srgb": [199, 192, 177], "mean_roughness": 0.242},
+  {"name": "rock", "layer": 8, "size_m": [8.14, 8.14], "mean_srgb": [79, 74, 69], "mean_roughness": 0.873},
+  {"name": "metal_brushed", "layer": 9, "size_m": [1.0, 1.0], "mean_srgb": [146, 149, 152], "mean_roughness": 0.469},
+  {"name": "metal_painted", "layer": 10, "size_m": [1.0, 1.0], "mean_srgb": [180, 180, 180], "mean_roughness": 0.503},
+  {"name": "metal_rust", "layer": 11, "size_m": [2.2, 2.2], "mean_srgb": [95, 56, 30], "mean_roughness": 0.777},
+  {"name": "metal_plate", "layer": 12, "size_m": [1.2, 1.2], "mean_srgb": [106, 96, 82], "mean_roughness": 0.555},
+  {"name": "fabric", "layer": 13, "size_m": [0.27, 0.27], "mean_srgb": [175, 175, 175], "mean_roughness": 0.718},
+  {"name": "leather", "layer": 14, "size_m": [0.4, 0.4], "mean_srgb": [76, 43, 15], "mean_roughness": 0.662},
+  {"name": "carpet", "layer": 15, "size_m": [1.7, 1.7], "mean_srgb": [180, 170, 142], "mean_roughness": 0.648},
+  {"name": "bricks", "layer": 16, "size_m": [2.0, 2.0], "mean_srgb": [121, 92, 74], "mean_roughness": 0.937},
+  {"name": "wood_painted", "layer": 17, "size_m": [1.8, 1.8], "mean_srgb": [189, 181, 176], "mean_roughness": 0.524}
+]

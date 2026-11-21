@@ -33,6 +33,35 @@ These parts of the renderer for the room and the jungle are derived from Abyssal
 - `src/wgsl/post.js`: the depth-aware blur and upsample, the tone mapping.
 - `src/renderer.js`: the frame structure, cell culling, GPU timing and dynamic resolution.
 
+## The turquoise grotto
+
+Poly Haven publishes the following assets under CC0. [Poly Haven asset license](https://polyhaven.com/license)
+
+| Use | Original asset |
+|---|---|
+| Stone and gravel surface maps | [Mossy Rock](https://polyhaven.com/a/mossy_rock), [Rock Ground 02](https://polyhaven.com/a/rock_ground_02) |
+| Ledges and submerged boulders | [Rock Face 02](https://polyhaven.com/a/rock_face_02), [Rock Moss Set 01](https://polyhaven.com/a/rock_moss_set_01) |
+| Shore vegetation | [Fern 02](https://polyhaven.com/a/fern_02), [Periwinkle Plant](https://polyhaven.com/a/periwinkle_plant) |
+| Island tree, branches and leaves | [Tree Small 02](https://polyhaven.com/a/tree_small_02) |
+
+The porcini mesh and its surface maps come from tevy's CC0 release. [Porcini Mushroom, version 1](https://tevy.dev/models/porcini-mushroom)
+
+The local pack contains optimized meshes, resampled textures and cutout masks.
+The hanging flowers, water, spray and wisps are generated in the scene.
+
+## The lighthouse behind the pink door
+
+The lighthouse's surfaces are photographed texture sets and its sound is recorded, all published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/lighthouse/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 18 texture sets: concrete, plaster, wood, stone, tiles, rock, metals, fabric, leather, carpet, brick | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) | `assets/lighthouse/tex/CREDITS.md` names each asset, its authors and its link |
+| 47 sound files: storm and calm sea, wind, rain, thunder, wave crashes, gulls, fire, clock, generator, pump, footsteps, switch, horn | [Freesound](https://freesound.org/) and [BigSoundBank](https://bigsoundbank.com/) | `assets/lighthouse/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled and repacked by `tools/lighthouse-textures.py`, the recordings cut and levelled by `tools/lighthouse-audio.py`; each tool's `.json` file lists the sources and what was done to them.
+The tower, its furnishing, the sea, the weather and the pictures on its walls are made by the page.
+
 ## The stars over the moon
 
 The positions, magnitudes and colour indices of the stars brighter than magnitude 6.5 in the moon's sky are from the Yale Bright Star Catalogue, 5th Revised Edition (D. Hoffleit and W. H. Warren Jr., 1991), distributed by the Centre de Données astronomiques de Strasbourg as catalogue V/50.
