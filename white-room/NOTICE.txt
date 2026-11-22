@@ -59,8 +59,22 @@ They are kept as files beside the page, in `assets/lighthouse/`.
 | 18 texture sets: concrete, plaster, wood, stone, tiles, rock, metals, fabric, leather, carpet, brick | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) | `assets/lighthouse/tex/CREDITS.md` names each asset, its authors and its link |
 | 47 sound files: storm and calm sea, wind, rain, thunder, wave crashes, gulls, fire, clock, generator, pump, footsteps, switch, horn | [Freesound](https://freesound.org/) and [BigSoundBank](https://bigsoundbank.com/) | `assets/lighthouse/audio/CREDITS.md` names each recording, its author and its link |
 
-The textures were resampled and repacked by `tools/lighthouse-textures.py`, the recordings cut and levelled by `tools/lighthouse-audio.py`; each tool's `.json` file lists the sources and what was done to them.
+The textures were resampled and repacked by `tools/place-textures.py`, the recordings cut and levelled by `tools/place-audio.py`; `tools/lighthouse-textures.json` and `tools/lighthouse-audio.json` list the sources and what was done to them.
 The tower, its furnishing, the sea, the weather and the pictures on its walls are made by the page.
+
+## The alley behind the vermilion door
+
+The alley's surfaces are photographed texture sets and its rain, gutters and footsteps are recorded, all published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/alley/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 16 texture sets: granite setts and slabs, stone, charred and weathered cedar, timber, clay wall, plaster, bamboo, copper, tin, painted metal, iron, paper, fabric, concrete | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) | `assets/alley/tex/CREDITS.md` names each asset, its authors and its link |
+| 17 sound files: rain in a street, rain on a tin roof, a gutter's trickle, drips, footsteps on wet stone and in puddles | [Freesound](https://freesound.org/) | `assets/alley/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled and repacked by `tools/place-textures.py`, the recordings cut and levelled by `tools/place-audio.py`; `tools/alley-textures.json` and `tools/alley-audio.json` list the sources and what was done to them.
+The houses, lanterns, signs and curtains, the rooms behind the windows, the rain and the trio heard from the bar are made by the page.
+The trio's music is generated note by note from a chord progression written for this place.
 
 ## The stars over the moon
 

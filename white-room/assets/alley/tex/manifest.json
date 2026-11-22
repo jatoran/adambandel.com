@@ -1,0 +1,18 @@
+[
+  {"name": "setts", "layer": 0, "size_m": [1.96, 1.96], "mean_srgb": [137, 131, 121], "mean_roughness": 0.74, "height": true},
+  {"name": "slab", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [112, 100, 85], "mean_roughness": 0.77, "height": true},
+  {"name": "stone", "layer": 2, "size_m": [1.9, 1.9], "mean_srgb": [116, 112, 104], "mean_roughness": 0.789},
+  {"name": "yakisugi", "layer": 3, "size_m": [1.6, 1.6], "mean_srgb": [24, 26, 30], "mean_roughness": 0.935},
+  {"name": "timber", "layer": 4, "size_m": [2.0, 2.0], "mean_srgb": [76, 64, 56], "mean_roughness": 0.736},
+  {"name": "cedar", "layer": 5, "size_m": [1.13, 1.13], "mean_srgb": [166, 94, 11], "mean_roughness": 0.635},
+  {"name": "clay", "layer": 6, "size_m": [2.0, 2.0], "mean_srgb": [113, 89, 59], "mean_roughness": 0.923},
+  {"name": "plaster", "layer": 7, "size_m": [1.8, 1.8], "mean_srgb": [159, 158, 155], "mean_roughness": 0.888},
+  {"name": "bamboo", "layer": 8, "size_m": [2.0, 2.0], "mean_srgb": [124, 100, 77], "mean_roughness": 0.707},
+  {"name": "copper", "layer": 9, "size_m": [1.0, 1.0], "mean_srgb": [211, 198, 183], "mean_roughness": 0.339},
+  {"name": "tin", "layer": 10, "size_m": [1.12, 1.12], "mean_srgb": [165, 173, 169], "mean_roughness": 0.702},
+  {"name": "metal_painted", "layer": 11, "size_m": [1.0, 1.0], "mean_srgb": [180, 180, 180], "mean_roughness": 0.503},
+  {"name": "iron", "layer": 12, "size_m": [2.0, 2.0], "mean_srgb": [82, 71, 60], "mean_roughness": 0.659},
+  {"name": "paper", "layer": 13, "size_m": [0.5, 0.5], "mean_srgb": [245, 244, 242], "mean_roughness": 0.631},
+  {"name": "fabric", "layer": 14, "size_m": [0.27, 0.27], "mean_srgb": [175, 175, 175], "mean_roughness": 0.718},
+  {"name": "concrete", "layer": 15, "size_m": [3.0, 3.0], "mean_srgb": [127, 128, 125], "mean_roughness": 0.541}
+]
