@@ -62,6 +62,18 @@ They are kept as files beside the page, in `assets/lighthouse/`.
 The textures were resampled and repacked by `tools/place-textures.py`, the recordings cut and levelled by `tools/place-audio.py`; `tools/lighthouse-textures.json` and `tools/lighthouse-audio.json` list the sources and what was done to them.
 The tower, its furnishing, the sea, the weather and the pictures on its walls are made by the page.
 
+## The backrooms behind the brown portal
+
+The backrooms' surfaces are photographed texture sets, published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/backrooms/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 14 texture sets: carpet, paper, ceiling tile, pool tile, concrete floor and wall, painted block, rusty metal, office carpet, stucco, wool fabric, oak veneer, kraft board, planks | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) | `assets/backrooms/tex/CREDITS.md` names each asset, its authors and its link |
+
+The textures were resampled and repacked by `tools/place-textures.py`; `tools/backrooms-textures.json` lists the sources and what was done to them.
+The level's layout, its fittings and props, the water, and the sound are made by the page.
+
 ## The alley behind the vermilion door
 
 The alley's surfaces are photographed texture sets and its rain, gutters and footsteps are recorded, all published by their authors under CC0 1.0 (public domain dedication).

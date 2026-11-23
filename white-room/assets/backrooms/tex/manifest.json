@@ -1,0 +1,16 @@
+[
+  {"name": "carpet", "layer": 0, "size_m": [1.7, 1.7], "mean_srgb": [180, 170, 142], "mean_roughness": 0.648},
+  {"name": "wallpaper", "layer": 1, "size_m": [0.5, 0.5], "mean_srgb": [216, 216, 216], "mean_roughness": 0.439},
+  {"name": "ceiling", "layer": 2, "size_m": [3.6, 3.6], "mean_srgb": [235, 235, 235], "mean_roughness": 0.692},
+  {"name": "pooltile", "layer": 3, "size_m": [1.0, 1.0], "mean_srgb": [227, 227, 227], "mean_roughness": 0.054},
+  {"name": "concrete_floor", "layer": 4, "size_m": [3.0, 3.0], "mean_srgb": [122, 123, 120], "mean_roughness": 0.541},
+  {"name": "concrete_wall", "layer": 5, "size_m": [2.71, 2.71], "mean_srgb": [135, 132, 122], "mean_roughness": 0.735},
+  {"name": "blockwall", "layer": 6, "size_m": [1.8, 1.8], "mean_srgb": [173, 173, 170], "mean_roughness": 0.548},
+  {"name": "metal", "layer": 7, "size_m": [2.0, 2.0], "mean_srgb": [142, 135, 118], "mean_roughness": 0.82},
+  {"name": "office_carpet", "layer": 8, "size_m": [0.4, 0.4], "mean_srgb": [104, 104, 104], "mean_roughness": 0.693},
+  {"name": "drywall", "layer": 9, "size_m": [2.0, 2.0], "mean_srgb": [213, 209, 206], "mean_roughness": 0.881},
+  {"name": "fabric", "layer": 10, "size_m": [0.27, 0.276], "mean_srgb": [132, 132, 132], "mean_roughness": 0.861},
+  {"name": "laminate", "layer": 11, "size_m": [1.0, 1.0], "mean_srgb": [214, 185, 154], "mean_roughness": 0.562},
+  {"name": "cardboard", "layer": 12, "size_m": [0.3, 0.3], "mean_srgb": [191, 145, 93], "mean_roughness": 0.584},
+  {"name": "planks", "layer": 13, "size_m": [1.87, 1.87], "mean_srgb": [157, 122, 82], "mean_roughness": 0.717}
+]
