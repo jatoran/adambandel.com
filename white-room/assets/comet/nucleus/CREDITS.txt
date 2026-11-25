@@ -1,0 +1,7 @@
+# The nucleus of 67P
+
+- `mesh.bin`, `near.bin` and `nucleus.json` are derived from `CG_DLR_SPG_SHAP4S_4M.WRL` (2 million vertices, 4 million plates), the SPG SHAP4S shape model of comet 67P/Churyumov-Gerasimenko.
+- Source: data set RO-C-MULTI-5-67P-SHAPE-V2.0, "Rosetta Shape Models of Comet 67P/C-G v2.0", NASA Planetary Data System (Small Bodies Node) and ESA Planetary Science Archive, https://pdssbn.astro.umd.edu/holdings/ro-c-multi-5-67p-shape-v2.0/dataset.html.
+- Credit: F. Preusker, F. Scholten and others, German Aerospace Center (DLR), "Shape model, reference system definition, and cartographic mapping standards for comet 67P/Churyumov-Gerasimenko", Astronomy & Astrophysics 583, A33 (2015); images ESA/Rosetta/MPS for OSIRIS Team MPS/UPD/LAM/IAA/SSO/INTA/UPM/DASP/IDA.
+- Terms: archived research data, free to use with credit to the authors and the archive.
+- Changed by `tools/comet-bake.mjs`: turned into the place's frame, made coarser where it is not seen from the portal, given finer relief than the model holds, and the sun, the sky and the light thrown back baked over it.

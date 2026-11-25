@@ -1,0 +1,9 @@
+[
+  {"name": "panel", "layer": 0, "size_m": [1.6, 1.6], "mean_srgb": [60, 60, 60], "mean_roughness": 0.284},
+  {"name": "deck", "layer": 1, "size_m": [1.2, 1.2], "mean_srgb": [58, 47, 26], "mean_roughness": 0.589},
+  {"name": "metal", "layer": 2, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469},
+  {"name": "paint", "layer": 3, "size_m": [1.5, 1.5], "mean_srgb": [104, 57, 42], "mean_roughness": 0.822},
+  {"name": "fabric", "layer": 4, "size_m": [0.5, 0.5], "mean_srgb": [151, 151, 151], "mean_roughness": 0.718},
+  {"name": "frost", "layer": 5, "size_m": [1.0, 1.0], "mean_srgb": [128, 128, 130], "mean_roughness": 0.801},
+  {"name": "ribbed", "layer": 6, "size_m": [1.2, 1.2], "mean_srgb": [120, 124, 126], "mean_roughness": 0.633}
+]

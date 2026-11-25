@@ -1,0 +1,6 @@
+[
+  {"name": "ripple", "layer": 0, "size_m": [30.0, 30.0], "mean_srgb": [124, 115, 105], "mean_roughness": 0.61, "height": true},
+  {"name": "sand", "layer": 1, "size_m": [3.0, 3.0], "mean_srgb": [119, 83, 64], "mean_roughness": 0.825, "height": true},
+  {"name": "vault", "layer": 2, "size_m": [20.0, 20.0], "mean_srgb": [146, 139, 129], "mean_roughness": 0.881, "height": true},
+  {"name": "block", "layer": 3, "size_m": [2.7, 2.7], "mean_srgb": [126, 101, 77], "mean_roughness": 0.818, "height": true}
+]

@@ -1,0 +1,5 @@
+# Dallol ground
+
+| File | Source |
+|---|---|
+| `ground.bin`, `ctl0.webp` .. `ctl2.webp` | Made by `tools/dallol-terrain.mjs` and `tools/dallol-pack.py` from measures of the real place (no outside data) |

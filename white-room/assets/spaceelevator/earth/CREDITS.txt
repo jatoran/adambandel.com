@@ -1,0 +1,15 @@
+# Space elevator: Earth imagery credits
+
+All three files are equirectangular images of the Earth (north up, longitude increasing to the right), made by `tools/spaceelevator-earth.py` from imagery served by NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).
+NASA imagery is not copyrighted and may be used freely; NASA asks for credit, given here.
+
+| File | Holds | Source |
+|---|---|---|
+| `near.webp` | 2048 x 2048, 2.5 degrees about 0 N, 98.3 W (about 270 m a pixel) | RGB: VIIRS on NOAA-20, Corrected Reflectance (True Color), 15 January 2024. Alpha: water mask from the Blue Marble |
+| `hero.webp` | 4096 x 4096, 9 degrees about the same point (about 490 m a pixel) | As `near.webp` |
+| `world.webp` | 4096 x 2048, the whole globe (about 10 km a pixel) | As `near.webp`, gaps filled from VIIRS on Suomi NPP of the same day; the polar night with each row's mean colour |
+
+The pictures were turned from Worldview's stretch back to reflectance, the sun's glint and haze over the sea reduced, and stored as square roots.
+
+Credit: NASA Worldview / GIBS, VIIRS (NOAA-20, Suomi NPP) Corrected Reflectance; Blue Marble Next Generation, NASA Earth Observatory (Reto Stockli).
+Pages: https://worldview.earthdata.nasa.gov/ and https://earthobservatory.nasa.gov/features/BlueMarble.

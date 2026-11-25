@@ -1,0 +1,10 @@
+# Saturn and its rings: credits
+
+Built by `tools/saturnrings-data.py`.
+
+| File | What it is | Source | Author | Licence |
+|---|---|---|---|---|
+| `globe.webp` | Saturn's globe, plate carree, 4096 x 2048, re-encoded | [Solarsystemscope texture 8k saturn.jpg](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_8k_saturn.jpg) | Solar System Scope (INOVE), from NASA's Cassini and Voyager imagery | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `rings.png` | The rings' colour and opacity along a radius, 70214 to 140948 km from Saturn's centre, averaged to 2048 samples | [Solarsystemscope texture 8k saturn ring alpha.png](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_8k_saturn_ring_alpha.png) | Solar System Scope (INOVE), from NASA's Cassini imagery | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+
+Changes made: the globe was re-encoded as WebP; the ring strip's rows were averaged into one profile and resampled.

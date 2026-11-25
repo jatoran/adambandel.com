@@ -1,0 +1,5 @@
+# Drowned city sky credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `sky.webp`, `sky.json` | [Kloofendal 43d Clear (Pure Sky)](https://polyhaven.com/a/kloofendal_43d_clear_puresky) (Poly Haven HDRI, 4k; its upper hemisphere resampled to 4096 x 1024, its sun and sky light measured, by `tools/drownedcity-sky.py`) | Greg Zaal | [CC0 1.0](https://polyhaven.com/license) |

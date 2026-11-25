@@ -1,0 +1,6 @@
+[
+  {"name": "crystal", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [252, 251, 246], "mean_roughness": 0.034},
+  {"name": "rim", "layer": 1, "size_m": [1.5, 1.5], "mean_srgb": [189, 192, 192], "mean_roughness": 0.366},
+  {"name": "rock", "layer": 2, "size_m": [2.42, 2.42], "mean_srgb": [31, 27, 22], "mean_roughness": 0.797},
+  {"name": "slate", "layer": 3, "size_m": [2.0, 2.0], "mean_srgb": [56, 49, 42], "mean_roughness": 0.824}
+]

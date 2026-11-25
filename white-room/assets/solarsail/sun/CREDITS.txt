@@ -1,0 +1,12 @@
+# Solar sail: the Sun
+
+Made by `tools/solarsail-sun.py` from three pictures of the Sun taken within ten minutes of each other on 2024-05-10 by NASA's Solar Dynamics Observatory.
+Data and images courtesy of NASA/SDO and the AIA, EVE, and HMI science teams; public domain (NASA media usage guidelines, https://sdo.gsfc.nasa.gov/data/rules.php).
+
+| File | Channel | Source |
+|---|---|---|
+| `sun.webp` | red | AIA 304 A, https://sdo.gsfc.nasa.gov/assets/img/browse/2024/05/10/20240510_000918_4096_0304.jpg |
+| `sun.webp` | green | AIA 171 A, https://sdo.gsfc.nasa.gov/assets/img/browse/2024/05/10/20240510_000710_4096_0171.jpg |
+| `sun.webp` | blue | HMI colorized continuum, https://sdo.gsfc.nasa.gov/assets/img/browse/2024/05/10/20240510_000000_4096_HMIIC.jpg |
+
+Changed: centred and scaled alike, reduced to brightness, the photosphere's limb darkening divided out, the pictures' borders faded out.

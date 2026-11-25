@@ -1,0 +1,5 @@
+[
+  {"name": "blocks", "layer": 0, "size_m": [3.0, 3.0], "mean_srgb": [164, 146, 124], "mean_roughness": 0.833, "height": true},
+  {"name": "pave", "layer": 1, "size_m": [2.15, 2.15], "mean_srgb": [99, 86, 73], "mean_roughness": 0.719},
+  {"name": "plaster", "layer": 2, "size_m": [1.8, 1.8], "mean_srgb": [115, 107, 90], "mean_roughness": 0.971}
+]

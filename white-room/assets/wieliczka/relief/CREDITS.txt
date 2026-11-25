@@ -1,0 +1,11 @@
+# Reliefs
+
+Photographs of the salt reliefs in St. Kinga's Chapel, Wieliczka, cropped, their light evened out and greyed by
+`tools/wieliczka-reliefs.py`.
+
+| File | Subject | Source | Author | Licence |
+|---|---|---|---|---|
+| `supper.webp` | The Last Supper (after Leonardo), carved in salt by Antoni Wyrodek | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:The_Last_Supper_(3868802697).jpg) | Klearchos Kapoutsis | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
+| `egypt.webp` | The Flight into Egypt, carved in salt | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Flight_into_Egypt_(3868778533).jpg) | Klearchos Kapoutsis | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
+
+Changes: cropped to 3:2, resampled to 1536 x 1024, large-scale lighting divided out, converted to grey.

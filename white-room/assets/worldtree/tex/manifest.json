@@ -1,0 +1,4 @@
+[
+  {"name": "bark", "layer": 0, "size_m": [1.94, 1.94], "mean_srgb": [81, 56, 38], "mean_roughness": 0.927, "height": true},
+  {"name": "moss", "layer": 1, "size_m": [1.0, 1.0], "mean_srgb": [56, 76, 19], "mean_roughness": 0.609, "height": true}
+]

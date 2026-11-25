@@ -1,0 +1,5 @@
+# Lanterns sky credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `sky.webp`, `sky.json` | [Kloppenheim 07 (Pure Sky)](https://polyhaven.com/a/kloppenheim_07_puresky) (Poly Haven HDRI, 4k; its upper hemisphere resampled to 4096 x 1024, its sun and sky light measured, by `tools/lanterns-sky.py`) | Greg Zaal, Jarod Guest | [CC0 1.0](https://polyhaven.com/license) |

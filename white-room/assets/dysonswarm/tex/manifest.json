@@ -1,0 +1,7 @@
+[
+  {"name": "panel", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [60, 60, 60], "mean_roughness": 0.284},
+  {"name": "steel", "layer": 1, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469},
+  {"name": "deck", "layer": 2, "size_m": [1.2, 1.2], "mean_srgb": [51, 48, 44], "mean_roughness": 0.589},
+  {"name": "cell", "layer": 3, "size_m": [2.0, 2.0], "mean_srgb": [51, 62, 73], "mean_roughness": 0.179},
+  {"name": "foil", "layer": 4, "size_m": [1.0, 1.0], "mean_srgb": [213, 213, 213], "mean_roughness": 0.05}
+]

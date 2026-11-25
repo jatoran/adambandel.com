@@ -1,0 +1,4 @@
+# The mercury lake: the cave
+
+Everything in this folder is made by `tools/mercury-bake.mjs` for this project: the cave's shape, what hangs and stands in it, and the torches' light traced through it.
+It uses no other source and is under the repository's own licence.

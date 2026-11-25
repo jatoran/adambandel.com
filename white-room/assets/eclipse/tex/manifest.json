@@ -1,0 +1,5 @@
+[
+  {"name": "gravel", "layer": 0, "size_m": [2.48, 2.48], "mean_srgb": [138, 105, 72], "mean_roughness": 0.789, "height": true},
+  {"name": "stony", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [120, 106, 88], "mean_roughness": 0.649, "height": true},
+  {"name": "rock", "layer": 2, "size_m": [1.8, 1.8], "mean_srgb": [162, 150, 135], "mean_roughness": 0.633, "height": true}
+]

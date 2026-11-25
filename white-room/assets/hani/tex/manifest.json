@@ -1,0 +1,10 @@
+[
+  {"name": "mud", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [75, 66, 53], "mean_roughness": 0.524, "height": true},
+  {"name": "withered", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [156, 133, 109], "mean_roughness": 0.808, "height": true},
+  {"name": "leafy", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [132, 115, 77], "mean_roughness": 0.685, "height": true},
+  {"name": "forest", "layer": 3, "size_m": [2.0, 2.0], "mean_srgb": [108, 101, 70], "mean_roughness": 0.935, "height": true},
+  {"name": "adobe", "layer": 4, "size_m": [2.0, 2.0], "mean_srgb": [113, 89, 59], "mean_roughness": 0.923, "height": true},
+  {"name": "thatch", "layer": 5, "size_m": [2.0, 2.0], "mean_srgb": [102, 87, 66], "mean_roughness": 0.87, "height": true},
+  {"name": "bark", "layer": 6, "size_m": [1.0, 1.0], "mean_srgb": [77, 70, 52], "mean_roughness": 0.902, "height": true},
+  {"name": "stone", "layer": 7, "size_m": [2.0, 2.0], "mean_srgb": [87, 72, 55], "mean_roughness": 0.899, "height": true}
+]

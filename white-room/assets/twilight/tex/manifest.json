@@ -1,0 +1,8 @@
+[
+  {"name": "concrete", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [124, 121, 115], "mean_roughness": 0.822},
+  {"name": "paving", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [112, 100, 86], "mean_roughness": 0.77},
+  {"name": "metal", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [82, 71, 60], "mean_roughness": 0.659},
+  {"name": "rock", "layer": 3, "size_m": [8.14, 8.14], "mean_srgb": [84, 78, 73], "mean_roughness": 0.873},
+  {"name": "sand", "layer": 4, "size_m": [3.0, 3.0], "mean_srgb": [119, 83, 64], "mean_roughness": 0.825},
+  {"name": "ice", "layer": 5, "size_m": [2.0, 2.0], "mean_srgb": [73, 89, 89], "mean_roughness": 0.14}
+]

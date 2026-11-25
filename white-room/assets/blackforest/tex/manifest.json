@@ -1,0 +1,9 @@
+[
+  {"name": "litter", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [60, 47, 28], "mean_roughness": 0.786},
+  {"name": "soil", "layer": 1, "size_m": [2.4, 2.4], "mean_srgb": [49, 34, 17], "mean_roughness": 0.918},
+  {"name": "moss", "layer": 2, "size_m": [2.2, 2.2], "mean_srgb": [116, 92, 48], "mean_roughness": 0.931},
+  {"name": "bark", "layer": 3, "size_m": [1.6, 1.6], "mean_srgb": [78, 69, 49], "mean_roughness": 0.944},
+  {"name": "pale", "layer": 4, "size_m": [1.6, 1.6], "mean_srgb": [148, 127, 106], "mean_roughness": 0.683},
+  {"name": "rock", "layer": 5, "size_m": [2.2, 2.2], "mean_srgb": [100, 99, 80], "mean_roughness": 0.805},
+  {"name": "cliff", "layer": 6, "size_m": [3.0, 3.0], "mean_srgb": [126, 101, 77], "mean_roughness": 0.818}
+]

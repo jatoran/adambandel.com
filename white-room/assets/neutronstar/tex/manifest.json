@@ -1,0 +1,6 @@
+[
+  {"name": "scorch", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [163, 160, 138], "mean_roughness": 0.842, "height": true},
+  {"name": "plate", "layer": 1, "size_m": [1.6, 1.6], "mean_srgb": [60, 60, 60], "mean_roughness": 0.284},
+  {"name": "foil", "layer": 2, "size_m": [0.9, 0.9], "mean_srgb": [233, 212, 146], "mean_roughness": 0.05},
+  {"name": "metal", "layer": 3, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469}
+]

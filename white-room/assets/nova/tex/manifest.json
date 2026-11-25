@@ -1,0 +1,5 @@
+[
+  {"name": "slab", "layer": 0, "size_m": [2.42, 2.42], "mean_srgb": [31, 27, 22], "mean_roughness": 0.797, "height": true},
+  {"name": "skin", "layer": 1, "size_m": [2.5, 2.5], "mean_srgb": [15, 25, 28], "mean_roughness": 0.689, "height": true},
+  {"name": "clinker", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [115, 107, 94], "mean_roughness": 0.769, "height": true}
+]

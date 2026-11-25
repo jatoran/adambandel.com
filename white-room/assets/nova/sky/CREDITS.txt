@@ -1,0 +1,5 @@
+# Sky
+
+| File | Source | Licence |
+|---|---|---|
+| `sky.webp` | [The Milky Way panorama, eso0932a](https://www.eso.org/public/images/eso0932a/), ESO/S. Brunier; its sky glow taken off and resampled to 4096 x 2048 by `tools/nova-sky.py` | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

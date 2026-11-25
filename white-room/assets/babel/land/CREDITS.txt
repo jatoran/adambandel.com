@@ -1,0 +1,4 @@
+# The land round the tower
+
+`near.webp` and `far.webp` are the plain of Babylon (Hillah, Iraq) round 32.539 N 44.433 E, cut and resampled by `tools/babel-land.py` from
+Sentinel-2 cloudless 2016 (https://s2maps.eu) by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016 and 2017), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

@@ -1,0 +1,11 @@
+[
+  {"name": "concrete", "layer": 0, "size_m": [3.0, 3.0], "mean_srgb": [139, 132, 111], "mean_roughness": 0.735},
+  {"name": "board", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [124, 121, 115], "mean_roughness": 0.822},
+  {"name": "render", "layer": 2, "size_m": [1.8, 1.8], "mean_srgb": [159, 158, 155], "mean_roughness": 0.888},
+  {"name": "tiles", "layer": 3, "size_m": [1.27, 1.27], "mean_srgb": [199, 192, 177], "mean_roughness": 0.242},
+  {"name": "ribbed", "layer": 4, "size_m": [1.2, 1.2], "mean_srgb": [120, 124, 126], "mean_roughness": 0.633},
+  {"name": "plate", "layer": 5, "size_m": [1.5, 1.5], "mean_srgb": [73, 73, 73], "mean_roughness": 0.659},
+  {"name": "paving", "layer": 6, "size_m": [2.0, 2.0], "mean_srgb": [112, 100, 85], "mean_roughness": 0.77},
+  {"name": "ground", "layer": 7, "size_m": [2.0, 2.0], "mean_srgb": [132, 115, 78], "mean_roughness": 0.685},
+  {"name": "bark", "layer": 8, "size_m": [1.2, 1.2], "mean_srgb": [77, 70, 52], "mean_roughness": 0.902}
+]

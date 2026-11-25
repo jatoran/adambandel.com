@@ -1,0 +1,5 @@
+# Lanterns ridge credits
+
+| File | Source | Licence |
+|---|---|---|
+| `ridge.bin` | The skyline seen from Huay Tung Tao lake (18.8683 N, 98.9400 E), measured by `tools/lanterns-ridge.py` from the [Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) of the AWS open data registry (Mapzen; here NASA SRTM data, courtesy of the U.S. Geological Survey) | Public domain source data; [attribution](https://github.com/tilezen/joerd/blob/master/docs/attribution.md) given here |

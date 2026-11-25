@@ -1,0 +1,12 @@
+# Phobos terrain credits
+
+Made by `tools/phobos-terrain.py` (and `tools/phobos-mola.py`) from images and heights of Melas Chasma, Mars, taken from orbit.
+
+| File | Source | Credit and terms |
+|---|---|---|
+| `h1.bin`, `h4.bin`, part of `h12.bin` | HiRISE stereo terrain model DTEEC_028857_1700_028923_1700_A01, 1 m, USGS Astrogeology Analysis Ready Data (https://stac.astrogeology.usgs.gov/) | NASA/JPL/University of Arizona, USGS Astrogeology; CC0 1.0 |
+| `h12.bin`, part of `h100.bin` | CTX terrain models D04_028857_1684 / D04_028923_1684, J21_052922_1704 / J20_052711_1712, B19_017187_1685 / B19_016976_1685, 20 m, USGS Astrogeology Analysis Ready Data | NASA/JPL/MSSS, USGS Astrogeology; CC0 1.0 |
+| `h100.bin` | HRSC and MOLA blended global terrain model, 200 m (Fergason, Hare and Laura 2018, USGS Astrogeology) | ESA/DLR/FU Berlin, NASA/GSFC MOLA Science Team, USGS; free to use with credit |
+| `a1.webp`, `a4.webp`, part of `a12.webp` | HiRISE orthoimage ESP_028857_1700 RED, 1 m, from the same release | NASA/JPL/University of Arizona; CC0 1.0 |
+| `a12.webp` | the orthoimages of the three CTX models | NASA/JPL/MSSS, USGS Astrogeology; CC0 1.0 |
+| `terrain.json` | the frame, the grids and the addresses of the sources | this project |

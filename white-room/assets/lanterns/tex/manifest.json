@@ -1,0 +1,5 @@
+[
+  {"name": "deck", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [76, 64, 56], "mean_roughness": 0.736, "height": true},
+  {"name": "bamboo", "layer": 1, "size_m": [1.0, 1.0], "mean_srgb": [209, 173, 127], "mean_roughness": 0.756, "height": true},
+  {"name": "paper", "layer": 2, "size_m": [1.0, 1.0], "mean_srgb": [201, 168, 121], "mean_roughness": 0.468, "height": true}
+]

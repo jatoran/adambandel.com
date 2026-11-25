@@ -1,0 +1,13 @@
+# Jezero terrain credits
+
+The heights and albedo in this folder are resampled from orbital data by `tools/jezero-terrain.py` (see `docs/design/jezero.md`).
+
+| File | Made from | Source | Credit and licence |
+|---|---|---|---|
+| `h1.bin`, `h4.bin` | HiRISE DTM mosaic tile C, 1 m (Mars 2020 Terrain Relative Navigation basemap), with the CTX DTM where tile C has no data | https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/HiRISE/DTM_MOLAtopography_DeltaGeoid_Jezero_C_Edited_affine_1m_Eqc_latTs0_lon0.tif | USGS Astrogeology Science Center (Fergason et al. 2020), from HiRISE images by NASA/JPL/University of Arizona; USGS products are in the public domain |
+| `h20.bin` | CTX DTM mosaic, 20 m, with MOLA where it has no data | https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/CTX/JEZ_ctx_B_soc_008_DTM_MOLAtopography_DeltaGeoid_20m_Eqc_latTs0_lon0.tif | USGS Astrogeology Science Center, from CTX images by NASA/JPL/Malin Space Science Systems; public domain |
+| `h100.bin` | MOLA global DEM, 463 m, with the CTX DTM where it reaches | https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars_MGS_MOLA_DEM_mosaic_global_463m.tif | NASA Goddard Space Flight Center, MOLA Science Team; USGS mosaic; public domain |
+| `a05.webp`, `a4.webp` | HiRISE orthoimage ESP_045994_1985, 25 cm, its own shading divided out; CTX where it has no data | https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/HiRISE/ESP_045994_1985_Edited_affine_25cm_Eqc_latTs0_lon0.tif | NASA/JPL/University of Arizona, orthorectified by the USGS Astrogeology Science Center; free to use with this credit |
+| `a20.webp` | CTX orthomosaic, 6 m | https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/CTX/JEZ_ctx_B_soc_008_orthoMosaic_6m_Eqc_latTs0_lon0.tif | NASA/JPL/Malin Space Science Systems, USGS Astrogeology Science Center; free to use with this credit |
+
+Reference: Fergason, R. L., Hare, T. M., Mayer, D. P., et al. (2020), Mars 2020 Terrain Relative Navigation Flight Product Generation: Digital Terrain Model and Orthorectified Image Mosaics, 51st LPSC, abstract 2020.

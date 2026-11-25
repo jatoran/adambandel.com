@@ -1,0 +1,68 @@
+{
+ "origin": {
+  "lon": 77.4257184834547,
+  "lat": 18.459099223134576,
+  "height_areoid_m": -2547.810302734375,
+  "dtm_row": 5424,
+  "dtm_col": 2554
+ },
+ "bearing_deg": 335.0,
+ "pad": [
+  3.0,
+  8.0
+ ],
+ "heights": {
+  "h1": {
+   "file": "h1.bin",
+   "n": 2048,
+   "step": 1.0,
+   "base": -26.88,
+   "q": 0.004
+  },
+  "h4": {
+   "file": "h4.bin",
+   "n": 2048,
+   "step": 4.0,
+   "base": -103.21,
+   "q": 0.01
+  },
+  "h20": {
+   "file": "h20.bin",
+   "n": 2048,
+   "step": 20.0,
+   "base": -162.86000061035156,
+   "q": 0.04
+  },
+  "h100": {
+   "file": "h100.bin",
+   "n": 1024,
+   "step": 100.0,
+   "base": -556.97998046875,
+   "q": 0.2
+  }
+ },
+ "albedo": {
+  "a05": {
+   "file": "a05.webp",
+   "n": 2048,
+   "step": 0.5
+  },
+  "a4": {
+   "file": "a4.webp",
+   "n": 2048,
+   "step": 4.0
+  },
+  "a20": {
+   "file": "a20.webp",
+   "n": 2048,
+   "step": 20.0
+  }
+ },
+ "sources": {
+  "hirise_dtm": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/HiRISE/DTM_MOLAtopography_DeltaGeoid_Jezero_C_Edited_affine_1m_Eqc_latTs0_lon0.tif",
+  "hirise_ortho": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/HiRISE/ESP_045994_1985_Edited_affine_25cm_Eqc_latTs0_lon0.tif",
+  "ctx_dtm": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/CTX/JEZ_ctx_B_soc_008_DTM_MOLAtopography_DeltaGeoid_20m_Eqc_latTs0_lon0.tif",
+  "ctx_ortho": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/CTX/JEZ_ctx_B_soc_008_orthoMosaic_6m_Eqc_latTs0_lon0.tif",
+  "mola": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars_MGS_MOLA_DEM_mosaic_global_463m.tif"
+ }
+}

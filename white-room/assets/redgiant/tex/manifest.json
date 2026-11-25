@@ -1,0 +1,5 @@
+[
+  {"name": "crust", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [114, 113, 109], "mean_roughness": 0.931, "height": true},
+  {"name": "wall", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [180, 168, 149], "mean_roughness": 0.47, "height": true},
+  {"name": "broken", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [163, 160, 138], "mean_roughness": 0.842, "height": true}
+]

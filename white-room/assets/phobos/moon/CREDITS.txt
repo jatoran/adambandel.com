@@ -1,0 +1,4 @@
+# Phobos shape credits
+
+`radius.bin` is made by `tools/phobos-moon.py` from the Gaskell Phobos Shape Model V1.0 (R. W. Gaskell 2020, NASA Planetary Data System, https://doi.org/10.26033/xzv5-bw95), from images of Viking Orbiter 1 and Phobos 2, public domain.
+It was read from https://sbn.psi.edu/pds/shape-models/files/phobos/phobos_ver64q.tab.obj.

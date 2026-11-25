@@ -1,0 +1,12 @@
+[
+  {"name": "concrete", "layer": 0, "size_m": [3.0, 3.0], "mean_srgb": [139, 132, 111], "mean_roughness": 0.735, "height": true},
+  {"name": "brick", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [159, 107, 76], "mean_roughness": 0.788, "height": true},
+  {"name": "stone", "layer": 2, "size_m": [2.6, 2.6], "mean_srgb": [161, 145, 120], "mean_roughness": 0.526, "height": true},
+  {"name": "plaster", "layer": 3, "size_m": [2.6, 2.6], "mean_srgb": [115, 107, 90], "mean_roughness": 0.971, "height": true},
+  {"name": "rust", "layer": 4, "size_m": [1.6, 1.6], "mean_srgb": [152, 127, 79], "mean_roughness": 0.423, "height": true},
+  {"name": "roof", "layer": 5, "size_m": [2.4, 2.4], "mean_srgb": [88, 87, 30], "mean_roughness": 0.935, "height": true},
+  {"name": "ground", "layer": 6, "size_m": [2.4, 2.4], "mean_srgb": [108, 101, 70], "mean_roughness": 0.935, "height": true},
+  {"name": "asphalt", "layer": 7, "size_m": [3.0, 3.0], "mean_srgb": [78, 78, 73], "mean_roughness": 0.77, "height": true},
+  {"name": "silt", "layer": 8, "size_m": [2.4, 2.4], "mean_srgb": [69, 61, 49], "mean_roughness": 0.946, "height": true},
+  {"name": "bark", "layer": 9, "size_m": [1.2, 1.2], "mean_srgb": [77, 70, 52], "mean_roughness": 0.902, "height": true}
+]

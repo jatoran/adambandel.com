@@ -1,0 +1,14 @@
+# Orbit: Earth imagery credits
+
+All three files are equirectangular images of the Earth (north up, longitude increasing to the right), made by `tools/orbit-earth.py` from imagery served by NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).
+NASA imagery is not copyrighted and may be used freely; NASA asks for credit, given here.
+
+| File | Holds | Source |
+|---|---|---|
+| `hero.webp` | 4096 x 3277, longitude 5 to 45 E, latitude 18 to 50 N (about 1 km a pixel). RGB: the day's true colour; alpha: city lights | RGB: VIIRS on NOAA-20, Corrected Reflectance (True Color), 25 September 2024 (`VIIRS_NOAA20_CorrectedReflectance_TrueColor`). Alpha: VIIRS Black Marble 2016 (`VIIRS_Black_Marble`), NASA Earth Observatory / Goddard Space Flight Center, Miguel Román and colleagues |
+| `world.webp` | 4096 x 2048, the whole globe (about 10 km a pixel), the same two layers | As above; where that day has no data (the polar night) each row's mean colour |
+| `night.webp` | 5850 x 1300, longitude 28 to 145 E, latitude 30 to 56 N (0.02 degree, about 2 km a pixel), grey: city lights alone, along the pass's night (Turkey to Japan) | VIIRS Black Marble 2016 (`VIIRS_Black_Marble`), NASA Earth Observatory / Goddard Space Flight Center, Miguel Román and colleagues |
+
+Credit: NASA Worldview / GIBS, VIIRS (NOAA-20) Corrected Reflectance; NASA Earth Observatory, Black Marble 2016.
+Pages: https://worldview.earthdata.nasa.gov/ and https://earthobservatory.nasa.gov/features/NightLights.
+The lights were separated from the dim ground of the Black Marble composite by how far its red channel stands above its blue.

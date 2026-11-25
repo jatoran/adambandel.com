@@ -1,0 +1,5 @@
+# Hani sky credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `sky.webp`, `sky.json` | [Belfast Sunset (Pure Sky)](https://polyhaven.com/a/belfast_sunset_puresky) (Poly Haven HDRI, 8k; its upper hemisphere resampled to 4096 x 1024, its sun and sky light measured, by `tools/hani-sky.py`) | Dimitrios Savva, Greg Zaal, Jarod Guest | [CC0 1.0](https://polyhaven.com/license) |

@@ -1,0 +1,8 @@
+# The sky's photographs
+
+Made by `tools/andromeda-sky.py` from the files below; the page turns and bends them into the sky of a few billion years from now.
+
+| File | What | Source | Author | Licence |
+|---|---|---|---|---|
+| `milkyway.webp` | The sky over the place (azimuth all round, elevation -6 to 90 degrees), its stars and the Milky Way laid on it from the galactic panorama, the band bent toward Andromeda, the Magellanic Clouds covered | [ESO, eso0932a](https://www.eso.org/public/images/eso0932a/) | ESO/S. Brunier | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `m31.webp` | The Andromeda galaxy, turned level, cropped, its foreground stars and sky level taken out | [Wikimedia Commons, Andromeda Galaxy (with h-alpha)](https://commons.wikimedia.org/wiki/File:Andromeda_Galaxy_(with_h-alpha).jpg) | Adam Evans | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |

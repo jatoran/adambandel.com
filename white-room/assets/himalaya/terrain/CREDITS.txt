@@ -1,0 +1,10 @@
+# Himalaya terrain credits
+
+The heights and maps in this folder are resampled from Copernicus data by `tools/himalaya-terrain.py` (see `docs/design/himalaya.md`).
+
+| File | Made from | Source | Credit and licence |
+|---|---|---|---|
+| `ha.bin`, `hb.bin`, `hc.bin` | Copernicus DEM GLO-30, tiles N27 and N28, E086 to E088, resampled to 16, 64 and 160 m in the place's own frame; the crest within 400 m of the portal reshaped | https://copernicus-dem-30m.s3.amazonaws.com/ | Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Free to use, adapt and distribute with this notice |
+| `ma.webp`, `mb.webp`, `mc.webp` (red channel) | The share of snow, from bands 3 and 11 of Sentinel-2 L2A, 2 March 2025, tiles 45RVL, 45RWL, 45RVM, 45RWM; from the slope where the images do not reach | https://registry.opendata.aws/sentinel-2-l2a-cogs/ | Contains modified Copernicus Sentinel data 2025; free and open |
+| `ma.webp`, `mb.webp`, `mc.webp` (green and blue channels) | How much of the sun and of the sky reaches each point, worked out from the heights | `tools/himalaya-terrain.py` | As the heights |
+| `terrain.json` | The grids and the frame | `tools/himalaya-terrain.py` | - |

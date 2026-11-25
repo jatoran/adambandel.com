@@ -1,0 +1,6 @@
+[
+  {"name": "rock", "layer": 0, "size_m": [2.7, 2.7], "mean_srgb": [126, 101, 77], "mean_roughness": 0.818},
+  {"name": "flow", "layer": 1, "size_m": [1.8, 1.8], "mean_srgb": [162, 150, 135], "mean_roughness": 0.633},
+  {"name": "pebble", "layer": 2, "size_m": [2.16, 2.16], "mean_srgb": [112, 104, 93], "mean_roughness": 0.808},
+  {"name": "grey", "layer": 3, "size_m": [2.0, 2.0], "mean_srgb": [147, 135, 118], "mean_roughness": 0.902}
+]

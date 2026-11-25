@@ -1,0 +1,6 @@
+[
+  {"name": "sand", "layer": 0, "size_m": [2.5, 2.5], "mean_srgb": [135, 133, 130], "mean_roughness": 0.61, "height": true},
+  {"name": "shellsand", "layer": 1, "size_m": [1.5, 1.5], "mean_srgb": [121, 116, 110], "mean_roughness": 0.96, "height": true},
+  {"name": "rock", "layer": 2, "size_m": [2.5, 2.5], "mean_srgb": [69, 66, 60], "mean_roughness": 0.818, "height": true},
+  {"name": "coral", "layer": 3, "size_m": [2.0, 2.0], "mean_srgb": [103, 91, 79], "mean_roughness": 0.764}
+]

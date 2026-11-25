@@ -1,0 +1,5 @@
+# Uyuni sky credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `sky.webp`, `sky.json` | [Kloofendal 48d Partly Cloudy (Pure Sky)](https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky) (Poly Haven HDRI, 8k; its upper hemisphere resampled to 8192 x 2048, its sun and sky light measured, by `tools/uyuni-sky.py`) | Greg Zaal, Jarod Guest | [CC0 1.0](https://polyhaven.com/license) |

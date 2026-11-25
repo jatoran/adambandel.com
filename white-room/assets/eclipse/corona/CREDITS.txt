@@ -1,0 +1,5 @@
+# Eclipse corona credits
+
+| File | Source | Licence |
+|---|---|---|
+| `corona.webp` | [Dynamic inner corona (eso1912z)](https://www.eso.org/public/images/eso1912z/), the corona during the total solar eclipse of 2 July 2019 from ESO's La Silla Observatory. Credit: P. Horálek/ESO. Unwrapped round the Sun and flattened in brightness by `tools/eclipse-corona.py`. | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

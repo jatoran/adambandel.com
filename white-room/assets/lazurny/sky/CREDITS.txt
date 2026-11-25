@@ -1,0 +1,5 @@
+# Lazurny sky credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `sky.webp`, `sky.json` | [Schachen Forest](https://polyhaven.com/a/schachen_forest) (Poly Haven HDRI, 4k, resampled to 4096 x 2048 by `tools/lazurny-sky.py`) | Adrian Kubasa | [CC0 1.0](https://polyhaven.com/license) |

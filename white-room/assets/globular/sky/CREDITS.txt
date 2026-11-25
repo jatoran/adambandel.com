@@ -1,0 +1,10 @@
+# Sky
+
+`stars.bin`, `glow.bin` and `sky.json` are made by `tools/globular-bake.py` from the HST UV Globular Cluster Survey (HUGS) catalogue of NGC 104 (47 Tucanae), photometric method 1, version 1:
+
+- Nardiello et al. 2018, MNRAS 481, 3382; Piotto et al. 2015, AJ 149, 91.
+- Source: https://archive.stsci.edu/hlsps/hugs/ (MAST, doi:10.17909/T9810F).
+- Based on observations made with the NASA/ESA Hubble Space Telescope, obtained from the data archive at the Space Telescope Science Institute; free to use with credit.
+
+Measured: each star's place on the sky, its brightness (F606W) and its colour (F606W - F814W).
+Made: its distance along the line of sight (drawn from the cluster's density profile), the faint stars lost in the crowd toward the centre, and the outskirts past the field.

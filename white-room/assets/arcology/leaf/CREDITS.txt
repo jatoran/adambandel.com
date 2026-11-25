@@ -1,0 +1,5 @@
+# Arcology leaf credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `leaf.webp` | [LeafSet010](https://ambientcg.com/a/LeafSet010), [LeafSet009](https://ambientcg.com/a/LeafSet009), [LeafSet029](https://ambientcg.com/a/LeafSet029), [Foliage001](https://ambientcg.com/a/Foliage001), [Foliage003](https://ambientcg.com/a/Foliage003), [Foliage006](https://ambientcg.com/a/Foliage006) (ambientCG, 1K; leaves cut out and composed into clusters by `tools/arcology-leaves.py`) | Lennart Demes, ambientCG | [CC0 1.0](https://docs.ambientcg.com/license/) |

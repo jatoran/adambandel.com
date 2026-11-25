@@ -1,0 +1,6 @@
+[
+  {"name": "metal", "layer": 0, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469},
+  {"name": "cloth", "layer": 1, "size_m": [0.5, 0.5], "mean_srgb": [150, 150, 150], "mean_roughness": 0.718},
+  {"name": "panel", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [60, 60, 60], "mean_roughness": 0.284},
+  {"name": "floor", "layer": 3, "size_m": [1.0, 1.0], "mean_srgb": [33, 33, 33], "mean_roughness": 0.75}
+]

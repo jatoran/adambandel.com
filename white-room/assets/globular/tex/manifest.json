@@ -1,0 +1,7 @@
+[
+  {"name": "gravel", "layer": 0, "size_m": [2.9, 2.9], "mean_srgb": [105, 94, 79], "mean_roughness": 0.839, "height": true},
+  {"name": "stones", "layer": 1, "size_m": [3.0, 3.0], "mean_srgb": [109, 101, 92], "mean_roughness": 0.714, "height": true},
+  {"name": "slab", "layer": 2, "size_m": [1.8, 1.8], "mean_srgb": [162, 150, 135], "mean_roughness": 0.633, "height": true},
+  {"name": "cliff", "layer": 3, "size_m": [2.7, 2.7], "mean_srgb": [126, 101, 77], "mean_roughness": 0.818, "height": true},
+  {"name": "aerial", "layer": 4, "size_m": [50.0, 50.0], "mean_srgb": [98, 83, 47], "mean_roughness": 0.817, "height": true}
+]

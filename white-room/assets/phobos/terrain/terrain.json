@@ -1,0 +1,67 @@
+{
+ "origin": {
+  "lon": -69.96872980775302,
+  "lat": -10.083715713462572,
+  "height_areoid_m": -4143.6083984375,
+  "dtm_row": 12700,
+  "dtm_col": 3300
+ },
+ "bearing_deg": 3.0,
+ "pad": [
+  3.0,
+  8.0
+ ],
+ "heights": {
+  "h1": {
+   "file": "h1.bin",
+   "n": 2048,
+   "step": 1.0,
+   "base": -204.25,
+   "q": 0.006596367938701923
+  },
+  "h4": {
+   "file": "h4.bin",
+   "n": 2048,
+   "step": 4.0,
+   "base": -445.88,
+   "q": 0.030337700871394233
+  },
+  "h12": {
+   "file": "h12.bin",
+   "n": 2048,
+   "step": 12.0,
+   "base": -716.0700073242188,
+   "q": 0.08078851693960337
+  },
+  "h100": {
+   "file": "h100.bin",
+   "n": 2048,
+   "step": 100.0,
+   "base": -1138.81005859375,
+   "q": 0.4
+  }
+ },
+ "albedo": {
+  "a1": {
+   "file": "a1.webp",
+   "n": 2048,
+   "step": 1.0
+  },
+  "a4": {
+   "file": "a4.webp",
+   "n": 2048,
+   "step": 4.0
+  },
+  "a12": {
+   "file": "a12.webp",
+   "n": 2048,
+   "step": 12.0
+  }
+ },
+ "sources": {
+  "hirise_dtm": "https://astrogeo-ard.s3-us-west-2.amazonaws.com/mars/mro/hirise/controlled/dtm/ESP_028857_1700_ESP_028923_1700/DTEEC_028857_1700_028923_1700_A01.tif",
+  "hirise_ortho": "https://astrogeo-ard.s3-us-west-2.amazonaws.com/mars/mro/hirise/controlled/dtm/ESP_028857_1700_ESP_028923_1700/ESP_028857_1700_RED_C_01_ORTHO.tif",
+  "ctx": "https://astrogeo-ard.s3-us-west-2.amazonaws.com/mars/mro/ctx/controlled/usgs/ (D04_028857_1684, J21_052922_1704, B19_017187_1685: _dtm.tif and _orthoimage.tif)",
+  "blend": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif"
+ }
+}

@@ -1,0 +1,8 @@
+# Ground
+
+`h_*.bin` (heights), `l_*.webp` (the starlight that reaches each point, the snow) and `ground.json` are made by `tools/globular-bake.py` from the U.S. Geological Survey's 3D Elevation Program (3DEP), the basin of Thousand Island Lake, Sierra Nevada:
+
+- Source: https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer (fetched by `tools/globular-fetch.py`).
+- Public domain (U.S. Geological Survey).
+
+Made: the lake's bed, the islets, the roughness finer than the survey, the light, the snow.

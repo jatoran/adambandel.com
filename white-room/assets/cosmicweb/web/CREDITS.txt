@@ -1,0 +1,11 @@
+# Credits: assets/cosmicweb/web
+
+| File | Made from | Author | Licence |
+|---|---|---|---|
+| `volume.gz.bin`, `points.gz.bin`, `galaxies.bin` | [CAMELS](https://camels.readthedocs.io/) simulations, `Sims/IllustrisTNG/L50n512/CV/CV_24`, snapshot and group catalogue 090 (redshift 0): the gas laid on a grid, a tenth of its cells sampled again, the Subfind catalogue's galaxies | The CAMELS collaboration: F. Villaescusa-Navarro, S. Genel, D. Angles-Alcazar, D. Spergel and others, [The CAMELS Project: Public Data Release](https://arxiv.org/abs/2201.01300) and [Genel and others 2026](https://arxiv.org/abs/2606.10038); the IllustrisTNG galaxy model (Weinberger and others 2017, Pillepich and others 2018) | Publicly released by the collaboration, which asks for citation of these papers; no other terms are stated with the data |
+| `atlas.webp` | [SDSS DR18](https://www.sdss.org/dr18/) SkyServer cut-outs of 64 galaxies: the sky taken off, other sources replaced, named in `manifest.json` by object id, right ascension and declination | Sloan Digital Sky Survey | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `manifest.json` | The numbers above need | The page | - |
+
+All were made by `tools/cosmicweb-bake.py`.
+Funding for the Sloan Digital Sky Survey V has been provided by the Alfred P. Sloan Foundation, the Heising-Simons Foundation, the National Science Foundation, and the Participating Institutions.
+SDSS acknowledges support and resources from the Center for High-Performance Computing at the University of Utah.

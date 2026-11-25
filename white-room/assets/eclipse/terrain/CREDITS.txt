@@ -1,0 +1,5 @@
+# Eclipse terrain credits
+
+| File | Source | Licence |
+|---|---|---|
+| `ha.bin`, `hb.bin` | [Copernicus DEM GLO-30](https://doi.org/10.5270/ESA-c5d3d65), tiles S28 to S31, W070 to W073, resampled by `tools/eclipse-terrain.py`. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. | Copernicus DEM licence (free use with this notice) |

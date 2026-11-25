@@ -1,0 +1,9 @@
+[
+  {"name": "panel", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [60, 60, 60], "mean_roughness": 0.284},
+  {"name": "steel", "layer": 1, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469},
+  {"name": "grate", "layer": 2, "size_m": [1.2, 1.2], "mean_srgb": [58, 47, 26], "mean_roughness": 0.589},
+  {"name": "paint", "layer": 3, "size_m": [1.5, 1.5], "mean_srgb": [84, 66, 62], "mean_roughness": 0.822},
+  {"name": "fabric", "layer": 4, "size_m": [0.5, 0.5], "mean_srgb": [151, 151, 151], "mean_roughness": 0.718},
+  {"name": "ribbed", "layer": 5, "size_m": [1.2, 1.2], "mean_srgb": [123, 123, 123], "mean_roughness": 0.633},
+  {"name": "primer", "layer": 6, "size_m": [2.0, 2.0], "mean_srgb": [97, 97, 97], "mean_roughness": 0.366}
+]

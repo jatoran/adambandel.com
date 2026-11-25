@@ -1,0 +1,5 @@
+# Hanging Gardens sky credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `sky.webp`, `sky.json` | [Qwantani Late Afternoon (Pure Sky)](https://polyhaven.com/a/qwantani_late_afternoon_puresky) (Poly Haven HDRI, 8k; its upper hemisphere resampled to 4096 x 1024, its sun and sky light measured, by `tools/hanginggardens-sky.py`) | Greg Zaal, Jarod Guest | [CC0 1.0](https://polyhaven.com/license) |

@@ -1,0 +1,14 @@
+# The wormhole's skies: credits
+
+| File | Made from | Author | Licence |
+|---|---|---|---|
+| `near.webp` | [The Milky Way panorama (eso0932a)](https://www.eso.org/public/images/eso0932a/), its stars taken out, turned onto the place's sky | ESO/S. Brunier | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `far.webp` | [The spectacular star-forming Carina Nebula imaged by the VLT Survey Telescope (eso1250a)](https://www.eso.org/public/images/eso1250a/) | ESO. Acknowledgement: VPHAS+ Consortium/Cambridge Astronomical Survey Unit | CC BY 4.0 |
+| `far.webp` | [The Eagle Nebula (eso0926a)](https://www.eso.org/public/images/eso0926a/) | ESO | CC BY 4.0 |
+| `far.webp` | [The Lagoon Nebula (eso1403a)](https://www.eso.org/public/images/eso1403a/) | ESO/VPHAS+ team | CC BY 4.0 |
+| `far.webp` | [VISTA's infrared view of the Orion Nebula (eso1006a)](https://www.eso.org/public/images/eso1006a/) | ESO/J. Emerson/VISTA. Acknowledgment: Cambridge Astronomical Survey Unit | CC BY 4.0 |
+| `far.webp` | The Milky Way panorama (eso0932a), dimmed, between the nebulae | ESO/S. Brunier | CC BY 4.0 |
+| `planet.webp` | [A map of Jupiter](https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_8k_jupiter.jpg), recoloured, without its Great Red Spot | Solar System Scope (INOVE), from NASA imagery | CC BY 4.0 |
+
+Made by `tools/wormhole-sky.py`.
+The pictures were resampled, blended into one sky and toned; what the page shows through the wormhole is an imagined place, not a view of these nebulae as they lie in the sky.

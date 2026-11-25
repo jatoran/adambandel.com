@@ -1,0 +1,5 @@
+[
+  {"name": "crust", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [154, 130, 101], "mean_roughness": 0.866, "height": true},
+  {"name": "rust", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [94, 69, 48], "mean_roughness": 0.806, "height": true},
+  {"name": "rock", "layer": 2, "size_m": [1.0, 1.0], "mean_srgb": [144, 134, 114], "mean_roughness": 0.81, "height": true}
+]

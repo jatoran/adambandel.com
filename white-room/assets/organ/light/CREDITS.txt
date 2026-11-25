@@ -1,0 +1,3 @@
+# Credits: the organ's light
+
+`rad.bin` and `sh.bin` are computed by `tools/organ-bake.mjs` from the scene of `src/places/organ/scene.js`; nothing in them comes from elsewhere.

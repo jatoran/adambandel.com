@@ -1,0 +1,9 @@
+# The holes' motion and their waves
+
+Made by `tools/blackholes-bake.py`.
+
+| File | Made from | Source | Licence |
+|---|---|---|---|
+| `orbit.bin`, `orbit.json` | Binary black-hole simulation SXS:BBH:0305 (its highest resolution, Lev6): the horizons' places and the (2, 2) mode of the strain, resampled every half M from 960 M before the peak to 160 M past it | [SXS Collaboration, doi:10.5281/zenodo.13182440](https://doi.org/10.5281/zenodo.13182440); Lovelace et al. 2016, Class. Quantum Grav. 33, 244002; Boyle et al. 2019, Class. Quantum Grav. 36, 195006 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+
+Changed: the pair's separation and turning are carried on past the common horizon, dying away with the ringing, and the wave's last part is replaced by its exponential decay.

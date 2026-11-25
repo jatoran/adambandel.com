@@ -1,0 +1,6 @@
+# The sky of the edge of the world: credits
+
+| File | Source | Author | Licence |
+|---|---|---|---|
+| `sky.webp`, `sky.json` | [Kloppenheim 06 (Pure Sky)](https://polyhaven.com/a/kloppenheim_06_puresky) (Poly Haven HDRI, 4k; its upper hemisphere resampled to 4096 x 1024, its sun and sky light measured, by `tools/worldedge-sky.py`) | Greg Zaal, Jarod Guest | [CC0 1.0](https://polyhaven.com/license) |
+| `milkyway.webp` | [ESO, eso0932a, The Milky Way panorama](https://www.eso.org/public/images/eso0932a/) (resampled, its bright stars reduced, by `tools/worldedge-sky.py`) | ESO/S. Brunier | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,0 +1,8 @@
+# The sky
+
+Made by `tools/blackholes-bake.py`.
+
+| File | Made from | Source | Licence |
+|---|---|---|---|
+| `milkyway.webp` | The Milky Way layer of Deep Star Maps 2020 (`milkyway_2020_8k.exr`), its values scaled and kept as square roots | [NASA/Goddard Space Flight Center Scientific Visualization Studio. Gaia DR2: ESA/Gaia/DPAC](https://svs.gsfc.nasa.gov/4851) | Public domain (NASA media), credit asked |
+| `stars.bin` | 224 823 stars to magnitude 9.6: place, brightness, colour | [The Hipparcos and Tycho-2 catalogues (ESA SP-1200, 1997; Hog et al. 2000, A&A 355, L27)](https://gea.esac.esa.int/archive/), from the European Space Agency's Gaia archive | Free to use with credit to ESA |

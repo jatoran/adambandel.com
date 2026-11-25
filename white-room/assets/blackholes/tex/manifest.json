@@ -1,0 +1,8 @@
+[
+  {"name": "panel", "layer": 0, "size_m": [1.5, 1.5], "mean_srgb": [73, 73, 73], "mean_roughness": 0.659},
+  {"name": "steel", "layer": 1, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469},
+  {"name": "tread", "layer": 2, "size_m": [1.2, 1.2], "mean_srgb": [50, 48, 45], "mean_roughness": 0.589},
+  {"name": "paint", "layer": 3, "size_m": [2.0, 2.0], "mean_srgb": [60, 60, 60], "mean_roughness": 0.284},
+  {"name": "foil", "layer": 4, "size_m": [0.6, 0.6], "mean_srgb": [213, 213, 213], "mean_roughness": 0.05},
+  {"name": "cloth", "layer": 5, "size_m": [0.5, 0.5], "mean_srgb": [150, 150, 150], "mean_roughness": 0.718}
+]

@@ -1,0 +1,11 @@
+[
+  {"name": "ashlar", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [177, 162, 142], "mean_roughness": 0.694},
+  {"name": "brick", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [121, 92, 74], "mean_roughness": 0.937},
+  {"name": "rubble", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [136, 111, 83], "mean_roughness": 0.859},
+  {"name": "cobble", "layer": 3, "size_m": [2.0, 2.0], "mean_srgb": [129, 123, 113], "mean_roughness": 0.578},
+  {"name": "earth", "layer": 4, "size_m": [2.53, 2.53], "mean_srgb": [142, 106, 75], "mean_roughness": 0.785},
+  {"name": "wood", "layer": 5, "size_m": [2.0, 2.0], "mean_srgb": [76, 64, 56], "mean_roughness": 0.736},
+  {"name": "tiles", "layer": 6, "size_m": [2.5, 2.5], "mean_srgb": [131, 72, 39], "mean_roughness": 0.915},
+  {"name": "plaster", "layer": 7, "size_m": [2.0, 2.0], "mean_srgb": [113, 89, 59], "mean_roughness": 0.923},
+  {"name": "stone", "layer": 8, "size_m": [1.53, 1.53], "mean_srgb": [131, 100, 59], "mean_roughness": 0.838}
+]

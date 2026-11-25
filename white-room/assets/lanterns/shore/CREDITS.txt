@@ -1,0 +1,3 @@
+# Lanterns shore credits
+
+`trees.webp` is painted from a seed by `tools/lanterns-trees.py`; nothing in it is downloaded.

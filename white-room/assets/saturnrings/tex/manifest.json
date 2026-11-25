@@ -1,0 +1,5 @@
+[
+  {"name": "frost", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [128, 128, 130], "mean_roughness": 0.801, "height": true},
+  {"name": "ice", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [73, 89, 89], "mean_roughness": 0.14},
+  {"name": "crag", "layer": 2, "size_m": [3.0, 3.0], "mean_srgb": [180, 143, 108], "mean_roughness": 0.799, "height": true}
+]

@@ -1,0 +1,5 @@
+# Dallol forms
+
+| File | Source |
+|---|---|
+| `forms.bin`, `forms.json` | Made by `tools/dallol-forms.mjs` (distance fields meshed by surface nets; no outside data) |

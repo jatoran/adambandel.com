@@ -1,0 +1,10 @@
+[
+  {"name": "wall", "layer": 0, "size_m": [3.0, 3.0], "mean_srgb": [160, 153, 139], "mean_roughness": 0.798},
+  {"name": "floor", "layer": 1, "size_m": [2.5, 2.5], "mean_srgb": [84, 85, 82], "mean_roughness": 0.541},
+  {"name": "paint", "layer": 2, "size_m": [1.5, 1.5], "mean_srgb": [182, 187, 187], "mean_roughness": 0.193},
+  {"name": "steel", "layer": 3, "size_m": [0.8, 0.8], "mean_srgb": [146, 149, 152], "mean_roughness": 0.469},
+  {"name": "galv", "layer": 4, "size_m": [1.2, 1.2], "mean_srgb": [96, 98, 97], "mean_roughness": 0.366},
+  {"name": "tread", "layer": 5, "size_m": [1.1, 1.1], "mean_srgb": [106, 96, 82], "mean_roughness": 0.555},
+  {"name": "foil", "layer": 6, "size_m": [0.9, 0.9], "mean_srgb": [233, 212, 146], "mean_roughness": 0.05},
+  {"name": "brass", "layer": 7, "size_m": [1.0, 1.0], "mean_srgb": [174, 114, 57], "mean_roughness": 0.253}
+]

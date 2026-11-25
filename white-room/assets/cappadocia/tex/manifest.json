@@ -1,0 +1,6 @@
+[
+  {"name": "tuff", "layer": 0, "size_m": [4.0, 4.0], "mean_srgb": [98, 71, 38], "mean_roughness": 0.966, "height": true},
+  {"name": "ground", "layer": 1, "size_m": [3.0, 3.0], "mean_srgb": [101, 93, 81], "mean_roughness": 0.829, "height": true},
+  {"name": "wicker", "layer": 2, "size_m": [0.5, 0.5], "mean_srgb": [136, 106, 75], "mean_roughness": 0.612, "height": true},
+  {"name": "leather", "layer": 3, "size_m": [0.6, 0.6], "mean_srgb": [76, 43, 15], "mean_roughness": 0.662, "height": true}
+]

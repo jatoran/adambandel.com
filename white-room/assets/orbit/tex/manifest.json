@@ -1,0 +1,5 @@
+[
+  {"name": "cloth", "layer": 0, "size_m": [0.5, 0.5], "mean_srgb": [150, 150, 150], "mean_roughness": 0.718, "height": true},
+  {"name": "metal", "layer": 1, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469},
+  {"name": "plate", "layer": 2, "size_m": [1.5, 1.5], "mean_srgb": [73, 73, 73], "mean_roughness": 0.659, "height": true}
+]

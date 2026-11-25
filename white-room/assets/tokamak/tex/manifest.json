@@ -1,0 +1,8 @@
+[
+  {"name": "panel", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [60, 60, 60], "mean_roughness": 0.284},
+  {"name": "steel", "layer": 1, "size_m": [1.0, 1.0], "mean_srgb": [148, 148, 148], "mean_roughness": 0.469},
+  {"name": "scale", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [97, 97, 97], "mean_roughness": 0.366},
+  {"name": "concrete", "layer": 3, "size_m": [3.0, 3.0], "mean_srgb": [139, 132, 110], "mean_roughness": 0.736},
+  {"name": "floor", "layer": 4, "size_m": [3.0, 3.0], "mean_srgb": [84, 84, 84], "mean_roughness": 0.541},
+  {"name": "grate", "layer": 5, "size_m": [1.2, 1.2], "mean_srgb": [50, 48, 45], "mean_roughness": 0.589}
+]

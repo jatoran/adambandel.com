@@ -1,0 +1,5 @@
+[
+  {"name": "sheet", "layer": 0, "size_m": [1.6, 1.6], "mean_srgb": [233, 212, 146], "mean_roughness": 0.05},
+  {"name": "deck", "layer": 1, "size_m": [0.6, 0.6], "mean_srgb": [106, 96, 82], "mean_roughness": 0.555},
+  {"name": "rubber", "layer": 2, "size_m": [0.5, 0.5], "mean_srgb": [41, 44, 49], "mean_roughness": 0.591}
+]

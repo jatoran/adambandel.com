@@ -1,0 +1,6 @@
+# Hani terrain credits
+
+| File | Source | Licence |
+|---|---|---|
+| `ha.bin`, `hb.bin` | [Copernicus DEM GLO-30](https://doi.org/10.5270/ESA-c5d3d65), tiles N22/N23 E102/E103, resampled by `tools/hani-terrain.py`. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. | Copernicus DEM licence (free use with this notice) |
+| `cover.png` | [ESA WorldCover](https://esa-worldcover.org/) 10 m 2021 v200, tile N21E102, resampled by `tools/hani-terrain.py`. (c) ESA WorldCover project / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

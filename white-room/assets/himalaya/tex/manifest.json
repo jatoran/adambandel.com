@@ -1,0 +1,6 @@
+[
+  {"name": "snow", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [128, 128, 130], "mean_roughness": 0.801, "height": true},
+  {"name": "crust", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [171, 169, 168], "mean_roughness": 0.936, "height": true},
+  {"name": "rock", "layer": 2, "size_m": [2.7, 2.7], "mean_srgb": [126, 101, 77], "mean_roughness": 0.818, "height": true},
+  {"name": "cliff", "layer": 3, "size_m": [1.83, 1.83], "mean_srgb": [122, 81, 48], "mean_roughness": 0.861, "height": true}
+]

@@ -1,0 +1,9 @@
+# Shipyard: globe imagery credits
+
+Both files are equirectangular (north up, longitude increasing to the right), made by `tools/shipyard-globes.py`.
+NASA imagery is not copyrighted and may be used freely; NASA asks for credit, given here.
+
+| File | Holds | Source |
+|---|---|---|
+| `moon.webp` | 2048 x 1024, RGB the Moon's colour, alpha its height | NASA's Scientific Visualization Studio, CGI Moon Kit (https://svs.gsfc.nasa.gov/4720): LROC WAC colour (NASA/GSFC/Arizona State University), LOLA heights (NASA/GSFC/MIT) |
+| `earth.webp` | 1024 x 512, the Earth's true colour with its clouds | VIIRS on NOAA-20, Corrected Reflectance (True Color), 25 September 2024, NASA Worldview / GIBS (https://worldview.earthdata.nasa.gov/), as `assets/orbit/earth/CREDITS.md` gives it |

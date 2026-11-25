@@ -1,0 +1,5 @@
+# Black forest leaf credits
+
+| File | Source | Licence |
+|---|---|---|
+| `leaf.webp` | Leaves cut from the textures of Poly Haven's models [island_tree_01](https://polyhaven.com/a/island_tree_01), [shrub_03](https://polyhaven.com/a/shrub_03), [periwinkle_plant](https://polyhaven.com/a/periwinkle_plant), [jacaranda_tree](https://polyhaven.com/a/jacaranda_tree), and grass blades of ambientCG's [Foliage001](https://ambientcg.com/a/Foliage001) (Lennart Demes); composed by `tools/blackforest-leaves.py` into clusters of light and dark, normals and cover | CC0 1.0 ([Poly Haven](https://polyhaven.com/license), [ambientCG](https://docs.ambientcg.com/license/)) |

@@ -1,0 +1,11 @@
+# Neutron star: sky credits
+
+`sky.webp` (6000 x 3000, the whole sky, equirectangular) was made by `tools/neutronstar-sky.py` from two photographs released by the European Southern Observatory under the Creative Commons Attribution 4.0 International licence (https://creativecommons.org/licenses/by/4.0/).
+
+| Used for | Photograph | Credit | Page |
+|---|---|---|---|
+| The stars and the Milky Way | The Milky Way panorama (eso0932a) | ESO/S. Brunier | https://www.eso.org/public/images/eso0932a/ |
+| The glowing threads of gas | The Vela supernova remnant imaged by the VLT Survey Telescope (eso2214a) | ESO/VPHAS+ team. Acknowledgement: Cambridge Astronomical Survey Unit | https://www.eso.org/public/images/eso2214a/ |
+
+Changed: the panorama's sky glow was taken off and its contrast raised; the remnant's stars and its blue halos were taken out, and pieces of it were turned, mirrored, resized and laid round the sky; the two were added.
+ESO does not endorse this use.

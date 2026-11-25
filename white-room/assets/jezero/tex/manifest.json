@@ -1,0 +1,7 @@
+[
+  {"name": "regolith", "layer": 0, "size_m": [0.56, 0.56], "mean_srgb": [104, 104, 104], "mean_roughness": 0.965, "height": true},
+  {"name": "gravel", "layer": 1, "size_m": [2.48, 2.48], "mean_srgb": [111, 111, 111], "mean_roughness": 0.789, "height": true},
+  {"name": "sand", "layer": 2, "size_m": [3.0, 3.0], "mean_srgb": [91, 91, 91], "mean_roughness": 0.825, "height": true},
+  {"name": "rock", "layer": 3, "size_m": [1.8, 1.8], "mean_srgb": [152, 152, 152], "mean_roughness": 0.633, "height": true},
+  {"name": "outcrop", "layer": 4, "size_m": [2.38, 2.38], "mean_srgb": [74, 74, 74], "mean_roughness": 0.835, "height": true}
+]

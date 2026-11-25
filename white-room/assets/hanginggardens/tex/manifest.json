@@ -1,0 +1,12 @@
+[
+  {"name": "brick", "layer": 0, "size_m": [2.4, 2.4], "mean_srgb": [162, 135, 106], "mean_roughness": 0.838, "height": true},
+  {"name": "mudbrick", "layer": 1, "size_m": [2.6, 2.6], "mean_srgb": [119, 104, 87], "mean_roughness": 0.884, "height": true},
+  {"name": "paving", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [91, 74, 63], "mean_roughness": 0.878, "height": true},
+  {"name": "plaster", "layer": 3, "size_m": [2.6, 2.6], "mean_srgb": [113, 89, 59], "mean_roughness": 0.923, "height": true},
+  {"name": "soil", "layer": 4, "size_m": [2.2, 2.2], "mean_srgb": [90, 75, 46], "mean_roughness": 0.919, "height": true},
+  {"name": "grass", "layer": 5, "size_m": [2.4, 2.4], "mean_srgb": [132, 115, 77], "mean_roughness": 0.685, "height": true},
+  {"name": "palmbark", "layer": 6, "size_m": [1.2, 1.2], "mean_srgb": [83, 73, 64], "mean_roughness": 0.93, "height": true},
+  {"name": "bark", "layer": 7, "size_m": [1.2, 1.2], "mean_srgb": [77, 70, 52], "mean_roughness": 0.902, "height": true},
+  {"name": "wood", "layer": 8, "size_m": [2.0, 2.0], "mean_srgb": [94, 74, 56], "mean_roughness": 0.654, "height": true},
+  {"name": "stone", "layer": 9, "size_m": [2.4, 2.4], "mean_srgb": [127, 110, 89], "mean_roughness": 0.769, "height": true}
+]

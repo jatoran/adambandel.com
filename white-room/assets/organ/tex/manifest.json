@@ -1,0 +1,8 @@
+[
+  {"name": "oak", "layer": 0, "size_m": [1.4, 1.4], "mean_srgb": [160, 126, 87], "mean_roughness": 0.53},
+  {"name": "beam", "layer": 1, "size_m": [1.2, 1.2], "mean_srgb": [91, 42, 23], "mean_roughness": 0.628},
+  {"name": "planks", "layer": 2, "size_m": [2.0, 2.0], "mean_srgb": [110, 80, 56], "mean_roughness": 0.377},
+  {"name": "stone", "layer": 3, "size_m": [2.4, 2.4], "mean_srgb": [161, 145, 120], "mean_roughness": 0.526},
+  {"name": "leather", "layer": 4, "size_m": [0.6, 0.6], "mean_srgb": [76, 43, 15], "mean_roughness": 0.662},
+  {"name": "iron", "layer": 5, "size_m": [1.0, 1.0], "mean_srgb": [146, 149, 152], "mean_roughness": 0.469}
+]

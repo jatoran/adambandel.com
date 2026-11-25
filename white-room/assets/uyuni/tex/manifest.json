@@ -1,0 +1,4 @@
+[
+  {"name": "crust", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [114, 113, 109], "mean_roughness": 0.931, "height": true},
+  {"name": "grain", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [128, 128, 130], "mean_roughness": 0.801, "height": true}
+]

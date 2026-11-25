@@ -1,0 +1,9 @@
+[
+  {"name": "paint", "layer": 0, "size_m": [2.0, 2.0], "mean_srgb": [134, 163, 158], "mean_roughness": 0.879},
+  {"name": "deck", "layer": 1, "size_m": [2.0, 2.0], "mean_srgb": [111, 97, 81], "mean_roughness": 0.524},
+  {"name": "concrete", "layer": 2, "size_m": [2.5, 2.5], "mean_srgb": [139, 132, 110], "mean_roughness": 0.736},
+  {"name": "rust", "layer": 3, "size_m": [1.5, 1.5], "mean_srgb": [104, 57, 42], "mean_roughness": 0.822},
+  {"name": "debris", "layer": 4, "size_m": [2.0, 2.0], "mean_srgb": [120, 110, 99], "mean_roughness": 0.857},
+  {"name": "plaster", "layer": 5, "size_m": [2.0, 2.0], "mean_srgb": [140, 101, 86], "mean_roughness": 0.838},
+  {"name": "tile", "layer": 6, "size_m": [2.0, 2.0], "mean_srgb": [71, 66, 56], "mean_roughness": 0.58}
+]

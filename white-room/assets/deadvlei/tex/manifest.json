@@ -1,0 +1,5 @@
+[
+  {"name": "clay", "layer": 0, "size_m": [1.5, 1.5], "mean_srgb": [182, 149, 114], "mean_roughness": 0.756, "height": true},
+  {"name": "sand", "layer": 1, "size_m": [3.0, 3.0], "mean_srgb": [119, 83, 64], "mean_roughness": 0.825, "height": true},
+  {"name": "wood", "layer": 2, "size_m": [2.15, 2.15], "mean_srgb": [111, 99, 87], "mean_roughness": 0.694, "height": true}
+]

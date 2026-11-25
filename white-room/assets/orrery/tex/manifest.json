@@ -1,0 +1,8 @@
+[
+  {"name": "marble", "layer": 0, "size_m": [3.0, 3.0], "mean_srgb": [172, 174, 182], "mean_roughness": 0.065},
+  {"name": "dark", "layer": 1, "size_m": [1.8, 1.8], "mean_srgb": [61, 63, 62], "mean_roughness": 0.114},
+  {"name": "plaster", "layer": 2, "size_m": [2.5, 2.5], "mean_srgb": [159, 159, 155], "mean_roughness": 0.888},
+  {"name": "brass", "layer": 3, "size_m": [1.2, 1.2], "mean_srgb": [171, 131, 101], "mean_roughness": 0.236},
+  {"name": "wood", "layer": 4, "size_m": [1.6, 1.6], "mean_srgb": [137, 105, 80], "mean_roughness": 0.576},
+  {"name": "paving", "layer": 5, "size_m": [2.4, 2.4], "mean_srgb": [174, 154, 119], "mean_roughness": 0.506}
+]

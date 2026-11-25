@@ -1,0 +1,13 @@
+# Credits: assets/deepfield/sky
+
+| File | Made from | Author | Licence |
+|---|---|---|---|
+| `atlas.webp` | [Webb's First Deep Field, weic2209a](https://esawebb.org/images/weic2209a/): the galaxies cut out, the sky's level taken away | NASA, ESA, CSA and STScI | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `star.webp` | The same picture: its brightest star, mirrored on itself to leave out what lies beside it | NASA, ESA, CSA and STScI | CC BY 4.0 |
+| `glow.webp` | The same picture: the cluster's diffuse light, smoothed | NASA, ESA, CSA and STScI | CC BY 4.0 |
+| `sources.bin`, `manifest.json` | [Dawn JWST Archive](https://dawn-cph.github.io/dja/) catalogue, photometric redshifts (eazy) and segmentation of SMACS 0723, grizli v7.4; [Gaia DR3](https://www.cosmos.esa.int/gaia) stars in the field | G. Brammer and the Dawn JWST Archive; ESA/Gaia/DPAC | CC BY 4.0; Gaia data are free to use with credit to ESA/Gaia/DPAC |
+
+All were made by `tools/deepfield-cut.py`.
+Some of the data products presented herein were retrieved from the Dawn JWST Archive (DJA).
+DJA is an initiative of the Cosmic Dawn Center, which is funded by the Danish National Research Foundation.
+This work has made use of data from the European Space Agency (ESA) mission Gaia, processed by the Gaia Data Processing and Analysis Consortium (DPAC).

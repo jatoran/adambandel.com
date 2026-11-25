@@ -1,0 +1,4 @@
+# Orrery data credits
+
+`land.png` is made by `tools/orrery-land.py` from Natural Earth's 1:110m land polygons (naturalearthdata.com), which are in the public domain.
+Made with Natural Earth.
