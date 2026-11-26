@@ -8,5 +8,9 @@ No attribution is required for any of them; the authors are credited here with t
 ## Files
 
 - `hall.mp3` is cut from "mall shopping center open space heavy echo people steps Montreal, Canada.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/455800/.
-- `wind.mp3` is cut from "Burlingame howling wind.wav" by Andron827, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Andron827/sounds/646874/.
 - `city.mp3` is cut from "Summer Night Ambience - Heat, AC Units, Sparse Traffic" by Artem_Zaitsev, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Artem_Zaitsev/sounds/835896/.
+- `wind.mp3` is cut from "Burlingame howling wind.wav" by Andron827, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Andron827/sounds/646874/.
+- `step_1.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `step_2.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `step_3.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `step_4.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.

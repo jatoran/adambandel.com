@@ -7,12 +7,12 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `suit_fans.mp3` is cut from "US Lab background.mp3" by ColChrisHadfield (Chris Hadfield), released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/ColChrisHadfield/sounds/172547/.
-- `breath.mp3` is cut from "Mask Breathing Sound" by Kodack, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Kodack/sounds/256519/.
+- `suit_fans.mp3` is cut from "Portable Air Purifier Loop 02" by loganzsound, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/loganzsound/sounds/876969/.
+- `breath.mp3` is cut from "Slow Breathing Woman.wav" by helenavelikaja, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/helenavelikaja/sounds/485402/.
 - `radio.mp3` is cut from "Radio static" by LukaCafuka, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/LukaCafuka/sounds/760335/.
 - `step_metal_1.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
 - `step_metal_2.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
 - `step_metal_3.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
 - `step_metal_4.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
 - `step_metal_5.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
-- `structure.mp3` is cut from "drone natural tunnel office building ventilation bass2.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/452223/.
+- `structure.mp3` is cut from "power transformer in basement.wav" by itinerantmonk108, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/itinerantmonk108/sounds/648726/.

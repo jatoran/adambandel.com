@@ -7,7 +7,13 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `breath.mp3` is cut from "Mask Breathing Sound" by Kodack, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Kodack/sounds/256519/.
-- `hum.mp3` is cut from "S40-13 Alien hum or space ship interior.wav" by craigsmith, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/craigsmith/sounds/675339/.
+- `fan.mp3` is cut from "Quiet Computer Fan" by EagleStealthTeam, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/EagleStealthTeam/sounds/165530/.
+- `breath_1.mp3` is cut from "Deep breaths in between recordings" by Sadiquecat, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sadiquecat/sounds/855831/.
+- `breath_2.mp3` is cut from "Deep breaths in between recordings" by Sadiquecat, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sadiquecat/sounds/855831/.
+- `breath_3.mp3` is cut from "Deep breaths in between recordings" by Sadiquecat, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sadiquecat/sounds/855831/.
+- `hum.mp3` is cut from "Birmingham-erdington-canal-transformer-3.wav" by keithpeter, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/keithpeter/sounds/107215/.
 - `sheet.mp3` is cut from "de rottende veerboot" by allthingssound, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/allthingssound/sounds/425183/.
-- `radio.mp3` is cut from "Radio static" by LukaCafuka, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/LukaCafuka/sounds/760335/.
+- `step_1.mp3` is cut from "Walking_and_running_on_a_steel_floor (sound samples)" by SoundsofTheMachine, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/SoundsofTheMachine/sounds/809440/.
+- `step_2.mp3` is cut from "Walking_and_running_on_a_steel_floor (sound samples)" by SoundsofTheMachine, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/SoundsofTheMachine/sounds/809440/.
+- `step_3.mp3` is cut from "Walking_and_running_on_a_steel_floor (sound samples)" by SoundsofTheMachine, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/SoundsofTheMachine/sounds/809440/.
+- `step_4.mp3` is cut from "Walking_and_running_on_a_steel_floor (sound samples)" by SoundsofTheMachine, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/SoundsofTheMachine/sounds/809440/.

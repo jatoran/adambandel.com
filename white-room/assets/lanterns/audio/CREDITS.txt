@@ -7,10 +7,8 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `festival.mp3` is cut from "Thailand fireworks and firecrackers close and far from bridge Loi Krathong lantern festival Chiang Mai +people3 closer voices crowd, distant PA voice near start.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/177642/.
+- `festival.mp3` is cut from "Thailand fireworks and firecrackers close and far from bridge Loi Krathong lantern festival Chiang Mai +people1.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/177644/.
 - `night.mp3` is cut from "Night/Evening Ambience in Chiang Dao, Thailand" by EpicWizard, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/EpicWizard/sounds/335156/.
-- `chant.mp3` is cut from "Thailand chanting Thai Buddhist monks in small temple, prerecorded on PA but very convincing +some live monks chanting along periodically.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/177634/.
-- `bells.mp3` is cut from "THAILAND WAT PHRATHAT DOI SUTHEP BELLS.wav" by dorhel, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/dorhel/sounds/208588/.
 - `water.mp3` is cut from "230101 Water gentle calm lapping, boat-tailed ducks, R-07 EM272s, Colonel Samuel Smith Park, Lake Ontario, Toronto 1pm" by TRP, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/TRP/sounds/717838/.
 - `fire.mp3` is cut from "Fireplace #4" by Joseph SARDIN, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://bigsoundbank.com/fireplace-4-s2856.html.
 - `step_1.mp3` is cut from "Man Footsteps on the Wooden Floor" by DavidGreck, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://bigsoundbank.com/man-footsteps-on-the-wooden-floor-s0165.html.

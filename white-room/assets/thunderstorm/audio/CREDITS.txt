@@ -9,3 +9,7 @@ No attribution is required for any of them; the authors are credited here with t
 
 - `storm.mp3` is cut from "Rain and Thunder #2" by Joseph SARDIN, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://bigsoundbank.com/rain-and-storm-2-s0740.html.
 - `sea.mp3` is cut from "Rough Baltic Sea" by GirlWithSoundRecorder, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/GirlWithSoundRecorder/sounds/441008/.
+- `glass_1.mp3` is cut from "knocking on a glass door with knuckle and finger" by MeanRaccoon, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/MeanRaccoon/sounds/830853/.
+- `glass_2.mp3` is cut from "knocking on a glass door with knuckle and finger" by MeanRaccoon, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/MeanRaccoon/sounds/830853/.
+- `glass_3.mp3` is cut from "knocking on a glass door with knuckle and finger" by MeanRaccoon, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/MeanRaccoon/sounds/830853/.
+- `glass_4.mp3` is cut from "knocking on a glass door with knuckle and finger" by MeanRaccoon, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/MeanRaccoon/sounds/830853/.

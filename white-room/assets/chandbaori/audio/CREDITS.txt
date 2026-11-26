@@ -7,5 +7,10 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `air.mp3` is cut from "Rural, Terrace, afternoon ambience, light wind, leaves rustle, birds with distant loudspeaker" by Sagnik_Basu, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sagnik_Basu/sounds/398860/.
-- `birds.mp3` is cut from "chirping_Parakeets_and_cooing_Pigeons.wav" by Framefive, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Framefive/sounds/128068/.
+- `air.mp3` is cut from "Raigarh Village Early Afternoon" by kalhan, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kalhan/sounds/553079/.
+- `birds.mp3` is cut from "psittacula_krameri_20151031.WAV" by jan.bockelson, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/jan.bockelson/sounds/327095/.
+- `echo.mp3` is cut from "IR Stone staircase with fireplace chimney in the middle DJI-M3 - L= Bottom R=Top railing mid height" by Sadiquecat, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sadiquecat/sounds/873476/.
+- `step_1.mp3` is cut from "Footsteps_Stone.wav" by Galbenshire, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Galbenshire/sounds/464520/.
+- `step_2.mp3` is cut from "Footsteps_Stone.wav" by Galbenshire, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Galbenshire/sounds/464520/.
+- `step_3.mp3` is cut from "Footsteps_Stone.wav" by Galbenshire, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Galbenshire/sounds/464520/.
+- `step_4.mp3` is cut from "Footsteps_Stone.wav" by Galbenshire, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Galbenshire/sounds/464520/.

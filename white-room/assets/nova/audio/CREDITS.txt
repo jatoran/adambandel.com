@@ -9,4 +9,9 @@ No attribution is required for any of them; the authors are credited here with t
 
 - `rumble.mp3` is cut from "bass rumble deep subterranean subsonic.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/453405/.
 - `geiger.mp3` is cut from "Geiger counter clicks (HIGH)" by cookies+policy, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/cookies+policy/sounds/555920/.
-- `breath.mp3` is cut from "Mask Breathing Sound" by Kodack, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Kodack/sounds/256519/.
+- `fan.mp3` is cut from "PC Fan" by Lozanu1, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Lozanu1/sounds/875936/.
+- `breath_1.mp3` is cut from "relaxing-breath-inhale-exhale.wav" by beerre, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/beerre/sounds/622601/.
+- `breath_2.mp3` is cut from "relaxing-breath-inhale-exhale.wav" by beerre, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/beerre/sounds/622601/.
+- `breath_3.mp3` is cut from "relaxing-breath-inhale-exhale.wav" by beerre, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/beerre/sounds/622601/.
+- `step_1.mp3` is cut from "Heavy Boots Crushing Glass on Tiled Floor SFX" by Soup_UnderScore, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Soup_UnderScore/sounds/708023/.
+- `step_2.mp3` is cut from "Heavy Boots Crushing Glass on Tiled Floor SFX" by Soup_UnderScore, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Soup_UnderScore/sounds/708023/.

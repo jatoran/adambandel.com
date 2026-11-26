@@ -8,8 +8,7 @@ No attribution is required for any of them; the authors are credited here with t
 ## Files
 
 - `suit_fans.mp3` is cut from "US Lab background.mp3" by ColChrisHadfield (Chris Hadfield), released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/ColChrisHadfield/sounds/172547/.
-- `breath.mp3` is cut from "Mask Breathing Sound" by Kodack, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Kodack/sounds/256519/.
-- `radio.mp3` is cut from "Radio static" by LukaCafuka, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/LukaCafuka/sounds/760335/.
+- `breath.mp3` is cut from "Gas Mask breath" by Nuclearoid, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Nuclearoid/sounds/435825/.
 - `step_metal_1.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
 - `step_metal_2.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
 - `step_metal_3.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.

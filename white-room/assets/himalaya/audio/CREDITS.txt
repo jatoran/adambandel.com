@@ -9,6 +9,7 @@ No attribution is required for any of them; the authors are credited here with t
 
 - `wind.mp3` is cut from "Wind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile)." by felix.blume, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/felix.blume/sounds/156414/.
 - `gusts.mp3` is cut from "Storm_Boelo_Heavy_Wind_Gusts_3" by SignatureSoundsOrg, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/SignatureSoundsOrg/sounds/876000/.
+- `flags.mp3` is cut from "A flag flapping in the wind, at the small village of Assem Souk, in the High Atlas (Morocco)." by felix.blume, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/felix.blume/sounds/154794/.
 - `step_1.mp3` is cut from "Footsteps on snow (clean)" by xkeril, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/xkeril/sounds/611277/.
 - `step_2.mp3` is cut from "Footsteps on snow (clean)" by xkeril, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/xkeril/sounds/611277/.
 - `step_3.mp3` is cut from "Footsteps on snow (clean)" by xkeril, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/xkeril/sounds/611277/.

@@ -8,3 +8,4 @@ No attribution is required for any of them; the authors are credited here with t
 ## Files
 
 - `saturn_radio.mp3` is cut from "Eerie Sounds of Saturn's Radio Emissions (PIA07966)" by NASA/JPL/University of Iowa (Cassini Radio and Plasma Wave Science instrument), released under Public domain (NASA) (https://www.jpl.nasa.gov/jpl-image-use-policy), from https://commons.wikimedia.org/wiki/File:Eerie_Sounds_of_Saturn%E2%80%99s_Radio_Emissions_(PIA07966).wav.
+- `fan.mp3` is cut from "Computer Fan" by magnus589, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/magnus589/sounds/184565/.

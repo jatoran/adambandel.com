@@ -7,4 +7,10 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `suit_fans.mp3` is cut from "US Lab background.mp3" by ColChrisHadfield (Chris Hadfield), released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/ColChrisHadfield/sounds/172547/.
+- `life_support.mp3` is cut from "Home Nasal Oxygen Mask" by Sadiquecat, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sadiquecat/sounds/823702/.
+- `breath_1.mp3` is cut from "gas_mask_raw.wav" by xTokioBeatlex, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/xTokioBeatlex/sounds/571004/.
+- `breath_2.mp3` is cut from "gas_mask_raw.wav" by xTokioBeatlex, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/xTokioBeatlex/sounds/571004/.
+- `step_1.mp3` is cut from "rubble walk rocky grit cave footsteps.wav" by martian, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/martian/sounds/207372/.
+- `step_2.mp3` is cut from "rubble walk rocky grit cave footsteps.wav" by martian, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/martian/sounds/207372/.
+- `step_3.mp3` is cut from "rubble walk rocky grit cave footsteps.wav" by martian, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/martian/sounds/207372/.
+- `step_4.mp3` is cut from "rubble walk rocky grit cave footsteps.wav" by martian, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/martian/sounds/207372/.

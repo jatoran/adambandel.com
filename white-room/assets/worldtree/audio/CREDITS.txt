@@ -9,3 +9,7 @@ No attribution is required for any of them; the authors are credited here with t
 
 - `canopy.mp3` is cut from "wind-thru-trees.AIF" by alienistcog, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/alienistcog/sounds/123911/.
 - `gust.mp3` is cut from "Forest, close up of trees rustling in the wind.wav" by Anya_Media, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Anya_Media/sounds/523389/.
+- `step_1.mp3` is cut from "Footsteps Moss - Forest, walk, jog & run" by Vrymaa, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Vrymaa/sounds/770095/.
+- `step_2.mp3` is cut from "Footsteps Moss - Forest, walk, jog & run" by Vrymaa, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Vrymaa/sounds/770095/.
+- `step_3.mp3` is cut from "Footsteps Moss - Forest, walk, jog & run" by Vrymaa, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Vrymaa/sounds/770095/.
+- `step_4.mp3` is cut from "Footsteps Moss - Forest, walk, jog & run" by Vrymaa, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Vrymaa/sounds/770095/.

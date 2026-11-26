@@ -8,5 +8,10 @@ No attribution is required for any of them; the authors are credited here with t
 ## Files
 
 - `water.mp3` is cut from "Water flowing in north of Argentina (close to Salta)" by felix.blume, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/felix.blume/sounds/234240/.
-- `birds.mp3` is cut from "chirping_Parakeets_and_cooing_Pigeons.wav" by Framefive, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Framefive/sounds/128068/.
+- `birds.mp3` is cut from "birds_stereo.wav" by stamvas, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/stamvas/sounds/61836/.
 - `leaves.mp3` is cut from "Forest, close up of trees rustling in the wind.wav" by Anya_Media, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Anya_Media/sounds/523389/.
+- `step_1.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `step_2.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `step_3.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `step_4.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `step_5.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.

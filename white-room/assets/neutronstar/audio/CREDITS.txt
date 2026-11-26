@@ -7,7 +7,7 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `hum.mp3` is cut from "drone natural tunnel office building ventilation bass2.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/452223/.
+- `hum.mp3` is cut from "hum electric transformer in large room2.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/453445/.
 - `radio.mp3` is cut from "Radio static" by LukaCafuka, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/LukaCafuka/sounds/760335/.
 - `step_1.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
 - `step_2.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.

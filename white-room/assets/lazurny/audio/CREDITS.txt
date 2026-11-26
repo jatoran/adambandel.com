@@ -9,3 +9,12 @@ No attribution is required for any of them; the authors are credited here with t
 
 - `wind.mp3` is cut from "SFX-Windy,Whistle,Indoors,Creaks" by soundandmelodies, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/soundandmelodies/sounds/831617/.
 - `crows.mp3` is cut from "Crows" by Dave_Girtsman, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Dave_Girtsman/sounds/353432/.
+- `steel_1.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
+- `steel_2.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
+- `steel_3.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
+- `glass_1.mp3` is cut from "walking_broken_glass.wav" by jerry.berumen, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/jerry.berumen/sounds/511784/.
+- `glass_2.mp3` is cut from "walking_broken_glass.wav" by jerry.berumen, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/jerry.berumen/sounds/511784/.
+- `glass_3.mp3` is cut from "walking_broken_glass.wav" by jerry.berumen, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/jerry.berumen/sounds/511784/.
+- `glass_4.mp3` is cut from "walking_broken_glass.wav" by jerry.berumen, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/jerry.berumen/sounds/511784/.
+- `glass_5.mp3` is cut from "walking_broken_glass.wav" by jerry.berumen, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/jerry.berumen/sounds/511784/.
+- `echo.mp3` is cut from "IR_artisan_garage_B2_03_balloon_stereo" by kirkpatrick.live, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kirkpatrick.live/sounds/568095/.

@@ -9,3 +9,7 @@ No attribution is required for any of them; the authors are credited here with t
 
 - `burner.mp3` is cut from "Hot air balloon burner" by YannSauvin, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/YannSauvin/sounds/778358/.
 - `valley.mp3` is cut from "Dagestan, Urakhi village, morning ambience, XY stereo.wav" by gladkiy, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/gladkiy/sounds/363823/.
+- `creak_1.mp3` is cut from "Basket Creak" by sheepfilms, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/sheepfilms/sounds/202965/.
+- `creak_2.mp3` is cut from "Basket Creak" by sheepfilms, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/sheepfilms/sounds/202965/.
+- `creak_3.mp3` is cut from "Basket Creak" by sheepfilms, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/sheepfilms/sounds/202965/.
+- `creak_4.mp3` is cut from "Basket Creak" by sheepfilms, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/sheepfilms/sounds/202965/.

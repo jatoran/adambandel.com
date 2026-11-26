@@ -8,8 +8,8 @@ No attribution is required for any of them; the authors are credited here with t
 ## Files
 
 - `canyon_wind.mp3` is cut from "Wind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile)." by felix.blume, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/felix.blume/sounds/156414/.
-- `metallic_resonance.mp3` is cut from "DSGNDron_Dark sci-fi ambient extremely bass drone with huge reverb and hi metallic resonances 005_Anton Bushinskiy_AB FX" by pryanic, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/pryanic/sounds/777077/.
 - `step_1.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
 - `step_2.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
 - `step_3.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
 - `step_4.mp3` is cut from "footsteps shoes walk hard floor stone patio nice.flac" by kyles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kyles/sounds/637555/.
+- `echo.mp3` is cut from "IR Balloon under-mic - Courtyard 13x4m - (NT5o)" by Sadiquecat, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sadiquecat/sounds/862004/.

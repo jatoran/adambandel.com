@@ -7,6 +7,10 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `hull.mp3` is cut from "de rottende veerboot" by allthingssound, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/allthingssound/sounds/425183/.
 - `hold.mp3` is cut from "skibskrog.WAV" by snoezel, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/snoezel/sounds/368266/.
 - `lamp.mp3` is cut from "Flickering Fluorescent Light with Background Hum (Seamless Loop, 44100 Hz Mono)" by kentspublicdomain, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kentspublicdomain/sounds/777053/.
+- `ring.mp3` is cut from "Balloon Pop, 300m Long Steel Tunnel (192khz IR Sample / Impulse Response)" by modusmogulus, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/modusmogulus/sounds/846029/.
+- `step_1.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
+- `step_2.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
+- `step_3.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.
+- `step_4.mp3` is cut from "Footsteps on Metal" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/698697/.

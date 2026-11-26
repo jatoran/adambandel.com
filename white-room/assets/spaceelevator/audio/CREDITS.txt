@@ -7,6 +7,10 @@ No attribution is required for any of them; the authors are credited here with t
 
 ## Files
 
-- `cabin.mp3` is cut from "US Lab background.mp3" by ColChrisHadfield (Chris Hadfield), released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/ColChrisHadfield/sounds/172547/.
+- `cabin.mp3` is cut from "Air vent (looped)" by lfyaudio, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/lfyaudio/sounds/848969/.
 - `drive.mp3` is cut from "Electric machine engine, rumble, large air-conditioner" by kentspublicdomain, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/kentspublicdomain/sounds/328175/.
 - `wind.mp3` is cut from "Burlingame howling wind.wav" by Andron827, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Andron827/sounds/646874/.
+- `step_1.mp3` is cut from "Footsteps On Tile" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/834027/.
+- `step_2.mp3` is cut from "Footsteps On Tile" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/834027/.
+- `step_3.mp3` is cut from "Footsteps On Tile" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/834027/.
+- `step_4.mp3` is cut from "Footsteps On Tile" by IENBA, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/IENBA/sounds/834027/.

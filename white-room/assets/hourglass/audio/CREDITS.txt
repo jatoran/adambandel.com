@@ -8,5 +8,6 @@ No attribution is required for any of them; the authors are credited here with t
 ## Files
 
 - `dune.mp3` is cut from "Desert sand - Dune atmosphere" by Vrymaa, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Vrymaa/sounds/825860/.
-- `wind.mp3` is cut from "Desert binaural Wind.WAV" by Benbojangles, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Benbojangles/sounds/457159/.
+- `wind.mp3` is cut from "Desert wind stereo" by KasDonatov, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/KasDonatov/sounds/402710/.
 - `fall.mp3` is cut from "sandfall5.wav" by Wagna, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Wagna/sounds/326304/.
+- `roar.mp3` is cut from "Waterfall, distance, thunderous bass" by Sandy-Ogilvie, released under CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/), from https://freesound.org/people/Sandy-Ogilvie/sounds/828404/.
