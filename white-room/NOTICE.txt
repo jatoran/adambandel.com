@@ -114,6 +114,54 @@ They are kept as files beside the page, in `assets/<id>/audio/`, cut and levelle
 
 <!-- places: written by tools/notice-gen.mjs from each src/places/<id>/NOTICE.md; edit those, not this -->
 
+## A total solar eclipse
+
+This section is the place's part of the page's `NOTICE.md`.
+The ridge is La Silla, Chile, during the total solar eclipse of 2 July 2019.
+
+| Use | Source | Credits |
+|---|---|---|
+| The ridge and the land to the horizon | [Copernicus DEM GLO-30](https://doi.org/10.5270/ESA-c5d3d65). Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved | `assets/eclipse/terrain/CREDITS.md` |
+| The structure of the corona | [Dynamic inner corona (eso1912z)](https://www.eso.org/public/images/eso1912z/), P. Horálek/ESO, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); unwrapped round the Sun and flattened in brightness | `assets/eclipse/corona/CREDITS.md` |
+| 3 texture sets: the ridge's gravel and stony ground, the rocks | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/eclipse/tex/CREDITS.md` names each asset, its authors and its link |
+| 7 recordings: the wind, the watchers, steps on gravel | [Freesound](https://freesound.org/), CC0 1.0 | `assets/eclipse/audio/CREDITS.md` names each recording, its author and its link |
+
+The terrain was resampled by `tools/eclipse-terrain.py`, the corona made by `tools/eclipse-corona.py`, the textures by `tools/place-textures.py` from `tools/eclipse-textures.json`, the recordings by `tools/place-audio.py` from `tools/eclipse-audio.json`.
+What the page makes itself: the sky and its light, the shadow, the beads, the rocks and shrubs, the domes and the gear.
+Other ESO photographs of the eclipse were looked at to judge the picture and are not part of the page.
+
+## The Hani rice terraces
+
+The mountains of the Hani terraces are the real slopes of Duoyishu, Yuanyang, Yunnan: their heights come from the Copernicus programme's open data, and which land is terraced, wooded or built from ESA WorldCover.
+The sky is a photographed panorama, the close surfaces are photographed texture sets and the sounds are recordings, all published under CC0 1.0.
+They are kept as files beside the page, in `assets/hani/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| Heights of the Yuanyang region (30 m) | Copernicus DEM GLO-30: produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved | `assets/hani/terrain/CREDITS.md` |
+| Which land is terraced, wooded, built | ESA WorldCover 10 m 2021 v200, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): (c) ESA WorldCover project / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium | `assets/hani/terrain/CREDITS.md` |
+| The dawn sky | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/hani/sky/CREDITS.md` |
+| 8 texture sets: mud, grasses, forest floor, earth wall, thatch, bark, stone | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/hani/tex/CREDITS.md` names each asset, its authors and its link |
+| 9 recordings: a mountain village waking, water led to fields, steps in grass and water | [Freesound](https://freesound.org/), CC0 1.0 | `assets/hani/audio/CREDITS.md` names each recording, its author and its link |
+
+The heights and the land cover were resampled by `tools/hani-terrain.py`, the sky by `tools/hani-sky.py`, the textures by `tools/place-textures.py` from `tools/hani-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/hani-audio.json`.
+What the page makes itself: the terraces cut along the contours, their water, the mist, the trees, the grass, the houses.
+Photographs of the real terraces (Wikimedia Commons) were looked at to judge the picture and are not part of the page.
+
+## The lake of mercury
+
+The cave's surfaces are photographed texture sets, and its sounds recordings, published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/mercury/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 4 texture sets: fractured rock, pitted pale rock, river pebbles, cracked grey rock | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/mercury/tex/CREDITS.md` names each asset, its authors and its link |
+| 11 recordings: drops in a large cave, a wood fire, a stone church's impulse response (the chamber's ring), drops into a metal sink, a rock thrown into a river, four steps on pebbles | [Freesound](https://freesound.org/) and [BigSoundBank](https://bigsoundbank.com/), CC0 1.0 | `assets/mercury/audio/CREDITS.md` names each recording, its author and its link |
+| The cave's shape and its traced light | Made by this project (`tools/mercury-bake.mjs`) | `assets/mercury/cave/CREDITS.md` |
+
+The textures were resampled and repacked by `tools/place-textures.py` from the list in `tools/mercury-textures.json`.
+The recordings were cut and levelled by `tools/place-audio.py` from the list in `tools/mercury-audio.json`.
+
 ## Dead Vlei, Namibia
 
 This section is the place's part of the page's `NOTICE.md`.
@@ -173,54 +221,6 @@ The heights were resampled by `tools/himalaya-terrain.py`, the textures by `tool
 What the page makes itself: the knife edge of the crest and its cornice, the rocks, the rope and the flags, the cloud sea, the sky, the blown snow.
 Photographs of the real mountains (Wikimedia Commons) were looked at to judge the picture and are not part of the page.
 
-## A total solar eclipse
-
-This section is the place's part of the page's `NOTICE.md`.
-The ridge is La Silla, Chile, during the total solar eclipse of 2 July 2019.
-
-| Use | Source | Credits |
-|---|---|---|
-| The ridge and the land to the horizon | [Copernicus DEM GLO-30](https://doi.org/10.5270/ESA-c5d3d65). Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved | `assets/eclipse/terrain/CREDITS.md` |
-| The structure of the corona | [Dynamic inner corona (eso1912z)](https://www.eso.org/public/images/eso1912z/), P. Horálek/ESO, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); unwrapped round the Sun and flattened in brightness | `assets/eclipse/corona/CREDITS.md` |
-| 3 texture sets: the ridge's gravel and stony ground, the rocks | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/eclipse/tex/CREDITS.md` names each asset, its authors and its link |
-| 7 recordings: the wind, the watchers, steps on gravel | [Freesound](https://freesound.org/), CC0 1.0 | `assets/eclipse/audio/CREDITS.md` names each recording, its author and its link |
-
-The terrain was resampled by `tools/eclipse-terrain.py`, the corona made by `tools/eclipse-corona.py`, the textures by `tools/place-textures.py` from `tools/eclipse-textures.json`, the recordings by `tools/place-audio.py` from `tools/eclipse-audio.json`.
-What the page makes itself: the sky and its light, the shadow, the beads, the rocks and shrubs, the domes and the gear.
-Other ESO photographs of the eclipse were looked at to judge the picture and are not part of the page.
-
-## The Hani rice terraces
-
-The mountains of the Hani terraces are the real slopes of Duoyishu, Yuanyang, Yunnan: their heights come from the Copernicus programme's open data, and which land is terraced, wooded or built from ESA WorldCover.
-The sky is a photographed panorama, the close surfaces are photographed texture sets and the sounds are recordings, all published under CC0 1.0.
-They are kept as files beside the page, in `assets/hani/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| Heights of the Yuanyang region (30 m) | Copernicus DEM GLO-30: produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved | `assets/hani/terrain/CREDITS.md` |
-| Which land is terraced, wooded, built | ESA WorldCover 10 m 2021 v200, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): (c) ESA WorldCover project / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium | `assets/hani/terrain/CREDITS.md` |
-| The dawn sky | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/hani/sky/CREDITS.md` |
-| 8 texture sets: mud, grasses, forest floor, earth wall, thatch, bark, stone | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/hani/tex/CREDITS.md` names each asset, its authors and its link |
-| 9 recordings: a mountain village waking, water led to fields, steps in grass and water | [Freesound](https://freesound.org/), CC0 1.0 | `assets/hani/audio/CREDITS.md` names each recording, its author and its link |
-
-The heights and the land cover were resampled by `tools/hani-terrain.py`, the sky by `tools/hani-sky.py`, the textures by `tools/place-textures.py` from `tools/hani-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/hani-audio.json`.
-What the page makes itself: the terraces cut along the contours, their water, the mist, the trees, the grass, the houses.
-Photographs of the real terraces (Wikimedia Commons) were looked at to judge the picture and are not part of the page.
-
-## The lake of mercury
-
-The cave's surfaces are photographed texture sets, and its sounds recordings, published by their authors under CC0 1.0 (public domain dedication).
-They are kept as files beside the page, in `assets/mercury/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| 4 texture sets: fractured rock, pitted pale rock, river pebbles, cracked grey rock | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/mercury/tex/CREDITS.md` names each asset, its authors and its link |
-| 11 recordings: drops in a large cave, a wood fire, a stone church's impulse response (the chamber's ring), drops into a metal sink, a rock thrown into a river, four steps on pebbles | [Freesound](https://freesound.org/) and [BigSoundBank](https://bigsoundbank.com/), CC0 1.0 | `assets/mercury/audio/CREDITS.md` names each recording, its author and its link |
-| The cave's shape and its traced light | Made by this project (`tools/mercury-bake.mjs`) | `assets/mercury/cave/CREDITS.md` |
-
-The textures were resampled and repacked by `tools/place-textures.py` from the list in `tools/mercury-textures.json`.
-The recordings were cut and levelled by `tools/place-audio.py` from the list in `tools/mercury-audio.json`.
-
 ## Earth under the red giant Sun
 
 The salt plain, the ruins and the swollen Sun (`src/places/redgiant/`) are drawn from three photographed surfaces, six recordings and the place's own computed files.
@@ -234,6 +234,79 @@ The salt plain, the ruins and the swollen Sun (`src/places/redgiant/`) are drawn
 
 The textures were resampled by `tools/place-textures.py` from `tools/redgiant-textures.json`; the recordings were cut and levelled by `tools/place-audio.py` from `tools/redgiant-audio.json`.
 What the page makes itself: the salt's polygons, the sky, the far cliffs, and the carving over the portal.
+
+## The Great Organ
+
+The organ's surfaces are photographed texture sets and its sounds are recordings, published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/organ/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 6 texture sets: oak, dark timber, floor boards, stone, leather, worn metal | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) (CC0 1.0) | `assets/organ/tex/CREDITS.md` names each asset, its authors and its link |
+| 3 footsteps on a wooden floor | [BigSoundBank](https://bigsoundbank.com/) (CC0 1.0) | `assets/organ/audio/CREDITS.md` |
+| 3 recordings: an organ played in a church in Pelt, an organ's blower, a stone church's impulse response | [Freesound](https://freesound.org/) (CC0 1.0) | `assets/organ/audio/CREDITS.md` |
+| The light's volumes | computed by `tools/organ-bake.mjs` | `assets/organ/light/CREDITS.md` |
+
+The textures were resampled and repacked by `tools/place-textures.py` from the list in `tools/organ-textures.json`, the recordings cut by `tools/place-audio.py` from `tools/organ-audio.json`, and what the organ's recording plays read note by note by `tools/organ-notes.py`.
+The pipes and the case are made by the page.
+
+## The great orrery
+
+The orrery's surfaces are photographed texture sets and its sounds are recordings, all published by their authors under CC0 1.0 (public domain dedication); the lands on its globe of the Earth are Natural Earth's, in the public domain.
+They are kept as files beside the page, in `assets/orrery/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 6 texture sets: white and dark marble, stucco, bronze, walnut veneer, marble slabs | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) (CC0 1.0) | `assets/orrery/tex/CREDITS.md` names each asset, its authors and its link |
+| 4 recordings cut into 7 sounds: a clockwork motor, the inside of a clock's case, a pendulum clock's beat, steps on marble | [Freesound](https://freesound.org/) (CC0 1.0) | `assets/orrery/audio/CREDITS.md` names each recording, its author and its link |
+| The coasts on the lapis globe | [Natural Earth](https://www.naturalearthdata.com/), 1:110m land (public domain) | `assets/orrery/data/CREDITS.md` |
+
+The textures were resampled and repacked by `tools/place-textures.py`, the recordings cut and levelled by `tools/place-audio.py`, the coasts made into a map by `tools/orrery-land.py`.
+The rotunda, the orrery and its trains, the stones, the lettering and every other sound are made by the page.
+
+## Super-Kamiokande
+
+The tank's photographed surfaces and its recorded sounds were published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/superk/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 3 texture sets: crumpled foil (the black sheet's creases), aluminium tread plate, rubber | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/superk/tex/CREDITS.md` names each asset, its author and its link |
+| 11 recordings: water lapping against a hull (craigsmith), drops falling in a great cave (nomadas), a balloon burst in a steel-walled tunnel for the echo (modusmogulus), boots on metal (alec_mackay), steps on hollow boards (kbeezy88) | [Freesound](https://freesound.org/), CC0 1.0 | `assets/superk/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled by `tools/place-textures.py` from `tools/superk-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/superk-audio.json`.
+The tank's measures are the published ones of the detector (Kamioka Observatory, ICRR, The University of Tokyo; Fukuda et al., "The Super-Kamiokande detector", Nucl. Instrum. Meth. A 501, 2003); no picture or data of the observatory's is part of the page.
+The tank, its tubes and what they mirror, the water, the platform, the rafts, the floodlights are made by the page.
+
+## The collider
+
+The place's photographed surfaces and its recorded sounds were published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/collider/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 2 texture sets: cast concrete, worn concrete floor | [Poly Haven](https://polyhaven.com/), CC0 1.0 | `assets/collider/tex/CREDITS.md` names each asset and its link |
+| 6 texture sets: uneven metal, brushed steel, mottled metal, tread plate, crumpled foil, coppery metal | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/collider/tex/CREDITS.md` names each asset and its link |
+| 12 recordings: a ventilation drone, server fans, a small compressor, a concrete underpass's impulse response (the cavern's echo), four steps on concrete and four on a metal grate | [Freesound](https://freesound.org/), CC0 1.0 | `assets/collider/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled by `tools/place-textures.py` from `tools/collider-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/collider-audio.json`.
+Photographs of the LHC's tunnel and of the CMS experiment on Wikimedia Commons, and the published measures of both and of the FCC-hh study, were the references; no picture or data of theirs is part of the page.
+The tunnel, the magnets, the cavern, the detector, the light, the collisions and the carving are made by the page.
+
+## The tokamak
+
+The hall's and the chamber's surfaces are photographed texture sets and their sound is three recordings, all published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/tokamak/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 4 texture sets: scratched painted steel sheet, cast concrete, worn floor, patterned steel plate | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/tokamak/tex/CREDITS.md` names each asset, its authors and its link |
+| 2 texture sets: brushed metal (Metal009), steel plate (Metal038) | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/tokamak/tex/CREDITS.md` |
+| 3 recordings: a treatment plant's hall, a pump room, a transformer in a machine room | [Freesound](https://freesound.org/), CC0 1.0 | `assets/tokamak/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled by `tools/place-textures.py` from `tools/tokamak-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/tokamak-audio.json`.
+The hall, the machine, the chamber and its tiles, the plasma and its light, and the carving are made by the page.
+The reference photographs it was judged against (Wikimedia Commons, fetched by `tools/tokamak-refs.py`) are not shipped.
 
 ## The Hanging Gardens of Babylon
 
@@ -288,79 +361,6 @@ They are kept as files beside the page, in `assets/wieliczka/`.
 
 The textures were resampled and repacked by `tools/place-textures.py` from `tools/wieliczka-textures.json`, the reliefs prepared by `tools/wieliczka-reliefs.py`, and the recordings cut and levelled by `tools/place-audio.py` from `tools/wieliczka-audio.json`.
 The hall, its stairs, balustrades, altar, chandeliers, the floor's tiles and the door's carving are made by the page.
-
-## Super-Kamiokande
-
-The tank's photographed surfaces and its recorded sounds were published by their authors under CC0 1.0 (public domain dedication).
-They are kept as files beside the page, in `assets/superk/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| 3 texture sets: crumpled foil (the black sheet's creases), aluminium tread plate, rubber | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/superk/tex/CREDITS.md` names each asset, its author and its link |
-| 11 recordings: water lapping against a hull (craigsmith), drops falling in a great cave (nomadas), a balloon burst in a steel-walled tunnel for the echo (modusmogulus), boots on metal (alec_mackay), steps on hollow boards (kbeezy88) | [Freesound](https://freesound.org/), CC0 1.0 | `assets/superk/audio/CREDITS.md` names each recording, its author and its link |
-
-The textures were resampled by `tools/place-textures.py` from `tools/superk-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/superk-audio.json`.
-The tank's measures are the published ones of the detector (Kamioka Observatory, ICRR, The University of Tokyo; Fukuda et al., "The Super-Kamiokande detector", Nucl. Instrum. Meth. A 501, 2003); no picture or data of the observatory's is part of the page.
-The tank, its tubes and what they mirror, the water, the platform, the rafts, the floodlights are made by the page.
-
-## The collider
-
-The place's photographed surfaces and its recorded sounds were published by their authors under CC0 1.0 (public domain dedication).
-They are kept as files beside the page, in `assets/collider/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| 2 texture sets: cast concrete, worn concrete floor | [Poly Haven](https://polyhaven.com/), CC0 1.0 | `assets/collider/tex/CREDITS.md` names each asset and its link |
-| 6 texture sets: uneven metal, brushed steel, mottled metal, tread plate, crumpled foil, coppery metal | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/collider/tex/CREDITS.md` names each asset and its link |
-| 12 recordings: a ventilation drone, server fans, a small compressor, a concrete underpass's impulse response (the cavern's echo), four steps on concrete and four on a metal grate | [Freesound](https://freesound.org/), CC0 1.0 | `assets/collider/audio/CREDITS.md` names each recording, its author and its link |
-
-The textures were resampled by `tools/place-textures.py` from `tools/collider-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/collider-audio.json`.
-Photographs of the LHC's tunnel and of the CMS experiment on Wikimedia Commons, and the published measures of both and of the FCC-hh study, were the references; no picture or data of theirs is part of the page.
-The tunnel, the magnets, the cavern, the detector, the light, the collisions and the carving are made by the page.
-
-## The tokamak
-
-The hall's and the chamber's surfaces are photographed texture sets and their sound is three recordings, all published by their authors under CC0 1.0 (public domain dedication).
-They are kept as files beside the page, in `assets/tokamak/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| 4 texture sets: scratched painted steel sheet, cast concrete, worn floor, patterned steel plate | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/tokamak/tex/CREDITS.md` names each asset, its authors and its link |
-| 2 texture sets: brushed metal (Metal009), steel plate (Metal038) | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/tokamak/tex/CREDITS.md` |
-| 3 recordings: a treatment plant's hall, a pump room, a transformer in a machine room | [Freesound](https://freesound.org/), CC0 1.0 | `assets/tokamak/audio/CREDITS.md` names each recording, its author and its link |
-
-The textures were resampled by `tools/place-textures.py` from `tools/tokamak-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/tokamak-audio.json`.
-The hall, the machine, the chamber and its tiles, the plasma and its light, and the carving are made by the page.
-The reference photographs it was judged against (Wikimedia Commons, fetched by `tools/tokamak-refs.py`) are not shipped.
-
-## The Great Organ
-
-The organ's surfaces are photographed texture sets and its sounds are recordings, published by their authors under CC0 1.0 (public domain dedication).
-They are kept as files beside the page, in `assets/organ/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| 6 texture sets: oak, dark timber, floor boards, stone, leather, worn metal | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) (CC0 1.0) | `assets/organ/tex/CREDITS.md` names each asset, its authors and its link |
-| 3 footsteps on a wooden floor | [BigSoundBank](https://bigsoundbank.com/) (CC0 1.0) | `assets/organ/audio/CREDITS.md` |
-| 3 recordings: an organ played in a church in Pelt, an organ's blower, a stone church's impulse response | [Freesound](https://freesound.org/) (CC0 1.0) | `assets/organ/audio/CREDITS.md` |
-| The light's volumes | computed by `tools/organ-bake.mjs` | `assets/organ/light/CREDITS.md` |
-
-The textures were resampled and repacked by `tools/place-textures.py` from the list in `tools/organ-textures.json`, the recordings cut by `tools/place-audio.py` from `tools/organ-audio.json`, and what the organ's recording plays read note by note by `tools/organ-notes.py`.
-The pipes and the case are made by the page.
-
-## The great orrery
-
-The orrery's surfaces are photographed texture sets and its sounds are recordings, all published by their authors under CC0 1.0 (public domain dedication); the lands on its globe of the Earth are Natural Earth's, in the public domain.
-They are kept as files beside the page, in `assets/orrery/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| 6 texture sets: white and dark marble, stucco, bronze, walnut veneer, marble slabs | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/) (CC0 1.0) | `assets/orrery/tex/CREDITS.md` names each asset, its authors and its link |
-| 4 recordings cut into 7 sounds: a clockwork motor, the inside of a clock's case, a pendulum clock's beat, steps on marble | [Freesound](https://freesound.org/) (CC0 1.0) | `assets/orrery/audio/CREDITS.md` names each recording, its author and its link |
-| The coasts on the lapis globe | [Natural Earth](https://www.naturalearthdata.com/), 1:110m land (public domain) | `assets/orrery/data/CREDITS.md` |
-
-The textures were resampled and repacked by `tools/place-textures.py`, the recordings cut and levelled by `tools/place-audio.py`, the coasts made into a map by `tools/orrery-land.py`.
-The rotunda, the orrery and its trains, the stones, the lettering and every other sound are made by the page.
 
 ## The arcology
 
@@ -465,6 +465,21 @@ The textures were resampled by `tools/place-textures.py` from `tools/solarsail-t
 The sail, its folds and wrinkles, the ship, the outer corona, the stars, the light and its shadows are made by the page.
 The reference photographs it was judged against (NASA's and The Planetary Society's, fetched by `tools/solarsail-refs.py`) are not shipped.
 
+## The Dyson swarm
+
+The deck's and the collector's surfaces are photographed texture sets and the sound is recordings, all published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/dysonswarm/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 2 texture sets: scratched painted steel sheet, patterned steel floor plate | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/dysonswarm/tex/CREDITS.md` names each asset, its authors and its link |
+| 3 texture sets: brushed metal (Metal009), photovoltaic cells (SolarPanel003), crumpled foil (Foil002) | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/dysonswarm/tex/CREDITS.md` |
+| 10 recordings: a quiet computer fan (EagleStealthTeam), deep breaths (Sadiquecat), a distribution transformer's hum (keithpeter), a ferry's creaking steel hull (allthingssound), steps on a steel floor (SoundsofTheMachine) | [Freesound](https://freesound.org/), CC0 1.0 | `assets/dysonswarm/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled by `tools/place-textures.py` from `tools/dysonswarm-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/dysonswarm-audio.json`.
+The star, the swarm and its orbits, the collectors, the deck, the light and its shadows are made by the page.
+The reference photographs it was judged against (Wikimedia Commons, fetched by `tools/dysonswarm-refs.py`) are not shipped.
+
 ## The shipyard
 
 The yard's surfaces are photographed texture sets published by their authors under CC0 1.0 (public domain dedication), and its sound is recordings under CC0 1.0 and CC BY 4.0; the Moon and the Earth are NASA imagery.
@@ -496,20 +511,20 @@ They are kept as files beside the page, in `assets/spaceelevator/`.
 The Earth's pictures were cut and packed by `tools/spaceelevator-earth.py`, the textures resampled by `tools/place-textures.py` from `tools/spaceelevator-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/spaceelevator-audio.json`.
 What the page makes itself: the cabin, the drive, the tether and the ocean platform, the sea's waves, the near clouds' shapes, the air and the stars, the footsteps.
 
-## The Dyson swarm
+## Earth orbit, from a station's cupola
 
-The deck's and the collector's surfaces are photographed texture sets and the sound is recordings, all published by their authors under CC0 1.0 (public domain dedication).
-They are kept as files beside the page, in `assets/dysonswarm/`.
+The Earth seen from the cupola is real imagery: a day's true colour from the VIIRS instrument on NOAA-20 and the Black Marble's city lights, served by NASA's Global Imagery Browse Services; NASA imagery is not copyrighted and is credited here.
+The cabin's surfaces are photographed texture sets published under CC0 1.0, and its sound is a recording made on board the International Space Station, released under CC0 1.0.
+They are kept as files beside the page, in `assets/orbit/`.
 
 | Use | Source | Credits |
 |---|---|---|
-| 2 texture sets: scratched painted steel sheet, patterned steel floor plate | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/dysonswarm/tex/CREDITS.md` names each asset, its authors and its link |
-| 3 texture sets: brushed metal (Metal009), photovoltaic cells (SolarPanel003), crumpled foil (Foil002) | [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/dysonswarm/tex/CREDITS.md` |
-| 10 recordings: a quiet computer fan (EagleStealthTeam), deep breaths (Sadiquecat), a distribution transformer's hum (keithpeter), a ferry's creaking steel hull (allthingssound), steps on a steel floor (SoundsofTheMachine) | [Freesound](https://freesound.org/), CC0 1.0 | `assets/dysonswarm/audio/CREDITS.md` names each recording, its author and its link |
+| The Earth: VIIRS (NOAA-20) Corrected Reflectance of 25 September 2024, and VIIRS Black Marble 2016 city lights | NASA Worldview / GIBS (NASA ESDIS), NASA Earth Observatory / Goddard Space Flight Center; public domain, credit asked | `assets/orbit/earth/CREDITS.md` names each file and its layers |
+| 3 texture sets: cloth covers, brushed metal, painted plate | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/orbit/tex/CREDITS.md` names each asset, its authors and its link |
+| 1 recording: the ISS US Laboratory's background noise, by Chris Hadfield | [Freesound](https://freesound.org/), CC0 1.0 | `assets/orbit/audio/CREDITS.md` names the recording, its author and its link |
 
-The textures were resampled by `tools/place-textures.py` from `tools/dysonswarm-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/dysonswarm-audio.json`.
-The star, the swarm and its orbits, the collectors, the deck, the light and its shadows are made by the page.
-The reference photographs it was judged against (Wikimedia Commons, fetched by `tools/dysonswarm-refs.py`) are not shipped.
+The Earth's pictures were cut and packed by `tools/orbit-earth.py`, the textures resampled by `tools/place-textures.py` from `tools/orbit-textures.json`, the recording cut and levelled by `tools/place-audio.py` from `tools/orbit-audio.json`.
+What the page makes itself: the cabin and the cupola's frames, the orbit and the sun, the air over the Earth, the airglow, the lightning, the aurora and the stars.
 
 ## Jezero crater on Mars
 
@@ -544,6 +559,21 @@ They are kept as files beside the page, in `assets/phobos/`.
 The terrain was cropped and resampled by `tools/phobos-terrain.py`, the shape by `tools/phobos-moon.py`, the textures by `tools/place-textures.py`, the recordings by `tools/place-audio.py`.
 The rocks, the ring, the sky, the telescope and the breaking of the moon are made by the page.
 
+## Riding a comet near the Sun
+
+The comet's nucleus is the real one: the shape model SPG SHAP4S of 67P/Churyumov-Gerasimenko, made by the German Aerospace Center (DLR) from pictures taken by the OSIRIS camera on ESA's Rosetta, published in NASA's Planetary Data System and ESA's Planetary Science Archive, free to use with credit.
+Its close surfaces are photographed texture sets and its sounds field recordings, published under CC0 1.0.
+They are kept as files beside the page, in `assets/comet/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| The shape of the nucleus | F. Preusker, F. Scholten and others (DLR); ESA/Rosetta/MPS for OSIRIS Team MPS/UPD/LAM/IAA/SSO/INTA/UPM/DASP/IDA; data set RO-C-MULTI-5-67P-SHAPE-V2.0 | `assets/comet/nucleus/CREDITS.md` names the file, its source and what was changed |
+| 5 texture sets for the ground close by | [Poly Haven](https://polyhaven.com/license) | `assets/comet/tex/CREDITS.md` names each asset, its authors and its link |
+| 6 recordings: a computer's fans, breathing in a mask, four steps in frozen snow | [Freesound](https://freesound.org/), CC0 1.0 | `assets/comet/audio/CREDITS.md` names each recording, its author and its link |
+
+The shape was cut, refined and lit by `tools/comet-bake.mjs`, the textures by `tools/place-textures.py`, the recordings cut and levelled by `tools/place-audio.py` from `tools/comet-audio.json`.
+The finer relief, the boulders, the jets, the coma, the tail and the grains are made by the page.
+
 ## Inside Saturn's rings
 
 This section is the place's part of the page's `NOTICE.md`.
@@ -573,36 +603,6 @@ Its close surfaces are photographed texture sets published under CC0 1.0, kept a
 
 The textures were resampled by `tools/place-textures.py` from `tools/titan-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/titan-audio.json`.
 The ground, the pebbles, the sea, the sky and the rain are made by the page.
-
-## Earth orbit, from a station's cupola
-
-The Earth seen from the cupola is real imagery: a day's true colour from the VIIRS instrument on NOAA-20 and the Black Marble's city lights, served by NASA's Global Imagery Browse Services; NASA imagery is not copyrighted and is credited here.
-The cabin's surfaces are photographed texture sets published under CC0 1.0, and its sound is a recording made on board the International Space Station, released under CC0 1.0.
-They are kept as files beside the page, in `assets/orbit/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| The Earth: VIIRS (NOAA-20) Corrected Reflectance of 25 September 2024, and VIIRS Black Marble 2016 city lights | NASA Worldview / GIBS (NASA ESDIS), NASA Earth Observatory / Goddard Space Flight Center; public domain, credit asked | `assets/orbit/earth/CREDITS.md` names each file and its layers |
-| 3 texture sets: cloth covers, brushed metal, painted plate | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/orbit/tex/CREDITS.md` names each asset, its authors and its link |
-| 1 recording: the ISS US Laboratory's background noise, by Chris Hadfield | [Freesound](https://freesound.org/), CC0 1.0 | `assets/orbit/audio/CREDITS.md` names the recording, its author and its link |
-
-The Earth's pictures were cut and packed by `tools/orbit-earth.py`, the textures resampled by `tools/place-textures.py` from `tools/orbit-textures.json`, the recording cut and levelled by `tools/place-audio.py` from `tools/orbit-audio.json`.
-What the page makes itself: the cabin and the cupola's frames, the orbit and the sun, the air over the Earth, the airglow, the lightning, the aurora and the stars.
-
-## Riding a comet near the Sun
-
-The comet's nucleus is the real one: the shape model SPG SHAP4S of 67P/Churyumov-Gerasimenko, made by the German Aerospace Center (DLR) from pictures taken by the OSIRIS camera on ESA's Rosetta, published in NASA's Planetary Data System and ESA's Planetary Science Archive, free to use with credit.
-Its close surfaces are photographed texture sets and its sounds field recordings, published under CC0 1.0.
-They are kept as files beside the page, in `assets/comet/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| The shape of the nucleus | F. Preusker, F. Scholten and others (DLR); ESA/Rosetta/MPS for OSIRIS Team MPS/UPD/LAM/IAA/SSO/INTA/UPM/DASP/IDA; data set RO-C-MULTI-5-67P-SHAPE-V2.0 | `assets/comet/nucleus/CREDITS.md` names the file, its source and what was changed |
-| 5 texture sets for the ground close by | [Poly Haven](https://polyhaven.com/license) | `assets/comet/tex/CREDITS.md` names each asset, its authors and its link |
-| 6 recordings: a computer's fans, breathing in a mask, four steps in frozen snow | [Freesound](https://freesound.org/), CC0 1.0 | `assets/comet/audio/CREDITS.md` names each recording, its author and its link |
-
-The shape was cut, refined and lit by `tools/comet-bake.mjs`, the textures by `tools/place-textures.py`, the recordings cut and levelled by `tools/place-audio.py` from `tools/comet-audio.json`.
-The finer relief, the boulders, the jets, the coma, the tail and the grains are made by the page.
 
 ## The Twilight Band
 
@@ -689,40 +689,6 @@ The radii of the disk's dark lanes are those published by the ALMA Partnership (
 What the page makes itself: the disk (its dust, its light and shadow, its lanes, planets and jet), the cloud's stars, the rock's height field with its boulders and shadows, the wearer's breath, the grains on the helmet and the steps (synthesized).
 The photographs looked at to judge the picture (ALMA's image of HL Tauri, ESO/NAOJ/NRAO; Hubble's of HL and XZ Tauri; OSIRIS-REx's of Bennu's boulders, NASA/Goddard/University of Arizona) are not part of the page; `tools/protodisk-refs.py` fetches them.
 
-## Two black holes merging
-
-The holes' motion and their waves are a numerical simulation's, the sky is a map and two catalogues of the real one, the station's surfaces are photographed texture sets and its sounds are recordings.
-They are kept as files beside the page, in `assets/blackholes/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| The two holes' paths and their gravitational waves: simulation SXS:BBH:0305 | [SXS Collaboration](https://doi.org/10.5281/zenodo.13182440), CC BY 4.0 | `assets/blackholes/orbit/CREDITS.md` |
-| The Milky Way: Deep Star Maps 2020 | NASA/Goddard Space Flight Center Scientific Visualization Studio; Gaia DR2: ESA/Gaia/DPAC | `assets/blackholes/sky/CREDITS.md` |
-| 224 823 stars: the Hipparcos and Tycho-2 catalogues | European Space Agency (ESA) | `assets/blackholes/sky/CREDITS.md` |
-| 6 texture sets: painted and patterned steel plate, brushed metal, foil, coarse linen | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/blackholes/tex/CREDITS.md` names each asset, its authors and its link |
-| 9 recordings: a space station's air handling, breathing in a mask, a tunnel's drone, radio static, steps on metal | [Freesound](https://freesound.org/), CC0 1.0 | `assets/blackholes/audio/CREDITS.md` names each recording, its author and its link |
-
-The sky's files and the holes' table were made by `tools/blackholes-bake.py`, the textures resampled by `tools/place-textures.py` from `tools/blackholes-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/blackholes-audio.json`.
-The bending of the light, the station, its light and shadow, the free masses and the instrument's tone are made by the page.
-The film it was judged against (the SXS lensing group's of GW150914, on Wikimedia Commons) is not shipped.
-
-## The wormhole gate
-
-The two skies are made from ESO photographs, the giant planet from a map of Jupiter, the station's surfaces are photographed texture sets, and its sound is recorded.
-
-| Use | Source | Credits |
-|---|---|---|
-| This side's sky: the Milky Way panorama (eso0932a) | [ESO/S. Brunier](https://www.eso.org/public/images/eso0932a/), CC BY 4.0 | `assets/wormhole/sky/CREDITS.md` names each picture, its authors, its source and its licence |
-| The other side's sky: the Carina (eso1250a), Eagle (eso0926a), Lagoon (eso1403a) and Orion (eso1006a) nebulae | [ESO](https://www.eso.org/public/images/), the VPHAS+ team, ESO/J. Emerson/VISTA, CC BY 4.0 | `assets/wormhole/sky/CREDITS.md` |
-| The giant planet's clouds: a map of Jupiter from NASA imagery, recoloured | [Solar System Scope](https://www.solarsystemscope.com/textures/) (INOVE), CC BY 4.0; fetched from its copy on Wikimedia Commons | `assets/wormhole/sky/CREDITS.md` |
-| 6 texture sets: painted plate, brushed metal, patterned floor plate, scuffed painted steel, crumpled foil, coarse cloth | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/wormhole/tex/CREDITS.md` names each asset, its authors and its link |
-| 9 recordings: an air purifier's fan, slow breathing, a power transformer's hum, radio static, five steps on metal | [Freesound](https://freesound.org/), CC0 1.0 | `assets/wormhole/audio/CREDITS.md` names each recording, its author and its link |
-
-The skies were prepared by `tools/wormhole-sky.py`, the textures resampled by `tools/place-textures.py` from `tools/wormhole-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/wormhole-audio.json`.
-What the page makes itself: the wormhole and the light paths through it, the stars, the giant's rings, the moon, the station, the survey ship, the beacons and their light and shadows.
-The wormhole's geometry follows O. James, E. von Tunzelmann, P. Franklin and K. S. Thorne, "Visualizing Interstellar's wormhole" (American Journal of Physics 83, 486, 2015; arXiv:1502.03809).
-Photographs of the International Space Station's truss and of spacewalks (NASA, public domain) and C. Zahn's computed wormhole picture (Wikimedia Commons) were looked at to judge the picture and are not part of the page.
-
 ## The night sky as the Milky Way and Andromeda collide
 
 This section is the place's part of the page's `NOTICE.md`.
@@ -768,6 +734,40 @@ Its gas and its galaxies are a public cosmological simulation's, at their own pl
 The data were read, turned and packed by `tools/cosmicweb-bake.py`, the recordings cut and levelled by `tools/place-audio.py` from `tools/cosmicweb-audio.json`.
 What the page makes itself: the colours given to temperature, the glass deck and its map (drawn from the simulation).
 
+## Two black holes merging
+
+The holes' motion and their waves are a numerical simulation's, the sky is a map and two catalogues of the real one, the station's surfaces are photographed texture sets and its sounds are recordings.
+They are kept as files beside the page, in `assets/blackholes/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| The two holes' paths and their gravitational waves: simulation SXS:BBH:0305 | [SXS Collaboration](https://doi.org/10.5281/zenodo.13182440), CC BY 4.0 | `assets/blackholes/orbit/CREDITS.md` |
+| The Milky Way: Deep Star Maps 2020 | NASA/Goddard Space Flight Center Scientific Visualization Studio; Gaia DR2: ESA/Gaia/DPAC | `assets/blackholes/sky/CREDITS.md` |
+| 224 823 stars: the Hipparcos and Tycho-2 catalogues | European Space Agency (ESA) | `assets/blackholes/sky/CREDITS.md` |
+| 6 texture sets: painted and patterned steel plate, brushed metal, foil, coarse linen | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/blackholes/tex/CREDITS.md` names each asset, its authors and its link |
+| 9 recordings: a space station's air handling, breathing in a mask, a tunnel's drone, radio static, steps on metal | [Freesound](https://freesound.org/), CC0 1.0 | `assets/blackholes/audio/CREDITS.md` names each recording, its author and its link |
+
+The sky's files and the holes' table were made by `tools/blackholes-bake.py`, the textures resampled by `tools/place-textures.py` from `tools/blackholes-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/blackholes-audio.json`.
+The bending of the light, the station, its light and shadow, the free masses and the instrument's tone are made by the page.
+The film it was judged against (the SXS lensing group's of GW150914, on Wikimedia Commons) is not shipped.
+
+## The wormhole gate
+
+The two skies are made from ESO photographs, the giant planet from a map of Jupiter, the station's surfaces are photographed texture sets, and its sound is recorded.
+
+| Use | Source | Credits |
+|---|---|---|
+| This side's sky: the Milky Way panorama (eso0932a) | [ESO/S. Brunier](https://www.eso.org/public/images/eso0932a/), CC BY 4.0 | `assets/wormhole/sky/CREDITS.md` names each picture, its authors, its source and its licence |
+| The other side's sky: the Carina (eso1250a), Eagle (eso0926a), Lagoon (eso1403a) and Orion (eso1006a) nebulae | [ESO](https://www.eso.org/public/images/), the VPHAS+ team, ESO/J. Emerson/VISTA, CC BY 4.0 | `assets/wormhole/sky/CREDITS.md` |
+| The giant planet's clouds: a map of Jupiter from NASA imagery, recoloured | [Solar System Scope](https://www.solarsystemscope.com/textures/) (INOVE), CC BY 4.0; fetched from its copy on Wikimedia Commons | `assets/wormhole/sky/CREDITS.md` |
+| 6 texture sets: painted plate, brushed metal, patterned floor plate, scuffed painted steel, crumpled foil, coarse cloth | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/wormhole/tex/CREDITS.md` names each asset, its authors and its link |
+| 9 recordings: an air purifier's fan, slow breathing, a power transformer's hum, radio static, five steps on metal | [Freesound](https://freesound.org/), CC0 1.0 | `assets/wormhole/audio/CREDITS.md` names each recording, its author and its link |
+
+The skies were prepared by `tools/wormhole-sky.py`, the textures resampled by `tools/place-textures.py` from `tools/wormhole-textures.json`, the recordings cut and levelled by `tools/place-audio.py` from `tools/wormhole-audio.json`.
+What the page makes itself: the wormhole and the light paths through it, the stars, the giant's rings, the moon, the station, the survey ship, the beacons and their light and shadows.
+The wormhole's geometry follows O. James, E. von Tunzelmann, P. Franklin and K. S. Thorne, "Visualizing Interstellar's wormhole" (American Journal of Physics 83, 486, 2015; arXiv:1502.03809).
+Photographs of the International Space Station's truss and of spacewalks (NASA, public domain) and C. Zahn's computed wormhole picture (Wikimedia Commons) were looked at to judge the picture and are not part of the page.
+
 ## The Tower of Babel
 
 The tower's photographed surfaces and its recorded sounds were published by their authors under CC0 1.0 (public domain dedication); the plain about it is satellite imagery under CC BY 4.0.
@@ -812,31 +812,6 @@ The rim of the sea and the void beyond it (`src/places/worldedge/`) are drawn fr
 The sky and the Milky Way were resampled by `tools/worldedge-sky.py`, the textures by `tools/place-textures.py` from `tools/worldedge-textures.json`; the recordings were cut and levelled by `tools/place-audio.py` from `tools/worldedge-audio.json`.
 What the page makes itself: the rim, the sea, the falling water, the spray and its rainbow, the rock's shapes, and the carving over the portal.
 
-## The hourglass world
-
-The desert under the stone sky (`src/places/hourglass/`) is drawn from four photographed surfaces and four recordings.
-
-| Use | Source | Credits |
-|---|---|---|
-| 4 texture sets: rippled beach from the air, loose sand, a jointed cliff, a weathered rock face | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/hourglass/tex/CREDITS.md` names each asset, its authors and its link |
-| 4 recordings: sand running down a dune, desert wind, falling sand, a far waterfall's lows | [Freesound](https://freesound.org/), CC0 1.0 | `assets/hourglass/audio/CREDITS.md` names each recording, its author and its link |
-
-The textures were resampled by `tools/place-textures.py` from `tools/hourglass-textures.json`; the recordings were cut and levelled by `tools/place-audio.py` from `tools/hourglass-audio.json`.
-What the page makes itself: the dunes, the cone, the stone sky, the fallen blocks, the falling sand and its dust, the sky, the low roar of the fall, and the carving over the portal.
-
-## The Bismuth Canyon
-
-The canyon's surface detail textures and ambient/footstep recordings are published by their authors under CC0 1.0 (public domain dedication).
-They are kept as files beside the page, in `assets/bismuth/`.
-
-| Use | Source | Credits |
-|---|---|---|
-| 4 texture sets: smooth silver metal, pitted raw metal, dark fractured rock, layered dark rock | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/bismuth/tex/CREDITS.md` names each asset, its authors and its link |
-| 6 recordings: desert canyon wind, a courtyard's impulse response (the canyon's echo), 4 hard-stone footsteps | [Freesound](https://freesound.org/), CC0 1.0 | `assets/bismuth/audio/CREDITS.md` names each recording, its author and its link |
-
-The textures were resampled and repacked by `tools/place-textures.py` from `tools/bismuth-textures.json`, and the recordings cut and levelled by `tools/place-audio.py` from `tools/bismuth-audio.json`.
-The procedural bismuth hopper crystal geometry, thin-film oxide interference shading, canyon floor terraces, mirror basin, atmospheric shafts, convolution reverb and door carving are made by the page.
-
 ## The Stopped Storm
 
 This section is the place's part of the page's `NOTICE.md`.
@@ -863,6 +838,31 @@ They are kept as files beside the page, in `assets/seaoverhead/`.
 
 The textures were resampled and repacked by `tools/place-textures.py` from `tools/seaoverhead-textures.json`, and the audio excerpts were cut and levelled by `tools/place-audio.py` from `tools/seaoverhead-audio.json`.
 The seabed terrain, reef outcrops, giant kelp stands, hanging ocean ceiling, overhead fish schools, manta rays, sunbeams and dry-sand footsteps are made by the page.
+
+## The hourglass world
+
+The desert under the stone sky (`src/places/hourglass/`) is drawn from four photographed surfaces and four recordings.
+
+| Use | Source | Credits |
+|---|---|---|
+| 4 texture sets: rippled beach from the air, loose sand, a jointed cliff, a weathered rock face | [Poly Haven](https://polyhaven.com/license), CC0 1.0 | `assets/hourglass/tex/CREDITS.md` names each asset, its authors and its link |
+| 4 recordings: sand running down a dune, desert wind, falling sand, a far waterfall's lows | [Freesound](https://freesound.org/), CC0 1.0 | `assets/hourglass/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled by `tools/place-textures.py` from `tools/hourglass-textures.json`; the recordings were cut and levelled by `tools/place-audio.py` from `tools/hourglass-audio.json`.
+What the page makes itself: the dunes, the cone, the stone sky, the fallen blocks, the falling sand and its dust, the sky, the low roar of the fall, and the carving over the portal.
+
+## The Bismuth Canyon
+
+The canyon's surface detail textures and ambient/footstep recordings are published by their authors under CC0 1.0 (public domain dedication).
+They are kept as files beside the page, in `assets/bismuth/`.
+
+| Use | Source | Credits |
+|---|---|---|
+| 4 texture sets: smooth silver metal, pitted raw metal, dark fractured rock, layered dark rock | [Poly Haven](https://polyhaven.com/license) and [ambientCG](https://ambientcg.com/), CC0 1.0 | `assets/bismuth/tex/CREDITS.md` names each asset, its authors and its link |
+| 6 recordings: desert canyon wind, a courtyard's impulse response (the canyon's echo), 4 hard-stone footsteps | [Freesound](https://freesound.org/), CC0 1.0 | `assets/bismuth/audio/CREDITS.md` names each recording, its author and its link |
+
+The textures were resampled and repacked by `tools/place-textures.py` from `tools/bismuth-textures.json`, and the recordings cut and levelled by `tools/place-audio.py` from `tools/bismuth-audio.json`.
+The procedural bismuth hopper crystal geometry, thin-film oxide interference shading, canyon floor terraces, mirror basin, atmospheric shafts, convolution reverb and door carving are made by the page.
 
 <!-- places: end -->
 
